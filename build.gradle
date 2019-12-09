@@ -4,11 +4,11 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.1'
-        
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -18,10 +18,23 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+//扩展配置
+//相当于定义常量
+//知识我们这里定义的常量是在gradle文件中引用
+//而不是在java文件中引用
+ext {
+    compileSdkVersion = 29
+    minSdkVersion = 16
+    targetSkVersion = 29
+    versionCode = 1
+    versionName = "1.0"
+
 }

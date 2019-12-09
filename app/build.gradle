@@ -1,13 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    //编译版本
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    //默认配置
     defaultConfig {
+        //应用唯一标志
         applicationId "net.qiujuer.italker.mycloudmusicandroidjava"
-        minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -19,10 +22,20 @@ android {
 }
 
 dependencies {
+    //添加libs目录里面的jar
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //添加appcompat（这个是google 兼容包 可以在低版本的手机，享受高版本SDK的功能，基本上都要引用这个包，因为系统的兼容性太差了）
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    //引入约束控件constraintlayout依赖 （）注意：这里引入的是aar格式（可能包含资源），并不是jar包
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    //请求网络相关
+    //okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
+
+    //java测试依赖
     testImplementation 'junit:junit:4.12'
+
+    //android测试依赖
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
