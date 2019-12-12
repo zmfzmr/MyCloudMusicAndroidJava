@@ -12,7 +12,7 @@ import com.ixuea.courses.mymusicold.R;
 /**
  * 引导界面
  */
-public class GuideActivity extends AppCompatActivity implements View.OnClickListener {
+public class GuideActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "GuideActivity";
     private Button bt_login_or_register;//登录注册
@@ -33,9 +33,15 @@ public class GuideActivity extends AppCompatActivity implements View.OnClickList
         //很明显也设置为其他布局文件
         setContentView(R.layout.activity_guide);
 
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
         //隐藏状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 
         //找控件
         //登录注册按钮 (ctrl + alt + f创建实例变量（又局部变为全局变量）)
@@ -43,6 +49,11 @@ public class GuideActivity extends AppCompatActivity implements View.OnClickList
         //立即体验按钮
         bt_enter = findViewById(R.id.bt_enter);
 
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
         //设置点击事件
         bt_login_or_register.setOnClickListener(this);
         bt_enter.setOnClickListener(this);
