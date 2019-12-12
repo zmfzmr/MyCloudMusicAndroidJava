@@ -1,4 +1,4 @@
-package net.qiujuer.italker.mycloudmusicandroidjava;
+package com.qiujuer.italker.mycloudmusicandroidjava;
 
 import android.content.Context;
 
