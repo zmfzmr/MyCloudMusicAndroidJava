@@ -21,6 +21,7 @@
             android:layout_weight="1"/>
         <!-- 登录/注册-->
         <Button
+            android:id="@+id/bt_login_or_register"
             android:layout_width="@dimen/button_width_large"
             android:layout_height="@dimen/button_height"
             android:background="@drawable/selector_color_primary"
@@ -33,6 +34,7 @@
 
         <!-- 立即体验-->
         <Button
+            android:id="@+id/bt_enter"
             android:layout_width="@dimen/button_width_large"
             android:layout_height="@dimen/button_height"
             android:background="@drawable/selector_color_primary_reverse"
