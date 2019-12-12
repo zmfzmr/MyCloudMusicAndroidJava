@@ -82,7 +82,7 @@ public class SplashActivity extends AppCompatActivity {
         View decorView = getWindow().getDecorView();
 
         //判断版本
-        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) {
+        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 19) {
             //11~18版本
             decorView.setSystemUiVisibility(View.GONE);
         } else if(Build.VERSION.SDK_INT >= 19) {
