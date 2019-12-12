@@ -6,7 +6,7 @@ android {
     //默认配置
     defaultConfig {
         //应用唯一标志
-        applicationId "net.qiujuer.italker.mycloudmusicandroidjava"
+        applicationId "com.ixuea.courses.mymusicold"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSkVersion
         versionCode rootProject.ext.versionCode

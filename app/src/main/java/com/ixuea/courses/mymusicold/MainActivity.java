@@ -1,4 +1,4 @@
-package com.qiujuer.italker.mycloudmusicandroidjava;
+package com.ixuea.courses.mymusicold;
 
 import androidx.appcompat.app.AppCompatActivity;
 
