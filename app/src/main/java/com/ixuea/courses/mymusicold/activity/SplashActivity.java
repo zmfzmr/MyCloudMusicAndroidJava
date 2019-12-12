@@ -14,6 +14,9 @@ import android.view.View;
 
 import com.ixuea.courses.mymusicold.R;
 
+/**
+ * 启动界面
+ */
 public class SplashActivity extends BaseCommonActivity {
 
     private static final String TAG = "SplashActivity";

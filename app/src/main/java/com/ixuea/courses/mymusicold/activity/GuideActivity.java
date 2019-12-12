@@ -67,6 +67,7 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
             case R.id.bt_login_or_register:
                 //注册登录按钮点击
                 Log.d(TAG, "onClick login or register");
+                startActivityAfterFinishThis(LoginOrRegisterActivity.class);
                 break;
             case R.id.bt_enter:
                 //进入按钮
