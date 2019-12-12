@@ -12,7 +12,7 @@ import com.ixuea.courses.mymusicold.R;
 /**
  * 引导界面
  */
-public class GuideActivity extends BaseActivity implements View.OnClickListener {
+public class GuideActivity extends BaseCommonActivity implements View.OnClickListener {
 
     private static final String TAG = "GuideActivity";
     private Button bt_login_or_register;//登录注册

@@ -14,7 +14,7 @@ import android.view.View;
 
 import com.ixuea.courses.mymusicold.R;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseCommonActivity {
 
     private static final String TAG = "SplashActivity";
 
@@ -112,19 +112,5 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * 启动界面
-     * @param clazz
-     */
-    private void startActivity(Class<?> clazz) {
-        //创建Intent
-        Intent intent = new Intent(this, clazz);
-        startActivity(intent);
-    }
 
-    private void startActivityAfterFinishThis(Class<?> clazz) {
-        startActivity(clazz);
-        //关闭当前界面
-        finish();
-    }
 }
