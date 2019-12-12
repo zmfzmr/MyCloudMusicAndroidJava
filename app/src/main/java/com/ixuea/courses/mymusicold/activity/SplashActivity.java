@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -88,6 +90,30 @@ public class SplashActivity extends BaseCommonActivity {
         }, DEFAULT_DELAY_TIME);
     }
 
+    @Override
+    protected void initDatum() {
+        super.initDatum();
 
+        //测试使用偏好设置
+        //获取偏移设置对象
+        SharedPreferences preferences = getSharedPreferences("ixuea", Context.MODE_PRIVATE);
 
+        //保存一个字符串"我们是爱学啊"
+        //存储的键为：username
+        preferences.edit().putString("username","我们是爱学啊").commit();
+
+        //通过键找到上面存储的值
+        String username=preferences.getString("username",null);
+
+        //打印出来，方便调试
+        Log.d(TAG, "initDatum: "+"第一次获取的值："+username);
+
+        //删除该key对应的值
+        preferences.edit().remove("username").commit();
+
+        //再次获取
+        username=preferences.getString("username",null);
+
+        Log.d(TAG, "initDatum: "+"删除后再次获取的值："+username);
+    }
 }
