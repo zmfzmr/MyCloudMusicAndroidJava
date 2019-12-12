@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.ixuea.courses.mymusicold.MainActivity;
 import com.ixuea.courses.mymusicold.R;
 /**
  * 引导界面
@@ -72,6 +73,7 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
             case R.id.bt_enter:
                 //进入按钮
                 Log.d(TAG, "onClick enter");
+                startActivityAfterFinishThis(MainActivity.class);
                 break;
             default:
                 break;
