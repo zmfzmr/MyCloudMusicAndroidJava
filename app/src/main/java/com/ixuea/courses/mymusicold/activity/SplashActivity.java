@@ -3,6 +3,8 @@ package com.ixuea.courses.mymusicold.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +33,7 @@ public class SplashActivity extends AppCompatActivity {
      * 这样创建有内存泄漏
      * 在性能优化我们具体讲解
      */
+    @SuppressLint("HandlerLeak")
     private Handler handler=new Handler(){
 
         @Override
@@ -50,7 +53,17 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void next() {
         Log.d(TAG,"next");
+        ////创建Intent
+        //Intent intent = new Intent(this, GuideActivity.class);
+        //
+        ////启动界面
+        //startActivity(intent);
+        //
+        ////关闭当前界面
+        //finish();
 
+        //使用重构后的方法
+        startActivityAfterFinishThis(GuideActivity.class);
 
     }
     @Override
@@ -97,5 +110,21 @@ public class SplashActivity extends AppCompatActivity {
             //设置到控件
             decorView.setSystemUiVisibility(options);
         }
+    }
+
+    /**
+     * 启动界面
+     * @param clazz
+     */
+    private void startActivity(Class<?> clazz) {
+        //创建Intent
+        Intent intent = new Intent(this, clazz);
+        startActivity(intent);
+    }
+
+    private void startActivityAfterFinishThis(Class<?> clazz) {
+        startActivity(clazz);
+        //关闭当前界面
+        finish();
     }
 }
