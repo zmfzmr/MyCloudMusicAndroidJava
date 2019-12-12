@@ -23,7 +23,7 @@
         <Button
             android:layout_width="@dimen/button_width_large"
             android:layout_height="@dimen/button_height"
-            android:background="@drawable/shape_color_primary"
+            android:background="@drawable/selector_color_primary"
             android:text="@string/login_or_register"/>
         <View
             android:layout_width="0dp"
@@ -34,7 +34,7 @@
         <Button
             android:layout_width="@dimen/button_width_large"
             android:layout_height="@dimen/button_height"
-            android:background="@drawable/shape_border_color_primary"
+            android:background="@drawable/selector_color_primary_reverse"
             android:text="立即体验"/>
         <View
             android:layout_width="0dp"
