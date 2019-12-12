@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="TextSmall">
+        <item name="android:textColor">@color/light_grey</item>
+        <item name="android:textSize">@dimen/padding_large</item>
+    </style>
+
 </resources>
