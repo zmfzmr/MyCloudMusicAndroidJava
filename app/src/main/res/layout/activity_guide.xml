@@ -10,7 +10,7 @@
         android:layout_weight="1"/>
 
     <LinearLayout
-        android:background="#f00"
+
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -23,6 +23,7 @@
         <Button
             android:layout_width="@dimen/button_width_large"
             android:layout_height="@dimen/button_height"
+            android:background="@drawable/shape_color_primary"
             android:text="@string/login_or_register"/>
         <View
             android:layout_width="0dp"
@@ -33,7 +34,7 @@
         <Button
             android:layout_width="@dimen/button_width_large"
             android:layout_height="@dimen/button_height"
-            android:text="@string/login_or_register"/>
+            android:text="立即体验"/>
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
