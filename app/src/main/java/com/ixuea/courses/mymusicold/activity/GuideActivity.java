@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusicold.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.ixuea.courses.mymusicold.R;
 /**
@@ -23,5 +24,9 @@ public class GuideActivity extends AppCompatActivity {
         //将activity_guide布局设置当前Activity的界面
         //很明显也设置为其他布局文件
         setContentView(R.layout.activity_guide);
+
+        //隐藏状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 }
