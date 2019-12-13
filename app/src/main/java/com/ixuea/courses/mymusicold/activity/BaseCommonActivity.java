@@ -5,12 +5,23 @@ import android.os.Build;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.ixuea.courses.mymusicold.util.PreferenceUtil;
+
 /**
  * 通用界面逻辑
  */
 public class BaseCommonActivity extends BaseActivity {
+    /**
+     * 偏好设置工具实例
+     * protected：这样子类才能访问
+     */
+    protected PreferenceUtil sp;
 
-
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+        sp = PreferenceUtil.getInstance(getMainActivity());
+    }
 
     /**
      * 全屏

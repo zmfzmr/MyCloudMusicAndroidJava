@@ -10,6 +10,8 @@ import android.widget.Button;
 
 import com.ixuea.courses.mymusicold.MainActivity;
 import com.ixuea.courses.mymusicold.R;
+import com.ixuea.courses.mymusicold.util.PreferenceUtil;
+
 /**
  * 引导界面
  */
@@ -69,15 +71,24 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
                 //注册登录按钮点击
                 Log.d(TAG, "onClick login or register");
                 startActivityAfterFinishThis(LoginOrRegisterActivity.class);
+
+                setShowGuide();
                 break;
             case R.id.bt_enter:
                 //进入按钮
                 Log.d(TAG, "onClick enter");
                 startActivityAfterFinishThis(MainActivity.class);
+
+                setShowGuide();
                 break;
             default:
                 break;
         }
 
+    }
+
+    private void setShowGuide() {
+//        PreferenceUtil.getInstance(getMainActivity()).setShowGuide(false);
+        sp.setShowGuide(false);
     }
 }
