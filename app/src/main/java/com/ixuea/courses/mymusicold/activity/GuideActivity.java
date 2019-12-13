@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusicold.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Button;
 
 import com.ixuea.courses.mymusicold.MainActivity;
 import com.ixuea.courses.mymusicold.R;
+import com.ixuea.courses.mymusicold.adapter.GuideAdapter;
 import com.ixuea.courses.mymusicold.fragment.GuideFragment;
 import com.ixuea.courses.mymusicold.util.PreferenceUtil;
 
@@ -21,6 +23,8 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
     private static final String TAG = "GuideActivity";
     private Button bt_login_or_register;//登录注册
     private Button bt_enter;
+    private ViewPager vp;
+    private GuideAdapter adapter;
 
 
     /**
@@ -45,6 +49,11 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
 
         //隐藏状态栏
         hideStatusBar();
+
+        vp = findViewById(R.id.vp);
+        adapter = new GuideAdapter(getSupportFragmentManager());
+        vp.setAdapter(adapter);
+
         //找控件
         //登录注册按钮 (ctrl + alt + f创建实例变量（又局部变为全局变量）)
         bt_login_or_register = findViewById(R.id.bt_login_or_register);
@@ -54,7 +63,7 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
         //推荐使用里面的静态方法创建fragment：GuideFragment.newInstance()
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container, GuideFragment.newInstance(R.drawable.guide1))
+                .replace(R.id.vp, GuideFragment.newInstance(R.drawable.guide1))
                 .commit();
     }
 
