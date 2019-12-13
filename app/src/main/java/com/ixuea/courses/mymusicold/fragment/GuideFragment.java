@@ -14,13 +14,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ixuea.courses.mymusicold.R;
+import com.ixuea.courses.mymusicold.activity.BaseCommonActivity;
 import com.ixuea.courses.mymusicold.util.Constant;
 
 /**
  * 引导界面Fragment
  * androidx:用这个包下的好处是，可以适配低版本
  */
-public class GuideFragment extends BaseFragment {
+public class GuideFragment extends BaseCommonFragment {
 
     private ImageView iv;
     private int id;
