@@ -15,6 +15,9 @@ import com.ixuea.courses.mymusicold.adapter.GuideAdapter;
 import com.ixuea.courses.mymusicold.fragment.GuideFragment;
 import com.ixuea.courses.mymusicold.util.PreferenceUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 引导界面
  */
@@ -25,6 +28,7 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
     private Button bt_enter;
     private ViewPager vp;
     private GuideAdapter adapter;
+
 
 
     /**
@@ -53,6 +57,15 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
         vp = findViewById(R.id.vp);
         adapter = new GuideAdapter(getSupportFragmentManager());
         vp.setAdapter(adapter);
+        //准备数据
+        List<Integer> datum = new ArrayList<>();
+        datum.add(R.drawable.guide1);
+        datum.add(R.drawable.guide2);
+        datum.add(R.drawable.guide3);
+        datum.add(R.drawable.guide4);
+        datum.add(R.drawable.guide5);
+        adapter.setDatum(datum);//设置数据到适配器
+
 
         //找控件
         //登录注册按钮 (ctrl + alt + f创建实例变量（又局部变为全局变量）)
