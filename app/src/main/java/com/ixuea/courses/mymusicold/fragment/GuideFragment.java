@@ -20,8 +20,7 @@ import com.ixuea.courses.mymusicold.util.Constant;
  * 引导界面Fragment
  * androidx:用这个包下的好处是，可以适配低版本
  */
-public class GuideFragment extends Fragment {
-
+public class GuideFragment extends BaseFragment {
 
     private ImageView iv;
     private int id;
@@ -44,18 +43,8 @@ public class GuideFragment extends Fragment {
         return fragment;
     }
 
-
-    /**
-     * 返回要显示的View
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        //
+    protected View getLayoutView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_guide, container, false);
     }
 
@@ -67,7 +56,18 @@ public class GuideFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        iv = getView().findViewById(R.id.iv);
+
+    }
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+        iv = findViewById(R.id.iv);
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
 
         //取出传递的数据
         id = getArguments().getInt(Constant.ID, -1);//图片资源id
