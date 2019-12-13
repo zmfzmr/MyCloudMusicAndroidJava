@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.ixuea.courses.mymusicold.MainActivity;
 import com.ixuea.courses.mymusicold.R;
+import com.ixuea.courses.mymusicold.fragment.GuideFragment;
 import com.ixuea.courses.mymusicold.util.PreferenceUtil;
 
 /**
@@ -49,6 +50,12 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
         bt_login_or_register = findViewById(R.id.bt_login_or_register);
         //立即体验按钮
         bt_enter = findViewById(R.id.bt_enter);
+
+        //推荐使用里面的静态方法创建fragment：GuideFragment.newInstance()
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, GuideFragment.newInstance())
+                .commit();
     }
 
     @Override

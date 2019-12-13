@@ -68,13 +68,13 @@ public class SplashActivity extends BaseCommonActivity {
         //finish();
 
         //使用重构后的方法
-//        startActivityAfterFinishThis(GuideActivity.class);
+        startActivityAfterFinishThis(GuideActivity.class);
 
-        if (sp.isShowGuide()) {//第一次为true进入引导界面
-            startActivityAfterFinishThis(GuideActivity.class);
-        } else {
-            startActivityAfterFinishThis(LoginOrRegisterActivity.class);
-        }
+//        if (sp.isShowGuide()) {//第一次为true进入引导界面
+//            startActivityAfterFinishThis(GuideActivity.class);
+//        } else {
+//            startActivityAfterFinishThis(LoginOrRegisterActivity.class);
+//        }
 
     }
     @Override
