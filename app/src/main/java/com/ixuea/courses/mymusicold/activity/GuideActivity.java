@@ -54,7 +54,7 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
         //推荐使用里面的静态方法创建fragment：GuideFragment.newInstance()
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container, GuideFragment.newInstance())
+                .replace(R.id.container, GuideFragment.newInstance(R.drawable.guide1))
                 .commit();
     }
 

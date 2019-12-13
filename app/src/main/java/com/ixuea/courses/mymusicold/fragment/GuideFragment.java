@@ -4,13 +4,17 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.ixuea.courses.mymusicold.R;
+import com.ixuea.courses.mymusicold.util.Constant;
 
 /**
  * 引导界面Fragment
@@ -19,6 +23,9 @@ import com.ixuea.courses.mymusicold.R;
 public class GuideFragment extends Fragment {
 
 
+    private ImageView iv;
+    private int id;
+
     public GuideFragment() {
 
     }
@@ -26,10 +33,14 @@ public class GuideFragment extends Fragment {
     /**
      * 创建方法
      */
-    public static GuideFragment newInstance() {
+    public static GuideFragment newInstance(int id) {
         GuideFragment fragment = new GuideFragment();
         Bundle args = new Bundle();
+        args.putInt(Constant.ID,id);
+        //将bundle
         fragment.setArguments(args);
+
+
         return fragment;
     }
 
@@ -48,4 +59,26 @@ public class GuideFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_guide, container, false);
     }
 
+    /**
+     * View创建完毕
+     * @param view
+     * @param savedInstanceState
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        iv = getView().findViewById(R.id.iv);
+
+        //取出传递的数据
+        id = getArguments().getInt(Constant.ID, -1);//图片资源id
+        if (id == -1) {
+            //如果图片不存在
+            //就关闭当前界面
+            //但在我们这里不会发生该情况
+            getActivity().finish();
+            return;
+        }
+        iv.setImageResource(id);
+
+    }
 }
