@@ -2,6 +2,7 @@ package com.ixuea.courses.mymusicold.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
+import me.relex.circleindicator.CircleIndicator;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +29,7 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
     private Button bt_enter;
     private ViewPager vp;
     private GuideAdapter adapter;
-
+    private CircleIndicator ci;
 
 
     /**
@@ -55,17 +56,7 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
         hideStatusBar();
 
         vp = findViewById(R.id.vp);
-        adapter = new GuideAdapter(getSupportFragmentManager());
-        vp.setAdapter(adapter);
-        //准备数据
-        List<Integer> datum = new ArrayList<>();
-        datum.add(R.drawable.guide1);
-        datum.add(R.drawable.guide2);
-        datum.add(R.drawable.guide3);
-        datum.add(R.drawable.guide4);
-        datum.add(R.drawable.guide5);
-        adapter.setDatum(datum);//设置数据到适配器
-
+        ci = findViewById(R.id.ci);
 
         //找控件
         //登录注册按钮 (ctrl + alt + f创建实例变量（又局部变为全局变量）)
@@ -78,6 +69,26 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
                 .beginTransaction()
                 .replace(R.id.vp, GuideFragment.newInstance(R.drawable.guide1))
                 .commit();
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        adapter = new GuideAdapter(getSupportFragmentManager());
+        vp.setAdapter(adapter);
+        ci.setViewPager(vp);///让指示器根据列表控件配合工作
+        //适配器注册数据源观察者
+        adapter.registerDataSetObserver(ci.getDataSetObserver());
+
+        //准备数据
+        List<Integer> datum = new ArrayList<>();
+        datum.add(R.drawable.guide1);
+        datum.add(R.drawable.guide2);
+        datum.add(R.drawable.guide3);
+        datum.add(R.drawable.guide4);
+        datum.add(R.drawable.guide5);
+        adapter.setDatum(datum);//设置数据到适配器
     }
 
     @Override
