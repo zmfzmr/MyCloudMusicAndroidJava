@@ -9,7 +9,7 @@ import com.ixuea.courses.mymusicold.R;
 /**
  * 登录注册界面
  */
-public class LoginOrRegisterActivity extends AppCompatActivity {
+public class LoginOrRegisterActivity extends BaseCommonActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

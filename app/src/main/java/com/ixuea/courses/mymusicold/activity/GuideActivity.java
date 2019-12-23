@@ -127,6 +127,9 @@ public class GuideActivity extends BaseCommonActivity implements View.OnClickLis
 
     }
 
+    /**
+     * 点击登录注册或者立即体验按钮后，把标志置为false，下次就不进入引导界面了
+     */
     private void setShowGuide() {
 //        PreferenceUtil.getInstance(getMainActivity()).setShowGuide(false);
         sp.setShowGuide(false);

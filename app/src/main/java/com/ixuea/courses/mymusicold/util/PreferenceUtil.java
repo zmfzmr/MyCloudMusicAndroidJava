@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
  */
 public class PreferenceUtil {
 
-    private static final String NAME = "ixuea_my_cloud_music";
+    private static final String NAME = "ixuea_my_cloud_music";//持久化数据库名字
     private static final String SHOW_GUIDE = "SHOW_GUIDE";
     private static PreferenceUtil instance;
     private final Context context;//上下文
@@ -37,6 +37,7 @@ public class PreferenceUtil {
     }
 
     /**
+     * 单例
      * 设置偏好设置单例
      * @param context
      * @return
