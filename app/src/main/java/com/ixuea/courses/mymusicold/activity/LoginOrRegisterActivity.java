@@ -44,7 +44,9 @@ public class LoginOrRegisterActivity extends BaseCommonActivity implements View.
         switch(v.getId()) {
             case R.id.bt_login:
                 Log.d(TAG, "onClick login");
-                break;
+
+                startActivity(LoginActivity.class);
+               break;
             case R.id.bt_register:
                 Log.d(TAG, "onClick register");
                 break;
