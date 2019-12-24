@@ -19,6 +19,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    //将源码兼容版本设置为Java 8（原来默认的是1.7）
+    //因为Butterknife需要Java 8
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -35,6 +42,12 @@ dependencies {
     //圆形指示器
     //https://github.com/ongakuer/CircleIndicator
     implementation 'me.relex:circleindicator:2.1.4'
+
+    //提供通过注解的方式找控件
+    //绑定方法
+    //https://github.com/JakeWharton/butterknife
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
 
     //java测试依赖
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
