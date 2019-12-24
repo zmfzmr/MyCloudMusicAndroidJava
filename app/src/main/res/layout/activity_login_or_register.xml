@@ -4,10 +4,120 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.LoginOrRegisterActivity">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="登录注册"/>
+    android:orientation="vertical">
 
+    <!--顶部-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!--背景-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <!--logo-->
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/ic_launcher" />
+    </RelativeLayout><!--end 顶部-->
+
+    <!--下半部分-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!--登录注册按钮-->
+        <LinearLayout
+            android:layout_marginLeft="@dimen/padding_large"
+            android:layout_marginRight="@dimen/padding_large"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/bt_login"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:background="@drawable/selector_color_primary_reverse"
+                android:text="@string/login"
+                android:textColor="@drawable/selector_text_color_primary" />
+
+            <Button
+                android:id="@+id/bt_register"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginTop="@dimen/padding_large"
+                android:background="@drawable/selector_color_primary_reverse"
+                android:text="@string/register"
+                android:textColor="@drawable/selector_text_color_primary" />
+
+        </LinearLayout><!--end 登录注册按钮-->
+
+        <TextView
+            android:layout_marginBottom="@dimen/padding_large"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/ll_other_login_container"
+            android:textColor="@color/light_grey"
+            android:clickable="true"
+            android:layout_marginTop="@dimen/padding_large"
+            android:text="@string/other_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!--第三方登录按钮-->
+        <LinearLayout
+            android:id="@+id/ll_other_login_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/padding_large"
+            android:orientation="horizontal">
+
+            <include layout="@layout/fill"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/selector_login_wechat" />
+
+            <include layout="@layout/fill"/>
+
+            <ImageView
+                android:id="@+id/iv_login_qq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/selector_login_qq" />
+
+            <include layout="@layout/fill"/>
+
+            <ImageView
+                android:id="@+id/iv_login_weibo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/selector_login_weibo" />
+
+            <include layout="@layout/fill"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/selector_login_netease" />
+
+            <include layout="@layout/fill"/>
+
+        </LinearLayout><!--end 第三方登录按钮-->
+    </RelativeLayout><!--end 下半部分-->
 </LinearLayout>
