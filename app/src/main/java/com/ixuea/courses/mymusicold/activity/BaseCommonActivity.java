@@ -9,6 +9,8 @@ import android.view.WindowManager;
 
 import com.ixuea.courses.mymusicold.util.PreferenceUtil;
 
+import butterknife.ButterKnife;
+
 /**
  * 通用界面逻辑
  */
@@ -18,6 +20,34 @@ public class BaseCommonActivity extends BaseActivity {
      * protected：这样子类才能访问
      */
     protected PreferenceUtil sp;
+
+    @Override
+    protected void initView() {
+        super.initView();
+        //初始化注解找控件
+        //绑定方法框架
+        if (isBindView()) {
+            bindView();
+        }
+    }
+
+
+
+    /**
+     * 是否绑定View
+     * protected:
+     * @return
+     */
+    protected boolean isBindView() {
+        return true;
+    }
+
+    /**
+     * 绑定View
+     */
+    protected void bindView() {
+        ButterKnife.bind(this);
+    }
 
     @Override
     protected void initDatum() {
