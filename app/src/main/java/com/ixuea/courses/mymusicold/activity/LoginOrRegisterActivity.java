@@ -41,14 +41,17 @@ public class LoginOrRegisterActivity extends BaseCommonActivity implements View.
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.bt_login:
                 Log.d(TAG, "onClick login");
 
                 startActivity(LoginActivity.class);
-               break;
+                break;
             case R.id.bt_register:
+                //注册界面
                 Log.d(TAG, "onClick register");
+
+                startActivity(RegisterActivity.class);
                 break;
             default:
                 break;
