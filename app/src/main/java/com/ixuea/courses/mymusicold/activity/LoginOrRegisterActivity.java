@@ -25,6 +25,10 @@ public class LoginOrRegisterActivity extends BaseCommonActivity implements View.
     @Override
     protected void initView() {
         super.initView();
+
+        //显示亮色状态
+        lightStatusBar();
+
         //登录按钮
         bt_login = findViewById(R.id.bt_login);
 
