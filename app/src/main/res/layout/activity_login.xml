@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.LoginActivity">
+    <!-- AppBarLayout主要用来实现标题折叠功能
+         elevation：阴影高度  0dp:表示去掉阴影
 
-    <TextView
-        android:text="登录界面"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+         ?attr/actionBarSize：表示取找这个属性的值，如果找到就用这个actionBarSize值
+         -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/AppTheme.AppBarOverlay"
+        android:elevation="0dp">
+        <!-- Toolbar控件
+            PupupOverlay:翻译：折叠覆盖
 
-</LinearLayout>
+            注意：上面
+                  style="@style/AppTheme.AppBarOverlay"
+                  app:popupTheme="@style/AppTheme.PopupOverlay"
+                  的写法
+            -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+<!--    &lt;!&ndash;内容部分-->
+<!--        layout_behavior:用来控制内容区域&ndash;&gt;-->
+    <LinearLayout
+        android:background="#0f0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
