@@ -5,7 +5,7 @@
     -->
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/AppTheme.AppBarOverlay"
+    android:theme="@style/AppTheme.AppBarOverlay"
     android:elevation="0dp"
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
@@ -19,13 +19,15 @@
               的写法
 
        app:titleTextColor:标题字体颜色 app命名
+
+       这里把  app:titleTextColor="@color/white"去掉（这个只能更改单个，不能更改返回箭头的颜色）
+       所以把AppBarLayout的style变为android:theme，全称是：android:theme="@style/AppTheme.AppBarOverlay"
     -->
     <androidx.appcompat.widget.Toolbar
         android:background="?attr/colorPrimary"
         android:id="@+id/toolbar"
         android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
-        app:titleTextColor="@color/white"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
 </com.google.android.material.appbar.AppBarLayout>

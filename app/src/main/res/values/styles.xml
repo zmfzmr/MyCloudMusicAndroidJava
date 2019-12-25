@@ -13,7 +13,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!--  AppBarLayout样式  -->
+    <!--  AppBarLayout样式
+        这个AppBarLayout样式显示的是暗一点的颜色，那么里面的问题就会显示亮一点的颜色
+     -->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <!--  Toolbar样式  -->
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
