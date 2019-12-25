@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="padding_small">12dp</dimen>
+    <dimen name="padding_middle">10dp</dimen>
     <dimen name="padding_large">20dp</dimen>
+
     <dimen name="button_width_large">130dp</dimen>
     <dimen name="button_height">40dp</dimen>
-    <!--    圆角相关-->
+    <!-- 圆角相关 -->
     <dimen name="radius_button">20dp</dimen>
     <!-- 分割线相关-->
     <dimen name="divider_small">1dp</dimen>
     <dimen name="guide_indicator_height">40dp</dimen>
+    <!--LinearLayout的内边距-->
+    <dimen name="activity_margin">16dp</dimen>
 </resources>

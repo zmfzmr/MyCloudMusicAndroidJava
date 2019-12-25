@@ -16,15 +16,32 @@
     <!--  AppBarLayout样式
         这个AppBarLayout样式显示的是暗一点的颜色，那么里面的问题就会显示亮一点的颜色
      -->
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <!--  Toolbar样式  -->
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
     <style name="TextSmall">
         <item name="android:textColor">@color/light_grey</item>
         <item name="android:textSize">@dimen/padding_large</item>
+    </style>
+
+    <style name="EditText">
+        <!--    宽高    -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!-- 图片和文字距离   图片左边图片 -->
+        <item name="android:drawablePadding">@dimen/padding_middle</item>
+        <item name="android:drawableLeft">@drawable/ic_phone</item>
+        <!-- 内边距 顶部和底部的距离       -->
+        <item name="android:paddingTop">@dimen/padding_middle</item>
+        <item name="android:paddingBottom">@dimen/padding_middle</item>
+
+        <item name="android:layout_marginTop">@dimen/padding_middle</item>
+        <!--最大显示一行-->
+        <item name="android:lines">1</item>
+
+
     </style>
 
 </resources>
