@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 
 import com.ixuea.courses.mymusicold.R;
+import com.ixuea.courses.mymusicold.util.LogUtil;
 
 /**
  * 登录界面
@@ -40,13 +41,13 @@ public class LoginActivity extends BaseTitleActivity {
      */
     @OnClick(R.id.bt_login)
     public void onLoginClick(Button view) {
-        Log.d(TAG, "onLoginClick: ");
+        LogUtil.d(TAG, "onLoginClick: ");
 
     }
 
     @OnClick(R.id.bt_forget_password)
     public void onForgetPasswordClick(Button view) {
-        Log.d(TAG, "onForgetPasswordClick: ");
+        LogUtil.d(TAG, "onForgetPasswordClick: ");
 
     }
 
