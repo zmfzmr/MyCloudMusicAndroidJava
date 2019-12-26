@@ -18,12 +18,23 @@ public class LogUtil {
     private static boolean isDebug = BuildConfig.DEBUG;
     /**
      * 调试级别日志
-     * @param tag
-     * @param value
+     * @param tag TAG
+     * @param value 值
      */
     public static void d(String tag, String value) {
         if (isDebug) {
             Log.d(tag, value);
+        }
+    }
+
+    /**
+     * 警告级别日志
+     * @param tag TAG
+     * @param value 值
+     */
+    public static void w(String tag, String value) {
+        if (isDebug) {
+            Log.w(tag, value);
         }
     }
 }
