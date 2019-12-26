@@ -27,16 +27,19 @@
             后面可以在代码中判断是手机号还是邮箱
        -->
         <EditText
+            android:id="@+id/et_username"
             style="@style/EditText"
             android:hint="@string/enter_username"
             android:inputType="textEmailAddress" />
 
         <EditText
+            android:id="@+id/et_password"
             style="@style/EditText"
             android:hint="@string/enter_password"
             android:inputType="textEmailAddress" />
 
         <Button
+            android:id="@+id/bt_login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
             android:layout_marginTop="@dimen/padding_large"
@@ -49,6 +52,7 @@
             android:background="@color/transparent"
         -->
         <Button
+            android:id="@+id/bt_forget_password"
             style="?attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
