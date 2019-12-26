@@ -40,7 +40,8 @@
         <item name="android:layout_marginTop">@dimen/padding_middle</item>
         <!--最大显示一行-->
         <item name="android:lines">1</item>
-
+        <!--编辑框EditText背景 默认状态和选中状态-->
+        <item name="android:background">@drawable/selector_edit_text</item>
 
     </style>
 
