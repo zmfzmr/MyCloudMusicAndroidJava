@@ -59,6 +59,10 @@ dependencies {
     //http://commons.apache.org/proper/commons-lang/
     implementation 'org.apache.commons:commons-lang3:3.9'
 
+    //toast工具类
+    //https://github.com/GrenderG/Toasty
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

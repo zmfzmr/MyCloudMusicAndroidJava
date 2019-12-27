@@ -1,13 +1,11 @@
 package com.ixuea.courses.mymusicold.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,6 +13,7 @@ import android.widget.Toast;
 
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.util.LogUtil;
+import com.ixuea.courses.mymusicold.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -53,7 +52,9 @@ public class LoginActivity extends BaseTitleActivity {
         //isBlank：方法里面判断了 如果没有输入，或者输入的有空格 都会为true
         if (StringUtils.isBlank(username)) {//如果用户名没有输入(也就是为空)
             LogUtil.d(TAG, "onLoginClick user empty");
-            Toast.makeText(getMainActivity(), R.string.enter_username, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getMainActivity(), R.string.enter_username, Toast.LENGTH_SHORT).show();
+//            Toasty.error(getMainActivity(),R.string.enter_username,Toasty.LENGTH_SHORT).show();
+            ToastUtil.errorShortToast(getMainActivity(), R.string.enter_username);
             return;
         }
 
@@ -63,11 +64,13 @@ public class LoginActivity extends BaseTitleActivity {
         if (TextUtils.isEmpty(password)) {
             //这里用的是w警告
             LogUtil.w(TAG, "onLoginClick password empty");
-            Toast.makeText(getMainActivity(), R.string.enter_password, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getMainActivity(), R.string.enter_password, Toast.LENGTH_SHORT).show();
+            ToastUtil.errorShortToast(getMainActivity(), R.string.enter_password);
             return;
         }
 
         //TODO 调用登录方法
+        ToastUtil.successLongToast(getMainActivity(), R.string.login_success);
 
 
     }
