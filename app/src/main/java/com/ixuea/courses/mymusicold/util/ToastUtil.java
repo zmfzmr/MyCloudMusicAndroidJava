@@ -2,8 +2,6 @@ package com.ixuea.courses.mymusicold.util;
 
 import android.content.Context;
 
-import com.ixuea.courses.mymusicold.activity.BaseCommonActivity;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import es.dmoral.toasty.Toasty;
