@@ -12,6 +12,9 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //开启MultiDex
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -62,6 +65,9 @@ dependencies {
     //toast工具类
     //https://github.com/GrenderG/Toasty
     implementation 'com.github.GrenderG:Toasty:1.4.2'
+
+    //MultiDex
+    implementation "androidx.multidex:multidex:2.0.0"
 
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
