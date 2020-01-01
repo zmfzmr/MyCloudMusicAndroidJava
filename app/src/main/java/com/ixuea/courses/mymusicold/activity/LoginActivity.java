@@ -52,7 +52,7 @@ public class LoginActivity extends BaseTitleActivity {
             LogUtil.d(TAG, "onLoginClick user empty");
 //            Toast.makeText(getMainActivity(), R.string.enter_username, Toast.LENGTH_SHORT).show();
 //            Toasty.error(getMainActivity(),R.string.enter_username,Toasty.LENGTH_SHORT).show();
-            ToastUtil.errorShortToast(getMainActivity(), R.string.enter_username);
+            ToastUtil.errorShortToast(R.string.enter_username);
             return;
         }
 
@@ -62,7 +62,7 @@ public class LoginActivity extends BaseTitleActivity {
         //就是格式错误
         //其实就是点击的时候，把值传入过去，看是否匹配正则表达式，匹配就返回true,否则就返回false
         if (!(StringUtil.isPhone(username) || StringUtil.isEmail(username))) {
-            ToastUtil.errorShortToast(getMainActivity(), R.string.error_username_format);
+            ToastUtil.errorShortToast(R.string.error_username_format);
             return;
         }
 
@@ -73,18 +73,18 @@ public class LoginActivity extends BaseTitleActivity {
             //这里用的是w警告
             LogUtil.w(TAG, "onLoginClick password empty");
 //            Toast.makeText(getMainActivity(), R.string.enter_password, Toast.LENGTH_SHORT).show();
-            ToastUtil.errorShortToast(getMainActivity(), R.string.enter_password);
+            ToastUtil.errorShortToast(R.string.enter_password);
             return;
         }
 
         //判断密码格式
         if (!StringUtil.isPassword(password)) {
-            ToastUtil.errorShortToast(getMainActivity(), R.string.error_password_format);
+            ToastUtil.errorShortToast(R.string.error_password_format);
             return;
         }
 
         //TODO 调用登录方法
-        ToastUtil.successLongToast(getMainActivity(), R.string.login_success);
+        ToastUtil.successLongToast(R.string.login_success);
 
 
     }

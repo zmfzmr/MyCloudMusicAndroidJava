@@ -2,6 +2,8 @@ package com.ixuea.courses.mymusicold;
 
 import android.app.Application;
 
+import com.ixuea.courses.mymusicold.util.ToastUtil;
+
 import es.dmoral.toasty.Toasty;
 
 /**
@@ -17,5 +19,7 @@ public class AppContext extends Application {
         super.onCreate();
         //初始化toast工具类
         Toasty.Config.getInstance().apply();
+        //初始化Toast工具类
+        ToastUtil.init(getApplicationContext());
     }
 }
