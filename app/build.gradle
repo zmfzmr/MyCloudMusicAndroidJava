@@ -69,6 +69,14 @@ dependencies {
     //MultiDex
     implementation "androidx.multidex:multidex:2.0.0"
 
+    //使用了Android响应式编程
+    //RxJava和RxAndroid区别？
+    //简单来说：就是RxAndroid在RxJava的基础上
+    //优化了一些功能
+    //增强了Android特有的功能
+    //https://github.com/ReactiveX/RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
