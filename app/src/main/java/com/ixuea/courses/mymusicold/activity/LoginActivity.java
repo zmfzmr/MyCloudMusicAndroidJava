@@ -1,21 +1,19 @@
 package com.ixuea.courses.mymusicold.activity;
 
-import butterknife.BindView;
-import butterknife.OnClick;
-import es.dmoral.toasty.Toasty;
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
 
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.util.LogUtil;
+import com.ixuea.courses.mymusicold.util.StringUtil;
 import com.ixuea.courses.mymusicold.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 登录界面
@@ -58,6 +56,16 @@ public class LoginActivity extends BaseTitleActivity {
             return;
         }
 
+        //格式判断（正则表达式判断是否匹配）
+        //如果是用户名
+        //不是手机号也不是邮箱
+        //就是格式错误
+        //其实就是点击的时候，把值传入过去，看是否匹配正则表达式，匹配就返回true,否则就返回false
+        if (!(StringUtil.isPhone(username) || StringUtil.isEmail(username))) {
+            ToastUtil.errorShortToast(getMainActivity(), R.string.error_username_format);
+            return;
+        }
+
         //获取密码
         String password = et_password.getText().toString().trim();
         //注意：也可以用 TextUtils.isEmpty(password) 这个就相当简单些，没有那么复杂了，可以点击进入查看
@@ -66,6 +74,12 @@ public class LoginActivity extends BaseTitleActivity {
             LogUtil.w(TAG, "onLoginClick password empty");
 //            Toast.makeText(getMainActivity(), R.string.enter_password, Toast.LENGTH_SHORT).show();
             ToastUtil.errorShortToast(getMainActivity(), R.string.enter_password);
+            return;
+        }
+
+        //判断密码格式
+        if (!StringUtil.isPassword(password)) {
+            ToastUtil.errorShortToast(getMainActivity(), R.string.error_password_format);
             return;
         }
 

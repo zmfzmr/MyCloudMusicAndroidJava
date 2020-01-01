@@ -36,7 +36,7 @@
             android:id="@+id/et_password"
             style="@style/EditText"
             android:hint="@string/enter_password"
-            android:inputType="textEmailAddress" />
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/bt_login"
