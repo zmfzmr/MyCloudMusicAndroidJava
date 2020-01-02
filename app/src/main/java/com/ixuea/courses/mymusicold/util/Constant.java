@@ -1,9 +1,19 @@
 package com.ixuea.courses.mymusicold.util;
 
+import com.ixuea.courses.mymusicold.BuildConfig;
+
 /**
  * 常量类
  */
 public class Constant {
+
+    /**
+     * 资源端点
+     * 哪天不需要BuildConfig.ENDPOINT啦，直接更改Constant这个类就可以，这样就和BuildConfig没有关系
+     * 替换更加容易
+     */
+    public static final String ENDPOINT = BuildConfig.ENDPOINT;
+
     public static final String ID = "ID";
 
     /**
@@ -26,5 +36,6 @@ public class Constant {
      * {n,m}	重复n到m次 比如：{2,6} 重复2次到6次
      */
     public static final String REGEX_EMAIL = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$";
+
 
 }

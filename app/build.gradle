@@ -15,11 +15,37 @@ android {
 
         //开启MultiDex
         multiDexEnabled true
+
+        //渠道相关
+        flavorDimensions "versionCode"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //配置不同的环境
+    productFlavors{
+        //开发环境
+        dev {
+            //API端点
+            //注意：这里是可以单引号的（也可以双引号），而java语言是不能这样用的（java单引号只能一个字符）
+            //'"http://api-courses-misuc.ixuea.com/"':单引号里面有个双引号，
+            //包含双引号的才是他到的值，"http://api-courses-misuc.ixuea.com/"
+            buildConfigField('String',"ENDPOINT",'"http://dev-my-cloud-music-api-rails.ixuea.com/"')
+
+            dimension = minSdkVersion
+        }
+
+        //正式环境
+        prod {
+            //API端点
+            //buildConfigField:方法  后面省略了括号
+            buildConfigField 'String','ENDPOINT','"http://api-courses-misuc.ixuea.com/"'
+            //minSdkVersion()  这里省略了(),原本是一个方法
+            dimension = minSdkVersion
         }
     }
 
