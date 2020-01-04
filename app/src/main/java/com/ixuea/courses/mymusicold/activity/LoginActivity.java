@@ -5,9 +5,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ixuea.courses.mymusicold.R;
-import com.ixuea.courses.mymusicold.api.Service;
+import com.ixuea.courses.mymusicold.api.Api;
 import com.ixuea.courses.mymusicold.domain.SheetDetailWrapper;
-import com.ixuea.courses.mymusicold.util.Constant;
 import com.ixuea.courses.mymusicold.util.LogUtil;
 import com.ixuea.courses.mymusicold.util.ToastUtil;
 
@@ -21,11 +20,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.OkHttpClient;
 import retrofit2.HttpException;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 登录界面
@@ -57,28 +52,29 @@ public class LoginActivity extends BaseTitleActivity {
         LogUtil.d(TAG, "onLoginClick: ");
         //测试网络请求
 
-        OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder();
-        //构建者模式
-        //初始化Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                //让Retrofit使用okhttp
-                .client(okhttpClientBuilder.build())
-                //api地址
-                .baseUrl(Constant.ENDPOINT)//这里使用的是地址的公共前缀
-                //适配Rxjava（就是所返回的对象以Rxjava这种方式来工作（比如我们使用了Observable这种方式，接口Service查看））
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                //使用gson解析json
-                //包括请求参数和响应
-                // （比如使用Retrofit请求框架请求数据，发送对象，也会转换成json（使用gson转换））
-                .addConverterFactory(GsonConverterFactory.create())
-                //创建Retrofit
-                .build();
-
-        //创建Service
-        Service service = retrofit.create(Service.class);
+//        OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder();
+//        //构建者模式
+//        //初始化Retrofit
+//        Retrofit retrofit = new Retrofit.Builder()
+//                //让Retrofit使用okhttp
+//                .client(okhttpClientBuilder.build())
+//                //api地址
+//                .baseUrl(Constant.ENDPOINT)//这里使用的是地址的公共前缀
+//                //适配Rxjava（就是所返回的对象以Rxjava这种方式来工作（比如我们使用了Observable这种方式，接口Service查看））
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                //使用gson解析json
+//                //包括请求参数和响应
+//                // （比如使用Retrofit请求框架请求数据，发送对象，也会转换成json（使用gson转换））
+//                .addConverterFactory(GsonConverterFactory.create())
+//                //创建Retrofit
+//                .build();
+//
+//        //创建Service
+//        Service service = retrofit.create(Service.class);
 
         //请求歌单详情
-        service.sheetDetail("1")
+//        service.sheetDetail("1")
+        Api.getInstance().sheetDetail("1")
                 .subscribeOn(Schedulers.io())//在子线程执行
                 .observeOn(AndroidSchedulers.mainThread())//在主线程观察（操作UI在主线程）
                 //接口方法里面对应的对象：SheetDetailWrapper
@@ -143,7 +139,6 @@ public class LoginActivity extends BaseTitleActivity {
 
                     }
                 });
-
 
 //        //获取用户名
 //        String username = et_username.getText().toString().trim();
