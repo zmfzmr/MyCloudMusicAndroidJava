@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusicold.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -81,7 +82,7 @@ public class LoginActivity extends BaseTitleActivity {
                 .subscribe(new Observer<SheetDetailWrapper>() {//订阅回来的数据
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        Log.d(TAG, "onSubscribe: ");
                     }
 
                     /**
@@ -91,7 +92,7 @@ public class LoginActivity extends BaseTitleActivity {
                      */
                     @Override
                     public void onNext(SheetDetailWrapper sheetDetailWrapper) {
-                        LogUtil.d(TAG, "request sheet detail success:" + sheetDetailWrapper.getData().getTitle());
+                        LogUtil.d(TAG, "onNext:" + sheetDetailWrapper.getData().getTitle());
 
                     }
 
@@ -102,7 +103,8 @@ public class LoginActivity extends BaseTitleActivity {
                      */
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
+                        Log.d(TAG, "onError: ");
+//                        e.printStackTrace();
 //                        LogUtil.d(TAG,"request sheet detail failed:" + e.getLocalizedMessage());
 
                         //判断错误类型
