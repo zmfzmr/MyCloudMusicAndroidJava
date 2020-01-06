@@ -1,8 +1,8 @@
 package com.ixuea.courses.mymusicold.api;
 
 import com.ixuea.courses.mymusicold.domain.Sheet;
-import com.ixuea.courses.mymusicold.domain.SheetListWrapper;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
+import com.ixuea.courses.mymusicold.domain.response.ListResponse;
 import com.ixuea.courses.mymusicold.util.Constant;
 
 import io.reactivex.Observable;
@@ -70,7 +70,7 @@ public class Api {
      *
      * @return 返回Observable<SheetListWrapper>
      */
-    public Observable<SheetListWrapper> sheets() {
+    public Observable<ListResponse<Sheet>> sheets() {
         return service.sheets()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

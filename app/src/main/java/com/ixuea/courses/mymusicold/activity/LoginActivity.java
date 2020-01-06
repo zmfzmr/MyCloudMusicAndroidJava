@@ -7,7 +7,7 @@ import android.widget.EditText;
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.api.Api;
 import com.ixuea.courses.mymusicold.domain.Sheet;
-import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
+import com.ixuea.courses.mymusicold.domain.response.ListResponse;
 import com.ixuea.courses.mymusicold.util.LogUtil;
 
 import butterknife.BindView;
@@ -177,17 +177,42 @@ public class LoginActivity extends BaseTitleActivity {
 //
 //                    }
 //                });
-        //请求DetailResponse歌单详情（封装接口后使用）
-        Api.getInstance().sheetDetail("1")
-                .subscribe(new Observer<DetailResponse<Sheet>>() {
+
+//        //请求DetailResponse歌单详情（封装接口后使用）
+//        Api.getInstance().sheetDetail("1")
+//                .subscribe(new Observer<DetailResponse<Sheet>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(DetailResponse<Sheet> sheetDetailResponse) {
+//                        LogUtil.d(TAG, "onNext:" + sheetDetailResponse.getData().getTitle());
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+
+        //使用ListResponse
+        Api.getInstance().sheets()
+                .subscribe(new Observer<ListResponse<Sheet>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(DetailResponse<Sheet> sheetDetailResponse) {
-                        LogUtil.d(TAG, "onNext:" + sheetDetailResponse.getData().getTitle());
+                    public void onNext(ListResponse<Sheet> sheetListResponse) {
+                        LogUtil.d(TAG, "onNext：" + sheetListResponse.getData().size());
                     }
 
                     @Override

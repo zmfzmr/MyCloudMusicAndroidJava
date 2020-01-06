@@ -1,8 +1,8 @@
 package com.ixuea.courses.mymusicold.api;
 
 import com.ixuea.courses.mymusicold.domain.Sheet;
-import com.ixuea.courses.mymusicold.domain.SheetListWrapper;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
+import com.ixuea.courses.mymusicold.domain.response.ListResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -22,7 +22,8 @@ public interface Service {
      * 歌单列表
      */
     @GET("v1/sheets")
-    Observable<SheetListWrapper> sheets();
+//    Observable<SheetListWrapper> sheets();
+    Observable<ListResponse<Sheet>> sheets();
 
     /**
      * 歌单详情
