@@ -7,13 +7,12 @@ import android.widget.EditText;
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.api.Api;
 import com.ixuea.courses.mymusicold.domain.Sheet;
-import com.ixuea.courses.mymusicold.domain.response.ListResponse;
+import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
+import com.ixuea.courses.mymusicold.listener.ObserverAdapter;
 import com.ixuea.courses.mymusicold.util.LogUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 
 /**
  * 登录界面
@@ -202,30 +201,39 @@ public class LoginActivity extends BaseTitleActivity {
 //                    }
 //                });
 
-        //使用ListResponse
-        Api.getInstance().sheets()
-                .subscribe(new Observer<ListResponse<Sheet>>() {
+//        //使用ListResponse
+//        Api.getInstance().sheets()
+//                .subscribe(new Observer<ListResponse<Sheet>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(ListResponse<Sheet> sheetListResponse) {
+//                        LogUtil.d(TAG, "onNext：" + sheetListResponse.getData().size());
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+
+        //使用ObserverAdapter
+        Api.getInstance().sheetDetail("1")
+                .subscribe(new ObserverAdapter<DetailResponse<Sheet>>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(ListResponse<Sheet> sheetListResponse) {
-                        LogUtil.d(TAG, "onNext：" + sheetListResponse.getData().size());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
+                    public void onNext(DetailResponse<Sheet> sheetDetailResponse) {
+                        super.onNext(sheetDetailResponse);
+                        LogUtil.d(TAG, "onNext:" + sheetDetailResponse.getData().getTitle());
                     }
                 });
-
 
 //        //获取用户名
 //        String username = et_username.getText().toString().trim();
