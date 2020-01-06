@@ -1,27 +1,16 @@
 package com.ixuea.courses.mymusicold.activity;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.ixuea.courses.mymusicold.R;
-import com.ixuea.courses.mymusicold.api.Api;
-import com.ixuea.courses.mymusicold.domain.SheetDetailWrapper;
+import com.ixuea.courses.mymusicold.util.LoadingUtil;
 import com.ixuea.courses.mymusicold.util.LogUtil;
-import com.ixuea.courses.mymusicold.util.ToastUtil;
-
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 /**
  * 登录界面
@@ -75,72 +64,84 @@ public class LoginActivity extends BaseTitleActivity {
 
         //请求歌单详情
 //        service.sheetDetail("1")
-        Api.getInstance().sheetDetail("1")
-                .subscribeOn(Schedulers.io())//在子线程执行
-                .observeOn(AndroidSchedulers.mainThread())//在主线程观察（操作UI在主线程）
-                //接口方法里面对应的对象：SheetDetailWrapper
-                .subscribe(new Observer<SheetDetailWrapper>() {//订阅回来的数据
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        Log.d(TAG, "onSubscribe: ");
-                    }
+//        Api.getInstance().sheetDetail("1")
+//                .subscribeOn(Schedulers.io())//在子线程执行
+//                .observeOn(AndroidSchedulers.mainThread())//在主线程观察（操作UI在主线程）
+//                //接口方法里面对应的对象：SheetDetailWrapper
+//                .subscribe(new Observer<SheetDetailWrapper>() {//订阅回来的数据
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//                        Log.d(TAG, "onSubscribe: ");
+//                    }
+//
+//                    /**
+//                     * 请求成功
+//                     *
+//                     * @param sheetDetailWrapper 解析回来的对象
+//                     */
+//                    @Override
+//                    public void onNext(SheetDetailWrapper sheetDetailWrapper) {
+//                        LogUtil.d(TAG, "onNext:" + sheetDetailWrapper.getData().getTitle());
+//
+//                    }
+//
+//                    /**
+//                     * 请求失败
+//                     *
+//                     * @param e Error
+//                     */
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Log.d(TAG, "onError: ");
+////                        e.printStackTrace();
+////                        LogUtil.d(TAG,"request sheet detail failed:" + e.getLocalizedMessage());
+//
+//                        //判断错误类型
+//                        if (e instanceof UnknownHostException) {
+//                            ToastUtil.errorShortToast(R.string.error_network_unknown_host);
+//                        } else if (e instanceof ConnectException) {
+//                            ToastUtil.errorShortToast(R.string.error_network_connect);
+//                        } else if (e instanceof SocketTimeoutException) {
+//                            ToastUtil.errorShortToast(R.string.error_network_timeout);
+//                        } else if (e instanceof HttpException) {
+//                            HttpException exception = (HttpException) e;
+//                            int code = exception.code();
+//                            if (code == 401) {
+//                                ToastUtil.errorShortToast(R.string.error_network_not_auth);
+//                            } else if (code == 403) {
+//                                ToastUtil.errorShortToast(R.string.error_network_not_permission);
+//                            } else if (code == 404) {
+//                                ToastUtil.errorShortToast(R.string.error_network_not_found);
+//                            } else if (code >= 500) {
+//                                ToastUtil.errorShortToast(R.string.error_network_server);
+//                            } else {
+//                                ToastUtil.errorShortToast(R.string.error_network_unknown);
+//                            }
+//                        } else {
+//                            ToastUtil.errorShortToast(R.string.error_network_unknown);
+//                        }
+//                    }
+//
+//                    /**
+//                     * 请求结束
+//                     */
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
 
-                    /**
-                     * 请求成功
-                     *
-                     * @param sheetDetailWrapper 解析回来的对象
-                     */
-                    @Override
-                    public void onNext(SheetDetailWrapper sheetDetailWrapper) {
-                        LogUtil.d(TAG, "onNext:" + sheetDetailWrapper.getData().getTitle());
+        //测试加载提示框
+        LoadingUtil.showLoading(getMainActivity());
 
-                    }
-
-                    /**
-                     * 请求失败
-                     *
-                     * @param e Error
-                     */
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError: ");
-//                        e.printStackTrace();
-//                        LogUtil.d(TAG,"request sheet detail failed:" + e.getLocalizedMessage());
-
-                        //判断错误类型
-                        if (e instanceof UnknownHostException) {
-                            ToastUtil.errorShortToast(R.string.error_network_unknown_host);
-                        } else if (e instanceof ConnectException) {
-                            ToastUtil.errorShortToast(R.string.error_network_connect);
-                        } else if (e instanceof SocketTimeoutException) {
-                            ToastUtil.errorShortToast(R.string.error_network_timeout);
-                        } else if (e instanceof HttpException) {
-                            HttpException exception = (HttpException) e;
-                            int code = exception.code();
-                            if (code == 401) {
-                                ToastUtil.errorShortToast(R.string.error_network_not_auth);
-                            } else if (code == 403) {
-                                ToastUtil.errorShortToast(R.string.error_network_not_permission);
-                            } else if (code == 404) {
-                                ToastUtil.errorShortToast(R.string.error_network_not_found);
-                            } else if (code >= 500) {
-                                ToastUtil.errorShortToast(R.string.error_network_server);
-                            } else {
-                                ToastUtil.errorShortToast(R.string.error_network_unknown);
-                            }
-                        } else {
-                            ToastUtil.errorShortToast(R.string.error_network_unknown);
-                        }
-                    }
-
-                    /**
-                     * 请求结束
-                     */
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        //3秒中隐藏加载提示框
+        //因显示后无法点击后面的按钮（也就是当前页面点击的3s后关闭，在另一个页面关闭麻烦）
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LoadingUtil.hideLoading();
+            }
+        }, 3000);
 
 //        //获取用户名
 //        String username = et_username.getText().toString().trim();
