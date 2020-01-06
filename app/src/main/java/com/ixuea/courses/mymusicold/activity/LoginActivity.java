@@ -8,7 +8,7 @@ import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.api.Api;
 import com.ixuea.courses.mymusicold.domain.Sheet;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
-import com.ixuea.courses.mymusicold.listener.ObserverAdapter;
+import com.ixuea.courses.mymusicold.listener.HttpObserver;
 import com.ixuea.courses.mymusicold.util.LogUtil;
 
 import butterknife.BindView;
@@ -225,16 +225,24 @@ public class LoginActivity extends BaseTitleActivity {
 //                    }
 //                });
 
-        //使用ObserverAdapter
+//        //使用ObserverAdapter
+//        Api.getInstance().sheetDetail("1")
+//                .subscribe(new ObserverAdapter<DetailResponse<Sheet>>() {
+//                    @Override
+//                    public void onNext(DetailResponse<Sheet> sheetDetailResponse) {
+//                        super.onNext(sheetDetailResponse);
+//                        LogUtil.d(TAG, "onNext:" + sheetDetailResponse.getData().getTitle());
+//                    }
+//                });
+
+        //使用HttpObserver
         Api.getInstance().sheetDetail("1")
-                .subscribe(new ObserverAdapter<DetailResponse<Sheet>>() {
+                .subscribe(new HttpObserver<DetailResponse<Sheet>>() {
                     @Override
-                    public void onNext(DetailResponse<Sheet> sheetDetailResponse) {
-                        super.onNext(sheetDetailResponse);
-                        LogUtil.d(TAG, "onNext:" + sheetDetailResponse.getData().getTitle());
+                    public void onSucceeded(DetailResponse<Sheet> data) {
+                        LogUtil.d(TAG, "onSucceeded:" + data.getData().getTitle());
                     }
                 });
-
 //        //获取用户名
 //        String username = et_username.getText().toString().trim();
 //        //注意：这里没有用isEmpty,而用的是isBlank
