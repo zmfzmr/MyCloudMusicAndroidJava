@@ -1,7 +1,8 @@
 package com.ixuea.courses.mymusicold.api;
 
-import com.ixuea.courses.mymusicold.domain.SheetDetailWrapper;
+import com.ixuea.courses.mymusicold.domain.Sheet;
 import com.ixuea.courses.mymusicold.domain.SheetListWrapper;
+import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
 import com.ixuea.courses.mymusicold.util.Constant;
 
 import io.reactivex.Observable;
@@ -81,7 +82,7 @@ public class Api {
      * @param id 传入的第几个歌曲Id
      * @return 返回Retrofit接口实例 里面的方法返回的对象
      */
-    public Observable<SheetDetailWrapper> sheetDetail(String id) {
+    public Observable<DetailResponse<Sheet>> sheetDetail(String id) {
         return service.sheetDetail(id)
                 .subscribeOn(Schedulers.io())//在子线程执行
                 .observeOn(AndroidSchedulers.mainThread());//在主线程观察（操作UI在主线程）

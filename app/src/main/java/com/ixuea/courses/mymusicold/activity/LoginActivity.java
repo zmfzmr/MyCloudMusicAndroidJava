@@ -6,7 +6,8 @@ import android.widget.EditText;
 
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.api.Api;
-import com.ixuea.courses.mymusicold.domain.SheetListWrapper;
+import com.ixuea.courses.mymusicold.domain.Sheet;
+import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
 import com.ixuea.courses.mymusicold.util.LogUtil;
 
 import butterknife.BindView;
@@ -152,18 +153,41 @@ public class LoginActivity extends BaseTitleActivity {
 //            }
 //        }, 3000);
 
-        //请求歌单列表
-        Api.getInstance()
-                .sheets()
-                .subscribe(new Observer<SheetListWrapper>() {
+//        //请求歌单列表
+//        Api.getInstance()
+//                .sheets()
+//                .subscribe(new Observer<SheetListWrapper>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(SheetListWrapper sheetListWrapper) {
+//                        LogUtil.d(TAG, "onNext:" + sheetListWrapper.getData().size());
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+        //请求DetailResponse歌单详情（封装接口后使用）
+        Api.getInstance().sheetDetail("1")
+                .subscribe(new Observer<DetailResponse<Sheet>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(SheetListWrapper sheetListWrapper) {
-                        LogUtil.d(TAG, "onNext:" + sheetListWrapper.getData().size());
+                    public void onNext(DetailResponse<Sheet> sheetDetailResponse) {
+                        LogUtil.d(TAG, "onNext:" + sheetDetailResponse.getData().getTitle());
                     }
 
                     @Override
@@ -176,7 +200,6 @@ public class LoginActivity extends BaseTitleActivity {
 
                     }
                 });
-
 
 
 //        //获取用户名

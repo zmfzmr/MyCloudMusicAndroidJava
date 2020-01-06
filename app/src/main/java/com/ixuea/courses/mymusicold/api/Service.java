@@ -1,7 +1,8 @@
 package com.ixuea.courses.mymusicold.api;
 
-import com.ixuea.courses.mymusicold.domain.SheetDetailWrapper;
+import com.ixuea.courses.mymusicold.domain.Sheet;
 import com.ixuea.courses.mymusicold.domain.SheetListWrapper;
+import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -38,7 +39,7 @@ public interface Service {
      *           Observable：rxjava里面的类
      */
     @GET("v1/sheets/{id}")
-    Observable<SheetDetailWrapper> sheetDetail(@Path("id") String id);
-
+//    Observable<SheetDetailWrapper> sheetDetail(@Path("id") String id);
+    Observable<DetailResponse<Sheet>> sheetDetail(@Path("id") String id);
 
 }
