@@ -12,6 +12,7 @@ public class SheetDetailWrapper {
      */
     private Sheet data;
 
+    //这里返回的是单个歌单Sheet，//SheetListWrapper那边返回的是多个歌单，也就是list，
     public Sheet getData() {
         return data;
     }

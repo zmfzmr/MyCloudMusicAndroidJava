@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusicold.api;
 
 import com.ixuea.courses.mymusicold.domain.SheetDetailWrapper;
+import com.ixuea.courses.mymusicold.domain.SheetListWrapper;
 import com.ixuea.courses.mymusicold.util.Constant;
 
 import io.reactivex.Observable;
@@ -61,6 +62,17 @@ public class Api {
 
         //创建Service
         service = retrofit.create(Service.class);
+    }
+
+    /**
+     * 歌单列表
+     *
+     * @return 返回Observable<SheetListWrapper>
+     */
+    public Observable<SheetListWrapper> sheets() {
+        return service.sheets()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**

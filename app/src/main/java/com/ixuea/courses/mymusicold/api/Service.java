@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusicold.api;
 
 import com.ixuea.courses.mymusicold.domain.SheetDetailWrapper;
+import com.ixuea.courses.mymusicold.domain.SheetListWrapper;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -15,6 +16,12 @@ import retrofit2.http.Path;
  * 在《详解Retrofit》课程中讲解
  */
 public interface Service {
+
+    /**
+     * 歌单列表
+     */
+    @GET("v1/sheets")
+    Observable<SheetListWrapper> sheets();
 
     /**
      * 歌单详情
@@ -32,4 +39,6 @@ public interface Service {
      */
     @GET("v1/sheets/{id}")
     Observable<SheetDetailWrapper> sheetDetail(@Path("id") String id);
+
+
 }
