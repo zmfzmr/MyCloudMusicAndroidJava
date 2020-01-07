@@ -86,12 +86,12 @@ public class SplashActivity extends BaseCommonActivity {
         //延时3秒
         //在企业中通常会有很多逻辑处理
         //所以延时时间最好是用3-消耗的的时间
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
                 handler.sendEmptyMessage(MSG_NEXT);
-            }
-        }, DEFAULT_DELAY_TIME);
+//            }
+//        }, DEFAULT_DELAY_TIME);
     }
 
     @Override

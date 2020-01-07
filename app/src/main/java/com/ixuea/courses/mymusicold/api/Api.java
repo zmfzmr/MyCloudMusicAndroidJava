@@ -1,9 +1,14 @@
 package com.ixuea.courses.mymusicold.api;
 
 import com.ixuea.courses.mymusicold.domain.Sheet;
+import com.ixuea.courses.mymusicold.domain.User;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
 import com.ixuea.courses.mymusicold.domain.response.ListResponse;
 import com.ixuea.courses.mymusicold.util.Constant;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -84,6 +89,28 @@ public class Api {
      */
     public Observable<DetailResponse<Sheet>> sheetDetail(String id) {
         return service.sheetDetail(id)
+                .subscribeOn(Schedulers.io())//在子线程执行
+                .observeOn(AndroidSchedulers.mainThread());//在主线程观察（操作UI在主线程）
+    }
+
+    /**
+     * 歌单详情
+     *
+     * @param id 传入的第几个歌曲Id
+     * @return 返回Retrofit接口实例 里面的方法返回的对象
+     */
+    public Observable<DetailResponse<User>> userDetail(String id, String nickname) {
+
+        //添加查询参数
+        HashMap<String, String> data = new HashMap<>();
+
+        if (StringUtils.isNotBlank(nickname)) {
+            //如果昵称不为空才添加
+            // nickname=11111111  键Constant.NICKNAME对应nickname;  值nickname对应11111111
+            data.put(Constant.NICKNAME, nickname);
+        }
+
+        return service.userDetail(id, data)
                 .subscribeOn(Schedulers.io())//在子线程执行
                 .observeOn(AndroidSchedulers.mainThread());//在主线程观察（操作UI在主线程）
     }

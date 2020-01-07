@@ -41,6 +41,17 @@ public class ToastUtil {
     }
 
     /**
+     * 显示短时间错误toast 字符串的形式  目前requestErrorHandler方法使用到
+     *
+     * @param message Message
+     */
+    public static void errorShortToast(String message) {
+        //必须要调用show方法
+        Toasty.error(context, message, Toasty.LENGTH_SHORT).show();
+    }
+
+
+    /**
      * 显示长时间错误toast
      * @param id      字符串id
      */

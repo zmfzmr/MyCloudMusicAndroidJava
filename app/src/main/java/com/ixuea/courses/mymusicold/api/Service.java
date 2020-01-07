@@ -1,12 +1,16 @@
 package com.ixuea.courses.mymusicold.api;
 
 import com.ixuea.courses.mymusicold.domain.Sheet;
+import com.ixuea.courses.mymusicold.domain.User;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
 import com.ixuea.courses.mymusicold.domain.response.ListResponse;
+
+import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.QueryMap;
 
 /**
  * 网络接口配置
@@ -39,8 +43,19 @@ public interface Service {
      *           Observable<SheetDetailWrapper>：相等于把json数据转换成这个SheetDetailWrapper类型的对象
      *           Observable：rxjava里面的类
      */
+//    @GET("v1/sheets11111111/{id}")//404
     @GET("v1/sheets/{id}")
 //    Observable<SheetDetailWrapper> sheetDetail(@Path("id") String id);
     Observable<DetailResponse<Sheet>> sheetDetail(@Path("id") String id);
+
+    /**
+     * 用户详情
+     * //后面的查询参数会自动添加到后面的
+     * http://dev-my-cloud-music-api-rails.ixuea.com/v1/users/-1?nickname=11111111
+     * 比如这里吗的 问号？和参数nickname=11111111会添加到后面
+     * 因为这里有个参数 @QueryMap Map<String,String> data
+     */
+    @GET("v1/users/{id}")
+    Observable<DetailResponse<User>> userDetail(@Path("id") String id, @QueryMap Map<String, String> data);
 
 }

@@ -37,5 +37,8 @@ public class Constant {
      */
     public static final String REGEX_EMAIL = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$";
 
-
+    /**
+     * 用户详情昵称查询字段
+     */
+    public static final String NICKNAME = "nickname";
 }
