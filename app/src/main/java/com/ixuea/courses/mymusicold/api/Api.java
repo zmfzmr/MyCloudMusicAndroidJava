@@ -5,6 +5,7 @@ import com.ixuea.courses.mymusicold.domain.User;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
 import com.ixuea.courses.mymusicold.domain.response.ListResponse;
 import com.ixuea.courses.mymusicold.util.Constant;
+import com.ixuea.courses.mymusicold.util.LogUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,6 +15,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -50,6 +52,18 @@ public class Api {
      */
     private Api() {
         OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder();
+        if (LogUtil.isDebug) {//是//调试模式的时候才添加拦截器
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            ///设置日志等级
+            loggingInterceptor.level(HttpLoggingInterceptor.Level.BASIC);
+            //打印请求头
+//            loggingInterceptor.level(HttpLoggingInterceptor.Level.HEADERS);
+            //打印BODy
+//            loggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
+            //添加拦截器到OkHttpClient.Builder（添加到网络框架中）
+            okhttpClientBuilder.addInterceptor(loggingInterceptor);
+        }
+
         //构建者模式
         //初始化Retrofit
         Retrofit retrofit = new Retrofit.Builder()

@@ -15,7 +15,7 @@ public class LogUtil {
      * studio工具左边Build Variants栏 为debug状态，
      * 那么这个BuildConfig.DEBUG为true，否则为false
      */
-    private static boolean isDebug = BuildConfig.DEBUG;
+    public static boolean isDebug = BuildConfig.DEBUG;
     /**
      * 调试级别日志
      * @param tag TAG
