@@ -64,8 +64,8 @@ public class Api {
             //添加拦截器到OkHttpClient.Builder（添加到网络框架中）
             okhttpClientBuilder.addInterceptor(loggingInterceptor);
 
-            //添加Stetho抓包拦截器
-            okhttpClientBuilder.addInterceptor(new StethoInterceptor());
+            //添加Stetho抓包拦截器(注意：addNetworkInterceptor，而不是addInterceptor)
+            okhttpClientBuilder.addNetworkInterceptor(new StethoInterceptor());
 
         }
 
