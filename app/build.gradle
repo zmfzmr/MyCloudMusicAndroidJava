@@ -133,6 +133,16 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 
+    //通过OkHttp的拦截器机制
+    //实现在应用内显示网络请求功能
+    //https://github.com/ChuckerTeam/chucker
+    //(所以我们希望有一个工具，集成到客户端里面的，其他人员能直接在手机上查看网络请求，
+    // 这样可以使用Chucker，他也是基于OkHttp拦截器来实现的;)
+    //debug:调试的时候才添加上，可以理解下面release那个依赖没有添加，理解为空实现
+    debugImplementation "com.github.ChuckerTeam.Chucker:library:3.0.1"
+    releaseImplementation "com.github.ChuckerTeam.Chucker:library-no-op:3.0.1"
+
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

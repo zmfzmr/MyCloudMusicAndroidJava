@@ -1,6 +1,8 @@
 package com.ixuea.courses.mymusicold.api;
 
+import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.ixuea.courses.mymusicold.AppContext;
 import com.ixuea.courses.mymusicold.domain.Sheet;
 import com.ixuea.courses.mymusicold.domain.User;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
@@ -66,6 +68,17 @@ public class Api {
 
             //添加Stetho抓包拦截器(注意：addNetworkInterceptor，而不是addInterceptor)
             okhttpClientBuilder.addNetworkInterceptor(new StethoInterceptor());
+
+            /**
+             * 前面的实现，基本上是要配合电脑才能使用，或者说只有开发人员使用才方便，但真实项目中，
+             * 可能希望除开发外的人员（测试，产品等）也能在网络请求出错了，
+             * 自己查看是什么错误，从而将Bug直接提交给相应的人，而不是，本来是后端问题，
+             * 结果因为测试不确定是哪里的问题，就直接将Bug反馈给客户端开发人员了，
+             * 而我们一查看后，还需要转给服务端人员；所以我们希望有一个工具，集成到客户端里面的，
+             * 其他人员能直接在手机上查看网络请求，这样可以使用Chucker，他也是基于OkHttp拦截器来实现的。
+             */
+            //添加Chucker实现应用内显示网络请求信息拦截器
+            okhttpClientBuilder.addInterceptor(new ChuckerInterceptor(AppContext.getContext()));
 
         }
 

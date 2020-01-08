@@ -18,7 +18,7 @@ public class AppContext extends Application {
     /**
      * 上下文
      */
-    private static AppContext context;
+    private static Context context;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -43,5 +43,14 @@ public class AppContext extends Application {
         //初始化Stetho抓包
         //使用默认参数初始化
         Stetho.initializeWithDefaults(this);
+    }
+
+    /**
+     * 获取当前上下文
+     *
+     * @return Context
+     */
+    public static Context getContext() {
+        return context;
     }
 }
