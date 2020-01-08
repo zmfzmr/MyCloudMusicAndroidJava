@@ -6,10 +6,9 @@ import android.widget.EditText;
 
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.api.Api;
-import com.ixuea.courses.mymusicold.domain.User;
+import com.ixuea.courses.mymusicold.domain.Sheet;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
 import com.ixuea.courses.mymusicold.listener.HttpObserver;
-import com.ixuea.courses.mymusicold.util.HttpUtil;
 import com.ixuea.courses.mymusicold.util.LogUtil;
 
 import butterknife.BindView;
@@ -245,26 +244,39 @@ public class LoginActivity extends BaseTitleActivity {
 //                    }
 //                });
 
-        //模拟500错误 用户名错误
-        Api.getInstance().userDetail("-1", "1111111111")
-                .subscribe(new HttpObserver<DetailResponse<User>>() {
+//        //模拟500错误 用户名错误
+//        Api.getInstance().userDetail("-1", "1111111111")
+//                .subscribe(new HttpObserver<DetailResponse<User>>() {
+//                    @Override
+//                    public void onSucceeded(DetailResponse<User> data) {
+//                        LogUtil.d(TAG, "onSucceeded:" + data.getData());
+//                    }
+//
+//                    @Override
+//                    public boolean onFailed(DetailResponse<User> data, Throwable e) {
+//                        LogUtil.d(TAG, "onFailed:" + e);
+//
+////                        return super.onFailed(data, e);//调用父类，内部处理错误
+//
+//                        //return true 表示：手动处理错误
+//
+//                        //调用工具类处理错误(这个时候会有提示弹出来)
+//                        HttpUtil.handlerRequest(data, e);
+//
+//                        return true;//外部处理，（就是说内部的那个提示没有弹出来）
+//                    }
+//                });
+
+        //测试自动显示加载对话框
+        Api.getInstance().sheetDetail("1")
+                .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(), true) {
+                    //false表示不显示
+//                .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(),false) {
+                    //无参构造方法（没有参数，也是不显示提示加载对话框）
+//                .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(),false) {
                     @Override
-                    public void onSucceeded(DetailResponse<User> data) {
-                        LogUtil.d(TAG, "onSucceeded:" + data.getData());
-                    }
-
-                    @Override
-                    public boolean onFailed(DetailResponse<User> data, Throwable e) {
-                        LogUtil.d(TAG, "onFailed:" + e);
-
-//                        return super.onFailed(data, e);//调用父类，内部处理错误
-
-                        //return true 表示：手动处理错误
-
-                        //调用工具类处理错误(这个时候会有提示弹出来)
-                        HttpUtil.handlerRequest(data, e);
-
-                        return true;//外部处理，（就是说内部的那个提示没有弹出来）
+                    public void onSucceeded(DetailResponse<Sheet> data) {
+                        LogUtil.d(TAG, "onSucceeded：" + data.getData().getTitle());
                     }
                 });
 

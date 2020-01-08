@@ -1,8 +1,12 @@
 package com.ixuea.courses.mymusicold.listener;
 
+import com.ixuea.courses.mymusicold.activity.BaseCommonActivity;
 import com.ixuea.courses.mymusicold.domain.response.BaseResponse;
 import com.ixuea.courses.mymusicold.util.HttpUtil;
+import com.ixuea.courses.mymusicold.util.LoadingUtil;
 import com.ixuea.courses.mymusicold.util.LogUtil;
+
+import io.reactivex.disposables.Disposable;
 
 /**
  * 网络请求Observer
@@ -15,6 +19,31 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
 
 
     private static final String TAG = "HttpObserver";
+    //final 修饰的成员变量，必须要初始化一次，而这里有个空构造方法，有可能没有初始化成员变量，
+    // 所以final修饰的成员变量在编译的时候可能没有初始化，故报错
+//    private final BaseCommonActivity activity;
+//    private final boolean isShowLoading;
+    private BaseCommonActivity activity;//公共Activity
+    private boolean isShowLoading;//是否显示加载对话框
+
+    /**
+     * 无参构造方法
+     */
+    public HttpObserver() {
+
+    }
+
+    /**
+     * 有参构造方法
+     *
+     * @param activity      BaseCommonActivity
+     * @param isShowLoading 是否显示加载提示框
+     */
+    public HttpObserver(BaseCommonActivity activity, boolean isShowLoading) {
+        this.activity = activity;
+        this.isShowLoading = isShowLoading;
+    }
+
 
     /**
      * 请求成功
@@ -34,6 +63,15 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
      */
     public boolean onFailed(T data, Throwable e) {
         return false;
+    }
+
+    @Override
+    public void onSubscribe(Disposable d) {
+        super.onSubscribe(d);
+        if (isShowLoading) {
+            //显示加载对话框
+            LoadingUtil.showLoading(activity);
+        }
     }
 
     /**
@@ -59,6 +97,9 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
         super.onNext(t);
         LogUtil.d(TAG, "onNext:" + t);
 
+        //检查是否需要隐藏加载提示框（其他地方如onError中用到，提取到一个方法中）
+        checkHideLoading();
+
         if (isSucceeded(t)) {
             //请求正常
             onSucceeded(t);
@@ -69,10 +110,13 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
 
     }
 
+
     @Override
     public void onError(Throwable e) {
         super.onError(e);
         LogUtil.d(TAG, "onError:" + e.getLocalizedMessage());
+        //检查是否需要隐藏加载提示框
+        checkHideLoading();
 
         handlerRequest(null, e);//第一个参数为null，出错了，没有数据对象传递到这个方法里面来
     }
@@ -118,5 +162,15 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
 
 
     }
+
+    /**
+     * 检查是否需要隐藏加载提示框
+     */
+    private void checkHideLoading() {
+        if (isShowLoading) {
+            LoadingUtil.hideLoading();
+        }
+    }
+
 
 }
