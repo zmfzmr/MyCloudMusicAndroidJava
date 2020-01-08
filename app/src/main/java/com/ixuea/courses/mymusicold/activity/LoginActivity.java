@@ -251,6 +251,16 @@ public class LoginActivity extends BaseTitleActivity {
                     public void onSucceeded(DetailResponse<User> data) {
                         LogUtil.d(TAG, "onSucceeded:" + data.getData());
                     }
+
+                    @Override
+                    public boolean onFailed(DetailResponse<User> data, Throwable e) {
+                        LogUtil.d(TAG, "onFailed:" + e);
+
+//                        return super.onFailed(data, e);//调用父类，内部处理错误
+
+                        //return true 表示：手动处理错误
+                        return true;//外部处理，（就是说内部的那个提示没有弹出来）
+                    }
                 });
 
 

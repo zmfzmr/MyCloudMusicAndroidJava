@@ -39,7 +39,7 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
      *
      * @param data 数据（对象或者集合）
      * @param e    Throwable
-     * @return boolean
+     * @return boolean false :表示父类（本类）要处理错误（内部处理）；true：表示子类要处理错误（外部处理）
      */
     public boolean onFailed(T data, Throwable e) {
         return false;
@@ -53,20 +53,21 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
      * <p>
      * 总结：发生错误都会发生在onError中
      *
+     *
+     *   已经请求成功，但是登录失败了
+     *   但是如果用户名 密码错误会返回false
+     *
+     *   可以理解为200~299之间的值就会返回到这里来
+     *   这里面的错误，可以先看看，到时候遇到再说
      * @param t 具体的对象或者集合
      */
+
 
     @Override
     public void onNext(T t) {
         super.onNext(t);
         LogUtil.d(TAG, "onNext:" + t);
-        /**
-         * 已经请求成功，但是登录失败了
-         * 但是如果用户名 密码错误会返回false
-         *
-         * 可以理解为200~299之间的值就会返回到这里来
-         * 这里面的错误，可以先看看，到时候遇到再说
-         */
+
         if (isSucceeded(t)) {
             //请求正常
             onSucceeded(t);
@@ -112,41 +113,49 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
      * @param error Throwable错误对象
      */
     private void requestErrorHandler(T data, Throwable error) {
-        if (error != null) {
-            //判断错误类型
-            if (error instanceof UnknownHostException) {
-                ToastUtil.errorShortToast(R.string.error_network_unknown_host);
-            } else if (error instanceof ConnectException) {
-                ToastUtil.errorShortToast(R.string.error_network_connect);
-            } else if (error instanceof SocketTimeoutException) {
-                ToastUtil.errorShortToast(R.string.error_network_timeout);
-            } else if (error instanceof HttpException) {
-                HttpException exception = (HttpException) error;
-                int code = exception.code();
-                if (code == 401) {
-                    ToastUtil.errorShortToast(R.string.error_network_not_auth);
-                } else if (code == 403) {
-                    ToastUtil.errorShortToast(R.string.error_network_not_permission);
-                } else if (code == 404) {
-                    ToastUtil.errorShortToast(R.string.error_network_not_found);
-                } else if (code >= 500) {
-                    ToastUtil.errorShortToast(R.string.error_network_server);
+        if (onFailed(data, error)) {//fasle就会走else，父类（可以说本类）处理错误；true：就是外部处理错误
+            //回调了请求失败方法
+            //并且该方法返回了true
+
+            //返回true就表示外部手动处理错误
+            //那我们框架内部就不用做任何事情了
+        } else {
+            if (error != null) {
+                //判断错误类型
+                if (error instanceof UnknownHostException) {
+                    ToastUtil.errorShortToast(R.string.error_network_unknown_host);
+                } else if (error instanceof ConnectException) {
+                    ToastUtil.errorShortToast(R.string.error_network_connect);
+                } else if (error instanceof SocketTimeoutException) {
+                    ToastUtil.errorShortToast(R.string.error_network_timeout);
+                } else if (error instanceof HttpException) {
+                    HttpException exception = (HttpException) error;
+                    int code = exception.code();
+                    if (code == 401) {
+                        ToastUtil.errorShortToast(R.string.error_network_not_auth);
+                    } else if (code == 403) {
+                        ToastUtil.errorShortToast(R.string.error_network_not_permission);
+                    } else if (code == 404) {
+                        ToastUtil.errorShortToast(R.string.error_network_not_found);
+                    } else if (code >= 500) {
+                        ToastUtil.errorShortToast(R.string.error_network_server);
+                    } else {
+                        ToastUtil.errorShortToast(R.string.error_network_unknown);
+                    }
                 } else {
                     ToastUtil.errorShortToast(R.string.error_network_unknown);
                 }
-            } else {
-                ToastUtil.errorShortToast(R.string.error_network_unknown);
-            }
-        } else {//error为null（这个时候是走onNext-->else-->requestErrorHandler）
-            //(登录失败的这种错误)
-            if (data instanceof BaseResponse) {
-                //判断具体的业务请求是否成功
-                BaseResponse response = (BaseResponse) data;
-                if (TextUtils.isEmpty(response.getMessage())) {
-                    //没有错误提示信息（message可能没有错误提示信息） (未知错误，请稍后再试！)
-                    ToastUtil.errorShortToast(R.string.error_network_unknown);
-                } else {//message不为空
-                    ToastUtil.errorShortToast(response.getMessage());
+            } else {//error为null（这个时候是走onNext-->else-->requestErrorHandler）
+                //(登录失败的这种错误)
+                if (data instanceof BaseResponse) {
+                    //判断具体的业务请求是否成功
+                    BaseResponse response = (BaseResponse) data;
+                    if (TextUtils.isEmpty(response.getMessage())) {
+                        //没有错误提示信息（message可能没有错误提示信息） (未知错误，请稍后再试！)
+                        ToastUtil.errorShortToast(R.string.error_network_unknown);
+                    } else {//message不为空
+                        ToastUtil.errorShortToast(response.getMessage());
+                    }
                 }
             }
         }
