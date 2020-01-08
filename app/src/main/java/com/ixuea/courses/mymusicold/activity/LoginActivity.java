@@ -9,6 +9,7 @@ import com.ixuea.courses.mymusicold.api.Api;
 import com.ixuea.courses.mymusicold.domain.User;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
 import com.ixuea.courses.mymusicold.listener.HttpObserver;
+import com.ixuea.courses.mymusicold.util.HttpUtil;
 import com.ixuea.courses.mymusicold.util.LogUtil;
 
 import butterknife.BindView;
@@ -259,6 +260,10 @@ public class LoginActivity extends BaseTitleActivity {
 //                        return super.onFailed(data, e);//调用父类，内部处理错误
 
                         //return true 表示：手动处理错误
+
+                        //调用工具类处理错误(这个时候会有提示弹出来)
+                        HttpUtil.handlerRequest(data, e);
+
                         return true;//外部处理，（就是说内部的那个提示没有弹出来）
                     }
                 });
