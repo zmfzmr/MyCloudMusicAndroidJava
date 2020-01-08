@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusicold;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.stetho.Stetho;
 import com.ixuea.courses.mymusicold.util.ToastUtil;
 
 import androidx.multidex.MultiDex;
@@ -38,5 +39,9 @@ public class AppContext extends Application {
         Toasty.Config.getInstance().apply();
         //初始化Toast工具类
         ToastUtil.init(getApplicationContext());
+
+        //初始化Stetho抓包
+        //使用默认参数初始化
+        Stetho.initializeWithDefaults(this);
     }
 }

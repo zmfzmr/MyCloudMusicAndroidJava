@@ -1,5 +1,6 @@
 package com.ixuea.courses.mymusicold.api;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ixuea.courses.mymusicold.domain.Sheet;
 import com.ixuea.courses.mymusicold.domain.User;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
@@ -62,6 +63,10 @@ public class Api {
 //            loggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
             //添加拦截器到OkHttpClient.Builder（添加到网络框架中）
             okhttpClientBuilder.addInterceptor(loggingInterceptor);
+
+            //添加Stetho抓包拦截器
+            okhttpClientBuilder.addInterceptor(new StethoInterceptor());
+
         }
 
         //构建者模式
