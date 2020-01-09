@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ixuea.courses.mymusicold.AppContext;
+import com.ixuea.courses.mymusicold.MainActivity;
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.api.Api;
 import com.ixuea.courses.mymusicold.domain.Session;
@@ -357,6 +358,9 @@ public class LoginActivity extends BaseTitleActivity {
                         AppContext.getInstance().login(sp, data.getData());
 
                         ToastUtil.successLongToast(R.string.login_success);
+
+                        //关闭当前界面并启动主界面
+                        startActivityAfterFinishThis(MainActivity.class);
                     }
                 });
 

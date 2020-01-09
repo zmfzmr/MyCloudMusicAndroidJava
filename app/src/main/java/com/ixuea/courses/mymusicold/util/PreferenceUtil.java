@@ -2,6 +2,7 @@ package com.ixuea.courses.mymusicold.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 /**
  * 偏好设置工具类
@@ -75,10 +76,9 @@ public class PreferenceUtil {
     /**
      * 获取登录session
      *
-     * @param value Value
      */
-    public void getSession(String value) {//统一设置为value，方便管理
-        preference.getString(SESSION, null);
+    public String getSession() {//统一设置为value，方便管理
+        return preference.getString(SESSION, null);
     }
 
     /**
@@ -114,11 +114,21 @@ public class PreferenceUtil {
     /**
      * 保存boolean
      *
-     * @param key
-     * @param value
+     * @param key Key
+     * @param value Value
      */
     private void putBoolean(String key, boolean value) {
         preference.edit().putBoolean(key, value).commit();
+    }
+
+    /**
+     * 是否登录了
+     *
+     * @return true：表示登录，false：表示没有登录
+     */
+    public boolean isLogin() {
+        //TextUtils.isEmpty(getSession()):不为空就返回false；希望返回true，加个！
+        return !TextUtils.isEmpty(getSession());
     }
 
     //end辅助方法

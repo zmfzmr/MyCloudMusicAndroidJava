@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.ixuea.courses.mymusicold.MainActivity;
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.util.Constant;
 import com.ixuea.courses.mymusicold.util.LogUtil;
@@ -66,13 +67,20 @@ public class SplashActivity extends BaseCommonActivity {
         //finish();
 
         //使用重构后的方法
-        startActivityAfterFinishThis(GuideActivity.class);
+//        startActivityAfterFinishThis(GuideActivity.class);
 
-//        if (sp.isShowGuide()) {//第一次为true进入引导界面
-//            startActivityAfterFinishThis(GuideActivity.class);
-//        } else {
-//            startActivityAfterFinishThis(LoginOrRegisterActivity.class);
-//        }
+        if (sp.isShowGuide()) {//第一次为true进入引导界面
+            startActivityAfterFinishThis(GuideActivity.class);
+        } else if (sp.isLogin()) {
+            //已经登录了
+
+            //跳转到首页
+            startActivityAfterFinishThis(MainActivity.class);
+        } else {
+            //没有登录
+            //跳转到登录注册界面
+            startActivityAfterFinishThis(LoginOrRegisterActivity.class);
+        }
 
     }
     @Override
