@@ -142,6 +142,9 @@ dependencies {
     debugImplementation "com.github.ChuckerTeam.Chucker:library:3.0.1"
     releaseImplementation "com.github.ChuckerTeam.Chucker:library-no-op:3.0.1"
 
+    //跨界面通信框架
+    //https://github.com/greenrobot/EventBus
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
