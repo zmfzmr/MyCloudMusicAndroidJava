@@ -1,5 +1,6 @@
 package com.ixuea.courses.mymusicold.api;
 
+import com.ixuea.courses.mymusicold.domain.Session;
 import com.ixuea.courses.mymusicold.domain.Sheet;
 import com.ixuea.courses.mymusicold.domain.User;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
@@ -8,7 +9,9 @@ import com.ixuea.courses.mymusicold.domain.response.ListResponse;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
@@ -47,6 +50,16 @@ public interface Service {
     @GET("v1/sheets/{id}")
 //    Observable<SheetDetailWrapper> sheetDetail(@Path("id") String id);
     Observable<DetailResponse<Sheet>> sheetDetail(@Path("id") String id);
+
+    /**
+     * 登录
+     *
+     * @param data User
+     * @return Observable<DetailResponse < Session>>
+     */
+    @POST("v1/sessions")
+    Observable<DetailResponse<Session>> login(@Body User data);
+
 
     /**
      * 用户详情

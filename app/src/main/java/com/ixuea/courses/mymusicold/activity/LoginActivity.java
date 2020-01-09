@@ -1,15 +1,22 @@
 package com.ixuea.courses.mymusicold.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.api.Api;
-import com.ixuea.courses.mymusicold.domain.Sheet;
+import com.ixuea.courses.mymusicold.domain.Session;
+import com.ixuea.courses.mymusicold.domain.User;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
 import com.ixuea.courses.mymusicold.listener.HttpObserver;
 import com.ixuea.courses.mymusicold.util.LogUtil;
+import com.ixuea.courses.mymusicold.util.StringUtil;
+import com.ixuea.courses.mymusicold.util.ToastUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -268,60 +275,86 @@ public class LoginActivity extends BaseTitleActivity {
 //                });
 
         //测试自动显示加载对话框
-        Api.getInstance().sheetDetail("1")
-                .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(), true) {
-                    //false表示不显示
-//                .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(),false) {
-                    //无参构造方法（没有参数，也是不显示提示加载对话框）
-//                .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(),false) {
+//        Api.getInstance().sheetDetail("1")
+//                .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(), true) {
+//                    //false表示不显示
+////                .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(),false) {
+//                    //无参构造方法（没有参数，也是不显示提示加载对话框）
+////                .subscribe(new HttpObserver<DetailResponse<Sheet>>(getMainActivity(),false) {
+//                    @Override
+//                    public void onSucceeded(DetailResponse<Sheet> data) {
+//                        LogUtil.d(TAG, "onSucceeded：" + data.getData().getTitle());
+//                    }
+//                });
+
+
+        //获取用户名
+        String username = et_username.getText().toString().trim();
+        //注意：这里没有用isEmpty,而用的是isBlank
+        //isBlank：方法里面判断了 如果没有输入，或者输入的有空格 都会为true
+        if (StringUtils.isBlank(username)) {//如果用户名没有输入(也就是为空)
+            LogUtil.d(TAG, "onLoginClick user empty");
+//            Toast.makeText(getMainActivity(), R.string.enter_username, Toast.LENGTH_SHORT).show();
+//            Toasty.error(getMainActivity(),R.string.enter_username,Toasty.LENGTH_SHORT).show();
+            ToastUtil.errorShortToast(R.string.enter_username);
+            return;
+        }
+
+        //格式判断（正则表达式判断是否匹配）
+        //如果是用户名
+        //不是手机号也不是邮箱
+        //就是格式错误
+        //其实就是点击的时候，把值传入过去，看是否匹配正则表达式，匹配就返回true,否则就返回false
+        if (!(StringUtil.isPhone(username) || StringUtil.isEmail(username))) {
+            ToastUtil.errorShortToast(R.string.error_username_format);
+            return;
+        }
+
+        //获取密码
+        String password = et_password.getText().toString().trim();
+        //注意：也可以用 TextUtils.isEmpty(password) 这个就相当简单些，没有那么复杂了，可以点击进入查看
+        if (TextUtils.isEmpty(password)) {
+            //这里用的是w警告
+            LogUtil.w(TAG, "onLoginClick password empty");
+//            Toast.makeText(getMainActivity(), R.string.enter_password, Toast.LENGTH_SHORT).show();
+            ToastUtil.errorShortToast(R.string.enter_password);
+            return;
+        }
+
+        //判断密码格式
+        if (!StringUtil.isPassword(password)) {
+            ToastUtil.errorShortToast(R.string.error_password_format);
+            return;
+        }
+
+        //可以使用账号：ixueaedu@163.com或者手机号：13141111112   密码:ixueaedu
+
+        //判断是手机号还是邮箱
+        String phone = null;//这里用的是null
+        String email = null;
+        if (StringUtil.isPhone(username)) {
+            phone = username;
+        } else {
+            email = username;
+        }
+
+        User user = new User();
+        //这里虽然同时传递了手机号和邮箱
+        //但服务端登录的时候有先后顺序(也就是说phone或者email其中的一个有值才会传递)
+        user.setPhone(phone);
+        user.setEmail(email);
+        user.setPassword(password);
+        Api.getInstance()
+                .login(user)
+                .subscribe(new HttpObserver<DetailResponse<Session>>() {
                     @Override
-                    public void onSucceeded(DetailResponse<Sheet> data) {
-                        LogUtil.d(TAG, "onSucceeded：" + data.getData().getTitle());
+                    public void onSucceeded(DetailResponse<Session> data) {
+                        Log.d(TAG, "onLongClick,onSucceeded: " + data.getData());
+
+                        ToastUtil.successLongToast(R.string.login_success);
                     }
                 });
 
-
-//        //获取用户名
-//        String username = et_username.getText().toString().trim();
-//        //注意：这里没有用isEmpty,而用的是isBlank
-//        //isBlank：方法里面判断了 如果没有输入，或者输入的有空格 都会为true
-//        if (StringUtils.isBlank(username)) {//如果用户名没有输入(也就是为空)
-//            LogUtil.d(TAG, "onLoginClick user empty");
-////            Toast.makeText(getMainActivity(), R.string.enter_username, Toast.LENGTH_SHORT).show();
-////            Toasty.error(getMainActivity(),R.string.enter_username,Toasty.LENGTH_SHORT).show();
-//            ToastUtil.errorShortToast(R.string.enter_username);
-//            return;
-//        }
-//
-//        //格式判断（正则表达式判断是否匹配）
-//        //如果是用户名
-//        //不是手机号也不是邮箱
-//        //就是格式错误
-//        //其实就是点击的时候，把值传入过去，看是否匹配正则表达式，匹配就返回true,否则就返回false
-//        if (!(StringUtil.isPhone(username) || StringUtil.isEmail(username))) {
-//            ToastUtil.errorShortToast(R.string.error_username_format);
-//            return;
-//        }
-//
-//        //获取密码
-//        String password = et_password.getText().toString().trim();
-//        //注意：也可以用 TextUtils.isEmpty(password) 这个就相当简单些，没有那么复杂了，可以点击进入查看
-//        if (TextUtils.isEmpty(password)) {
-//            //这里用的是w警告
-//            LogUtil.w(TAG, "onLoginClick password empty");
-////            Toast.makeText(getMainActivity(), R.string.enter_password, Toast.LENGTH_SHORT).show();
-//            ToastUtil.errorShortToast(R.string.enter_password);
-//            return;
-//        }
-//
-//        //判断密码格式
-//        if (!StringUtil.isPassword(password)) {
-//            ToastUtil.errorShortToast(R.string.error_password_format);
-//            return;
-//        }
-//
-//        //TODO 调用登录方法
-//        ToastUtil.successLongToast(R.string.login_success);
 
 
     }
