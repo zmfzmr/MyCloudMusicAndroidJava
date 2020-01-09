@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.ixuea.courses.mymusicold.AppContext;
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.api.Api;
 import com.ixuea.courses.mymusicold.domain.Session;
@@ -350,6 +351,10 @@ public class LoginActivity extends BaseTitleActivity {
                     @Override
                     public void onSucceeded(DetailResponse<Session> data) {
                         Log.d(TAG, "onLongClick,onSucceeded: " + data.getData());
+
+                        //把登录成功的事件通知到AppContext
+                        //PreferenceUtil sp 是父类BaseCommonActivity初始化的
+                        AppContext.getInstance().login(sp, data.getData());
 
                         ToastUtil.successLongToast(R.string.login_success);
                     }

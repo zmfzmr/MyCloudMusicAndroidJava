@@ -79,7 +79,7 @@ public class Api {
              * 其他人员能直接在手机上查看网络请求，这样可以使用Chucker，他也是基于OkHttp拦截器来实现的。
              */
             //添加Chucker实现应用内显示网络请求信息拦截器
-            okhttpClientBuilder.addInterceptor(new ChuckerInterceptor(AppContext.getContext()));
+            okhttpClientBuilder.addInterceptor(new ChuckerInterceptor(AppContext.getInstance()));
 
         }
 

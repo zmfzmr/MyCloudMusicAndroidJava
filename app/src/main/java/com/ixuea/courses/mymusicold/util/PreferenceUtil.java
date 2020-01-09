@@ -11,13 +11,15 @@ public class PreferenceUtil {
 
     private static final String NAME = "ixuea_my_cloud_music";//持久化数据库名字
     private static final String SHOW_GUIDE = "SHOW_GUIDE";
+    private static final String SESSION = "SESSION";//用户登录session key
+    private static final String USER_ID = "USER_ID";//用户登录UserId key
     private static PreferenceUtil instance;
     private final Context context;//上下文
     private final SharedPreferences preference;
 
     /**
      * 注意：这里用的是this.context
-     * @param context
+     * @param context Context
      */
     public PreferenceUtil(Context context) {//构造方法
 //        this.context = context;
@@ -39,8 +41,8 @@ public class PreferenceUtil {
     /**
      * 单例
      * 设置偏好设置单例
-     * @param context
-     * @return
+     * @param context Context
+     * @return PreferenceUtil
      */
     public static PreferenceUtil getInstance(Context context) {
         if (instance == null) {
@@ -51,7 +53,7 @@ public class PreferenceUtil {
 
     /**
      * 是否显示引导界面
-     * @return
+     * @return true，显示引导界面；false，不显示
      */
     public boolean isShowGuide() {
         return preference.getBoolean(SHOW_GUIDE,true);//第一次默认为true，后面改为false即可
@@ -61,4 +63,39 @@ public class PreferenceUtil {
         preference.edit().putBoolean(SHOW_GUIDE,value).commit();
     }
 
+    /**
+     * 保存登录session
+     *
+     * @param value session
+     */
+    public void setSession(String value) {//统一设置为value，方便管理
+        preference.edit().putString(SESSION, value).commit();
+    }
+
+    /**
+     * 获取登录session
+     *
+     * @param value Value
+     */
+    public void getSession(String value) {//统一设置为value，方便管理
+        preference.getString(SESSION, null);
+    }
+
+    /**
+     * 设置用户Id
+     *
+     * @param value 用户id值
+     */
+    public void setUserId(String value) {
+        preference.edit().putString(USER_ID, value).commit();
+    }
+
+    /**
+     * 获取登录获取id
+     *
+     * @return id
+     */
+    public String getUserId() {
+        return preference.getString(USER_ID, null);
+    }
 }
