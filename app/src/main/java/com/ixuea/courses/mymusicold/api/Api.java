@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusicold.api;
 import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ixuea.courses.mymusicold.AppContext;
+import com.ixuea.courses.mymusicold.domain.BaseModel;
 import com.ixuea.courses.mymusicold.domain.Session;
 import com.ixuea.courses.mymusicold.domain.Sheet;
 import com.ixuea.courses.mymusicold.domain.User;
@@ -149,6 +150,18 @@ public class Api {
     }
 
     /**
+     * 注册
+     *
+     * @param data User
+     * @return Observable<DetailResponse < BaseModel>>
+     */
+    public Observable<DetailResponse<BaseModel>> register(User data) {
+        return service.register(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 登录方法
      *
      * @param data User
@@ -158,7 +171,6 @@ public class Api {
         return service.login(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-
     }
 
 

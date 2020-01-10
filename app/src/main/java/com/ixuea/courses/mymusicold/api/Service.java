@@ -1,5 +1,6 @@
 package com.ixuea.courses.mymusicold.api;
 
+import com.ixuea.courses.mymusicold.domain.BaseModel;
 import com.ixuea.courses.mymusicold.domain.Session;
 import com.ixuea.courses.mymusicold.domain.Sheet;
 import com.ixuea.courses.mymusicold.domain.User;
@@ -50,6 +51,15 @@ public interface Service {
     @GET("v1/sheets/{id}")
 //    Observable<SheetDetailWrapper> sheetDetail(@Path("id") String id);
     Observable<DetailResponse<Sheet>> sheetDetail(@Path("id") String id);
+
+    /**
+     * 注册
+     *
+     * @param data Data
+     *             BaseModel:因为返回json只有一个id，所以这个类也行
+     */
+    @POST("v1/users")
+    Observable<DetailResponse<BaseModel>> register(@Body User data);
 
     /**
      * 登录

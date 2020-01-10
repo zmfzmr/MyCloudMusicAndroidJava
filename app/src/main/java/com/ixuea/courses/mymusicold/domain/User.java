@@ -4,6 +4,7 @@ package com.ixuea.courses.mymusicold.domain;
  * 用户模型
  */
 public class User extends BaseModel {
+    private String nickname;//昵称
     private String phone;//手机号
     private String email;//邮箱
     /**
@@ -33,5 +34,13 @@ public class User extends BaseModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

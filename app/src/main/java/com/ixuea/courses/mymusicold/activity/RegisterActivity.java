@@ -4,6 +4,12 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 import com.ixuea.courses.mymusicold.R;
+import com.ixuea.courses.mymusicold.api.Api;
+import com.ixuea.courses.mymusicold.domain.BaseModel;
+import com.ixuea.courses.mymusicold.domain.User;
+import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
+import com.ixuea.courses.mymusicold.listener.HttpObserver;
+import com.ixuea.courses.mymusicold.util.LogUtil;
 import com.ixuea.courses.mymusicold.util.StringUtil;
 import com.ixuea.courses.mymusicold.util.ToastUtil;
 
@@ -14,6 +20,7 @@ import butterknife.OnClick;
 
 public class RegisterActivity extends BaseTitleActivity {
 
+    private static final String TAG = "RegisterActivity";
     @BindView(R.id.et_nickname)//昵称输入框
             EditText et_nickname;
 
@@ -110,7 +117,24 @@ public class RegisterActivity extends BaseTitleActivity {
             return;
         }
 
-        //TODO 调用注册接口完成注册
+        //调用注册接口完成注册
+        User data = new User();
+        //将信息设置到对象上
+        data.setNickname(nickname);
+        data.setPhone(phone);
+        data.setEmail(email);
+        data.setPassword(password);
+        //将信息设置到
+        Api.getInstance().register(data)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        LogUtil.d(TAG, "register success: " + data.getData().getId());
+
+                        //TODO 自动登录
+
+                    }
+                });
 
     }
 
