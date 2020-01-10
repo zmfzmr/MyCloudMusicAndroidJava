@@ -1,11 +1,15 @@
 package com.ixuea.courses.mymusicold.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 
+import com.ixuea.courses.mymusicold.AppContext;
+import com.ixuea.courses.mymusicold.MainActivity;
 import com.ixuea.courses.mymusicold.R;
 import com.ixuea.courses.mymusicold.api.Api;
 import com.ixuea.courses.mymusicold.domain.BaseModel;
+import com.ixuea.courses.mymusicold.domain.Session;
 import com.ixuea.courses.mymusicold.domain.User;
 import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
 import com.ixuea.courses.mymusicold.listener.HttpObserver;
@@ -130,12 +134,43 @@ public class RegisterActivity extends BaseTitleActivity {
                     @Override
                     public void onSucceeded(DetailResponse<BaseModel> data) {
                         LogUtil.d(TAG, "register success: " + data.getData().getId());
-
-                        //TODO 自动登录
+                        //注册后自动登录
+                        login(phone, email, password);
 
                     }
                 });
 
+    }
+
+    /**
+     * @param phone    手机号
+     * @param email    邮箱
+     * @param password 密码
+     */
+    public void login(String phone, String email, String password) {
+        User user = new User();
+        //这里虽然同时传递了手机号和邮箱
+        //但服务端登录的时候有先后顺序(也就是说phone或者email其中的一个有值才会传递)
+        user.setPhone(phone);
+        user.setEmail(email);
+        user.setPassword(password);
+        Api.getInstance()
+                .login(user)
+                .subscribe(new HttpObserver<DetailResponse<Session>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<Session> data) {
+                        Log.d(TAG, "onLongClick,onSucceeded: " + data.getData());
+
+                        //把登录成功的事件通知到AppContext
+                        //PreferenceUtil sp 是父类BaseCommonActivity初始化的
+                        AppContext.getInstance().login(sp, data.getData());
+
+                        ToastUtil.successLongToast(R.string.login_success);
+
+                        //关闭当前界面并启动主界面
+                        startActivityAfterFinishThis(MainActivity.class);
+                    }
+                });
     }
 
 
