@@ -1,12 +1,10 @@
 package com.ixuea.courses.mymusicold.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 import com.ixuea.courses.mymusicold.R;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseTitleActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

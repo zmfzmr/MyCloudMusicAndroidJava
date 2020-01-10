@@ -1,15 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.RegisterActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="注册界面" />
+    <!--Toolbar-->
+    <include layout="@layout/tool_bar" />
+
+    <LinearLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_margin">
+        <!--请输入昵称 -->
+        <EditText
+            style="@style/EditText"
+            android:hint="@string/enter_nickname"
+            android:maxLength="10" />
+
+        <!--请输入手机号 -->
+        <EditText
+            style="@style/EditText"
+            android:hint="@string/enter_phone"
+            android:maxLength="11"
+            android:inputType="phone" />
+
+        <!--请输入邮箱 -->
+        <EditText
+            style="@style/EditText"
+            android:hint="@string/enter_email"
+            android:inputType="textEmailAddress" />
 
 
-</LinearLayout>
+        <!--请输入密码 -->
+        <EditText
+            style="@style/EditText"
+            android:hint="@string/enter_password"
+            android:maxLength="15"
+            android:inputType="textPassword" />
+
+        <!--确定密码 -->
+        <EditText
+            style="@style/EditText"
+            android:hint="@string/enter_confirm_password"
+            android:maxLength="15"
+            android:inputType="textPassword" />
+
+        <!--注册按钮-->
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:text="@string/register"
+            android:layout_marginTop="@dimen/padding_large"
+            android:textColor="@drawable/selector_text_color_primary_reverse"
+            android:background="@drawable/selector_color_primary" />
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
