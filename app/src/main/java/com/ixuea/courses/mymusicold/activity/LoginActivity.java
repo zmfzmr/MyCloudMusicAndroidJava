@@ -2,18 +2,10 @@ package com.ixuea.courses.mymusicold.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.ixuea.courses.mymusicold.AppContext;
-import com.ixuea.courses.mymusicold.MainActivity;
 import com.ixuea.courses.mymusicold.R;
-import com.ixuea.courses.mymusicold.api.Api;
-import com.ixuea.courses.mymusicold.domain.Session;
-import com.ixuea.courses.mymusicold.domain.User;
-import com.ixuea.courses.mymusicold.domain.response.DetailResponse;
-import com.ixuea.courses.mymusicold.listener.HttpObserver;
 import com.ixuea.courses.mymusicold.util.LogUtil;
 import com.ixuea.courses.mymusicold.util.StringUtil;
 import com.ixuea.courses.mymusicold.util.ToastUtil;
@@ -26,7 +18,7 @@ import butterknife.OnClick;
 /**
  * 登录界面
  */
-public class LoginActivity extends BaseTitleActivity {
+public class LoginActivity extends BaseLoginActivity {
 
     private static final String TAG = "LoginActivity";
     @BindView(R.id.et_username)//用户名输入框
@@ -340,29 +332,31 @@ public class LoginActivity extends BaseTitleActivity {
             email = username;
         }
 
-        User user = new User();
-        //这里虽然同时传递了手机号和邮箱
-        //但服务端登录的时候有先后顺序(也就是说phone或者email其中的一个有值才会传递)
-        user.setPhone(phone);
-        user.setEmail(email);
-        user.setPassword(password);
-        Api.getInstance()
-                .login(user)
-                .subscribe(new HttpObserver<DetailResponse<Session>>() {
-                    @Override
-                    public void onSucceeded(DetailResponse<Session> data) {
-                        Log.d(TAG, "onLongClick,onSucceeded: " + data.getData());
+//        User user = new User();
+//        //这里虽然同时传递了手机号和邮箱
+//        //但服务端登录的时候有先后顺序(也就是说phone或者email其中的一个有值才会传递)
+//        user.setPhone(phone);
+//        user.setEmail(email);
+//        user.setPassword(password);
+//        Api.getInstance()
+//                .login(user)
+//                .subscribe(new HttpObserver<DetailResponse<Session>>() {
+//                    @Override
+//                    public void onSucceeded(DetailResponse<Session> data) {
+//                        Log.d(TAG, "onLongClick,onSucceeded: " + data.getData());
+//
+//                        //把登录成功的事件通知到AppContext
+//                        //PreferenceUtil sp 是父类BaseCommonActivity初始化的
+//                        AppContext.getInstance().login(sp, data.getData());
+//
+//                        ToastUtil.successLongToast(R.string.login_success);
+//
+//                        //关闭当前界面并启动主界面
+//                        startActivityAfterFinishThis(MainActivity.class);
+//                    }
+//                });
 
-                        //把登录成功的事件通知到AppContext
-                        //PreferenceUtil sp 是父类BaseCommonActivity初始化的
-                        AppContext.getInstance().login(sp, data.getData());
-
-                        ToastUtil.successLongToast(R.string.login_success);
-
-                        //关闭当前界面并启动主界面
-                        startActivityAfterFinishThis(MainActivity.class);
-                    }
-                });
+        login(phone, email, password);
 
 
 
