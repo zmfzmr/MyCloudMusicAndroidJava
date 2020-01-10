@@ -5,8 +5,11 @@ import android.content.Context;
 
 import com.facebook.stetho.Stetho;
 import com.ixuea.courses.mymusicold.domain.Session;
+import com.ixuea.courses.mymusicold.domain.event.LoginSuccessEvent;
 import com.ixuea.courses.mymusicold.util.PreferenceUtil;
 import com.ixuea.courses.mymusicold.util.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import androidx.multidex.MultiDex;
 import es.dmoral.toasty.Toasty;
@@ -72,6 +75,11 @@ public class AppContext extends Application {
 
         //初始化其他需要登录后初始化的内容
         onLogin();
+
+        //发送登录成功通知
+        //目的是一些界面需要接收该事件
+        EventBus.getDefault().post(new LoginSuccessEvent());
+
     }
 
     /**
