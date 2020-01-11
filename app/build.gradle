@@ -19,10 +19,59 @@ android {
         //渠道相关
         flavorDimensions "versionCode"
     }
+
+    //签名配置
+    //要写到使用签名配置的前面
+    signingConfigs {
+        //以下两个版本都用的是同一个
+        //真实项目中可能会用多个
+        debug {
+            //签名文件路径
+            //根目录config/key.jks
+            //. :一个点表示当前目录，..:2个点表示当前目录的上一级目录
+            //这类的当前目录是build.gradle所在的目录app包中，上一级目录就项目根目录
+            //
+            storeFile file('../config/ixuea_courses.jks')
+            //key密码
+            storePassword "8J7rHtXNNjhD9aD"
+
+            //别名
+            keyAlias "a1"
+
+            //签名密码
+            keyPassword "ehXs7fRAK6m82z4"
+        }
+
+        //正式版配置
+        release {
+            storeFile file('../config/ixuea_courses.jks')
+            storePassword "8J7rHtXNNjhD9aD"
+            keyAlias "a1"
+            keyPassword "ehXs7fRAK6m82z4"
+        }
+    }
+
+
     buildTypes {
+        debug {
+            //混淆：也就是我们这个项目，打包完成以后，有一些资源，可能我们用不到；如果这里设置true，
+            // 就会把用不到的给去除，而且还会混淆一些资源文件，混淆java代码，防止反编译，同时也能减少一些体积
+            //但是我们就不再讲解，因为开启以后也会把一些重要的类，给混淆了，会出问题
+            //在真实项目中最好把它开启
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            //使用签名配置 signingConfigs 是上面定义的那个
+            signingConfig signingConfigs.debug
+        }
+
+        //正式版本
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            //使用签名配置
+            signingConfig signingConfigs.release
         }
     }
 
