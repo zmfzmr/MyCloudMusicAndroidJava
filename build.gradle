@@ -12,6 +12,15 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+
+        //sharesdk
+        //使用最新版本
+        //classpath "com.mob.sdk:MobSDK:+"
+
+        //写死版本
+        //真实项目中一定要写死版本
+        //手动升级版本
+        classpath "com.mob.sdk:MobSDK:2018.0319.1724"
     }
 }
 

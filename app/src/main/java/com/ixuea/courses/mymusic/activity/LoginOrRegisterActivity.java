@@ -1,0 +1,226 @@
+package com.ixuea.courses.mymusic.activity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+
+import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
+import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.HandlerUtil;
+import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.HashMap;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.PlatformDb;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.tencent.qq.QQ;
+
+/**
+ * 登录注册界面
+ */
+public class LoginOrRegisterActivity extends BaseCommonActivity  {
+
+    private static final String TAG = "LoginOrRegisterActivity";
+//    private Button bt_login;//登录按钮
+//    private Button bt_register;//登录按钮
+
+
+    /**
+     * 登录按钮
+     * <p>
+     * 字段不能申明为private
+     */
+    @BindView(R.id.bt_login)
+    Button bt_login;//登录按钮
+    /**
+     * 第三方登录后用户信息
+     */
+    private User data;
+    //    Button bt_register;//登录按钮
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login_or_register);
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+//        //初始化ButterKnife
+//        ButterKnife.bind(this);
+
+        //显示亮色状态
+        lightStatusBar();
+
+//        //登录按钮
+//        bt_login = findViewById(R.id.bt_login);
+//
+//        //注册按钮
+//        bt_register = findViewById(R.id.bt_register);//这2个可以忽略了，因为上面已经找到实例了
+
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+        //它EventBus 怎么知道我这个界面activity有没有注册这些事件呢，
+        //需要把当前界面注册到这些EventBus框架中
+        //注册通知
+        EventBus.getDefault().register(this);
+
+        //思路：
+        // 其实就是：AppContext(登录成功调用login 发送通知) -- > 当前界面 注册到EventBus-->通过监听onLoginSuccessEvent接收
+        // 到发送的通知，然后关闭界面
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+//        bt_login.setOnClickListener(this);
+//        bt_register.setOnClickListener(this);
+    }
+
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+////            case R.id.bt_login:
+////                Log.d(TAG, "onClick login");
+////
+////                startActivity(LoginActivity.class);
+////                break;
+//            case R.id.bt_register:
+//                //注册界面
+//                Log.d(TAG, "onClick register");
+//
+//                startActivity(RegisterActivity.class);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+
+    @OnClick(R.id.bt_login)
+    public void onLoginClick() {
+        Log.d(TAG, "onClick login");
+        startActivity(LoginActivity.class);
+    }
+
+    @OnClick(R.id.bt_register)
+    public void onRegisterClick() {
+        //注册界面
+        Log.d(TAG, "onClick register");
+        //清楚第三方登录用户信息(因为点击的qq登录，data是不为null的)
+        data = null;
+        toRegister();
+    }
+
+    /**
+     * 跳转到注册界面
+     */
+    private void toRegister() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        if (data != null) {
+            //传递用户数据
+            intent.putExtra(Constant.DATA, data);
+        }
+//        startActivity(RegisterActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.iv_qq)
+    public void onQQLoginClick() {
+        ToastUtil.errorShortToast("QQ登录");
+        //初始化具体的平台 Platform：翻译：平台  这里表示获取QQ这个平台的Platform对象
+        Platform platform = ShareSDK.getPlatform(QQ.NAME);
+
+        //设置false表示使用SSO(单点登录)授权方式
+        platform.SSOSetting(false);
+
+        //回调信息
+        //可以在这里获取基本的授权返回的信息
+        platform.setPlatformActionListener(new PlatformActionListener() {
+            /**
+             * 登录成功了
+             *
+             * @param platform Platform
+             * @param i        i
+             * @param hashMap  HashMap
+             */
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                //登录成功了
+
+                //就可以获取到昵称，头像，OpenId
+                //该方法回调不是在主线程
+
+                //从数据库获取信息
+                //也可以通过user参数获取
+                PlatformDb db = platform.getDb();//从平台那边获取到数据库，数据库返回信息
+
+                data = new User();
+                data.setNickname(db.getUserName());
+                data.setAvatar(db.getUserIcon());//db.getUserIcon():获取用户头像
+
+                data.setQq_id(db.getUserId());//db.getUserId() 平台用户的id
+                //跳转到注册界面（直接调用按钮点击事件方法）
+                toRegister();
+//                LogUtil.d(TAG, "other login success:" + nickname + ", " + avatar + ", " + openId + ", " + HandlerUtil.isMainThread());
+
+            }
+
+            /**
+             * 登录失败了
+             */
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+                LogUtil.d(TAG, "other login error:" + throwable.getLocalizedMessage() + "," + HandlerUtil.isMainThread());
+            }
+
+            /**
+             * 取消登录了
+             */
+            @Override
+            public void onCancel(Platform platform, int i) {
+                LogUtil.d(TAG, "other login cancel:" + i + "," + HandlerUtil.isMainThread());
+            }
+        });
+
+        //authorize与showUser单独调用一个即可
+        //授权并获取用户信息
+        platform.showUser(null);
+
+    }
+
+    /**
+     * 登录成功事件
+     * 接受该事件的目的是关闭该界面
+     *
+     * @param event LoginSuccessEvent 也就是监听的事件（这里是一个空类，没有实现）
+     *              <p>
+     *              onLoginSuccessEvent：习惯在前面加个on 表示当事件发生时
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)//线程模式 是在主线程（主线更新UI）
+    public void onLoginSuccessEvent(LoginSuccessEvent event) {
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //解除注册
+        EventBus.getDefault().unregister(this);
+    }
+}
