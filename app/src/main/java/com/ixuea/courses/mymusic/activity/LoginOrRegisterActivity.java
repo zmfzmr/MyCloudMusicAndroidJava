@@ -246,19 +246,11 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
                 //从数据库获取信息
                 //也可以通过user参数获取
                 PlatformDb db = platform.getDb();//从平台那边获取到数据库，数据库返回信息
+                String nickname = db.getUserName();
+                String avatar = db.getUserIcon();
+                String openId = db.getUserId();
 
-                data = new User();
-                data.setNickname(db.getUserName());
-                data.setAvatar(db.getUserIcon());//db.getUserIcon():获取用户头像
-
-//                data.setQq_id(db.getUserId());//db.getUserId() 平台用户的id
-
-                data.setQq_id("zmf1");//只要这个qq_id(OpenId不一样)，只要不一样就能注册成功
-
-                //继续登录
-                continueLogin();
-//                LogUtil.d(TAG, "other login success:" + nickname + ", " + avatar + ", " + openId + ", " + HandlerUtil.isMainThread());
-
+                LogUtil.d(TAG, "other login success:" + nickname + "," + avatar + "," + openId + "," + HandlerUtil.isMainThread());
             }
 
             /**
