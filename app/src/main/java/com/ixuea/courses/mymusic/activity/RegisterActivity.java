@@ -15,6 +15,7 @@ import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -157,7 +158,7 @@ public class RegisterActivity extends BaseLoginActivity {
         }
 
         //调用注册接口完成注册
-        User data = new User();
+        User data = getData();
         //将信息设置到对象上
         data.setNickname(nickname);
         data.setPhone(phone);
@@ -174,6 +175,23 @@ public class RegisterActivity extends BaseLoginActivity {
                     }
                 });
 
+    }
+
+    /**
+     * 获取用户对象
+     * 如果传递了用户对象直接复用
+     * 否则创建一个新对象
+     * <p>
+     * QQ登录后传递过来的对象包含了昵称
+     * 关于上面 再次data.setNickname(nickname);
+     * 设置昵称的原因是，用户可能再次修改昵称，需要获取输入框的新昵称后注册
+     */
+    @NotNull
+    private User getData() {
+        if (data == null) {
+            data = new User();
+        }
+        return data;
     }
 
 }
