@@ -31,6 +31,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 
 /**
@@ -187,6 +188,72 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
 
 //                //跳转到注册界面（直接调用按钮点击事件方法）
 //                toRegister();
+
+                //继续登录
+                continueLogin();
+//                LogUtil.d(TAG, "other login success:" + nickname + ", " + avatar + ", " + openId + ", " + HandlerUtil.isMainThread());
+
+            }
+
+            /**
+             * 登录失败了
+             */
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+                LogUtil.d(TAG, "other login error:" + throwable.getLocalizedMessage() + "," + HandlerUtil.isMainThread());
+            }
+
+            /**
+             * 取消登录了
+             */
+            @Override
+            public void onCancel(Platform platform, int i) {
+                LogUtil.d(TAG, "other login cancel:" + i + "," + HandlerUtil.isMainThread());
+            }
+        });
+
+        //authorize与showUser单独调用一个即可
+        //授权并获取用户信息
+        platform.showUser(null);
+
+    }
+
+    @OnClick(R.id.iv_weibo)
+    public void onWeiboLoginClick() {
+        //初始化具体的平台 Platform：翻译：平台  这里表示获取QQ这个平台的Platform对象
+        Platform platform = ShareSDK.getPlatform(SinaWeibo.NAME);
+
+        //设置false表示使用SSO(单点登录)授权方式
+        platform.SSOSetting(false);
+
+        //回调信息
+        //可以在这里获取基本的授权返回的信息
+        platform.setPlatformActionListener(new PlatformActionListener() {
+            /**
+             * 登录成功了
+             *
+             * @param platform Platform
+             * @param i        i
+             * @param hashMap  HashMap
+             */
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                //登录成功了
+
+                //就可以获取到昵称，头像，OpenId
+                //该方法回调不是在主线程
+
+                //从数据库获取信息
+                //也可以通过user参数获取
+                PlatformDb db = platform.getDb();//从平台那边获取到数据库，数据库返回信息
+
+                data = new User();
+                data.setNickname(db.getUserName());
+                data.setAvatar(db.getUserIcon());//db.getUserIcon():获取用户头像
+
+//                data.setQq_id(db.getUserId());//db.getUserId() 平台用户的id
+
+                data.setQq_id("zmf1");//只要这个qq_id(OpenId不一样)，只要不一样就能注册成功
 
                 //继续登录
                 continueLogin();

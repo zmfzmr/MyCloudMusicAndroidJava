@@ -101,7 +101,7 @@
             <include layout="@layout/fill"/>
 
             <ImageView
-                android:id="@+id/iv_login_weibo"
+                android:id="@+id/iv_weibo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
