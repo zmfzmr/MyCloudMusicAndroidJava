@@ -38,16 +38,26 @@ public class BaseLoginActivity extends BaseTitleActivity {
                     @Override
                     public void onSucceeded(DetailResponse<Session> data) {
                         Log.d(TAG, "onLongClick,onSucceeded: " + data.getData());
+//                        toLogin(data);
+                        toLogin(data.getData());
 
-                        //把登录成功的事件通知到AppContext
-                        //PreferenceUtil sp 是父类BaseCommonActivity初始化的
-                        AppContext.getInstance().login(sp, data.getData());
-
-                        ToastUtil.successLongToast(R.string.login_success);
-
-                        //关闭当前界面并启动主界面
-                        startActivityAfterFinishThis(MainActivity.class);
                     }
                 });
+    }
+
+    /**
+     * 登录成功
+     */
+//    private void toLogin(DetailResponse<Session> data) {
+    private void toLogin(Session data) {
+        //把登录成功的事件通知到AppContext
+        //PreferenceUtil sp 是父类BaseCommonActivity初始化的
+//        AppContext.getInstance().login(sp, data.getData());
+        AppContext.getInstance().login(sp, data);
+
+        ToastUtil.successLongToast(R.string.login_success);
+
+        //关闭当前界面并启动主界面
+        startActivityAfterFinishThis(MainActivity.class);
     }
 }

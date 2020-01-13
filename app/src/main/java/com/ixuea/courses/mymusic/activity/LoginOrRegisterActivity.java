@@ -5,9 +5,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
+import com.ixuea.courses.mymusic.AppContext;
+import com.ixuea.courses.mymusic.MainActivity;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
+import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.HandlerUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -174,9 +180,16 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
                 data.setNickname(db.getUserName());
                 data.setAvatar(db.getUserIcon());//db.getUserIcon():获取用户头像
 
-                data.setQq_id(db.getUserId());//db.getUserId() 平台用户的id
-                //跳转到注册界面（直接调用按钮点击事件方法）
-                toRegister();
+//                data.setQq_id(db.getUserId());//db.getUserId() 平台用户的id
+
+                data.setQq_id("zmf1");//只要这个qq_id(OpenId不一样)，只要不一样就能注册成功
+
+
+//                //跳转到注册界面（直接调用按钮点击事件方法）
+//                toRegister();
+
+                //继续登录
+                continueLogin();
 //                LogUtil.d(TAG, "other login success:" + nickname + ", " + avatar + ", " + openId + ", " + HandlerUtil.isMainThread());
 
             }
@@ -201,6 +214,61 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
         //authorize与showUser单独调用一个即可
         //授权并获取用户信息
         platform.showUser(null);
+
+    }
+
+    /**
+     * 继续登录
+     * <p>
+     * 第三方登录完成以后，如果判断第三方登录的QQ是否已经注册呢
+     * <p>
+     * <p>
+     * 其实只要调用下登录方法，如果不可以登录，说明未注册，跳转注册界面；
+     * 否则可以登录，直接通知关闭登录注册界面并跳转到主页
+     */
+    private void continueLogin() {
+        Api.getInstance()
+                .login(data)
+                .subscribe(new HttpObserver<DetailResponse<Session>>() {
+                    /**
+                     * 登录成功
+                     */
+                    @Override
+                    public void onSucceeded(DetailResponse<Session> data) {
+                        if (data != null) {
+                            AppContext.getInstance().login(sp, data.getData());
+
+                            ToastUtil.successLongToast(R.string.login_success);
+                            startActivityAfterFinishThis(MainActivity.class);
+                        }
+                    }
+
+                    /**
+                     * 登录失败
+                     */
+                    @Override
+                    public boolean onFailed(DetailResponse<Session> data, Throwable e) {
+                        if (data != null) {
+                            //请求成功了
+                            //并且服务端还返回了错误信息
+
+                            //判断错误码
+                            if (1010 == data.getStatus()) {
+                                //用户未注册
+                                //跳转到补充用户资料界面
+                                toRegister();
+
+                                //返回true表示我们处理了错误
+                                return true;
+                            }
+                        }
+                        //其他错误直接让父类处理
+                        return super.onFailed(data, e);//默认是返回false的
+                    }
+
+
+                });
+
 
     }
 
