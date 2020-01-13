@@ -23,6 +23,10 @@ android {
         flavorDimensions "versionCode"
     }
 
+    //配置了签名后，是debug release中的签名都是一样，所以更加方面，
+    // 直接复制模拟器的签名就行了，可以不用在手机上运行找签名
+    // 生成到模拟器的apk放到这个目录下...app\build\outputs\apk\dev\debug
+
     //签名配置
     //要写到使用签名配置的前面
     signingConfigs {
