@@ -366,6 +366,9 @@ public class LoginActivity extends BaseLoginActivity {
     public void onForgetPasswordClick(Button view) {
         LogUtil.d(TAG, "onForgetPasswordClick: ");
 
+        //跳转到找回密码(这里没有finish，因为找回密码后还需要回到该界面)
+        startActivity(ForgetPasswordActivity.class);
+
     }
 
 }

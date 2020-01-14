@@ -1,38 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ixuea.courses.mymusic">
-    <!-- 这里用老师的的应用，改包名 和applicationId ,否则第三方登录不上去（原来的后面加old）-->
+    <!-- 这里用老师的的应用，改包名 和applicationId ,否则第三方登录不上去（原来的后面加old） -->
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- android:usesCleartextTraffic="true" 开启HTTP请求-->
     <application
-        android:usesCleartextTraffic="true"
-        android:name="com.ixuea.courses.mymusic.AppContext"
+        android:name=".AppContext"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        android:usesCleartextTraffic="true">
         <activity
-            android:name="com.ixuea.courses.mymusic.activity.RegisterActivity"
-            android:label="@string/register">
-
-        </activity>
-        <activity android:name="com.ixuea.courses.mymusic.activity.LoginOrRegisterActivity" />
-        <activity android:name="com.ixuea.courses.mymusic.activity.GuideActivity" />
-        <activity android:name="com.ixuea.courses.mymusic.activity.SplashActivity">
+            android:name=".activity.ForgetPasswordActivity"
+            android:label="@string/activity_forget_password"></activity>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="@string/register"></activity>
+        <activity android:name=".activity.LoginOrRegisterActivity" />
+        <activity android:name=".activity.GuideActivity" />
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.ixuea.courses.mymusic.MainActivity" />
-        <!--   android:label="@string/login" 这个是标题栏的那个标题     -->
+        <activity android:name=".MainActivity" /> <!-- android:label="@string/login" 这个是标题栏的那个标题 -->
         <activity
-            android:name="com.ixuea.courses.mymusic.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:label="@string/login" />
     </application>
 
