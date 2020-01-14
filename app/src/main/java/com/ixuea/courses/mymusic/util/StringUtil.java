@@ -49,4 +49,11 @@ public class StringUtil {
     public static boolean isNickName(String value) {
         return value.length() >= 2 && value.length() <= 10;
     }
+
+    /**
+     * 是否符合验证码格式
+     */
+    public static boolean isCode(String value) {
+        return value.length() == 4;
+    }
 }

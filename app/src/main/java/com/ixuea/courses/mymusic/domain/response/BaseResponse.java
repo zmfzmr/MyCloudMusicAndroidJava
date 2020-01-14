@@ -1,5 +1,7 @@
 package com.ixuea.courses.mymusic.domain.response;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * 通用网络请求响应模型
  * <p>
@@ -16,8 +18,11 @@ public class BaseResponse {
      * 如果用int类型的话，全局变量会默认初始化，这个值就默认为0了
      * 而我们不想为0，让发生了错误的时候才会值（不想有值，出错了才有值）
      * 所以我们这里定义为引用类型Integer，就会默认初始化为null
+     *
+     * 更改：防止其他接口没有状态码，这里改成int，默认初始化为0
      */
-    private Integer status;
+//    private Integer status;
+    private int status;
 
     /**
      * 出错的提示信息
@@ -26,11 +31,20 @@ public class BaseResponse {
      */
     private String message;
 
-    public Integer getStatus() {
+//    public Integer getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(Integer status) {
+//        this.status = status;
+//    }
+
+
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -40,5 +54,13 @@ public class BaseResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("status", status)
+                .append("message", message)
+                .toString();
     }
 }
