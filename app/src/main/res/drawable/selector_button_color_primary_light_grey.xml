@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--按钮禁用颜色(就是按下后禁用,并且颜色变为灰色)-->
+    <item android:color="@color/light_grey" android:state_enabled="false" />
+
+    <!--默认状态颜色-->
+    <item android:color="@color/colorPrimary" />
+
+</selector>
