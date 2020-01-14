@@ -4,6 +4,7 @@ import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 
@@ -69,6 +70,13 @@ public interface Service {
      */
     @POST("v1/sessions")
     Observable<DetailResponse<Session>> login(@Body User data);
+
+    /**
+     * 重置密码
+     */
+    @POST("v1/users/reset_password")
+    Observable<BaseResponse> resetPassword(@Body User data);
+
 
 
     /**

@@ -10,6 +10,8 @@ public class User extends BaseModel {
     private String email;//邮箱
     private String qq_id;//QQ第三方登录后Id
     private String weibo_id;//微博第三方登录后Id
+    //因为字段只有一个code，所以写到User对象里面
+    private String code;//验证码 只有找回密码的时候才会用到
     /**
      * 用户的密码,登录，注册向服务端传递
      */
@@ -69,5 +71,13 @@ public class User extends BaseModel {
 
     public void setWeibo_id(String weibo_id) {
         this.weibo_id = weibo_id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

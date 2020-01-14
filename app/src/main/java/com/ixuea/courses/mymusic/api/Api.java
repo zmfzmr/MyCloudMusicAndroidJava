@@ -7,6 +7,7 @@ import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.util.Constant;
@@ -169,6 +170,18 @@ public class Api {
      */
     public Observable<DetailResponse<Session>> login(User data) {
         return service.login(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 重置密码
+     *
+     * @param data User
+     * @return Observable<BaseResponse>
+     */
+    public Observable<BaseResponse> resetPassword(User data) {
+        return service.resetPassword(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
