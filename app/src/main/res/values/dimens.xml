@@ -5,9 +5,14 @@
     <dimen name="padding_large">20dp</dimen>
 
     <dimen name="button_width_large">130dp</dimen>
+    <dimen name="button_width_small">80dp</dimen>
+
     <dimen name="button_height">40dp</dimen>
+    <dimen name="button_height_small">30dp</dimen>
     <!-- 圆角相关 -->
     <dimen name="radius_button">20dp</dimen>
+    <!-- 因为button高度是30 所以半径定为15   -->
+    <dimen name="radius_button_small">15dp</dimen>
     <!-- 分割线相关-->
     <dimen name="divider_small">1dp</dimen>
     <dimen name="guide_indicator_height">40dp</dimen>

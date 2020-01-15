@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--    注意：这里要改成shape，表示图形。而不是Selector-->
+    <!--圆角-->
+    <corners android:radius="@dimen/radius_button_small" />
+    <!--填充的颜色
+        00：完全透明
+        (255)ff：完全不透明  f转换成十进制就是16
+
+        16的一半是8  就是半透明
+
+        #ff000000跟#000000都是一样大的，因为ff是完全不透明，所以都是一样的
+
+    -->
+    <solid android:color="#44000000" />
+    <!--
+        60%  255*0.6 = 153  换成16进制就是99
+    -->
+    <!--    <solid android:color="#997e7e7e" />-->
+
+</shape>
