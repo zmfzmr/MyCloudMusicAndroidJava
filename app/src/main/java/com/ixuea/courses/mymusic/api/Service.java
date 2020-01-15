@@ -87,7 +87,14 @@ public interface Service {
     @POST("v1/codes/request_sms_code")
     Observable<DetailResponse<BaseModel>> sendSMSCode(@Body User data);
 
-
+    /**
+     * 发送邮箱验证码
+     *
+     * @param data User
+     * @return Observable<DetailResponse < BaseModel>>
+     */
+    @POST("v1/codes/request_email_code")
+    Observable<DetailResponse<BaseModel>> sendEmailCode(@Body User data);
 
     /**
      * 用户详情

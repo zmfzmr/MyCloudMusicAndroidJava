@@ -81,13 +81,24 @@ public class ForgetPasswordActivity extends BaseLoginActivity {
     }
 
     /**
-     * 发送邮件
+     * 发送邮件验证码
      *
      * @param value 邮箱
      */
     private void sendEmailCode(String value) {
+        User data = new User();
+        data.setEmail(value);
+        //调用接口
+        Api.getInstance().sendEmailCode(data)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        //发送成功了
 
-
+                        //开始倒计时
+                        startCountDown();
+                    }
+                });
     }
 
     /**
