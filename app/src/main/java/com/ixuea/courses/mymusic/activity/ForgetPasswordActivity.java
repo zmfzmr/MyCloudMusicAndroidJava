@@ -7,8 +7,10 @@ import android.widget.EditText;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
+import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.StringUtil;
@@ -56,8 +58,57 @@ public class ForgetPasswordActivity extends BaseLoginActivity {
     @OnClick(R.id.bt_send_code)
     public void onSendCodeClick() {
         LogUtil.d(TAG, "onSendCodeClick");
+//        //开启倒计时
+//        startCountDown();
 
-        startCountDown();
+        //获取用户名
+        String username = et_username.getText().toString().trim();
+        if (StringUtils.isBlank(username)) {
+            ToastUtil.errorShortToast(R.string.enter_username);
+            return;
+        }
+
+        //判断用户名格式
+        if (StringUtil.isPhone(username)) {
+            //手机号
+            sendSMSCode(username);
+        } else if (StringUtil.isEmail(username)) {
+            //邮箱
+            sendEmailCode(username);
+        } else {
+            ToastUtil.errorShortToast(R.string.error_username_format);
+        }
+    }
+
+    /**
+     * 发送邮件
+     *
+     * @param value 邮箱
+     */
+    private void sendEmailCode(String value) {
+
+
+    }
+
+    /**
+     * 发送手机验证码
+     *
+     * @param value 手机号
+     */
+    private void sendSMSCode(String value) {
+        User data = new User();
+        data.setPhone(value);
+        //调用接口
+        Api.getInstance().sendSMSCode(data)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        //发送成功了
+
+                        //开始倒计时
+                        startCountDown();
+                    }
+                });
     }
 
 

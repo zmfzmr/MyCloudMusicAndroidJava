@@ -186,5 +186,19 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 发送短信验证码
+     *
+     * @param data User
+     * @return Observable<BaseModel>
+     */
+    public Observable<DetailResponse<BaseModel>> sendSMSCode(User data) {
+        return service.sendSMSCode(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+
 
 }

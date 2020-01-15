@@ -77,6 +77,16 @@ public interface Service {
     @POST("v1/users/reset_password")
     Observable<BaseResponse> resetPassword(@Body User data);
 
+    /**
+     * 发送短信验证码
+     *
+     * @param data User
+     * @return Observable<BaseModel> 因为返回的response中有code字段，
+     * 而我们也不需要处理这个验证码（这个是服务器帮我们返回的），只需要通过ChuckerTeam（build中查看）就可以查看验证码
+     */
+    @POST("v1/codes/request_sms_code")
+    Observable<DetailResponse<BaseModel>> sendSMSCode(@Body User data);
+
 
 
     /**
