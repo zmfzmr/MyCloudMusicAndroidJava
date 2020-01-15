@@ -14,12 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.AdActivity"></activity>
         <activity
             android:name=".activity.ForgetPasswordActivity"
-            android:label="@string/activity_forget_password"></activity>
+            android:label="@string/activity_forget_password" />
         <activity
             android:name=".activity.RegisterActivity"
-            android:label="@string/register"></activity>
+            android:label="@string/register" />
         <activity android:name=".activity.LoginOrRegisterActivity" />
         <activity android:name=".activity.GuideActivity" />
         <activity android:name=".activity.SplashActivity">

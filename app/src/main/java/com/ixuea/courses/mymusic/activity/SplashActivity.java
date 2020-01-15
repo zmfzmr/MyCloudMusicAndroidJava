@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.ixuea.courses.mymusic.MainActivity;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -74,8 +73,12 @@ public class SplashActivity extends BaseCommonActivity {
         } else if (sp.isLogin()) {
             //已经登录了
 
-            //跳转到首页
-            startActivityAfterFinishThis(MainActivity.class);
+            //就显示广告页面；在广告页面再进入主界面
+            //可以根据自己的需求来更改
+            //同时只有用户登录了
+            //才显示也给用户有更好的体验
+//            startActivityAfterFinishThis(MainActivity.class);
+            startActivityAfterFinishThis(AdActivity.class);
         } else {
             //没有登录
             //跳转到登录注册界面

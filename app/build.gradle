@@ -90,7 +90,7 @@ android {
             //注意：这里是可以单引号的（也可以双引号），而java语言是不能这样用的（java单引号只能一个字符）
             //'"http://api-courses-misuc.ixuea.com/"':单引号里面有个双引号，
             //包含双引号的才是他到的值，"http://api-courses-misuc.ixuea.com/"
-            buildConfigField('String',"ENDPOINT",'"http://dev-my-cloud-music-api-rails.ixuea.com/"')
+            buildConfigField('String', "ENDPOINT", '"http://dev-my-cloud-music-api-rails.ixuea.com/"')
 
             dimension = minSdkVersion
         }
