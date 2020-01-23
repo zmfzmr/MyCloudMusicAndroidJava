@@ -51,4 +51,5 @@
          %1$d:表示第一个参数   s:表示第二个参数（s就是单独的s）
          -->
     <string name="count_second">%1$ds</string>
+    <string name="hint_agreement">注册就代表同意《用户协议》</string>
 </resources>
