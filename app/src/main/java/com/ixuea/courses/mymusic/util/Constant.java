@@ -14,7 +14,19 @@ public class Constant {
      */
     public static final String ENDPOINT = BuildConfig.ENDPOINT;
 
+    //放在一起方便管理
     public static final String ID = "ID";
+
+    /**
+     * 用户详情昵称查询字段
+     */
+    public static final String NICKNAME = "nickname";
+    /**
+     * 传递data key
+     */
+    public static final String DATA = "DATA";
+    public static final String TITLE = "TITLE";//传递标题
+    public static final String URL = "URL";//传递url key
 
     /**
      * 手机号正则表达式
@@ -37,12 +49,5 @@ public class Constant {
      */
     public static final String REGEX_EMAIL = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$";
 
-    /**
-     * 用户详情昵称查询字段
-     */
-    public static final String NICKNAME = "nickname";
-    /**
-     * 传递data key
-     */
-    public static final String DATA = "DATA";
+
 }

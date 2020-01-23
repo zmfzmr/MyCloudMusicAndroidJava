@@ -137,6 +137,16 @@ public class BaseCommonActivity extends BaseActivity {
     }
 
     /**
+     * 获取字符串
+     *
+     * @param key Key
+     * @return
+     */
+    protected String extraString(String key) {
+        return getIntent().getStringExtra(key);
+    }
+
+    /**
      * 获取data对象
      *
      * @return

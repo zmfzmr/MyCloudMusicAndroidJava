@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.Button;
 
-import com.ixuea.courses.mymusic.MainActivity;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
@@ -81,7 +80,11 @@ public class AdActivity extends BaseCommonActivity {
      * 进入首页
      */
     private void next() {
-        startActivityAfterFinishThis(MainActivity.class);
+//        startActivityAfterFinishThis(MainActivity.class);
+
+        //显示网页
+        WebViewActivity.start(getMainActivity(), "活动详情", "http://www.ixuea.com");
+
     }
 
     /**
