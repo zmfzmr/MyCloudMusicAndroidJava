@@ -1,10 +1,13 @@
 package com.ixuea.courses.mymusic.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.Button;
 
+import com.ixuea.courses.mymusic.MainActivity;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
 import butterknife.BindView;
@@ -89,10 +92,38 @@ public class AdActivity extends BaseCommonActivity {
 
     /**
      * 广告点击了
+     *
      */
     @OnClick(R.id.bt_ad)
     public void onAdClick() {
         LogUtil.d(TAG, "onAdClick");
+
+        //取消倒计时
+        cancelCountDown();
+
+        //创建意图
+        Intent intent = new Intent(getMainActivity(), MainActivity.class);
+
+        //添加广告地址
+        //真实项目中
+        //广告地址一般来自网络接口
+        //这里就写死我们爱学啊官网了
+        intent.putExtra(Constant.URL, "http://www.ixuea.com");
+
+        //要跳转到广告界面
+        //先启动主界面的
+        //好处是
+        //用户在广告界面
+        //返回正好看到的主界面
+        //这样才符合应用逻辑
+        //(一个Intent里面只有一个Action，也就是只有一个动作) 这里可以理解为一个字符串
+        intent.setAction(Constant.ACTION_AD);
+
+        //启动界面
+        startActivity(intent);
+
+        //关闭当前界面(广告点击了以后，肯定要关闭当前广告界面)
+        finish();
     }
 
     /**

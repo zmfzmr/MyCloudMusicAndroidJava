@@ -49,5 +49,10 @@ public class Constant {
      */
     public static final String REGEX_EMAIL = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$";
 
-
+    /**
+     * 广告点击
+     * 包名+命名
+     * 防止重复
+     */
+    public static final String ACTION_AD = "com.ixuea.courses.mymusic.ACTION_AD";
 }

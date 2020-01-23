@@ -31,7 +31,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" /> <!-- android:label="@string/login" 这个是标题栏的那个标题 -->
+
+        <!--
+            主界面
+            launchMode:是Activity启动模式
+            比较复杂
+            详细的在基础课程中讲解
+
+            简单来说就是控制是否创建新界面
+            而我们这里肯定不希望有多个主界面
+            所以配置为singleTask
+            -->
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask" /> <!-- android:label="@string/login" 这个是标题栏的那个标题 -->
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/login" />
