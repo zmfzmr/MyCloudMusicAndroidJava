@@ -54,39 +54,39 @@ public class AdActivity extends BaseCommonActivity {
         //单位为毫秒
 
         //创建倒计时
-        countDownTimer = new CountDownTimer(5000, 1000) {
-
-            /**
-             * 每次间隔调用
-             */
-            @Override
-            public void onTick(long millisUntilFinished) {
-                //可能会倒回到0，所以这里加1
-                bt_skip_ad.setText(getString(R.string.count_second, millisUntilFinished / 1000 + 1));
-            }
-
-            /**
-             * 倒计时完成
-             */
-            @Override
-            public void onFinish() {
+//        countDownTimer = new CountDownTimer(5000, 1000) {
+//
+//            /**
+//             * 每次间隔调用
+//             */
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//                //可能会倒回到0，所以这里加1
+//                bt_skip_ad.setText(getString(R.string.count_second, millisUntilFinished / 1000 + 1));
+//            }
+//
+//            /**
+//             * 倒计时完成
+//             */
+//            @Override
+//            public void onFinish() {
                 //执行下一步方法
                 next();
-            }
-        };
-
-        //启动定时器
-        countDownTimer.start();
+//            }
+//        };
+//
+//        //启动定时器
+//        countDownTimer.start();
     }
 
     /**
      * 进入首页
      */
     private void next() {
-//        startActivityAfterFinishThis(MainActivity.class);
+        startActivityAfterFinishThis(MainActivity.class);
 
         //显示网页
-        WebViewActivity.start(getMainActivity(), "活动详情", "http://www.ixuea.com");
+//        WebViewActivity.start(getMainActivity(), "活动详情", "http://www.ixuea.com");
 
     }
 

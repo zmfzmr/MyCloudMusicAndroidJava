@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><!--包含appBar和内容布局-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--标题控件-->
+    <include layout="@layout/tool_bar" />
+
+    <!--主界面内容
+       也可以直接写到这里
+       这里放到多个文件中
+       主要是降低当前文件代码量
+    -->
+    <include layout="@layout/content_home" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
