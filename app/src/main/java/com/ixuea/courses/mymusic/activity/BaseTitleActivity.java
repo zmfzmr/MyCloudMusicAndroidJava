@@ -15,7 +15,7 @@ public class BaseTitleActivity extends BaseCommonActivity {
      * 标题控件
      */
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    protected Toolbar toolbar;
 
 
     @Override

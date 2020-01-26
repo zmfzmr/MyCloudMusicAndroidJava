@@ -44,6 +44,7 @@
             -->
         <activity
             android:name=".MainActivity"
+            android:label=""
             android:launchMode="singleTask" /> <!-- android:label="@string/login" 这个是标题栏的那个标题 -->
         <activity
             android:name=".activity.LoginActivity"

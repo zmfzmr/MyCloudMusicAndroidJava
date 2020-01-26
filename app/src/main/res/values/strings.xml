@@ -33,6 +33,16 @@
     <string name="enter_register2">补充资料</string>
     <string name="complete_register">完成注册</string>
 
+    <!--忘记密码-->
+    <string name="send_code">发送验证码</string>
+    <string name="enter_code">请输入验证码</string>
+    <string name="error_code_format">验证码格式不正确</string>
+    <!--%1：表示第一个参数  $d：表示是数字   连在一起到时候显示为59 58 ..50 49 这种形式
+         %1$d:表示第一个参数   s:表示第二个参数（s就是单独的s）
+         -->
+    <string name="count_second">%1$ds</string>
+    <string name="hint_agreement">注册就代表同意《用户协议》</string>
+
     <!-- 网络相关-->
     <string name="error_network_unknown_host">找不到服务器，请稍后再试</string>
     <string name="error_network_connect">连接失败，请稍后再试</string>
@@ -43,13 +53,8 @@
     <string name="error_network_server">服务器错误，请稍后再试！</string>
     <string name="error_network_unknown">未知错误，请稍后再试！</string>
     <string name="loading">拼命加载中</string>
-    <!--忘记密码-->
-    <string name="send_code">发送验证码</string>
-    <string name="enter_code">请输入验证码</string>
-    <string name="error_code_format">验证码格式不正确</string>
-    <!--%1：表示第一个参数  $d：表示是数字   连在一起到时候显示为59 58 ..50 49 这种形式
-         %1$d:表示第一个参数   s:表示第二个参数（s就是单独的s）
-         -->
-    <string name="count_second">%1$ds</string>
-    <string name="hint_agreement">注册就代表同意《用户协议》</string>
+
+    <!--侧滑相关-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
