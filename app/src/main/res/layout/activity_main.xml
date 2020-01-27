@@ -29,12 +29,31 @@ tools:openDrawer:预览的时候开启方向
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:background="@color/background">
+        android:background="@color/background"
+        android:orientation="vertical">
+        <!--滚动容器
+            因为这个里面只能有一个子布局，所以需要套一个布局
+        -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--侧滑内容布局-->
+            <!--wrap_content，因为这类是滚动视图，所以使用match_parent是不能充满的，
+                因为还有内容可以滚动，不可能充满父布局-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="这是测试侧滑的内容" />
+                <!--引入用户布局-->
+                <include layout="@layout/user_info" />
+                <!--引入分割线布局-->
+                <include layout="@layout/divider_small" />
+
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 

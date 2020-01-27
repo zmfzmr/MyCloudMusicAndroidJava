@@ -2,6 +2,8 @@ package com.ixuea.courses.mymusic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
 import com.ixuea.courses.mymusic.activity.WebViewActivity;
@@ -11,6 +13,7 @@ import com.ixuea.courses.mymusic.util.LogUtil;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.drawerlayout.widget.DrawerLayout;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseTitleActivity {
 
@@ -18,6 +21,15 @@ public class MainActivity extends BaseTitleActivity {
 
     @BindView(R.id.dl)//侧滑控件
             DrawerLayout dl;
+
+    @BindView(R.id.iv_avatar)//头像
+            ImageView iv_avatar;
+
+    @BindView(R.id.tv_nickname)//昵称
+            TextView tv_nickname;
+
+    @BindView(R.id.tv_description)//描述
+            TextView tv_description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,5 +86,13 @@ public class MainActivity extends BaseTitleActivity {
             //显示广告界面
             WebViewActivity.start(getMainActivity(), "活动标题", intent.getStringExtra(Constant.URL));
         }
+    }
+
+    /**
+     * 用户点击了（这里是外层的ll_user 设置点击事件）
+     */
+    @OnClick(R.id.ll_user)
+    public void onUserClick() {
+        LogUtil.d(TAG, "onUserClick:");
     }
 }

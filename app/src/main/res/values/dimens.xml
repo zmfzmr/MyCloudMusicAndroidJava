@@ -18,4 +18,7 @@
     <dimen name="guide_indicator_height">40dp</dimen>
     <!--LinearLayout的内边距-->
     <dimen name="activity_margin">16dp</dimen>
+
+    <!--用户相关-->
+    <dimen name="avatar_width">80dp</dimen>
 </resources>

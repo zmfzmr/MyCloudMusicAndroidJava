@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/ll_user"
+    android:clickable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:padding="@dimen/padding_large">
+    <!-- android:clickable="true" 这里设置clickable="true" 为true 设置点击事件-->
+
+    <!--这里跟随外层布局一样都是wrap_content-->
+
+    <!--头像-->
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:scaleType="centerCrop"
+        android:layout_width="@dimen/avatar_width"
+        android:layout_height="@dimen/avatar_width"
+        android:src="@drawable/placeholder" />
+    <!--昵称-->
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_middle"
+        android:textColor="@color/text"
+        android:text="这是昵称" />
+    <!--描述
+        lines：显示2行，超出以后不会再显示了
+        android:ellipsize="end"：显示省略号
+    -->
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_middle"
+        android:textColor="@color/light_grey"
+        android:text="这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描述"
+        android:lines="2"
+        android:ellipsize="end" />
+
+
+</LinearLayout>
