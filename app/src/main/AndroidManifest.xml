@@ -41,11 +41,14 @@
             简单来说就是控制是否创建新界面
             而我们这里肯定不希望有多个主界面
             所以配置为singleTask
+
+            theme:设置了主题，不同的版本会找不同的主题（比如小于21的会找values里面，大于找values-21的）
             -->
         <activity
             android:name=".MainActivity"
             android:label=""
-            android:launchMode="singleTask" /> <!-- android:label="@string/login" 这个是标题栏的那个标题 -->
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.StatusBarTransparent" /> <!-- android:label="@string/login" 这个是标题栏的那个标题 -->
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/login" />

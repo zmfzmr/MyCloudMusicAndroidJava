@@ -39,6 +39,7 @@
     <string name="error_code_format">验证码格式不正确</string>
     <!--%1：表示第一个参数  $d：表示是数字   连在一起到时候显示为59 58 ..50 49 这种形式
          %1$d:表示第一个参数   s:表示第二个参数（s就是单独的s）
+         注意：%1 中的%在前面
          -->
     <string name="count_second">%1$ds</string>
     <string name="hint_agreement">注册就代表同意《用户协议》</string>
