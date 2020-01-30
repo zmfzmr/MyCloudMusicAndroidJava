@@ -601,6 +601,11 @@ dependencies {
     //https://github.com/greenrobot/EventBus
     implementation 'org.greenrobot:eventbus:3.1.1'
 
+    //图片加载框架
+    //https://github.com/bumptech/glide
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
