@@ -7,6 +7,10 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
 import com.ixuea.courses.mymusic.activity.WebViewActivity;
+import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
@@ -58,6 +62,47 @@ public class MainActivity extends BaseTitleActivity {
         //同步状态(ActionBarDrawerToggle 相当于个监听器，这个监听检测Drawlayout 关闭 和打开状态，然后同步样式)
         //本来是返回箭头的，同步状态后，变为了另外一个(三)的图标；往右划的时候图标也会变化
         toggle.syncState();
+    }
+
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        //获取用户信息
+        //当然可以在用户要显示侧滑的时候
+        //才获取用户信息
+        //这样可以减少请求
+        fetchData();
+    }
+
+    /**
+     * 请求数据
+     * sp.getUserId():因为登录成功后保存了用户的id，所以通过地址和id连接起来可以访问改用户的详细信息
+     */
+    private void fetchData() {
+        Api.getInstance().userDetail(sp.getUserId())
+                .subscribe(new HttpObserver<DetailResponse<User>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<User> data) {
+                        next(data.getData());
+                    }
+                });
+    }
+
+    /**
+     * 显示数据
+     *
+     * @param data User
+     */
+    private void next(User data) {
+        //TODO 显示头像
+
+        //显示昵称
+        tv_nickname.setText(data.getNickname());
+
+        //显示描述
+        tv_description.setText(data.getDescriptionFormat());
     }
 
     /**

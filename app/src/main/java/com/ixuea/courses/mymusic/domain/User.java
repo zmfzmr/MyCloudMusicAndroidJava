@@ -1,5 +1,7 @@
 package com.ixuea.courses.mymusic.domain;
 
+import android.text.TextUtils;
+
 /**
  * 用户模型
  */
@@ -16,6 +18,12 @@ public class User extends BaseModel {
      * 用户的密码,登录，注册向服务端传递
      */
     private String password;//密码
+
+    /**
+     * 描述
+     */
+    private String description;
+
 
     public String getPhone() {
         return phone;
@@ -80,4 +88,31 @@ public class User extends BaseModel {
     public void setCode(String code) {
         this.code = code;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    //辅助方法
+
+    /**
+     * 格式化的描述
+     * <p>
+     * 这样写的好处是，有可能首页显示（也就是抽屉布局首页），也可能点击进入也可能用到
+     * 所以直接在返回data数据里面的User对象里面定义，方便复用（不然到时候需要在各个节目判断，麻烦）
+     *
+     * @return 描述
+     */
+    public String getDescriptionFormat() {
+        if (TextUtils.isEmpty(description)) {
+            return "这个人很懒，没有填写个人介绍!";
+        }
+        return description;
+    }
+    //end辅助方法
+
 }

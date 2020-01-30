@@ -129,7 +129,7 @@ public class Api {
     }
 
     /**
-     * 歌单详情
+     * 用户详情
      *
      * @param id 传入的第几个歌曲Id
      * @return 返回Retrofit接口实例 里面的方法返回的对象
@@ -148,6 +148,16 @@ public class Api {
         return service.userDetail(id, data)
                 .subscribeOn(Schedulers.io())//在子线程执行
                 .observeOn(AndroidSchedulers.mainThread());//在主线程观察（操作UI在主线程）
+    }
+
+    /**
+     * 用户详情(这里的第二个参数为null)
+     *
+     * @param id 传入的第几个歌曲Id
+     * @return Observable<DetailResponse < User>>
+     */
+    public Observable<DetailResponse<User>> userDetail(String id) {
+        return userDetail(id, null);
     }
 
     /**
