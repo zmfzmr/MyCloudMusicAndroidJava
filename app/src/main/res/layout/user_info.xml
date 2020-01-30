@@ -16,8 +16,7 @@
         android:id="@+id/iv_avatar"
         android:scaleType="centerCrop"
         android:layout_width="@dimen/avatar_width"
-        android:layout_height="@dimen/avatar_width"
-        android:src="@drawable/placeholder" />
+        android:layout_height="@dimen/avatar_width" />
     <!--昵称-->
     <TextView
         android:id="@+id/tv_nickname"

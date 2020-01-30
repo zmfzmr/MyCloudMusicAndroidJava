@@ -69,6 +69,32 @@ public class MainActivity extends BaseTitleActivity {
     protected void initDatum() {
         super.initDatum();
 
+        //测试显示资源目录图片
+//        iv_avatar.setImageResource(R.drawable.placeholder);
+
+        //显示资源目录图片
+        //就是应用中drawable和mipmap目录
+//        Glide.with(this)
+//                .load(R.drawable.placeholder)
+//                .into(iv_avatar);
+
+//        //测试网络图片
+//        Glide.with(this)
+//                .load("http://dev-courses-misuc.ixuea.com/1da1c001e89c4b8780ac8f9780ef881f.jpg")
+//                .into(iv_avatar);
+
+        //其他配置
+//        Glide.with(this)
+//                .load("http://dev-courses-misuc.ixuea.com/1da1c001e89c4b8780ac8f9780ef881f.jpg")
+//                //从中心裁剪
+//                .centerCrop()
+//                //占位图
+//                //就是当前真实的图片没有显示出来前
+//                //显示的图片
+//                .placeholder(R.drawable.placeholder)
+//                .into(iv_avatar);
+
+
         //获取用户信息
         //当然可以在用户要显示侧滑的时候
         //才获取用户信息
