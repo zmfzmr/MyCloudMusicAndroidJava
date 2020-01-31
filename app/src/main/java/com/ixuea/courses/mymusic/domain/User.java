@@ -7,7 +7,7 @@ import android.text.TextUtils;
  */
 public class User extends BaseModel {
     private String nickname;//昵称
-    private String avatar;//头像
+    private String avatar;//头像 (其实这里存储的是头像的相对路径（正常注册的）和绝对路径（QQ登录的，有个完整的地址）)
     private String phone;//手机号
     private String email;//邮箱
     private String qq_id;//QQ第三方登录后Id

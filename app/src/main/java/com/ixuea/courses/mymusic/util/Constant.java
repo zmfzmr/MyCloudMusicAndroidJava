@@ -8,11 +8,16 @@ import com.ixuea.courses.mymusic.BuildConfig;
 public class Constant {
 
     /**
-     * 资源端点
+     * 端点
      * 哪天不需要BuildConfig.ENDPOINT啦，直接更改Constant这个类就可以，这样就和BuildConfig没有关系
      * 替换更加容易
      */
     public static final String ENDPOINT = BuildConfig.ENDPOINT;
+
+    /**
+     * 资源端点
+     */
+    public static final String RESOURCE_ENDPOINT = BuildConfig.RESOURCE_ENDPOINT;
 
     //放在一起方便管理
     public static final String ID = "ID";

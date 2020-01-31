@@ -92,6 +92,8 @@ android {
             //包含双引号的才是他到的值，"http://api-courses-misuc.ixuea.com/"
             buildConfigField('String', "ENDPOINT", '"http://dev-my-cloud-music-api-rails.ixuea.com/"')
 
+            //资源端点（这个是图片资源地址的前缀（是阿里云那边的地址））
+            buildConfigField 'String','RESOURCE_ENDPOINT','"http://dev-courses-misuc.ixuea.com/%s"'
             dimension = minSdkVersion
         }
 
@@ -100,6 +102,11 @@ android {
             //API端点
             //buildConfigField:方法  后面省略了括号
             buildConfigField 'String', 'ENDPOINT', '"http://api-courses-misuc.ixuea.com/"'
+
+            //资源端点（这个是图片资源地址的前缀（是阿里云那边的地址））
+            //正式版的这个前缀，我们这里是没有的，这里只是暂时填写上，所以用的时候用上面dev的那个（开发版的那个）
+            buildConfigField 'String','RESOURCE_ENDPOINT','"http://courses-misuc.ixuea.com/%s"'
+
             //minSdkVersion()  这里省略了(),原本是一个方法
             dimension = minSdkVersion
         }
