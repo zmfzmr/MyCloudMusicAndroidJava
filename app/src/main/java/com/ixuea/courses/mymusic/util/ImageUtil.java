@@ -53,7 +53,7 @@ public class ImageUtil {
      * @param view       ImageView
      * @param resourceId 图片资源id
      */
-    private static void show(Activity activity, ImageView view, @RawRes @DrawableRes @Nullable int resourceId) {
+    public static void show(Activity activity, ImageView view, @RawRes @DrawableRes @Nullable int resourceId) {
         Glide.with(activity)
                 .load(resourceId)
                 .into(view);
@@ -96,7 +96,7 @@ public class ImageUtil {
      * @param view     ImageView
      * @param uri      uri 这里是showAvatar中外界传入过来的data.getAvatar()
      */
-    private static void show(Activity activity, ImageView view, String uri) {
+    public static void show(Activity activity, ImageView view, String uri) {
         //将图片地址转为绝对路径
         uri = String.format(Constant.RESOURCE_ENDPOINT, uri);
         //地址已经拼接好，复用绝对路径的方法
@@ -106,7 +106,6 @@ public class ImageUtil {
 
     /**
      * 获取公共配置
-     * 可能外界需要用到，所以用public
      */
     private static RequestOptions getCommonRequestOptions() {
         //创建配置选项
