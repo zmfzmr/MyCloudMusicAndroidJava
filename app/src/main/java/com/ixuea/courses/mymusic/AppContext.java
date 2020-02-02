@@ -2,8 +2,10 @@ package com.ixuea.courses.mymusic;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 
 import com.facebook.stetho.Stetho;
+import com.ixuea.courses.mymusic.activity.LoginOrRegisterActivity;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
@@ -13,6 +15,10 @@ import com.mob.MobSDK;
 import org.greenrobot.eventbus.EventBus;
 
 import androidx.multidex.MultiDex;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
 import es.dmoral.toasty.Toasty;
 
 /**
@@ -90,6 +96,57 @@ public class AppContext extends Application {
      * 初始化其他需要登录后初始化的内容
      */
     private void onLogin() {
+
+    }
+
+    /**
+     * 退出
+     * 清除信息后，跳转到 登录注册界面
+     */
+    public void logout() {
+        //清楚登录相关信息
+        //这里在PreferenceUtil偏好设置里面又定义了一个方法（在这里面清除）
+        PreferenceUtil.getInstance(getApplicationContext()).logout();
+
+        //QQ退出
+        otherLogout(QQ.NAME);
+
+        //微博退出
+        otherLogout(SinaWeibo.NAME);
+
+        //退出后跳转到登录注册界面
+        //因为我们的应用实现的是必须登录才能进入首页
+        Intent intent = new Intent(getApplicationContext(), LoginOrRegisterActivity.class);
+
+        //在Activity以外启动界面
+        //都要写这个标识
+        //具体的还比较复杂
+        //基础课程中讲解
+        //这里学会这样用就行了
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //启动界面
+        startActivity(intent);
+        //退出了通知了（可能需要做些其他处理）
+        onLogout();
+    }
+
+    /**
+     * 第三方平台退出
+     *
+     * @param name
+     */
+    private void otherLogout(String name) {
+        //清除第三方平台登录信息
+        Platform platform = ShareSDK.getPlatform(name);
+        if (platform.isAuthValid()) {//有这个认证或者有效期的（就是第三方登录后，这个应该是为true的）
+            platform.removeAccount(true);//移除第三方账号
+        }
+    }
+
+    /**
+     * 退出后，可能需要做一些处理
+     */
+    private void onLogout() {
 
     }
 }

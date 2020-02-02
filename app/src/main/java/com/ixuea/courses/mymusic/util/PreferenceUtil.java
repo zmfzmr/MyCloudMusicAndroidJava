@@ -99,7 +99,18 @@ public class PreferenceUtil {
         return preference.getString(USER_ID, null);
     }
 
-    //辅助方法
+    /**
+     * 退出
+     * <p>
+     * 退出方法不属于辅助方法，所以放到上面来
+     */
+    public void logout() {
+        delete(USER_ID);
+        delete(SESSION);
+    }
+
+
+    //辅助方法 （就是添加 删除等之类的）
 
     /**
      * 保存字符串
@@ -130,6 +141,16 @@ public class PreferenceUtil {
         //TextUtils.isEmpty(getSession()):不为空就返回false；希望返回true，加个！
         return !TextUtils.isEmpty(getSession());
     }
+
+    /**
+     * 删除内容（根据key删除SharedPreferences里面的值）
+     *
+     * @param key Key
+     */
+    private void delete(String key) {
+        preference.edit().remove(key).commit();
+    }
+
 
     //end辅助方法
 }
