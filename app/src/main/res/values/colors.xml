@@ -14,7 +14,7 @@
     <!--    全局背景-->
     <color name="background">@android:color/white</color>
 
-    <!--    亮一点的灰色-->
+    <!--亮一点的灰色-->
     <color name="light_grey">#aaaaaa</color>
     <color name="text">#333</color>
     <!--分割线颜色-->

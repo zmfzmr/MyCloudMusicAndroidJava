@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="padding_small">12dp</dimen>
+    <!--LinearLayout的内边距-->
+    <dimen name="activity_margin">16dp</dimen>
+
+    <dimen name="text_small">12sp</dimen>
+
+    <!--小 中 大 间隙-->
+    <dimen name="padding_small">5dp</dimen>
     <dimen name="padding_middle">10dp</dimen>
     <dimen name="padding_large">20dp</dimen>
 
@@ -15,10 +21,13 @@
     <dimen name="radius_button_small">15dp</dimen>
     <!-- 分割线相关-->
     <dimen name="divider_small">1dp</dimen>
+    <dimen name="divider_meddle">10dp</dimen>
+
     <dimen name="guide_indicator_height">40dp</dimen>
-    <!--LinearLayout的内边距-->
-    <dimen name="activity_margin">16dp</dimen>
 
     <!--用户相关-->
     <dimen name="avatar_width">80dp</dimen>
+    <!--菜单相关 抽屉布局每个item的高-->
+    <dimen name="menu_item_height">45dp</dimen>
+
 </resources>

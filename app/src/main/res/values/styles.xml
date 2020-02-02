@@ -53,4 +53,53 @@
 
     </style>
 
+    <!--侧滑界面ItemContainer（item容器）-->
+    <style name="ItemContainer">
+        <!--可点击 LinearLayout是不可点击，设置为可点击 -->
+        <item name="android:clickable">true</item>
+        <!--左侧padding -->
+        <item name="android:paddingLeft">@dimen/padding_large</item>
+        <!--右侧padding -->
+        <item name="android:paddingRight">@dimen/padding_large</item>
+        <!--内容垂直居中对齐-->
+        <item name="android:gravity">center_vertical</item>
+        <!--宽高-->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/menu_item_height</item>
+        <!--内容方向为水平-->
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <!--
+        ImageView里面的style设置
+        侧滑界面Item图标
+    -->
+    <style name="ItemIcon">
+        <!--宽高-->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--侧滑界面Item文本-->
+    <style name="ItemText">
+        <!--左侧margin-->
+        <item name="android:layout_marginLeft">@dimen/padding_small</item>
+
+        <!--文本颜色-->
+        <item name="android:textColor">@color/text</item>
+
+        <!--宽高-->
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--侧滑界面Item值 (个性换肤 右边的官方红 )-->
+    <style name="ItemTextHint">
+        <item name="android:textColor">@color/light_grey</item>
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 </resources>
