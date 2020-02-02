@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.WebViewActivity"></activity>
+        <activity android:name=".activity.SettingActivity"></activity>
+        <activity android:name=".activity.WebViewActivity" />
         <activity android:name=".activity.AdActivity" />
         <activity
             android:name=".activity.ForgetPasswordActivity"
@@ -31,7 +32,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <!--
             主界面
             launchMode:是Activity启动模式
@@ -43,7 +43,7 @@
             所以配置为singleTask
 
             theme:设置了主题，不同的版本会找不同的主题（比如小于21的会找values里面，大于找values-21的）
-            -->
+        -->
         <activity
             android:name=".MainActivity"
             android:label=""

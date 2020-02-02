@@ -260,8 +260,9 @@ tools:openDrawer:预览的时候开启方向
                     android:textColor="@color/text" />
             </LinearLayout>
 
-            <!--按钮容器-->
+            <!--设置 按钮容器-->
             <LinearLayout
+                android:id="@+id/ll_setting"
                 android:orientation="horizontal"
                 android:clickable="true"
                 android:gravity="center"

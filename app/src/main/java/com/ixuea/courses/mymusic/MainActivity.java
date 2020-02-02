@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
+import com.ixuea.courses.mymusic.activity.SettingActivity;
 import com.ixuea.courses.mymusic.activity.WebViewActivity;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.User;
@@ -16,6 +17,7 @@ import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,6 +37,7 @@ public class MainActivity extends BaseTitleActivity {
 
     @BindView(R.id.tv_description)//描述
             TextView tv_description;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,5 +171,23 @@ public class MainActivity extends BaseTitleActivity {
     @OnClick(R.id.ll_user)
     public void onUserClick() {
         LogUtil.d(TAG, "onUserClick:");
+    }
+
+    /**
+     * 设置点击了
+     */
+    @OnClick(R.id.ll_setting)
+    public void onSettingClick() {
+        startActivity(SettingActivity.class);
+
+        cloneDrawer();
+    }
+
+    /**
+     * 关闭抽屉
+     */
+    private void cloneDrawer() {
+        //START 就是我们显示抽屉的方向
+        dl.closeDrawer(GravityCompat.START);
     }
 }
