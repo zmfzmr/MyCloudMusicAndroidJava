@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4.class)//这里理解为这里面的测试：使用哪一个类去代理他（这里使用的是AndroidJUnit4）
 public class ExampleInstrumentedTest {
     /**
      * 测试当前应用包名
