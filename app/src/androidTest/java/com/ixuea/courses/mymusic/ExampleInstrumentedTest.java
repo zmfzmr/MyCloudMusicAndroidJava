@@ -17,11 +17,15 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+    /**
+     * 测试当前应用包名
+     */
+
     @Test
     public void useAppContext() {
-        // Context of the app under test.
+        //app测试上下文
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
-        assertEquals("net.qiujuer.italker.mycloudmusicandroidjava", appContext.getPackageName());
+        //测试包名 包名改为com.ixuea.courses.mymusic （改为和applicationId一样）
+        assertEquals("com.ixuea.courses.mymusic", appContext.getPackageName());
     }
 }
