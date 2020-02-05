@@ -57,12 +57,12 @@ public class ToastUtil {
      */
 //    public static void errorLongToast(@NonNull Context context, @StringRes int id) {
     public static void errorLongToast(@StringRes int id) {
-        Toasty.error(context, id, Toasty.LENGTH_SHORT).show();
+        Toasty.error(context, id, Toasty.LENGTH_LONG).show();
     }
 
     //    public static void successLongToast(@NonNull Context context, @StringRes int id) {
     public static void successLongToast(@StringRes int id) {
-        Toasty.success(context, id, Toasty.LENGTH_SHORT).show();
+        Toasty.success(context, id, Toasty.LENGTH_LONG).show();
     }
 
 
