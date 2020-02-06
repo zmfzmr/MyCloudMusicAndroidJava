@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
 import com.ixuea.courses.mymusic.activity.SettingActivity;
 import com.ixuea.courses.mymusic.activity.WebViewActivity;
+import com.ixuea.courses.mymusic.adapter.MainAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
@@ -16,27 +17,48 @@ import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
+import java.util.ArrayList;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseTitleActivity {
 
     private static final String TAG = "MainActivity";
+    /**
+     * 侧滑控件
+     */
+    @BindView(R.id.dl)
+    DrawerLayout dl;
+    /**
+     * 头像
+     */
+    @BindView(R.id.iv_avatar)
+    ImageView iv_avatar;
 
-    @BindView(R.id.dl)//侧滑控件
-            DrawerLayout dl;
+    /**
+     * 昵称
+     */
+    @BindView(R.id.tv_nickname)
+    TextView tv_nickname;
 
-    @BindView(R.id.iv_avatar)//头像
-            ImageView iv_avatar;
+    /**
+     * 描述
+     */
+    @BindView(R.id.tv_description)
+    TextView tv_description;
 
-    @BindView(R.id.tv_nickname)//昵称
-            TextView tv_nickname;
-
-    @BindView(R.id.tv_description)//描述
-            TextView tv_description;
+    /**
+     * 滚动视图
+     * ViewPager
+     */
+    @BindView(R.id.vp)
+    ViewPager vp;
+    private MainAdapter adapter;
 
 
     @Override
@@ -66,6 +88,24 @@ public class MainActivity extends BaseTitleActivity {
         //同步状态(ActionBarDrawerToggle 相当于个监听器，这个监听检测Drawlayout 关闭 和打开状态，然后同步样式)
         //本来是返回箭头的，同步状态后，变为了另外一个(三)的图标；往右划的时候图标也会变化
         toggle.syncState();
+
+        //缓存页面数量
+        //默认是缓存一个
+        vp.setOffscreenPageLimit(4);
+
+        //创建Adapter
+        adapter = new MainAdapter(getMainActivity(), getSupportFragmentManager());
+        vp.setAdapter(adapter);
+
+        //创建占位数据
+        ArrayList<Integer> datum = new ArrayList<>();
+        //4个数据表示有4个页面
+        datum.add(0);
+        datum.add(1);
+        datum.add(2);
+        datum.add(3);
+
+        adapter.setDatum(datum);//设置数据
     }
 
 
