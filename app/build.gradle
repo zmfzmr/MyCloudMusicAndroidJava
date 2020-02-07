@@ -613,6 +613,10 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 
+    //指示器（用于ViewPager）
+    //https://github.com/hackware1993/MagicIndicator
+    implementation 'com.github.hackware1993:MagicIndicator:1.6.0'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
