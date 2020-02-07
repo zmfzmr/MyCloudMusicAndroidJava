@@ -7,10 +7,40 @@ import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+
 /**
  * 首页-发现界面
  */
 public class DiscoveryFragment extends BaseCommonFragment {
+
+    /**
+     * 列表控件
+     */
+
+    @BindView(R.id.rv)
+    RecyclerView rv;
+    private GridLayoutManager layoutManager;
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+
+        //高度固定
+        //可以提交性能
+        //但由于这里是项目课程
+        //所以这里不讲解
+        //会在《详解RecyclerView》课程中讲解
+        //http://www.ixuea.com/courses/8
+        rv.setHasFixedSize(true);
+
+        //设置显示3列
+        layoutManager = new GridLayoutManager(getMainActivity(), 3);
+        rv.setLayoutManager(layoutManager);
+
+    }
 
     /**
      * 构造方法（准确说是一个静态的创建方法）
