@@ -1,7 +1,10 @@
 package com.ixuea.courses.mymusic;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,15 @@ import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
 import java.util.ArrayList;
 
@@ -58,8 +70,13 @@ public class MainActivity extends BaseTitleActivity {
      */
     @BindView(R.id.vp)
     ViewPager vp;
-    private MainAdapter adapter;
 
+    /**
+     * MagicIndicator (ViewPager指示器)
+     */
+    @BindView(R.id.mi)
+    MagicIndicator mi;
+    private MainAdapter adapter;//适配器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +123,87 @@ public class MainActivity extends BaseTitleActivity {
         datum.add(3);
 
         adapter.setDatum(datum);//设置数据
+
+        //将指示器和ViewPager关联起来
+        //创建通用的指示器
+        CommonNavigator commonNavigator = new CommonNavigator(getMainActivity());
+
+        /**
+         * 设置适配器
+         */
+        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
+            /**
+             * 指示器数量
+             *
+             * @return 就是指示器数量（就是有对应多少个标题）
+             */
+            @Override
+            public int getCount() {
+                return datum.size();
+            }
+
+            /**
+             * 获取当前位置的标题
+             *
+             * @param context Context
+             * @param index   index
+             * @return 标题
+             */
+            @Override
+            public IPagerTitleView getTitleView(Context context, int index) {
+                //创建简单的文本控件
+                SimplePagerTitleView titleView = new SimplePagerTitleView(context);
+
+                //默认选中颜色
+                titleView.setNormalColor(getResources().getColor(R.color.tab_normal));
+                //选中的颜色
+                titleView.setSelectedColor(getResources().getColor(R.color.white));
+
+                //根据坐标获取
+                //显示的文本
+                //getPageTitle:这个方法记得要重写，否则无法无法显示标题
+                titleView.setText(adapter.getPageTitle(index));
+
+                titleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //点击相关的指示器
+                        //让ViewPager跳转到当前位置
+                        vp.setCurrentItem(index);
+                    }
+                });
+                return titleView;
+            }
+
+            /**
+             * 返回指示器线
+             * <p>
+             * 就是下面那条线
+             *
+             * @param context Context
+             * @return IPagerIndicator
+             */
+            @Override
+            public IPagerIndicator getIndicator(Context context) {
+                LinePagerIndicator indicator = new LinePagerIndicator(context);
+                //线的宽度和内容一样
+                indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
+                //高亮颜色
+                indicator.setColors(Color.WHITE);
+//                return indicator;
+
+                //返回null表示不显示指示器
+                return null;
+            }
+        });
+
+        //如果位置显示不下指示器时
+        //是否自动调整
+        commonNavigator.setAdjustMode(true);
+        //设置导航器
+        mi.setNavigator(commonNavigator);
+        //让指示器和ViewPager关联
+        ViewPagerHelper.bind(mi, vp);
     }
 
 
@@ -138,6 +236,9 @@ public class MainActivity extends BaseTitleActivity {
 //                .placeholder(R.drawable.placeholder)
 //                .into(iv_avatar);
 
+        //默认选中第二个界面
+        //设置监听器在选择就会调用监听器(因为将监听器和指示器绑定了，所以滑动到第二个页面，上面的标题就会跟着跳转)
+        vp.setCurrentItem(1);
 
         //获取用户信息
         //当然可以在用户要显示侧滑的时候

@@ -5,7 +5,47 @@
     android:layout_height="match_parent">
 
     <!--标题控件-->
-    <include layout="@layout/tool_bar" />
+    <!-- AppBarLayout主要用来实现标题折叠功能
+        elevation：阴影高度  0dp:表示去掉阴影
+        ?attr/actionBarSize：表示取找这个属性的值，如果找到就用这个actionBarSize值
+        -->
+    <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:elevation="0dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <!-- Toolbar控件
+            PupupOverlay:翻译：折叠覆盖
+
+            注意：上面
+                  style="@style/AppTheme.AppBarOverlay"
+                  app:popupTheme="@style/AppTheme.PopupOverlay"
+                  的写法
+
+           app:titleTextColor:标题字体颜色 app命名
+
+           这里把  app:titleTextColor="@color/white"去掉（这个只能更改单个，不能更改返回箭头的颜色）
+           所以把AppBarLayout的style变为android:theme，全称是：android:theme="@style/AppTheme.AppBarOverlay"
+        -->
+        <androidx.appcompat.widget.Toolbar
+            android:background="?attr/colorPrimary"
+            android:id="@+id/toolbar"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+            <!--在Toolbar添加了个指示器，Toolbar也是继承自ViewGroup的，
+                所以可以在里面放控件-->
+            <!--指示器-->
+            <net.lucode.hackware.magicindicator.MagicIndicator
+                android:id="@+id/mi"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <!--主界面内容
        也可以直接写到这里
