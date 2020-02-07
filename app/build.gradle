@@ -617,6 +617,14 @@ dependencies {
     //https://github.com/hackware1993/MagicIndicator
     implementation 'com.github.hackware1993:MagicIndicator:1.6.0'
 
+    //recyclerview控件
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha03'
+
+    //封装了RecyclerView
+    //提供更高层次的接口
+    //https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
