@@ -35,6 +35,10 @@ public class Title extends BaseMultiItemEntity {
      * 如果要显示多类型这就是固定写法
      *
      * @return Item类型
+     *
+     * 根据返回类型区分创建了多少个布局：比如DiscoveryFragment创建了1个title，添加到集合中，
+     * 然后adapter.replaceData(datum)，DiscoveryAdapter适配器根据添加的布局类型（比如TYPE_TITLE），
+     * 来判断到底需要创建多少个title布局
      */
     @Override
     public int getItemType() {

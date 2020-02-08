@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.DiscoveryAdapter;
+import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
 import com.ixuea.courses.mymusic.domain.Sheet;
-import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Title;
+import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import io.reactivex.Observable;
 
 /**
  * 首页-发现界面
@@ -93,21 +96,33 @@ public class DiscoveryFragment extends BaseCommonFragment {
         //添加标题
         datum.add(new Title("推荐歌单"));
 
-        //添加歌单数据
-        for (int i = 0; i < 9; i++) {
-            datum.add(new Sheet());
-        }
+//        //添加歌单数据
+//        for (int i = 0; i < 9; i++) {
+//            datum.add(new Sheet());
+//        }
+//
+//        //添加标题
+//        datum.add(new Title("推荐单曲"));
+//
+//        //添加单曲数据
+//        for (int i = 0; i < 9; i++) {
+//            datum.add(new Song());
+//        }
+//
+//        //将数据设置（替换）到适配器
+//        adapter.replaceData(datum);
 
-        //添加标题
-        datum.add(new Title("推荐单曲"));
+        //歌单Api
+        Observable<ListResponse<Sheet>> sheets = Api.getInstance().sheets();
 
-        //添加单曲数据
-        for (int i = 0; i < 9; i++) {
-            datum.add(new Song());
-        }
-
-        //将数据设置（替换）到适配器
-        adapter.replaceData(datum);
+        //请求歌单数据
+        sheets.subscribe(new HttpObserver<ListResponse<Sheet>>() {
+            @Override
+            public void onSucceeded(ListResponse<Sheet> data) {
+                //添加歌单数据
+                datum.addAll(data.getData());
+            }
+        });
     }
 
     /**
