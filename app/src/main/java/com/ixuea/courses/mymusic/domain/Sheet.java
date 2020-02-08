@@ -1,9 +1,12 @@
 package com.ixuea.courses.mymusic.domain;
 
+import static com.ixuea.courses.mymusic.util.Constant.TYPE_SHEET;
+
 /**
  * 歌单对象
  */
-public class Sheet extends BaseModel {
+//public class Sheet extends BaseModel {
+public class Sheet extends BaseMultiItemEntity {
     //id可以删除了，因为已经定义到父类了
 //    /**
 //     * 歌单Id
@@ -40,5 +43,26 @@ public class Sheet extends BaseModel {
 
     public void setBanner(String banner) {
         this.banner = banner;
+    }
+
+    /**
+     * 使用了BaseRecyclerViewAdapterHelper框架
+     * 实现多类型列表
+     * 需要实现该接口返回类型
+     *
+     * @return Item类型
+     */
+    @Override
+    public int getItemType() {
+        return TYPE_SHEET;
+    }
+
+    /**
+     * 占多少列
+     */
+    @Override
+    public int getSpanSize() {
+        //为啥是1，参考BaseMultiItemEntity中
+        return 1;
     }
 }

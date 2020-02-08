@@ -60,4 +60,19 @@ public class Constant {
      * 防止重复
      */
     public static final String ACTION_AD = "com.ixuea.courses.mymusic.ACTION_AD";
+
+    /**
+     * 标题
+     */
+    public static final int TYPE_TITLE = 0;
+
+    /**
+     * 歌单
+     */
+    public static final int TYPE_SHEET = 1;
+
+    /**
+     * 单曲
+     */
+    public static final int TYPE_SONG = 2;
 }
