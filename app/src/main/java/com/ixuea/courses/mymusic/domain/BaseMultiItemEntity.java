@@ -15,6 +15,7 @@ public abstract class BaseMultiItemEntity extends BaseModel implements MultiItem
      * 意思说：前面我们设置了RecyclerView3列
      * 所以：我们这里默认return 3，就是一行显示一个（比如标题，歌曲）；
      * 如果return 1，就是一行显示3个（比如歌曲3列）
+     *
      * <p>
      * 可以理解为：除整或者取余（3 / 3 = 1; 1 / 3  除不尽就取余3）
      * <p>
