@@ -17,7 +17,9 @@ public abstract class BaseMultiItemEntity extends BaseModel implements MultiItem
      * 如果return 1，就是一行显示3个（比如歌曲3列）
      *
      * <p>
-     * 可以理解为：除整或者取余（3 / 3 = 1; 1 / 3  除不尽就取余3）
+     * 可以理解为：
+     *      除整或者取余（（占了3列的宽度）3 / 3 = 1（表示1个，占了3列的宽度） （比如标题，歌曲）;
+     *                   （占了1列的宽度）1 / 3  除不尽就取余3）             （比如歌单）
      * <p>
      * spansize：span：跨距 size：大小
      */

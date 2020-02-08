@@ -59,6 +59,24 @@ public class DiscoveryFragment extends BaseCommonFragment {
         adapter = new DiscoveryAdapter();
         rv.setAdapter(adapter);
 
+        //设置列宽度
+//        adapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
+//            @Override
+//            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
+//                //在这里
+//                //获取模型上面的宽度
+//                //adapter.getItem(position):返回的是DiscoveryAdapter extends BaseMultiItemQuickAdapter<BaseMultiItemEntity, BaseViewHolder>
+//                //传入的BaseMultiItemEntity泛型参数，
+//                //adapter.getItem(position).getSpanSize():返回的是BaseMultiItemEntity中getSpanSize
+//                //如果有子类继承BaseMultiItemEntity，就是子类的getSpanSize；而这类用的是它的子类（如Title Sheet Song）
+//                return adapter.getItem(position).getSpanSize();
+//            }
+//        });
+
+        //lambda写法
+        adapter.setSpanSizeLookup((gridLayoutManager, position)
+                -> adapter.getItem(position).getSpanSize());
+
         //请求数据
         fetchData();
     }
