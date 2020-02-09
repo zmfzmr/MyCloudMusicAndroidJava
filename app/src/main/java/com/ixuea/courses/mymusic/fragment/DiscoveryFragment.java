@@ -10,6 +10,7 @@ import com.ixuea.courses.mymusic.adapter.DiscoveryAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
 import com.ixuea.courses.mymusic.domain.Sheet;
+import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Title;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
@@ -115,12 +116,34 @@ public class DiscoveryFragment extends BaseCommonFragment {
         //歌单Api
         Observable<ListResponse<Sheet>> sheets = Api.getInstance().sheets();
 
+        //单曲Api
+        Observable<ListResponse<Song>> songs = Api.getInstance().songs();
+
+        //为降低课程难度
+        //这里先不使用RxJava来合并请求
+        //后面会在我的界面讲解
+
         //请求歌单数据
         sheets.subscribe(new HttpObserver<ListResponse<Sheet>>() {
             @Override
             public void onSucceeded(ListResponse<Sheet> data) {
                 //添加歌单数据
                 datum.addAll(data.getData());
+
+                //请求单曲数据
+                songs.subscribe(new HttpObserver<ListResponse<Song>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Song> data) {
+                        //添加标题
+                        datum.add(new Title("推荐单曲"));
+
+                        //添加单曲数据
+                        //data.getData():获取到的是Song的集合（含有多个song）
+                        datum.addAll(data.getData());
+                        //设置数据到适配器（替换数据）
+                        adapter.replaceData(datum);//记得写上这个
+                    }
+                });
             }
         });
     }

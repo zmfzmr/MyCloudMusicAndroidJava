@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusic.api;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
+import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
@@ -106,4 +107,9 @@ public interface Service {
     @GET("v1/users/{id}")
     Observable<DetailResponse<User>> userDetail(@Path("id") String id, @QueryMap Map<String, String> data);
 
+    /**
+     * 单曲（单曲集合）
+     */
+    @GET("v1/songs")
+    Observable<ListResponse<Song>> songs();
 }

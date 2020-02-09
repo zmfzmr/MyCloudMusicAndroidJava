@@ -6,6 +6,7 @@ import com.ixuea.courses.mymusic.AppContext;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
+import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
@@ -220,6 +221,14 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-
-
+    /**
+     * 单曲
+     *
+     * @return Observable<DetailResponse < Song>>
+     */
+    public Observable<ListResponse<Song>> songs() {
+        return service.songs()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }
