@@ -4,6 +4,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
+import com.ixuea.courses.mymusic.domain.Title;
 
 import java.util.ArrayList;
 
@@ -55,6 +56,17 @@ public class DiscoveryAdapter extends BaseMultiItemQuickAdapter<BaseMultiItemEnt
      */
     @Override
     protected void convert(@NonNull BaseViewHolder helper, BaseMultiItemEntity item) {
-
+        switch (helper.getItemViewType()) {
+            case TYPE_TITLE:
+                Title title = (Title) item;
+                helper.setText(R.id.tv_title, title.getTitle());
+                break;
+            case TYPE_SHEET:
+                break;
+            case TYPE_SONG:
+                break;
+            default:
+                break;
+        }
     }
 }
