@@ -1,13 +1,87 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--Grid模式下分割线比较复杂
+这里就不讲解了：使用margin来实现
+但是有个问题就是相邻的Item间距是2倍-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#0f0">
+    android:layout_marginLeft="@dimen/padding_middle"
+    android:layout_marginRight="@dimen/padding_middle">
 
+    <!--封面图正方形容器-->
+    <com.ixuea.courses.mymusic.view.SquareLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--封面图容器-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--CardView
+                主要是用来实现圆角和阴影
+                只是这里用不到阴影
+                所以去掉了
+
+                cardCornerRadius：圆角尺寸
+                cardElevation：阴影高度
+                注意：上面的都是app命名到的
+
+                android:foreground="?android:attr/selectableItemBackground"
+                这个主要是按下去的时候，有那个水波效果
+                -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="@dimen/radius_small"
+                app:cardElevation="0dp">
+                <!--封面-->
+                <ImageView
+                    android:id="@+id/iv_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!--点击数容器-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_small"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_headset" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_small"
+                    tools:text="20万" />
+            </LinearLayout>
+        </RelativeLayout>
+    </com.ixuea.courses.mymusic.view.SquareLinearLayout>
+
+    <!--标题-->
+    <!--lineSpacingMultiplier  这个是行高比例   效果为:字体大小 * 比例-->
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_title"
+        android:layout_marginTop="@dimen/padding_middle"
+        android:layout_marginBottom="@dimen/padding_middle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="这是歌单" />
-
+        android:maxLines="2"
+        android:lineSpacingMultiplier="@dimen/line_spacing_multiplier"
+        android:ellipsize="end"
+        tools:text="这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题" />
 </LinearLayout>

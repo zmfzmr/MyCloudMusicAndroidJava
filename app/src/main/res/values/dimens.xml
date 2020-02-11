@@ -18,6 +18,7 @@
     <!-- 圆角相关 -->
     <dimen name="radius_button">20dp</dimen>
     <!-- 因为button高度是30 所以半径定为15   -->
+    <dimen name="radius_small">5dp</dimen>
     <dimen name="radius_button_small">15dp</dimen>
     <!-- 分割线相关-->
     <dimen name="divider_small">1dp</dimen>
@@ -32,4 +33,6 @@
     <!--Item高度 （这里用到了RecyclerView item中）-->
     <dimen name="item_title_height">50dp</dimen>
 
+    <!--行高比例-->
+    <item name="line_spacing_multiplier" type="dimen" format="float">1.2</item>
 </resources>
