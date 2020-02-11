@@ -28,7 +28,7 @@ public class Sheet extends BaseMultiItemEntity {
      */
     private String description;
     /**
-     * 点击数
+     * 点击数(播放量)
      */
     private int clicks_count;
     /**

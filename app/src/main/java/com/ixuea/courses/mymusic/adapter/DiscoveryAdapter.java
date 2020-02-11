@@ -1,10 +1,14 @@
 package com.ixuea.courses.mymusic.adapter;
 
+import android.app.Activity;
+
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
+import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Title;
+import com.ixuea.courses.mymusic.util.ImageUtil;
 
 import java.util.ArrayList;
 
@@ -62,6 +66,20 @@ public class DiscoveryAdapter extends BaseMultiItemQuickAdapter<BaseMultiItemEnt
                 helper.setText(R.id.tv_title, title.getTitle());
                 break;
             case TYPE_SHEET:
+                //歌单
+                Sheet sheet = (Sheet) item;
+                //显示图片
+                //这个mContext是BaseMultiItemQuickAdapter的父类BaseQuickAdapter里面的
+                //helper.getView(R.id.iv_banner)
+                //参数1：上下文 2：图片控件 3 ：控件地址
+                ImageUtil.show((Activity) mContext, helper.getView(R.id.iv_banner), sheet.getBanner());
+
+                //设置歌单标题(就是图片下面的文字)
+                helper.setText(R.id.tv_title, sheet.getTitle());
+
+                //设置播放量(点击数)
+                //注意：这里第二个参数是需要传入字符串的（需要转换成String）
+                helper.setText(R.id.tv_info, String.valueOf(sheet.getClicks_count()));
                 break;
             case TYPE_SONG:
                 break;

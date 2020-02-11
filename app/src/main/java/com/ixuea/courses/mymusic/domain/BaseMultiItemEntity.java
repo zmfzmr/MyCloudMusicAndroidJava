@@ -16,12 +16,14 @@ public abstract class BaseMultiItemEntity extends BaseModel implements MultiItem
      * 所以：我们这里默认return 3，就是一行显示一个（比如标题，歌曲）；
      * 如果return 1，就是一行显示3个（比如歌曲3列）
      *
-     * <p>
-     * 可以理解为：
-     *      除整或者取余（（占了3列的宽度）3 / 3 = 1（表示1个，占了3列的宽度） （比如标题，歌曲）;
-     *                   （占了1列的宽度）1 / 3  除不尽就取余3）             （比如歌单）
-     * <p>
      * spansize：span：跨距 size：大小
+     *
+     * 简单记：RecyclerView设置了3列
+     * 这里设置3,3 / 3 = 1,就是1个（宽度占了3列） （比如标题，歌曲）
+     * 如果是1 ，那就是宽度占1列（1无法整除，比3晓）（比如歌单）
+     *
+     * 其实就是返回1，占1列
+     * 返回3，宽度占了3列
      */
     public int getSpanSize() {
         return 3;
