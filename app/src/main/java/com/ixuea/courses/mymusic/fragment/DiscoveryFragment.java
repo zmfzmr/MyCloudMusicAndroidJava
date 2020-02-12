@@ -80,9 +80,27 @@ public class DiscoveryFragment extends BaseCommonFragment {
         //lambda写法
         adapter.setSpanSizeLookup((gridLayoutManager, position)
                 -> adapter.getItem(position).getSpanSize());
+        //添加头部
+        adapter.setHeaderView(createHeaderView());
 
         //请求数据
         fetchData();
+    }
+
+    /**
+     * 创建头部布局
+     * <p>
+     * 就是把一个xml转换成view，然后在上面adapter.setHeaderView() 添加进去
+     *
+     * @return View
+     */
+    private View createHeaderView() {
+        //参数2：false，我们自己在前面的adapter.setHeaderView(createHeaderView());已经添加了
+        //如果是true，则让它帮我们添加，那么这样的话，就是把一个控件添加到2个父类中，那么就会报错
+        //从XML创建View
+        View view = getLayoutInflater().inflate(R.layout.header_discovery, (ViewGroup) rv.getParent(), false);
+        //返回控件
+        return view;
     }
 
     /**
