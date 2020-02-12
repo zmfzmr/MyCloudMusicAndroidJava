@@ -83,5 +83,10 @@
     <string name="discovery">发现</string>
     <string name="friend">朋友</string>
     <string name="video">视频</string>
+    <!--发现界面相关-->
+    <string name="person_fm">视频</string>
+    <string name="rank">排行榜</string>
+    <string name="day_recommend">每日推荐</string>
+    <string name="sheet">歌单</string>
 
 </resources>
