@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -23,7 +24,7 @@
             android:layout_width="@dimen/song_banner_width"
             android:layout_height="@dimen/song_banner_width"
             android:scaleType="centerCrop"
-            android:src="@drawable/placeholder" />
+            tools:src="@drawable/placeholder" />
 
     </androidx.cardview.widget.CardView>
 
@@ -87,13 +88,15 @@
 
             <!--头像 宽度是25dp-->
             <ImageView
+                android:id="@+id/iv_avatar"
                 android:layout_width="@dimen/avatar_width_small"
                 android:layout_height="@dimen/avatar_width_small"
                 android:scaleType="centerCrop"
-                android:src="@drawable/placeholder" />
+                tools:src="@drawable/placeholder" />
 
             <!--昵称-->
             <TextView
+                android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_small"

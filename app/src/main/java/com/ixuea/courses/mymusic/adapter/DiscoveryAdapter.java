@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
 import com.ixuea.courses.mymusic.domain.Sheet;
+import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Title;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 
@@ -82,6 +83,25 @@ public class DiscoveryAdapter extends BaseMultiItemQuickAdapter<BaseMultiItemEnt
                 helper.setText(R.id.tv_info, String.valueOf(sheet.getClicks_count()));
                 break;
             case TYPE_SONG:
+                //单曲
+                Song song = (Song) item;
+
+                //显示封面
+                ImageUtil.show((Activity) mContext, helper.getView(R.id.iv_banner), song.getBanner());
+
+                //设置标题
+                helper.setText(R.id.tv_title, song.getTitle());
+
+                //设置播放量(点击数)
+                helper.setText(R.id.tv_info, String.valueOf(song.getClicks_count()));
+
+                //歌曲头像
+                //注意：song.getSinger().getAvatar() 这里是先获取到歌手这个对象，然后再获取里面的头像
+                ImageUtil.show((Activity) mContext, helper.getView(R.id.iv_avatar), song.getSinger().getAvatar());
+
+                //歌手昵称
+                helper.setText(R.id.tv_nickname, song.getSinger().getNickname());
+
                 break;
             default:
                 break;
