@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusic.api;
 import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ixuea.courses.mymusic.AppContext;
+import com.ixuea.courses.mymusic.domain.Ad;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
@@ -228,6 +229,17 @@ public class Api {
      */
     public Observable<ListResponse<Song>> songs() {
         return service.songs()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 广告列表
+     *
+     * @return Observable<ListResponse < Ad>> 广告的列表
+     */
+    public Observable<ListResponse<Ad>> ads() {
+        return service.ads()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

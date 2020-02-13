@@ -1,5 +1,6 @@
 package com.ixuea.courses.mymusic.api;
 
+import com.ixuea.courses.mymusic.domain.Ad;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
@@ -112,4 +113,10 @@ public interface Service {
      */
     @GET("v1/songs")
     Observable<ListResponse<Song>> songs();
+
+    /**
+     * 广告列表
+     */
+    @GET("v1/ads")
+    Observable<ListResponse<Ad>> ads();
 }

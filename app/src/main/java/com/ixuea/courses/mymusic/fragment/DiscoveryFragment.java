@@ -9,12 +9,14 @@ import android.widget.TextView;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.DiscoveryAdapter;
 import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.Ad;
 import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Title;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +32,7 @@ import io.reactivex.Observable;
  */
 public class DiscoveryFragment extends BaseCommonFragment {
 
+    private static final String TAG = "DiscoveryFragment";
     /**
      * 列表控件
      */
@@ -87,6 +90,33 @@ public class DiscoveryFragment extends BaseCommonFragment {
 
         //请求数据
         fetchData();
+
+        //请求轮播图数据
+        fetchBannerData();
+    }
+
+    /**
+     * //请求轮播图数据
+     */
+    private void fetchBannerData() {
+        Api.getInstance()
+                .ads()
+                .subscribe(new HttpObserver<ListResponse<Ad>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Ad> data) {
+                        //可能有很多的逻辑要处理，所以定义一个方法
+                        showBanner(data.getData());
+                    }
+                });
+    }
+
+    /**
+     * 显示banner
+     *
+     * @param data List<Ad>
+     */
+    private void showBanner(List<Ad> data) {
+        LogUtil.d(TAG, "showBanner:" + data.size());
     }
 
     /**
