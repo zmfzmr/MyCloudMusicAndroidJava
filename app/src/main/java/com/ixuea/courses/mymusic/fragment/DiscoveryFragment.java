@@ -1,9 +1,11 @@
 package com.ixuea.courses.mymusic.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
@@ -16,7 +18,10 @@ import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Title;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.youth.banner.Banner;
+import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,8 +44,10 @@ public class DiscoveryFragment extends BaseCommonFragment {
 
     @BindView(R.id.rv)
     RecyclerView rv;
-    private GridLayoutManager layoutManager;
-    private DiscoveryAdapter adapter;
+    private GridLayoutManager layoutManager;//Grid布局管理器
+    private DiscoveryAdapter adapter;//发现界面适配器（RecyclerView多类型适配器）
+    private Banner banner;//轮播图组件
+    private List<Ad> bannerData;//轮播图数据
 
     @Override
     protected void initViews() {
@@ -117,6 +124,47 @@ public class DiscoveryFragment extends BaseCommonFragment {
      */
     private void showBanner(List<Ad> data) {
         LogUtil.d(TAG, "showBanner:" + data.size());
+        this.bannerData = data;
+        //设置到轮播图组件
+        banner.setImages(data);
+
+        //显示数据
+        banner.start();
+        //第一次也要滚动
+        startBannerScroll();
+    }
+
+    /**
+     * //第一次也要滚动
+     */
+    private void startBannerScroll() {
+        //轮播图自动播放（自动滚动）
+        banner.startAutoPlay();
+    }
+
+    /**
+     * 当界面显示了执行
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        //开始轮播图滚动
+        if (bannerData != null) {//有数据才滚动
+            //开始轮播图滚动
+            banner.startAutoPlay();
+        }
+    }
+
+    /**
+     * 当界面看不见了执行
+     * <p>
+     * 包括开启新界面，弹窗，后台
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        //结束轮播图滚动
+        banner.stopAutoPlay();
     }
 
     /**
@@ -131,6 +179,13 @@ public class DiscoveryFragment extends BaseCommonFragment {
         //如果是true，则让它帮我们添加，那么这样的话，就是把一个控件添加到2个父类中，那么就会报错
         //从XML创建View
         View view = getLayoutInflater().inflate(R.layout.header_discovery, (ViewGroup) rv.getParent(), false);
+
+        //查找轮播图组件
+        banner = view.findViewById(R.id.banner);
+
+        //设置图片加载器
+        banner.setImageLoader(new GlideImageLoader());
+
         //找到日期文本控件
         //注意这里是用的findViewById（如果用的是@BindView获取的话，获取到的是本类加载的那个fragment_discovery）
         //而我们需要加载的是头布局，所以用头布局的view来获取
@@ -235,4 +290,27 @@ public class DiscoveryFragment extends BaseCommonFragment {
     protected View getLayoutView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_discovery, null);
     }
+
+    /**
+     * Banner框架显示图片的实现类
+     * <p>
+     * 如果有其他位置用到
+     * 可以放到单独的文件中
+     */
+    class GlideImageLoader extends ImageLoader {
+        /**
+         * 加载图片的方法
+         * @param context Context
+         * @param path 就是给Banner添加的对象（比如点击集合List<ad> 就是里面的ad对象）
+         * @param imageView 图片控件
+         */
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            //将对象转为广告对象
+            Ad banner = (Ad) path;
+            //使用工具类方法显示图片
+            ImageUtil.show(getMainActivity(), imageView, banner.getBanner());
+        }
+    }
+
 }
