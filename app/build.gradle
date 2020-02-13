@@ -625,6 +625,10 @@ dependencies {
     //https://github.com/CymChad/BaseRecyclerViewAdapterHelper
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
 
+    //轮播图（这里用了控件，自己写起来有点复杂，需要理解ViewPager的一些逻辑才行）
+    //https://github.com/youth5201314/banner
+    implementation 'com.youth.banner:banner:1.4.10'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
