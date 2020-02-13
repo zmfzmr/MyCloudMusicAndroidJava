@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.DiscoveryAdapter;
@@ -16,6 +17,7 @@ import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -99,6 +101,22 @@ public class DiscoveryFragment extends BaseCommonFragment {
         //如果是true，则让它帮我们添加，那么这样的话，就是把一个控件添加到2个父类中，那么就会报错
         //从XML创建View
         View view = getLayoutInflater().inflate(R.layout.header_discovery, (ViewGroup) rv.getParent(), false);
+        //找到日期文本控件
+        //注意这里是用的findViewById（如果用的是@BindView获取的话，获取到的是本类加载的那个fragment_discovery）
+        //而我们需要加载的是头布局，所以用头布局的view来获取
+        TextView tv_day = view.findViewById(R.id.tv_day);
+
+        //设置日期
+        //由于项目中没有其他位置使用到
+        //所以可以不用重构
+
+        //获取日历对象
+        Calendar calendar = Calendar.getInstance();
+        //获取当前月的天
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        //设置到控件上，记得转换
+        tv_day.setText(String.valueOf(day));
+
         //返回控件
         return view;
     }
