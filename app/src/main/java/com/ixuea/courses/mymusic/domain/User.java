@@ -2,6 +2,8 @@ package com.ixuea.courses.mymusic.domain;
 
 import android.text.TextUtils;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * 用户模型
  */
@@ -24,6 +26,33 @@ public class User extends BaseModel {
      */
     private String description;
 
+    private String area;//区
+    /**
+     * 区编码
+     * <p>
+     * SerializedName是GSON框架的功能
+     * 所以如果使用其他JSON框架可能不支持
+     * 更多的功能这里就不讲解了
+     * <p>
+     * 作用是指定序列化和反序列化时字段
+     * 也就说说在JSON中该字段为area_code
+     * 当然也可以不使用这个功能
+     * 字段就定义为area_code
+     * 只是在Java中推荐使用驼峰命名法
+     * <p>
+     * 其实就是服务器返回的json中是area_code
+     * Gson框架通过area_code这个字段找到这个值，并赋值给areaCode
+     */
+    @SerializedName("area_code")
+    private String areaCode;//区代码
+
+    private String province;//省
+    @SerializedName("province_code")
+    private String provinceCode;//省编码
+
+    private String city;//市
+    @SerializedName("city_code")
+    private String cityCode;//市编码
 
     public String getPhone() {
         return phone;
@@ -95,6 +124,54 @@ public class User extends BaseModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getProvinceCode() {
+        return provinceCode;
+    }
+
+    public void setProvinceCode(String provinceCode) {
+        this.provinceCode = provinceCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
     }
 
     //辅助方法

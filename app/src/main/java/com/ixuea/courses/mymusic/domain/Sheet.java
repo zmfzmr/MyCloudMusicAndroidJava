@@ -55,6 +55,15 @@ public class Sheet extends BaseMultiItemEntity {
      * 歌曲
      */
     private List<Song> songs;
+    /**
+     * 是否收藏了
+     * 有值就表示收藏了(收藏)
+     * <p>
+     * 这里用Integer
+     * <p>
+     * int 默认初始化为0；Integer默认初始化为null
+     */
+    private Integer collection_id;
 
 //    public String getId() {
 //        return id;
@@ -134,6 +143,14 @@ public class Sheet extends BaseMultiItemEntity {
 
     public void setSongs(List<Song> songs) {
         this.songs = songs;
+    }
+
+    public Integer getCollection_id() {
+        return collection_id;
+    }
+
+    public void setCollection_id(Integer collection_id) {
+        this.collection_id = collection_id;
     }
 
     /**
