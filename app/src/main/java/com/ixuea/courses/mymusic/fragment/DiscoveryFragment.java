@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.WebViewActivity;
 import com.ixuea.courses.mymusic.adapter.DiscoveryAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Ad;
@@ -21,6 +22,7 @@ import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ import io.reactivex.Observable;
 /**
  * 首页-发现界面
  */
-public class DiscoveryFragment extends BaseCommonFragment {
+public class DiscoveryFragment extends BaseCommonFragment implements OnBannerListener {
 
     private static final String TAG = "DiscoveryFragment";
     /**
@@ -183,6 +185,9 @@ public class DiscoveryFragment extends BaseCommonFragment {
         //查找轮播图组件
         banner = view.findViewById(R.id.banner);
 
+        //设置点击监听器
+        banner.setOnBannerListener(this);
+
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());
 
@@ -289,6 +294,19 @@ public class DiscoveryFragment extends BaseCommonFragment {
     @Override
     protected View getLayoutView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_discovery, null);
+    }
+
+    /**
+     * 轮播图点击回调
+     *
+     * @param position 索引
+     */
+    @Override
+    public void OnBannerClick(int position) {
+        //获取点击的广告对象
+        Ad ad = bannerData.get(position);
+        //获取通用的WebView界面显示
+        WebViewActivity.start(getMainActivity(), "活动详情", ad.getUri());
     }
 
     /**
