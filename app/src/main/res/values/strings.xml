@@ -3,6 +3,7 @@
 
     <!--activity标题-->
     <string name="activity_forget_password">找回密码</string>
+    <string name="activity_sheet_detail">歌单详情</string>
 
     <!--版本文本-->
     <string name="copyright">Copyright © 2019 Ixuea. All Rights Reserved</string>
@@ -88,5 +89,6 @@
     <string name="rank">排行榜</string>
     <string name="day_recommend">每日推荐</string>
     <string name="sheet">歌单</string>
+
 
 </resources>

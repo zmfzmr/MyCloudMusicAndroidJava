@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.SheetDetailActivity;
 import com.ixuea.courses.mymusic.activity.WebViewActivity;
 import com.ixuea.courses.mymusic.adapter.DiscoveryAdapter;
 import com.ixuea.courses.mymusic.api.Api;
@@ -19,6 +22,7 @@ import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Title;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.youth.banner.Banner;
@@ -102,6 +106,43 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
 
         //请求轮播图数据
         fetchBannerData();
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //设置item点击事件（DiscoveryAdapter内部实现了点击事件，如果是RecyclerView 需要自己取实现点击事件）
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            /**
+             * 点击Item回调
+             * @param adapter BaseQuickAdapter
+             * @param view View
+             * @param position 索引
+             */
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //获取点击的数据（获取当前用户点击的是哪一个对象）
+                Object data = adapter.getItem(position);
+
+                //判断类型
+                if (data instanceof Sheet) {
+                    //歌单
+                    Sheet sheet = (Sheet) data;
+
+                    //创建Intent
+                    //Android中大部分组件的操作都是通过他完成的
+                    Intent intent = new Intent(getMainActivity(), SheetDetailActivity.class);
+
+                    //传递Id
+                    //这样详情界面才知道点击的是那个歌单
+                    intent.putExtra(Constant.ID, sheet.getId());
+
+                    //启动Intent里面的activity
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     /**
