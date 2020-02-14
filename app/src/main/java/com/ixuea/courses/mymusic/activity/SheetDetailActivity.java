@@ -10,6 +10,11 @@ import com.ixuea.courses.mymusic.util.Constant;
  */
 public class SheetDetailActivity extends BaseTitleActivity {
 
+    /**
+     * 歌单Id
+     */
+    private String id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,5 +27,8 @@ public class SheetDetailActivity extends BaseTitleActivity {
 
         //获取传递的参数
         getIntent().getStringExtra(Constant.ID);
+
+        //使用重构后的方法
+        id = extraId();
     }
 }

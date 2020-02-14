@@ -1,7 +1,6 @@
 package com.ixuea.courses.mymusic.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,6 @@ import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Title;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
-import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.youth.banner.Banner;
@@ -130,16 +128,19 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
                     //歌单
                     Sheet sheet = (Sheet) data;
 
-                    //创建Intent
-                    //Android中大部分组件的操作都是通过他完成的
-                    Intent intent = new Intent(getMainActivity(), SheetDetailActivity.class);
+//                    //创建Intent
+//                    //Android中大部分组件的操作都是通过他完成的
+//                    Intent intent = new Intent(getMainActivity(), SheetDetailActivity.class);
+//
+//                    //传递Id
+//                    //这样详情界面才知道点击的是那个歌单
+//                    intent.putExtra(Constant.ID, sheet.getId());
+//
+//                    //启动Intent里面的activity
+//                    startActivity(intent);
 
-                    //传递Id
-                    //这样详情界面才知道点击的是那个歌单
-                    intent.putExtra(Constant.ID, sheet.getId());
-
-                    //启动Intent里面的activity
-                    startActivity(intent);
+                    //使用重构后的方法
+                    startActivityExtraId(SheetDetailActivity.class, sheet.getId());
                 }
             }
         });

@@ -1,8 +1,10 @@
 package com.ixuea.courses.mymusic.fragment;
 
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.ixuea.courses.mymusic.activity.BaseCommonActivity;
+import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 
 import butterknife.ButterKnife;
@@ -55,6 +57,26 @@ public abstract class BaseCommonFragment extends BaseFragment {
     protected void startActivity(Class<?> clazz) {
         //创建Intent
         Intent intent = new Intent(getMainActivity(), clazz);
+        startActivity(intent);
+    }
+
+    /**
+     * 启动界面，可以传递一个字符串参数
+     *
+     * @param clazz Class
+     * @param id    String(字符串id)
+     */
+    protected void startActivityExtraId(Class<?> clazz, String id) {
+        //创建Intent
+        Intent intent = new Intent(getMainActivity(), clazz);
+
+        //传递数据
+        if (!TextUtils.isEmpty(id)) {
+            //不为空才传递
+            intent.putExtra(Constant.ID, id);//这个id是字符串类型
+        }
+
+        //启动界面
         startActivity(intent);
     }
 
