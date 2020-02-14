@@ -629,6 +629,11 @@ dependencies {
     //https://github.com/youth5201314/banner
     implementation 'com.youth.banner:banner:1.4.10'
 
+    //内存泄漏检测工具
+    //https://github.com/square/leakcanary
+    //只有调试模式下才添加该依赖
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-2'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
