@@ -1,5 +1,7 @@
 package com.ixuea.courses.mymusic.domain;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.List;
 
 import static com.ixuea.courses.mymusic.util.Constant.TYPE_SHEET;
@@ -151,6 +153,22 @@ public class Sheet extends BaseMultiItemEntity {
 
     public void setCollection_id(Integer collection_id) {
         this.collection_id = collection_id;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("title", title)
+                .append("banner", banner)
+                .append("description", description)
+                .append("clicks_count", clicks_count)
+                .append("collections_count", collections_count)
+                .append("comments_count", comments_count)
+                .append("songs_count", songs_count)
+                .append("user", user)
+                .append("songs", songs)
+                .append("collection_id", collection_id)
+                .toString();
     }
 
     /**
