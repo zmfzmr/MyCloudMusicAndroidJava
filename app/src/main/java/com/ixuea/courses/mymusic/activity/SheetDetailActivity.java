@@ -1,6 +1,8 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SongAdapter;
@@ -61,6 +63,17 @@ public class SheetDetailActivity extends BaseTitleActivity {
 //        rv.addItemDecoration(decoration);
     }
 
+    /**
+     * 创建头部
+     */
+    private View createHeaderView() {
+        //从XML创建布局
+        View view = getLayoutInflater().inflate(R.layout.header_sheet_detail, (ViewGroup) rv.getParent(), false);
+
+        //返回view
+        return view;
+    }
+
     @Override
     protected void initDatum() {
         super.initDatum();
@@ -73,6 +86,9 @@ public class SheetDetailActivity extends BaseTitleActivity {
 
         //创建适配器
         adapter = new SongAdapter(R.layout.item_sheet_detail);
+
+        //添加头部（注意：在设置适配器前添加头部布局）
+        adapter.addHeaderView(createHeaderView());
 
         //设置适配器
         rv.setAdapter(adapter);
