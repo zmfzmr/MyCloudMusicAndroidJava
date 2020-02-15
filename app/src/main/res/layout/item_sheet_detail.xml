@@ -1,12 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/background">
+    <!--设置个白色 ，不然在不同的手机上颜色是不一样的-->
+    <!--内容-->
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--位置-->
+        <TextView
+            android:id="@+id/tv_position"
+            android:layout_width="@dimen/item_song_height"
+            android:layout_height="@dimen/item_song_height"
+            android:gravity="center"
+            android:textColor="@color/text"
+            tools:text="12" />
+        <!--音乐信息容器-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="这是标题" />
+            <!--标题-->
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text"
+                android:text="这是歌曲名称" />
+            <!--信息-->
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_marginTop="@dimen/padding_small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_small"
+                android:textColor="@color/light_grey"
+                android:text="这是歌手信息" />
 
+        </LinearLayout>
+        <!--更多按钮 这里用了ImageButton
+            这里设置了center 居中显示  （其实设不设置目前来说效果差不多）
+        -->
+        <ImageButton
+            android:id="@+id/ib_more"
+            android:layout_width="@dimen/item_song_height"
+            android:layout_height="@dimen/item_song_height"
+            android:background="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_more_grey" />
+    </LinearLayout>
+    <!--分割线-->
+    <include layout="@layout/divider_small" />
 </LinearLayout>
