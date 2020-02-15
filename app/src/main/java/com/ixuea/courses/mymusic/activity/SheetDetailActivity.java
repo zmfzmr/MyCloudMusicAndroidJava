@@ -52,6 +52,13 @@ public class SheetDetailActivity extends BaseTitleActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
         //设置管理器
         rv.setLayoutManager(layoutManager);
+
+//        //创建分割线
+//        DividerItemDecoration decoration = new DividerItemDecoration(getMainActivity(),RecyclerView.VERTICAL);
+//
+//        //添加到控件
+//        //可以添加多个
+//        rv.addItemDecoration(decoration);
     }
 
     @Override
