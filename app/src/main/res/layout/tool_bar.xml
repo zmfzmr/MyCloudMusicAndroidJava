@@ -6,9 +6,9 @@
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/AppTheme.AppBarOverlay"
-    android:elevation="0dp"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    app:elevation="0dp">
 
     <!-- Toolbar控件
         PupupOverlay:翻译：折叠覆盖
