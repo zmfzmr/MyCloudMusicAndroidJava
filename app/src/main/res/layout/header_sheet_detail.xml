@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_header"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -31,6 +32,7 @@
                 app:cardElevation="@dimen/elevation">
                 <!-- app:srcCompat  （相比src）可以理解为有其他的实现，可以用来做兼容，具体不细说-->
                 <ImageView
+                    android:id="@+id/iv_banner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -46,6 +48,7 @@
                 android:layout_height="wrap_content">
                 <!--这是歌单的标题-->
                 <TextView
+                    android:id="@+id/tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
@@ -61,14 +64,16 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
+                    <!--头像-->
                     <ImageView
+                        android:id="@+id/iv_avatar"
                         android:layout_width="@dimen/avatar_width_meddle"
                         android:layout_height="@dimen/avatar_width_meddle"
                         android:scaleType="centerCrop"
                         tools:src="@drawable/placeholder" />
-
+                    <!--昵称-->
                     <TextView
+                        android:id="@+id/tv_nickname"
                         android:layout_marginLeft="@dimen/padding_middle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -87,6 +92,7 @@
             android:layout_height="wrap_content">
             <!--按钮容器-->
             <LinearLayout
+                android:id="@+id/ll_comment_container"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -98,8 +104,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_comment_count" />
-
+                <!--文本 这里是评论数-->
                 <TextView
+                    android:id="@+id/tv_comment_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -146,7 +153,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    android:text="@string/download"
                     android:textColor="@color/white" />
 
             </LinearLayout>
@@ -168,7 +175,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    android:text="@string/select"
                     android:textColor="@color/white" />
 
             </LinearLayout>
@@ -182,6 +189,7 @@
         这里用的是item_song_height ：就是歌单详情里面单曲的item的高度（RecyclerView里面item的高度）
     -->
     <LinearLayout
+        android:id="@+id/ll_play_all_container"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -203,12 +211,16 @@
 
         <!--音乐数量-->
         <TextView
+            android:id="@+id/tv_count"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="@string/music_count" />
-        <!--收藏按钮 这里还是设置下高度吧，不然不同的手机上高度不一样的-->
+        <!--收藏按钮 这里还是设置下高度吧，不然不同的手机上高度不一样的
+            collection:收集 收藏
+        -->
         <Button
+            android:id="@+id/bt_collection"
             android:background="@null"
             android:layout_marginRight="@dimen/padding_middle"
             android:layout_width="wrap_content"

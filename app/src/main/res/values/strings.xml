@@ -92,6 +92,8 @@
     <string name="sheet">歌单</string>
     <string name="play_all">播放全部</string>
     <string name="music_count">(共%1$d首)</string>
+    <string name="download">下载</string>
+    <string name="select">多选</string>
 
 
 </resources>
