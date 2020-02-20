@@ -635,7 +635,11 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-2'
 
     //palette（调色板）
-    implementation 'androidx.palette:palette:1.0.0'
+//    implementation 'androidx.palette:palette:1.0.0'
+
+    //更方便的使用glide和palette
+//https://github.com/florent37/GlidePalette
+    implementation 'com.github.florent37:glidepalette:2.1.2'
 
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
