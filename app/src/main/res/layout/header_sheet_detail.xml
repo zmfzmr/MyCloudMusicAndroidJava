@@ -5,13 +5,13 @@
     android:id="@+id/ll_header"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary">
 
     <!--垂直方向上容器
         padding:这里有margin 改成padding后，
         背景还是没有变的，变的只是里面的子view随着控件变距离-->
     <LinearLayout
-        android:background="@color/colorPrimary"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

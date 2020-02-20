@@ -1,13 +1,20 @@
 package com.ixuea.courses.mymusic.activity;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SongAdapter;
 import com.ixuea.courses.mymusic.api.Api;
@@ -17,9 +24,13 @@ import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ResourceUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -177,15 +188,110 @@ public class SheetDetailActivity extends BaseTitleActivity {
             adapter.replaceData(data.getSongs());
         }
 
-        //显示封面
-        if (StringUtils.isBlank(data.getBanner())) {
-            //如果图片为空
+//        //显示封面
+//        if (StringUtils.isBlank(data.getBanner())) {
+//            //如果图片为空
+//
+//            //就用默认图片
+//            iv_banner.setImageResource(R.drawable.placeholder);
+//        } else {
+//            //有图片
+//            ImageUtil.show(getMainActivity(), iv_banner, data.getBanner());
+//        }
 
-            //就用默认图片
+        //使用Palette获取封面颜色
+        if (StringUtils.isBlank(data.getBanner())) {
+            //图片为空
+
+            //使用默认图片
             iv_banner.setImageResource(R.drawable.placeholder);
         } else {
-            //有图片
-            ImageUtil.show(getMainActivity(), iv_banner, data.getBanner());
+            //有图
+
+            //这是一个典型的构建者模式
+            //由于这是项目课程
+            //所以这里不详细讲解设计模式
+            Glide.with(this)
+                    .asBitmap()
+                    //加载图片到自定义目标
+                    //为什么是自定义目标
+                    //是因为我们要获取Bitmap
+                    //然后获取Bitmap的一些颜色
+                    .load(ResourceUtil.resourceUri(data.getBanner()))
+                    .into(new CustomTarget<Bitmap>() {
+                        /**
+                         * 资源加载完成调用
+                         *
+                         * @param resource   Bitmap
+                         * @param transition Transition<? super Bitmap>
+                         */
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            //显示封面图
+                            iv_banner.setImageBitmap(resource);
+
+                            //在Material Design(MD，材料设计，是Google的一门设计语言)的设计中
+                            //所谓的设计语言就是一些设计规范
+                            //目前Google已经应用到Android，Gmail等产品
+
+                            //推荐我们将应用的状态栏
+                            //标题栏的颜色和当前页面的内容融合
+                            //也就说当前页面显示一张红色的图片
+                            //那么最好状态栏，标题栏的颜色也和红色差不多
+                            //实现这种效果可以借助的Palette类。
+                            //Palette:可以翻译为调色板
+                            //功能是可以从图片中获取一些颜色
+                            //详细的可以学习《详解Material Design，http://www.ixuea.com/courses/9》课程
+                            Palette.from(resource)
+                                    //传入回调，这样就知道什么时候颜色资源生成了
+                                    .generate(new Palette.PaletteAsyncListener() {
+                                        /**
+                                         * 颜色计算完成了（也可能没找到颜色，这样也算计算完成了）
+                                         * @param palette Palette
+                                         *
+                                         * 这里是异步的操作
+                                         */
+                                        @Override
+                                        public void onGenerated(@Nullable Palette palette) {
+                                            //获取 有活力 的颜色
+                                            //翻译：Vibrant：充满活力的 Swatch：样本
+                                            Palette.Swatch swatch = palette.getVibrantSwatch();
+                                            //可能没有值所以要判断
+                                            if (swatch != null) {
+                                                //获取颜色的rgb
+                                                int rgb = swatch.getRgb();
+                                                //设置标题栏颜色
+                                                toolbar.setBackgroundColor(rgb);
+
+                                                //设置头部容器颜色
+                                                ll_header.setBackgroundColor(rgb);
+
+                                                //这些api只有高版本才有
+                                                //所以说要判断  LOLLIPOP  = 21
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                    Window window = getWindow();
+                                                    //设置状态栏颜色
+                                                    window.setStatusBarColor(rgb);
+                                                    //设置导航栏颜色
+                                                    window.setNavigationBarColor(rgb);
+                                                }
+                                            }
+
+                                        }
+                                    });
+                        }
+
+                        /**
+                         * 加载任务取消了
+                         * 可以在这里面释放我们定义的一些资源
+                         *
+                         * @param placeholder
+                         */
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                        }
+                    });
         }
 
         //显示标题
@@ -201,6 +307,8 @@ public class SheetDetailActivity extends BaseTitleActivity {
         tv_comment_count.setText(String.valueOf(data.getComments_count()));
 
         //音乐数
-        tv_count.setText(getResources().getString(R.string.music_count, data.getSongs().size()));
+//        tv_count.setText(getResources().getString(R.string.music_count, data.getSongs().size()));
+        //因为有些歌单没有值，会引起空指针异常，所以先用下面这个
+        tv_count.setText(getResources().getString(R.string.music_count, data.getSongs_count()));
     }
 }

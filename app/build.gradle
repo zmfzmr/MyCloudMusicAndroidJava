@@ -634,6 +634,9 @@ dependencies {
     //只有调试模式下才添加该依赖
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-2'
 
+    //palette（调色板）
+    implementation 'androidx.palette:palette:1.0.0'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
