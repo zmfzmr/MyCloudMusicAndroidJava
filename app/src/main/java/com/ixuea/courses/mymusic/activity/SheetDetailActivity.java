@@ -374,5 +374,40 @@ public class SheetDetailActivity extends BaseTitleActivity {
 //        tv_count.setText(getResources().getString(R.string.music_count, data.getSongs().size()));
         //因为有些歌单没有值，会引起空指针异常，所以先用下面这个
         tv_count.setText(getResources().getString(R.string.music_count, data.getSongs_count()));
+
+        //显示收藏状态
+        showCollectionStatus();
+    }
+
+    /**
+     * 显示收藏状态
+     */
+    private void showCollectionStatus() {
+        if (data.isCollection()) {
+            //收藏了
+
+            //将按钮文字改为取消
+            bt_collection.setText(getResources()
+                    .getString(R.string.cancel_collection, data.getCollections_count()));
+            //弱化取消收藏按钮
+            //因为我们的本质是想让用户收藏歌单
+            //所以去掉背景
+            bt_collection.setBackground(null);
+
+            //设置文字颜色为灰色
+            //注意：这里是getColor，而不是getSting
+            bt_collection.setTextColor(getResources().getColor(R.color.light_grey));
+        } else {
+            //将按钮文字改为收藏
+            bt_collection.setText(getResources()
+                    .getString(R.string.collection, data.getCollections_count()));
+
+            //设置按钮颜色为主色调 2种方式
+//            bt_collection.setBackground(getResources().getDrawable(R.drawable.selector_color_primary));
+            bt_collection.setBackgroundResource(R.drawable.selector_color_primary);
+
+            //设置文字颜色为白色
+            bt_collection.setTextColor(getResources().getColor(R.color.white));
+        }
     }
 }

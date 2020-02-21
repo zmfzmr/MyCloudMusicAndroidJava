@@ -172,6 +172,15 @@ public class Sheet extends BaseMultiItemEntity {
     }
 
     /**
+     * 是否收藏
+     *
+     * @return true:收藏； false：没有收藏
+     */
+    public boolean isCollection() {
+        return collection_id != null;//如果collection_id不等于null，说明这个歌单被收藏了
+    }
+
+    /**
      * 使用了BaseRecyclerViewAdapterHelper框架
      * 实现多类型列表
      * 需要实现该接口返回类型
