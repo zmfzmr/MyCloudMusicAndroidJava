@@ -14,6 +14,7 @@ import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.PreferenceUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,12 +24,14 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
+    private static final String TAG = "Api";
     /**
      * Api单例字段
      */
@@ -60,6 +63,37 @@ public class Api {
      */
     private Api() {
         OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder();
+
+        //公共请求参数
+        okhttpClientBuilder.addNetworkInterceptor(chain -> {
+            //获取到偏好设置工具类
+            PreferenceUtil sp = PreferenceUtil.getInstance(AppContext.getInstance());
+            //获取到request
+            Request request = chain.request();
+
+            //
+            if (sp.isLogin()) {
+                //登录了
+
+                //获取出用户Id 和 和token(其实就是Session)
+                String user = sp.getUserId();
+                String session = sp.getSession();
+
+                //打印日记是方便调试
+                LogUtil.d(TAG, "Api user:" + user + "," + session);
+                //将用户id和token(这里是session)
+                //注意：这里还要赋值给request
+                request = request.newBuilder()
+                        .addHeader("User", user)
+                        .addHeader("Authorization", session)
+                        .build();
+            }
+
+            //继续执行网络请求
+            return chain.proceed(request);
+
+        });
+
         if (LogUtil.isDebug) {//是//调试模式的时候才添加拦截器
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             ///设置日志等级
@@ -86,6 +120,7 @@ public class Api {
             okhttpClientBuilder.addInterceptor(new ChuckerInterceptor(AppContext.getInstance()));
 
         }
+
 
         //构建者模式
         //初始化Retrofit
