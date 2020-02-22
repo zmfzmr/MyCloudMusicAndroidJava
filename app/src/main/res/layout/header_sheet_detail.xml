@@ -225,7 +225,7 @@
             android:layout_marginRight="@dimen/padding_middle"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/button_height_small"
-            android:text="收藏" />
+            tools:text="收藏" />
 
     </LinearLayout>
 

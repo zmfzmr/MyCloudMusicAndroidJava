@@ -440,6 +440,14 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
     /**
      * 处理收藏和取消收藏逻辑
+     *
+     * 这里的思路是：先请求，然后(本地)及时刷新收藏状态，
+     * 然后再次进入歌单详情的时候，数据也是正确的啦
+     * （因为第一次使用了网络，再次进入个歌单详情的时候重新显示了状态）
+     *
+     * 其实这里使用fetchData();和本地2种方式都可以
+     * 用fetchData的话，需要加载更多的资源（需要请求网络资源）
+     * 实际使用的话，2中都行
      */
     private void processCollectionClick() {
         LogUtil.d(TAG, "processCollectionClick");
@@ -452,12 +460,22 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
                     .deleteCollect(data.getId())
                     .subscribe(new HttpObserver<Response<Void>>() {
                         @Override
-                        public void onSucceeded(Response<Void> data) {
+                        public void onSucceeded(Response<Void> d) {
                             //弹出提示
                             ToastUtil.successShortToast(R.string.cancel_success);
                             //重新加载数据
                             //目的是显示新的收藏状态
-                            fetchData();
+//                            fetchData();
+
+                            //取消收藏成功 (collection_id 为null，则说明取消收藏了)
+                            data.setCollection_id(null);
+
+                            //收藏数-1
+//                            SheetDetailActivity.this.data.setCollections_count(data.getCollections_count() - 1);
+                            data.setCollections_count(data.getCollections_count() - 1);
+
+                            //显示收藏状态
+                            showCollectionStatus();
                         }
                     });
 
@@ -469,12 +487,28 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
                     .collect(data.getId())
                     .subscribe(new HttpObserver<Response<Void>>() {
                         @Override
-                        public void onSucceeded(Response<Void> data) {
+                        public void onSucceeded(Response<Void> d) {
                             //弹出提示
                             ToastUtil.successShortToast(R.string.collection_success);
                             //重新加载数据
                             //目的是显示新的收藏状态
-                            fetchData();
+//                            fetchData();
+
+                            //收藏状态变更后
+                            //可以重新调用歌单详情界面接口
+                            //获取收藏状态
+                            //但对于收藏来说
+                            //收藏数可能没那么重要
+                            //所以不用及时刷新
+
+                            //（我们这里做的是本地及时更新）
+                            data.setCollection_id(1);//只要collection_id有值，那么isCollection就为true，说明收藏了，
+                            //收藏数+1
+//                            SheetDetailActivity.this.data.setCollections_count(data.getCollections_count() + 1);
+                            data.setCollections_count(data.getCollections_count() + 1);
+                            //显示收藏状态
+                            showCollectionStatus();
+
                         }
                     });
         }
