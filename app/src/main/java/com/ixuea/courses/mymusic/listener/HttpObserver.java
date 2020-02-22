@@ -7,6 +7,7 @@ import com.ixuea.courses.mymusic.util.LoadingUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
 import io.reactivex.disposables.Disposable;
+import retrofit2.Response;
 
 /**
  * 网络请求Observer
@@ -128,8 +129,22 @@ public abstract class HttpObserver<T> extends ObserverAdapter<T> {
      * @return 是否成功
      */
     private boolean isSucceeded(T t) {
-        //比如返回的code=200,（比如用户名 密码错误）
-        if (t instanceof BaseResponse) {
+        if (t instanceof Response) {
+            //retrofit里面的响应对象
+
+            //获取响应对象
+            Response response = (Response) t;
+
+            //获取响应码
+            int code = response.code();
+
+            //判断响应码
+            if (code >= 200 && code <= 299) {
+                //网络请求正常
+                return true;
+            }
+
+        } else if (t instanceof BaseResponse) {//比如返回的code=200,（比如用户名 密码错误）
             //判断具体的业务请求是否成功
             BaseResponse baseResponse = (BaseResponse) t;
 

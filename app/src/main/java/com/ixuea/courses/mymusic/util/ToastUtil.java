@@ -60,10 +60,23 @@ public class ToastUtil {
         Toasty.error(context, id, Toasty.LENGTH_LONG).show();
     }
 
-    //    public static void successLongToast(@NonNull Context context, @StringRes int id) {
-    public static void successLongToast(@StringRes int id) {
+    /**
+     * 显示短时间正确toast
+     *
+     * @param id 通过id找字符串
+     */
+    //    public static void successShortToast(@NonNull Context context, @StringRes int id) {
+    public static void successShortToast(@StringRes int id) {
         Toasty.success(context, id, Toasty.LENGTH_LONG).show();
     }
 
+    /**
+     * 显示短时间正确toast
+     *
+     * @param data 字符串传入
+     */
+    public static void successShortToast(String data) {
+        Toasty.success(context, data, Toasty.LENGTH_SHORT).show();
+    }
 
 }

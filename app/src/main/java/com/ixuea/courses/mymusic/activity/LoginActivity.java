@@ -349,7 +349,7 @@ public class LoginActivity extends BaseLoginActivity {
 //                        //PreferenceUtil sp 是父类BaseCommonActivity初始化的
 //                        AppContext.getInstance().login(sp, data.getData());
 //
-//                        ToastUtil.successLongToast(R.string.login_success);
+//                        ToastUtil.successShortToast(R.string.login_success);
 //
 //                        //关闭当前界面并启动主界面
 //                        startActivityAfterFinishThis(MainActivity.class);

@@ -251,7 +251,7 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
                         if (data != null) {
                             AppContext.getInstance().login(sp, data.getData());
 
-                            ToastUtil.successLongToast(R.string.login_success);
+                            ToastUtil.successShortToast(R.string.login_success);
                             startActivityAfterFinishThis(MainActivity.class);
                         }
                     }
