@@ -1,5 +1,6 @@
 package com.ixuea.courses.mymusic.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -164,6 +165,9 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         super.initListeners();
         //收藏按钮单击事件
         bt_collection.setOnClickListener(this);
+
+        //评论点击事件
+        ll_comment_container.setOnClickListener(this);
     }
 
     /**
@@ -432,6 +436,17 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
                 //收藏歌单按钮点击了
                 //翻译：process：过程或者处理
                 processCollectionClick();
+                break;
+            case R.id.ll_comment_container:
+                //评论容器点击了
+                Intent intent = new Intent(getMainActivity(), CommentActivity.class);
+
+                //添加歌单id
+                intent.putExtra(Constant.SHEET_ID, data.getId());
+
+                //启动界面
+                startActivity(intent);
+
                 break;
             default:
                 break;

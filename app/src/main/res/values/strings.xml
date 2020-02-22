@@ -4,6 +4,7 @@
     <!--activity标题-->
     <string name="activity_forget_password">找回密码</string>
     <string name="activity_sheet_detail">歌单详情</string>
+    <string name="activity_comment">评论</string>
 
     <!--版本文本-->
     <string name="copyright">Copyright © 2019 Ixuea. All Rights Reserved</string>
