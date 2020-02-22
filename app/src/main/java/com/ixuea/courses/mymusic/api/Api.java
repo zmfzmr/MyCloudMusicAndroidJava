@@ -26,6 +26,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -275,6 +276,25 @@ public class Api {
      */
     public Observable<ListResponse<Ad>> ads() {
         return service.ads()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 收藏歌单
+     * 注意：@Field("id") 就不要了
+     */
+    public Observable<Response<Void>> collect(String id) {
+        return service.collect(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 取消收藏歌单
+     */
+    public Observable<Response<Void>> deleteCollect(String id) {
+        return service.deleteCollect(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

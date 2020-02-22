@@ -13,7 +13,11 @@ import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -119,4 +123,26 @@ public interface Service {
      */
     @GET("v1/ads")
     Observable<ListResponse<Ad>> ads();
+
+    /**
+     * 收藏歌单
+     * 这个id的值传递给服务端的时候就会以sheet_id这个名称向服务端传递
+     * 表单形式：sheet_id=1（类似的如：username=ixuea&password=123）
+     * <p>
+     * 如果是json就是这种{"sheet_id","1"}
+     * 记得加上这个@POST
+     * <p>
+     * Response<Void>：这个表示接收的返回值没有，所以用这个
+     */
+    @FormUrlEncoded
+    @POST("v1/collections")
+    Observable<Response<Void>> collect(@Field("sheet_id") String id);
+
+    /**
+     * 因为后面只跟一个具体数字，所以用 @ Path
+     * <p>
+     * 注意：这里用的是@DELETE，从服务器端删除收藏内容
+     */
+    @DELETE("v1/collections/{id}")
+    Observable<Response<Void>> deleteCollect(@Path("id") String id);
 }
