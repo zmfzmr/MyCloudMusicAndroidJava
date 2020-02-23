@@ -176,6 +176,10 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
         //评论点击事件
         ll_comment_container.setOnClickListener(this);
+
+        //设置item点击事件
+        adapter.setOnItemClickListener((adapter, view, position)
+                -> SimplePlayerActivity.start(getMainActivity()));
     }
 
     /**
