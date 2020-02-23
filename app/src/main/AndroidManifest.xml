@@ -17,14 +17,17 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.UserDetailActivity"
+            android:label="@string/activity_user_detail"></activity>
+        <activity
             android:name=".activity.CommentActivity"
-            android:label="@string/activity_comment"></activity>
+            android:label="@string/activity_comment" />
         <activity
             android:name=".activity.SheetDetailActivity"
-            android:label="@string/activity_sheet_detail"></activity>
+            android:label="@string/activity_sheet_detail" />
         <activity
             android:name=".activity.SettingActivity"
-            android:label="@string/setting"></activity>
+            android:label="@string/setting" />
         <activity android:name=".activity.WebViewActivity" />
         <activity android:name=".activity.AdActivity" />
         <activity
