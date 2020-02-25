@@ -8,6 +8,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.manager.impl.MusicPlayerManagerImpl;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,6 +74,19 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_player);
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+        //测试单例模式
+        //可以发现他们两次的内存地址都是一样
+        //说明单例模式生效了
+        MusicPlayerManagerImpl o1 = MusicPlayerManagerImpl.getInstance(getMainActivity());
+        MusicPlayerManagerImpl o2 = MusicPlayerManagerImpl.getInstance(getMainActivity());
+
+        LogUtil.d(TAG, "initDatum test single:" + (o1 == o2));
+
     }
 
     @Override
