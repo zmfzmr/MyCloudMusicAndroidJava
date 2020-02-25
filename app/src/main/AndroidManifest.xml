@@ -16,6 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
+        <!-- 播放音乐的服务
+             android:priotity = "1000" 其实这优先级没多大作用
+        -->
+        <service
+            android:name=".service.MusicPlayerService"
+            android:enabled="true"
+            android:exported="false"
+            android:priority="1000"
+            android:persistent="true" />
         <activity
             android:name=".activity.SimplePlayerActivity"
             android:label="@string/activity_simple_player" />

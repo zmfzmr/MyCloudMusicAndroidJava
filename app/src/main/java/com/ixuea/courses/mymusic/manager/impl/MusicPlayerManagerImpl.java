@@ -14,7 +14,7 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
     /**
      * 构造方法
      *
-     * @param context
+     * @param context Context
      */
     private MusicPlayerManagerImpl(Context context) {
         this.context = context.getApplicationContext();
