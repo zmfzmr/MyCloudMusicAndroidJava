@@ -1,13 +1,16 @@
 package com.ixuea.courses.mymusic.service;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.manager.impl.MusicPlayerManagerImpl;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.NotificationUtil;
 import com.ixuea.courses.mymusic.util.ServiceUtil;
 
 /**
@@ -65,6 +68,22 @@ public class MusicPlayerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtil.d(TAG, "onStartCommand");
+        //因为这个API是8.0才有的
+        //所以要这样判断版本
+        //不然低版本会崩溃
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //设置Service为前台service
+            //提高应用的优先级
+
+            //获取通知
+            Notification notification = NotificationUtil.getServiceForeground(getApplicationContext());
+
+            //Id写0：这个通知就不会显示
+            //对于我们这里来说
+            //就需要不显示(我们这里不显示通知，只是应用保活（防止被杀死）)
+            startForeground(0, notification);
+
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -74,6 +93,11 @@ public class MusicPlayerService extends Service {
     @Override
     public void onDestroy() {
         LogUtil.d(TAG, "onDestroy");
+
+        //停止前台服务
+        //true:移除之前的通知
+        stopForeground(true);
+
         super.onDestroy();
     }
 

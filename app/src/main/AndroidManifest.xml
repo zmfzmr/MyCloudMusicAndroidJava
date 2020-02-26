@@ -7,6 +7,9 @@
     <!-- 读存储卡权限   轮播图框架或者其他地方需要读取本地的图片-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <!--有前台服务-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:name=".AppContext"
         android:allowBackup="true"

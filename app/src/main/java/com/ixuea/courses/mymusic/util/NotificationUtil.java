@@ -24,6 +24,9 @@ public class NotificationUtil {
      * 无任何实际意义
      *
      * @return
+     *
+     * 这里只是获取Notification，需要在MusicPlayerService配合startForeGround(0,notification) ，
+     * 设置称为前台通知，也就是设置成了前台Service（这样就提高了应用的保活，防止应用过一段被杀死）
      */
     public static Notification getServiceForeground(Context context) {
         //渠道是8.0中新增的
@@ -44,7 +47,6 @@ public class NotificationUtil {
 
         //获取通知管理器
         getNotificationManager(context);
-
 
         //因为这个API是8.0才有的
         //所以要这么判断版本
