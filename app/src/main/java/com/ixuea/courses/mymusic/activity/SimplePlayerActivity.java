@@ -1,7 +1,6 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -9,10 +8,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
-import com.ixuea.courses.mymusic.util.NotificationUtil;
 
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -71,6 +70,7 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
      */
     @BindView(R.id.bt_loop_model)
     Button bt_loop_model;
+    private MusicPlayerManager musicPlayerManager;//播放管理器
 
 
     @Override
@@ -92,10 +92,23 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
 
         //获取MusicPlayerService播放管理器
         //(思路：MusicPlayerService-->getMusicPlayerManager获取播放管理器（里面先开启service，然后获取播放管理器）)
-        MusicPlayerManager o1 = MusicPlayerService.getMusicPlayerManager(getMainActivity());
-        MusicPlayerManager o2 = MusicPlayerService.getMusicPlayerManager(getMainActivity());
+//        MusicPlayerManager o1 = MusicPlayerService.getMusicPlayerManager(getMainActivity());
+//        MusicPlayerManager o2 = MusicPlayerService.getMusicPlayerManager(getMainActivity());
+//
+//        LogUtil.d(TAG, "initDatum test single:" + (o1 == o2));
+        //获取播放管理器
+        musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
 
-        LogUtil.d(TAG, "initDatum test single:" + (o1 == o2));
+        //测试播放音乐
+        //由于现在没有获取数据
+        //所以创建一个测试数据
+        String songUrl = "http://dev-courses-misuc.ixuea.com/assets/s1.mp3";
+
+        Song song = new Song();
+        song.setUri(songUrl);
+
+        //播放音乐
+        musicPlayerManager.play(songUrl, song);
 
     }
 
@@ -122,16 +135,29 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     public void onPlayClick() {
         LogUtil.d(TAG, "onPlayClick");
 
-        //测试通知渠道
-        //该通知没有任何实际意义
+//        //测试通知渠道
+//        //该通知没有任何实际意义
+//
+//        //获取通知
+//        Notification notification = NotificationUtil.getServiceForeground(getApplicationContext());
+//
+//        //显示通知
+//        //Id没什么实际意义
+//        //只是相同Id的通知会被替换
+//        NotificationUtil.showNotification(100, notification);
 
-        //获取通知
-        Notification notification = NotificationUtil.getServiceForeground(getApplicationContext());
+        playOrPause();
+    }
 
-        //显示通知
-        //Id没什么实际意义
-        //只是相同Id的通知会被替换
-        NotificationUtil.showNotification(100, notification);
+    /**
+     * 播放或暂停
+     */
+    private void playOrPause() {
+        if (musicPlayerManager.isPlaying()) {
+            musicPlayerManager.pause();
+        } else {
+            musicPlayerManager.resume();
+        }
     }
 
     /**
