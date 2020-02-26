@@ -1,8 +1,12 @@
 package com.ixuea.courses.mymusic.manager.impl;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 
+import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
+
+import java.io.IOException;
 
 /**
  * 播放管理器默认实现
@@ -10,14 +14,20 @@ import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 public class MusicPlayerManagerImpl implements MusicPlayerManager {
     private static MusicPlayerManagerImpl instance;//实例对象
     private final Context context;//上下文
+    private final MediaPlayer player;//播放器
+    private Song data;//当前播放的音乐对象
 
     /**
-     * 构造方法
+     * 私有构造方法
      *
+     * 这里外部就不能通过new方法来创建对象了
      * @param context Context
      */
     private MusicPlayerManagerImpl(Context context) {
         this.context = context.getApplicationContext();
+
+        //初始化播放器
+        player = new MediaPlayer();
     }
 
     /**
@@ -39,5 +49,53 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
             instance = new MusicPlayerManagerImpl(context);
         }
         return instance;
+    }
+
+    @Override
+    public void play(String uri, Song data) {
+        try {
+            //保存音乐对象
+            this.data = data;
+
+            //是否播放器
+            player.reset();
+
+            //设置数据源
+            player.setDataSource(uri);//可能找不到这个uri，会发生异常，所以捕获异常
+
+            //同步准备
+            //真实项目中可能会使用异步
+            //因为如果网络不好
+            //同步可能会卡主
+            player.prepare();
+
+            //开始播放
+            player.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+            //TODO 错误了
+        }
+
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return player.isPlaying();
+    }
+
+    @Override
+    public void pause() {
+        if (isPlaying()) {
+            //如果在播放就暂停
+            player.pause();
+        }
+    }
+
+    @Override
+    public void resume() {
+        if (!isPlaying()) {
+            //如果没有在播放就播放
+            player.start();
+        }
     }
 }
