@@ -4,18 +4,27 @@ import android.content.Context;
 import android.media.MediaPlayer;
 
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 播放管理器默认实现
  */
-public class MusicPlayerManagerImpl implements MusicPlayerManager {
+public class MusicPlayerManagerImpl
+        implements MusicPlayerManager {
     private static MusicPlayerManagerImpl instance;//实例对象
     private final Context context;//上下文
     private final MediaPlayer player;//播放器
     private Song data;//当前播放的音乐对象
+
+    /**
+     * 播放器状态监听器
+     */
+    private List<MusicPlayerListener> listeners = new ArrayList<>();
 
     /**
      * 私有构造方法
@@ -71,11 +80,24 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
 
             //开始播放
             player.start();
+
+            //回调监听器
+            publishPlayingStatus();
+
         } catch (IOException e) {
             e.printStackTrace();
             //TODO 错误了
         }
 
+    }
+
+    /**
+     * 发布播放中状态
+     */
+    private void publishPlayingStatus() {
+        for (MusicPlayerListener listener : listeners) {
+            listener.onPlaying(data);
+        }
     }
 
     @Override
@@ -88,6 +110,11 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
         if (isPlaying()) {
             //如果在播放就暂停
             player.pause();
+
+            //回调监听器（暂停状态）
+            for (MusicPlayerListener listener : listeners) {
+                listener.onPause(data);
+            }
         }
     }
 
@@ -96,6 +123,23 @@ public class MusicPlayerManagerImpl implements MusicPlayerManager {
         if (!isPlaying()) {
             //如果没有在播放就播放
             player.start();
+
+            //回调监听器(已经播放了)
+            publishPlayingStatus();
         }
+    }
+
+    @Override
+    public void addMusicPlayerListener(MusicPlayerListener listener) {
+        //listener-->SimplePlayerActivity实现
+        if (!listeners.contains(listener)) {//不包含这个监听器的时候才添加
+            listeners.add(listener);
+        }
+    }
+
+    @Override
+    public void removeMusicPlayerListener(MusicPlayerListener listener) {
+        //这里可以不用判断，就算不存在，应该也不会报错
+        listeners.remove(listener);
     }
 }

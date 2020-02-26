@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -26,7 +27,7 @@ import butterknife.OnClick;
  * 从而把播放器相关逻辑实现完成
  * 然后在对接的黑胶唱片，就相对来说简单一些
  */
-public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.OnSeekBarChangeListener {
+public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.OnSeekBarChangeListener, MusicPlayerListener {
 
     private static final String TAG = "SimplePlayerActivity";
     /**
@@ -118,6 +119,34 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         //设置脱宅进度控件监听器
         sb_progress.setOnSeekBarChangeListener(this);
 
+    }
+
+    /**
+     * 进入了前台(界面可见了)
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtil.d(TAG, "onResume");
+
+        //设置播放监听器
+        musicPlayerManager.addMusicPlayerListener(this);
+
+        //显示音乐播放状态(这个主要是：在悬浮通知那里点击了播放，然后回到Activity中，然后刷新播放状态)
+        showMusicPlayStatus();
+    }
+
+    /**
+     * 代理(监听器)可以在进入界面后就设置，但最好在界面可见前设置，在界面不可见时移除代理，
+     * 好处是，如果界面后台后，就不需要显示相关的状态的，从而节省资源。
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LogUtil.d(TAG, "onPause");
+
+        //取消播放监听器
+        musicPlayerManager.removeMusicPlayerListener(this);
     }
 
     /**
@@ -221,4 +250,47 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     public void onStopTrackingTouch(SeekBar seekBar) {
         LogUtil.d(TAG, "onStopTrackingTouch");
     }
+
+    /**
+     * 显示播放状态
+     */
+    private void showPlayStatus() {
+        bt_play.setText("播放");
+    }
+
+    /**
+     * 显示暂停状态
+     */
+    private void showPauseStatus() {
+        bt_play.setText("暂停");
+    }
+
+    /**
+     * 显示音乐播放状态
+     */
+
+    private void showMusicPlayStatus() {
+        if (musicPlayerManager.isPlaying()) {//是播放的话，按钮设置为暂停
+            showPauseStatus();
+        } else {
+            showPlayStatus();//设置为播放
+        }
+    }
+
+    //播放管理器监听器
+    ////其实这个方法，已经在MusicPlayerManagerImpl中play pause resume 使用了（如：listener.onPause(data)）
+    @Override
+    public void onPause(Song data) {
+        LogUtil.d(TAG, "onPause");
+        //播放管理器监听器
+        showPlayStatus();
+    }
+
+    @Override
+    public void onPlaying(Song data) {
+        LogUtil.d(TAG, "onPlaying");
+
+        showPauseStatus();
+    }
+    //end播放管理器监听器
 }

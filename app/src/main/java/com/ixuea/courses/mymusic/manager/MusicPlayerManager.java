@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.manager;
 
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 
 /**
  * 音乐播放器对外暴露的接口
@@ -24,4 +25,17 @@ public interface MusicPlayerManager {
 
     void resume();//继续播放
 
+    /**
+     * 添加播放监听器
+     *
+     * @param listener MusicPlayerListener
+     */
+    void addMusicPlayerListener(MusicPlayerListener listener);
+
+    /**
+     * 移除播放监听器
+     *
+     * @param listener MusicPlayerListener
+     */
+    void removeMusicPlayerListener(MusicPlayerListener listener);
 }
