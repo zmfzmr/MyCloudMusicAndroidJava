@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.NotificationUtil;
 
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -119,6 +121,17 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     @OnClick(R.id.bt_play)
     public void onPlayClick() {
         LogUtil.d(TAG, "onPlayClick");
+
+        //测试通知渠道
+        //该通知没有任何实际意义
+
+        //获取通知
+        Notification notification = NotificationUtil.getServiceForeground(getApplicationContext());
+
+        //显示通知
+        //Id没什么实际意义
+        //只是相同Id的通知会被替换
+        NotificationUtil.showNotification(100, notification);
     }
 
     /**
