@@ -2,6 +2,7 @@ package com.ixuea.courses.mymusic.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -13,6 +14,7 @@ import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.TimeUtil;
 
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -131,6 +133,9 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
 
         //设置播放监听器
         musicPlayerManager.addMusicPlayerListener(this);
+
+        //显示音乐时长(这个因为是可能点击：别的地方点击下一曲了，播放时长变了，再次回到当前界面的时候，刷新播放总时长)
+        showDuration();
 
         //显示音乐播放状态(这个主要是：在悬浮通知那里点击了播放，然后回到Activity中，然后刷新播放状态)
         showMusicPlayStatus();
@@ -291,6 +296,28 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         LogUtil.d(TAG, "onPlaying");
 
         showPauseStatus();
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp, Song data) {
+        LogUtil.d(TAG, "onPrepared: " + data.getProgress() + "," + data.getDuration());
+
+        //显示时长
+        showDuration();
+    }
+
+    /**
+     * 显示时长
+     */
+    private void showDuration() {
+        //获取正在播放音乐的时长
+        long end = musicPlayerManager.getData().getDuration();
+
+        //将格式化为分钟:秒
+        //这里转换成了分钟秒
+        tv_end.setText(TimeUtil.formatMinuteSecond((int) end));
+
+        sb_progress.setMax((int) end);
     }
     //end播放管理器监听器
 }

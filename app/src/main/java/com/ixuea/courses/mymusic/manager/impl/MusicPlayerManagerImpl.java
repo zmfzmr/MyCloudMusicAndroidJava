@@ -8,6 +8,7 @@ import com.ixuea.courses.mymusic.listener.Consumer;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.util.ListUtil;
+import com.ixuea.courses.mymusic.util.LogUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 public class MusicPlayerManagerImpl
         implements MusicPlayerManager {
+    private static final String TAG = "MusicPlayerManagerImpl";
     private static MusicPlayerManagerImpl instance;//实例对象
     private final Context context;//上下文
     private final MediaPlayer player;//播放器
@@ -39,6 +41,37 @@ public class MusicPlayerManagerImpl
 
         //初始化播放器
         player = new MediaPlayer();
+
+        //设置播放器监听
+        initListeners();
+    }
+
+    /**
+     * 设置播放器监听
+     */
+    private void initListeners() {
+        //设置播放器准备监听器
+        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            /**
+             * 播放器准备开始播放
+             * <p>
+             * 这里可以获取到音乐时长
+             * 如果是视频还能获取到视频宽高等信息
+             *
+             * @param mp 音乐播放器对象
+             */
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                LogUtil.d(TAG, "onPrepared");
+
+                //将音乐总时长保存到音乐对象
+                data.setDuration(mp.getDuration());
+
+                //回调监听器(通知activity)
+                //函数式接口中到的方法参数，这个可以随便明明都可以
+                ListUtil.eachListener(listeners, listener -> listener.onPrepared(mp, data));
+            }
+        });
     }
 
     /**
@@ -153,5 +186,10 @@ public class MusicPlayerManagerImpl
     public void removeMusicPlayerListener(MusicPlayerListener listener) {
         //这里可以不用判断，就算不存在，应该也不会报错
         listeners.remove(listener);
+    }
+
+    @Override
+    public Song getData() {//这个data，当外界activity中调用play中传过来的
+        return data;
     }
 }

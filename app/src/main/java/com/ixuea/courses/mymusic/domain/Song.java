@@ -26,6 +26,20 @@ public class Song extends BaseMultiItemEntity {
      */
     private User singer;
 
+    //播放后才有值
+    /**
+     * 总进度
+     * 单位：毫秒
+     * 这个字段是后面添加的（不是json数据里面有的）
+     */
+    private long duration;
+    /**
+     * 播放进度
+     */
+    private long progress;
+
+    //end 播放后才有值
+
     public String getTitle() {
         return title;
     }
@@ -96,6 +110,22 @@ public class Song extends BaseMultiItemEntity {
 
     public void setSinger(User singer) {
         this.singer = singer;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public long getProgress() {
+        return progress;
+    }
+
+    public void setProgress(long progress) {
+        this.progress = progress;
     }
 
     /**
