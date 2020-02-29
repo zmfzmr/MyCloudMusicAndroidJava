@@ -137,6 +137,16 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         //显示音乐时长(这个因为是可能点击：别的地方点击下一曲了，播放时长变了，再次回到当前界面的时候，刷新播放总时长)
         showDuration();
 
+        //显示播放进度
+        // (因为在后台监听器listener被移除了（listener主要是回调进度的（传进度到activity的）），)
+        //如果没有监听器器，那么在MusicPlayerManagerImpl中startPublishProgress run方法中中断方法（并停止了定时器）
+        //所以listener无法传递数据到activity这边，
+        //所以这里需要重新刷新显示
+
+        //不过有一点需要注意：MusicPlayerManagerImpl 持有 App应用的Context，虽然切换到后台，可是音乐还是会播放的
+        //所以再次回到界面的时候需要更新下播放进度
+        showProgress();
+
         //显示音乐播放状态(这个主要是：在悬浮通知那里点击了播放，然后回到Activity中，然后刷新播放状态)
         showMusicPlayStatus();
     }
@@ -292,8 +302,20 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         //将格式化为分钟:秒
         //这里转换成了分钟秒
         tv_end.setText(TimeUtil.formatMinuteSecond((int) end));
-
+        //设置到进度条
         sb_progress.setMax((int) end);
+    }
+
+    /**
+     * 显示播放进度
+     */
+    private void showProgress() {
+        //获取播放进度
+        long progress = musicPlayerManager.getData().getProgress();
+        //格式化进度
+        tv_start.setText(TimeUtil.formatMinuteSecond((int) progress));
+        //设置到进度条
+        sb_progress.setProgress((int) progress);
     }
 
     //播放管理器监听器
@@ -323,6 +345,7 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     @Override
     public void onProgress(Song data) {
         LogUtil.d(TAG, "onProgress:" + data.getProgress() + "," + data.getDuration());
+        showProgress();
     }
 
     //end播放管理器监听器
