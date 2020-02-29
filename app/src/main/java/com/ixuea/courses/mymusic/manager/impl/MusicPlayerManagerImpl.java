@@ -227,6 +227,12 @@ public class MusicPlayerManagerImpl
         return data;
     }
 
+    @Override
+    public void seekTo(int progress) {
+        //注意：这里是调用播放器MediaPlayer 的seekTo方法
+        player.seekTo(progress);
+    }
+
     /**
      * 启动播放进度通知
      */

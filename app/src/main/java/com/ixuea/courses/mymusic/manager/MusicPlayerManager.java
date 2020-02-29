@@ -40,4 +40,11 @@ public interface MusicPlayerManager {
     void removeMusicPlayerListener(MusicPlayerListener listener);
 
     Song getData();//获取当前正在播放的音乐
+
+    /**
+     * 从指定位置播放
+     *
+     * @param progress 单位：毫秒
+     */
+    void seekTo(int progress);
 }
