@@ -81,4 +81,13 @@ public class Constant {
      */
     public static final int TYPE_SONG = 2;
 
+    /**
+     * 播放进度通知
+     */
+    public static final int MESSAGE_PROGRESS = 0;
+
+    /**
+     * 16毫秒 音乐通知进度回调间隔
+     */
+    public static final long DEFAULT_TIME = 16;
 }

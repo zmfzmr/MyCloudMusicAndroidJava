@@ -282,6 +282,20 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         }
     }
 
+    /**
+     * 显示时长
+     */
+    private void showDuration() {
+        //获取正在播放音乐的时长
+        long end = musicPlayerManager.getData().getDuration();
+
+        //将格式化为分钟:秒
+        //这里转换成了分钟秒
+        tv_end.setText(TimeUtil.formatMinuteSecond((int) end));
+
+        sb_progress.setMax((int) end);
+    }
+
     //播放管理器监听器
     ////其实这个方法，已经在MusicPlayerManagerImpl中play pause resume 使用了（如：listener.onPause(data)）
     @Override
@@ -306,18 +320,10 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         showDuration();
     }
 
-    /**
-     * 显示时长
-     */
-    private void showDuration() {
-        //获取正在播放音乐的时长
-        long end = musicPlayerManager.getData().getDuration();
-
-        //将格式化为分钟:秒
-        //这里转换成了分钟秒
-        tv_end.setText(TimeUtil.formatMinuteSecond((int) end));
-
-        sb_progress.setMax((int) end);
+    @Override
+    public void onProgress(Song data) {
+        LogUtil.d(TAG, "onProgress:" + data.getProgress() + "," + data.getDuration());
     }
+
     //end播放管理器监听器
 }
