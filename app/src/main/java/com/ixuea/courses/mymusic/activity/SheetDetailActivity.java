@@ -20,8 +20,11 @@ import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SongAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Sheet;
+import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.manager.ListManager;
+import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -70,6 +73,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     private Button bt_collection;//收藏按钮
     private View ll_play_all_container;//播放全部容器
     private TextView tv_count;//歌曲数
+    private ListManager listManager;//初始化列表管理器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +148,8 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     @Override
     protected void initDatum() {
         super.initDatum();
+        //初始化列表管理器
+        listManager = MusicPlayerService.getListManager(getApplicationContext());
 
         //获取传递的参数
         getIntent().getStringExtra(Constant.ID);
@@ -178,8 +184,34 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         ll_comment_container.setOnClickListener(this);
 
         //设置item点击事件
-        adapter.setOnItemClickListener((adapter, view, position)
-                -> SimplePlayerActivity.start(getMainActivity()));
+        //注意：Lambda表示式子，这里里面需要添加个大括号才能添加多行逻辑
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+
+//            SimplePlayerActivity.start(getMainActivity());
+
+            play(position);
+        });
+    }
+
+    /**
+     * 播放当前位置的音乐
+     *
+     * @param position
+     */
+    private void play(int position) {
+        //获取当前位置播放的音乐
+        Song song = adapter.getItem(position);
+
+        //把当前歌单所有音乐设置到播放列表
+        //有些应用
+        //可能会实现添加到已经播放列表功能
+        listManager.setDatum(adapter.getData());
+
+        //播放当前音乐
+        listManager.play(song);
+
+        //简单播放器界面
+        SimplePlayerActivity.start(getMainActivity());
     }
 
     /**

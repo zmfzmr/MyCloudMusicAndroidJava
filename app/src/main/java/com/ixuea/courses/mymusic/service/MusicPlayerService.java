@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
+import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
+import com.ixuea.courses.mymusic.manager.impl.ListManagerImpl;
 import com.ixuea.courses.mymusic.manager.impl.MusicPlayerManagerImpl;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.NotificationUtil;
@@ -42,6 +44,19 @@ public class MusicPlayerService extends Service {
         ServiceUtil.startService(context, MusicPlayerService.class);
 
         return MusicPlayerManagerImpl.getInstance(context);
+    }
+
+    /**
+     * 获取列表管理器
+     */
+    public static ListManager getListManager(Context context) {
+        context = context.getApplicationContext();
+
+        //尝试启动service（不启动service也可以播放，启动service只为应用保活，防止资源不足的时候把我们的应用杀死掉
+        // 所以是提高应用的优先级）
+        ServiceUtil.startService(context, MusicPlayerService.class);
+
+        return ListManagerImpl.getInstance(context);
     }
 
     /**
