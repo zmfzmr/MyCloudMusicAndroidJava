@@ -28,6 +28,7 @@ public class ListManagerImpl implements ListManager {
     //其实列表管理器中主要用到了播放管理器（就是让播放管理利器实现）
     private final MusicPlayerManager musicPlayerManager;//音乐播放管理器
     private Song data;//当前音乐对象
+    private boolean isPlay;//是否播放了
 
     /**
      * 构造刚刚
@@ -73,6 +74,9 @@ public class ListManagerImpl implements ListManager {
     @Override
     public void play(Song data) {
         LogUtil.d(TAG, "play");
+        //标志已经播放了
+        isPlay = true;
+
         //保存数据
         this.data = data;
         //播放音乐
@@ -83,10 +87,20 @@ public class ListManagerImpl implements ListManager {
     @Override
     public void pause() {
         LogUtil.d(TAG, "pause");
+        musicPlayerManager.pause();
     }
 
     @Override
     public void resume() {
         LogUtil.d(TAG, "resume");
+        if (isPlay) {
+            //原来已经播放过
+            //也就说播放器已经初始化了,已经播放过音乐了（播放要有准备等阶段，没有这些阶段，是不能直接调用player.start继续播放的）
+            musicPlayerManager.resume();
+        } else {
+            //到这里，是应用开启后，第一次点继续播放
+            //而这时内部其实还没有准备播放，所以应该调用播放
+            play(data);
+        }
     }
 }
