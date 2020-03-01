@@ -4,7 +4,10 @@ import android.content.Context;
 
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.manager.ListManager;
+import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
+import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ResourceUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +25,9 @@ public class ListManagerImpl implements ListManager {
      * ArrayList：遍历高效
      */
     private List<Song> datum = new LinkedList<>();
+    //其实列表管理器中主要用到了播放管理器（就是让播放管理利器实现）
+    private final MusicPlayerManager musicPlayerManager;//音乐播放管理器
+    private Song data;//当前音乐对象
 
     /**
      * 构造刚刚
@@ -30,6 +36,8 @@ public class ListManagerImpl implements ListManager {
      */
     private ListManagerImpl(Context context) {
         this.context = context.getApplicationContext();
+        //初始化音乐播放管理器
+        musicPlayerManager = MusicPlayerService.getMusicPlayerManager(context);
     }
 
     /**
@@ -49,6 +57,11 @@ public class ListManagerImpl implements ListManager {
     @Override
     public void setDatum(List<Song> datum) {
         LogUtil.d(TAG, "setDatum");
+
+        //清空原来的数据
+        this.datum.clear();
+        //添加新的数据
+        this.datum.addAll(datum);
     }
 
     @Override
@@ -60,6 +73,11 @@ public class ListManagerImpl implements ListManager {
     @Override
     public void play(Song data) {
         LogUtil.d(TAG, "play");
+        //保存数据
+        this.data = data;
+        //播放音乐
+        //这里是从SheetDetailActivity中，通过play(position)传递过来的Song
+        musicPlayerManager.play(ResourceUtil.resourceUri(data.getUri()), data);
     }
 
     @Override

@@ -200,6 +200,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
      */
     private void play(int position) {
         //获取当前位置播放的音乐
+        // （因为SongAdapter中的每个对象对象就是Song对象（这个是从adapter.replaceData(data.getSongs())））
         Song song = adapter.getItem(position);
 
         //把当前歌单所有音乐设置到播放列表
