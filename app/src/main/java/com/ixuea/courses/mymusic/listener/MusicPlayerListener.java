@@ -26,4 +26,6 @@ public interface MusicPlayerListener {
      * @param data Song
      */
     void onProgress(Song data);
+
+    void onCompletion(MediaPlayer mp);
 }

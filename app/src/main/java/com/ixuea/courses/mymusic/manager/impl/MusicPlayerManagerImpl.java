@@ -28,7 +28,7 @@ import static com.ixuea.courses.mymusic.util.Constant.MESSAGE_PROGRESS;
  * 播放管理器默认实现
  */
 public class MusicPlayerManagerImpl
-        implements MusicPlayerManager {
+        implements MusicPlayerManager, MediaPlayer.OnCompletionListener {
     private static final String TAG = "MusicPlayerManagerImpl";
     private static MusicPlayerManagerImpl instance;//实例对象
     private final Context context;//上下文
@@ -89,6 +89,9 @@ public class MusicPlayerManagerImpl
                 ListUtil.eachListener(listeners, listener -> listener.onPrepared(mp, data));
             }
         });
+
+        //设置播放完毕监听器
+        player.setOnCompletionListener(this);
     }
 
     /**
@@ -354,4 +357,15 @@ public class MusicPlayerManagerImpl
 
         }
     };
+
+    /**
+     * 播放完毕了回调
+     *
+     * @param mp MediaPlayer
+     */
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        //回调监听器
+        ListUtil.eachListener(listeners, listener -> listener.onCompletion(mp));
+    }
 }
