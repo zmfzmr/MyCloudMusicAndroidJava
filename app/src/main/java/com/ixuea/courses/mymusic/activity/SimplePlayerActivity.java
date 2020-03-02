@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SimplePlayerAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -155,8 +157,17 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         //设置脱宅进度控件监听器
         sb_progress.setOnSeekBarChangeListener(this);
 
+        //设置item点击事件
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //获取这一首音乐(根据点击的位置获取这首音乐)
+                Song data = listManager.getDatum().get(position);
+                //播放音乐
+                listManager.play(data);
+            }
+        });
     }
-
     /**
      * 进入了前台(界面可见了)
      */
