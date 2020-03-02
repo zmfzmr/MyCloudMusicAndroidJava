@@ -16,10 +16,15 @@ import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_LIST;
+import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_ONE;
+import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_RANDOM;
 
 /**
  * 简单的播放器实现
@@ -170,13 +175,6 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         musicPlayerManager.removeMusicPlayerListener(this);
     }
 
-    /**
-     * 上一曲
-     */
-    @OnClick(R.id.bt_previous)
-    public void onPreviousClick() {
-        LogUtil.d(TAG, "onPreviousClick");
-    }
 
     /**
      * 播放点击
@@ -214,11 +212,31 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     }
 
     /**
+     * 上一曲
+     */
+    @OnClick(R.id.bt_previous)
+    public void onPreviousClick() {
+        LogUtil.d(TAG, "onPreviousClick");
+        //listManager.previous()：获取的是上一曲的Song对象
+        listManager.play(listManager.previous());
+    }
+
+    /**
      * 下一曲
      */
     @OnClick(R.id.bt_next)
     public void onNextClick() {
         LogUtil.d(TAG, "onNextClick");
+
+        //获取下一首音乐
+        Song data = listManager.next();
+        if (data != null) {
+            listManager.play(data);
+        } else {
+            //正常情况下不能能走到这里
+            //因为播放界面只有播放列表有数据时才能进入
+            ToastUtil.errorShortToast(R.string.not_play_music);
+        }
     }
 
     /**
@@ -227,6 +245,30 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     @OnClick(R.id.bt_loop_model)
     public void onLoopModelClick() {
         LogUtil.d(TAG, "onLoopModelClick");
+        //这里只需要改变循环模式就行，改变循环模式后，用户点击上一曲，或者下一曲，
+        // 就会在ListManagerImpl根据模式选择不同的播放
+        listManager.changeLoopModel();
+
+        //显示循环模式
+        showLoopModel();
+    }
+
+    private void showLoopModel() {
+        //获取当前循环模式
+        int model = listManager.getLoopModel();
+        switch (model) {
+            case MODEL_LOOP_LIST:
+                bt_loop_model.setText("列表模式");
+                break;
+            case MODEL_LOOP_RANDOM:
+                bt_loop_model.setText("随机模式");
+                break;
+            case MODEL_LOOP_ONE:
+                bt_loop_model.setText("单曲循环");
+                break;
+            default:
+                break;
+        }
     }
 
 

@@ -321,6 +321,12 @@ public class MusicPlayerManagerImpl
 
     }
 
+    @Override
+    public void setLooping(boolean looping) {
+        //播放器是否单曲循环
+        player.setLooping(looping);
+    }
+
     /**
      * 创建Handler
      * 用来将事件转换到主线程

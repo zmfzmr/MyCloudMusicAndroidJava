@@ -27,4 +27,18 @@ public interface ListManager {
     void pause();//暂停
 
     void resume();//继续播放
+
+    /**
+     * 获取上一个
+     */
+    Song previous();
+
+    /**
+     * 获取下一个
+     */
+    Song next();
+
+    int changeLoopModel();//更改循环模式 return model，可能以后需要这个model循环模式，所以写上
+
+    int getLoopModel();//获取循环模式
 }
