@@ -9,6 +9,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.SimplePlayerAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
@@ -18,6 +19,7 @@ import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -81,12 +83,24 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     Button bt_loop_model;
     private MusicPlayerManager musicPlayerManager;//播放管理器
     private ListManager listManager;//列表管理器
+    private SimplePlayerAdapter adapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_player);
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+
+        //高度固定
+        rv.setHasFixedSize(true);
+        //布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
+        rv.setLayoutManager(layoutManager);
     }
 
     @Override
@@ -123,6 +137,15 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
 //
 //        //播放音乐
 //        musicPlayerManager.play(songUrl, song);
+
+        //创建适配器
+        adapter = new SimplePlayerAdapter(android.R.layout.simple_list_item_1);
+
+        //设置到控件
+        rv.setAdapter(adapter);
+
+        //设置到适配器
+        adapter.replaceData(listManager.getDatum());
 
     }
 
