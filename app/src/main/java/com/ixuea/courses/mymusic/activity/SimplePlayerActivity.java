@@ -145,6 +145,9 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         //设置播放监听器
         musicPlayerManager.addMusicPlayerListener(this);
 
+        //显示初始化数据
+        showInitData();
+
         //显示音乐时长(这个因为是可能点击：别的地方点击下一曲了，播放时长变了，再次回到当前界面的时候，刷新播放总时长)
         showDuration();
 
@@ -373,6 +376,17 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         sb_progress.setProgress((int) progress);
     }
 
+    /**
+     * 显示初始化数据
+     */
+    private void showInitData() {
+        //获取当前播放的音乐
+        Song data = listManager.getData();
+
+        //显示标题
+        tv_title.setText(data.getTitle());
+    }
+
     //播放管理器监听器
     ////其实这个方法，已经在MusicPlayerManagerImpl中play pause resume 使用了（如：listener.onPause(data)）
     @Override
@@ -392,6 +406,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     @Override
     public void onPrepared(MediaPlayer mp, Song data) {
         LogUtil.d(TAG, "onPrepared: " + data.getProgress() + "," + data.getDuration());
+        //显示初始化数据
+        showInitData();
 
         //显示时长
         showDuration();

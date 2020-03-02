@@ -41,4 +41,6 @@ public interface ListManager {
     int changeLoopModel();//更改循环模式 return model，可能以后需要这个model循环模式，所以写上
 
     int getLoopModel();//获取循环模式
+
+    Song getData();//获取当前播放的音乐
 }

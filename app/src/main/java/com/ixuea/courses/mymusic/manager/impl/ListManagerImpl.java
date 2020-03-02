@@ -1,8 +1,10 @@
 package com.ixuea.courses.mymusic.manager.impl;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
@@ -20,7 +22,7 @@ import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_RANDOM;
 /**
  * 列表管理器默认实现
  */
-public class ListManagerImpl implements ListManager {
+public class ListManagerImpl implements ListManager, MusicPlayerListener {
     private static final String TAG = "ListManagerImpl";
     private static ListManagerImpl instance;//实例对象
     private final Context context;//上下文
@@ -50,6 +52,12 @@ public class ListManagerImpl implements ListManager {
         this.context = context.getApplicationContext();
         //初始化音乐播放管理器
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(context);
+
+        //添加音乐监听器(给musicPlayerManager设置监听器（就是让ListManagerImpl成为musicPlayerManager里面的监听器）)
+        //主要是监听当前类的 方法调用（操作）情况
+        //（也就是说：本类(this)对musicPlayerManager方法的调用情况监听）
+        //外界对我(musicPlayerManager)里面的方法调用，我(musicPlayerManager)能监听器到；然后回调一个参数给外界
+        musicPlayerManager.addMusicPlayerListener(this);
     }
 
     /**
@@ -228,4 +236,61 @@ public class ListManagerImpl implements ListManager {
     public int getLoopModel() {
         return model;
     }
+
+    @Override
+    public Song getData() {
+        return data;
+    }
+
+    //音乐播放管理器
+    @Override
+    public void onPause(Song data) {
+
+    }
+
+    @Override
+    public void onPlaying(Song data) {
+
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp, Song data) {
+
+    }
+
+    @Override
+    public void onProgress(Song data) {
+
+    }
+
+    /**
+     * 播放完毕了回调
+     *
+     * @param mp
+     */
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        if (MODEL_LOOP_ONE == getLoopModel()) {
+            //如果是单曲循环
+            //就不会处理了
+            //因为我们使用了MediaPlayer的循环模式
+
+            //如果使用的第三方框架
+            //如果没有循环模式
+            //那就要在这里继续播放当前音乐
+        } else {
+            //其他模式
+
+            //播放下一首音乐
+            Song data = next();
+            //可能当前这首音乐正在播放,但是我们把原来的音乐刚删除，这个回调还没有执行完成
+            //不过这个只是小几率
+            //(也就是说:正在播放的音乐，播放完成后，next：点击下一曲，但是这个音乐被删除了，获取的Song为null)
+            //不过这个判不判断都无所谓，小概率事件，最好写上吧
+            if (data != null) {
+                play(data);//调用本类的播放方法
+            }
+        }
+    }
+    //end音乐播放管理器
 }

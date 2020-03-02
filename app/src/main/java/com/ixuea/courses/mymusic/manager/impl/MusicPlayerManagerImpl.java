@@ -245,6 +245,11 @@ public class MusicPlayerManagerImpl
             return;
         }
 
+        if (!isPlaying()) {
+            //没有播放音乐就不用启动
+            return;
+        }
+
         if (timerTask != null) {//说明已经启动了，直接返回（中断方法的运行）
             //已经启动了
             return;
