@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
@@ -46,7 +48,7 @@ import retrofit2.Response;
 /**
  * 歌单详情界面
  */
-public class SheetDetailActivity extends BaseTitleActivity implements View.OnClickListener {
+public class SheetDetailActivity extends BaseTitleActivity implements View.OnClickListener, MusicPlayerListener {
 
     private static final String TAG = "SheetDetailActivity";
 
@@ -691,8 +693,21 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     protected void onResume() {
         super.onResume();
 
+        //添加播放管理器监听器
+        musicPlayerManager.addMusicPlayerListener(this);
+
         //显示迷你播放控制器数据
         showSmallPlayControlData();
+    }
+
+    /**
+     * 界面隐藏了
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //移除播放管理器监听器
+        musicPlayerManager.removeMusicPlayerListener(this);
     }
 
     /**
@@ -775,4 +790,27 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         //显示标题
         tv_title_small_control.setText(data.getTitle());
     }
+
+    //监听MusicPlayManager中方法的调用情况
+    @Override
+    public void onPaused(Song data) {
+        //监听到暂停，就显示播放状态
+        showPlayStatus();
+    }
+
+    @Override
+    public void onPlaying(Song data) {
+        showPauseStatus();//播放中，显示暂停状态（就是图标为暂停）
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp, Song data) {
+        showInitData(data);
+    }
+
+    @Override
+    public void onProgress(Song data) {
+        showProgress(data);
+    }
+    //end 监听MusicPlayManager中方法的调用情况
 }

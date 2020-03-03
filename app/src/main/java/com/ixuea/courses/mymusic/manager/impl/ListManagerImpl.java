@@ -244,7 +244,7 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
     //音乐播放管理器
     @Override
-    public void onPause(Song data) {
+    public void onPaused(Song data) {
 
     }
 

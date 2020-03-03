@@ -178,11 +178,11 @@ public class MusicPlayerManagerImpl
 
 //            //回调监听器（暂停状态）
 //            for (MusicPlayerListener listener : listeners) {
-//                listener.onPause(data);
+//                listener.onPaused(data);
 //            }
 
             //使用重构后的方法
-            ListUtil.eachListener(listeners, musicPlayerListener -> musicPlayerListener.onPause(data));
+            ListUtil.eachListener(listeners, musicPlayerListener -> musicPlayerListener.onPaused(data));
 
             //停止进度通知
             stopPublishProgress();

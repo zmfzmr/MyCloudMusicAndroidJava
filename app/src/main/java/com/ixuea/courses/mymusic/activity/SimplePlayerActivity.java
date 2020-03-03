@@ -206,7 +206,7 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     @Override
     protected void onPause() {
         super.onPause();
-        LogUtil.d(TAG, "onPause");
+        LogUtil.d(TAG, "onPaused");
 
         //取消播放监听器
         musicPlayerManager.removeMusicPlayerListener(this);
@@ -422,10 +422,10 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
     }
 
     //播放管理器监听器
-    ////其实这个方法，已经在MusicPlayerManagerImpl中play pause resume 使用了（如：listener.onPause(data)）
+    ////其实这个方法，已经在MusicPlayerManagerImpl中play pause resume 使用了（如：listener.onPaused(data)）
     @Override
-    public void onPause(Song data) {
-        LogUtil.d(TAG, "onPause");
+    public void onPaused(Song data) {
+        LogUtil.d(TAG, "onPaused");
         //播放管理器监听器
         showPlayStatus();
     }
