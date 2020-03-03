@@ -197,6 +197,9 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
 
         //显示音乐播放状态(这个主要是：在悬浮通知那里点击了播放，然后回到Activity中，然后刷新播放状态)
         showMusicPlayStatus();
+
+        //滚动到当前音乐位置(并设置选中位置)
+        scrollPosition();
     }
 
     /**
@@ -445,6 +448,38 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
 
         //显示时长
         showDuration();
+
+        //选中当前音乐
+        scrollPosition();
+    }
+
+    /**
+     * 滚动到当前音乐位置(并设置选中位置)
+     */
+    private void scrollPosition() {
+        //选中当前播放的音乐
+
+        //使用post方法是
+        //将方法放到了消息循环
+        //如果不这样做
+        //在onCreate这样的方法中滚动无效
+        //因为这时候列表的数据还没有显示完成(数据的展示是异步完成的)
+        //具体的这部分我们在《详解View》课程中讲解了
+        rv.post(new Runnable() {
+            @Override
+            public void run() {
+                int index = listManager.getDatum().indexOf(listManager.getData());
+                //滚动到该位置(默认滚动到顶部（这里的顶部是指：位置顶部看不见了，
+                // 这时点击下一曲，这个时候就会看到滚下来到顶部位置）)
+                //smoothScrollToPosition:带有动画效果
+                //scrollToPosition:没有动画效果
+                rv.smoothScrollToPosition(index);
+
+                //选中
+                //SimplePlayerAdapter:是我们在SimplePlayerAdapter中定义的方法
+                adapter.setSelectedIndex(index);
+            }
+        });
     }
 
     @Override

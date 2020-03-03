@@ -90,7 +90,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
      */
     private String id;
     private Sheet data;//歌单对象数据
-    private SongAdapter adapter;
+    private SongAdapter adapter;//适配器
     /**
      * 头部容器
      */
