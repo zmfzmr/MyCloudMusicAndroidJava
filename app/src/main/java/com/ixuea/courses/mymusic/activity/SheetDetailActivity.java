@@ -25,6 +25,7 @@ import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.manager.ListManager;
+import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
@@ -103,6 +104,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     private View ll_play_all_container;//播放全部容器
     private TextView tv_count;//歌曲数
     private ListManager listManager;//初始化列表管理器
+    private MusicPlayerManager musicPlayerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +181,9 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         super.initDatum();
         //初始化列表管理器
         listManager = MusicPlayerService.getListManager(getApplicationContext());
+
+        //初始化音乐播放器
+        musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
 
         //获取传递的参数
         getIntent().getStringExtra(Constant.ID);
@@ -535,11 +540,11 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
     /**
      * 处理收藏和取消收藏逻辑
-     *
+     * <p>
      * 这里的思路是：先请求，然后(本地)及时刷新收藏状态，
      * 然后再次进入歌单详情的时候，数据也是正确的啦
      * （因为第一次使用了网络，再次进入个歌单详情的时候重新显示了状态）
-     *
+     * <p>
      * 其实这里使用fetchData();和本地2种方式都可以
      * 用fetchData的话，需要加载更多的资源（需要请求网络资源）
      * 实际使用的话，2中都行
@@ -679,5 +684,95 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         LogUtil.d(TAG, "onListSmallClick");
     }
 
+    /**
+     * 界面显示了
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        //显示迷你播放控制器数据
+        showSmallPlayControlData();
+    }
+
+    /**
+     * 显示迷你播放控制器数据
+     */
+    private void showSmallPlayControlData() {
+        if (listManager.getDatum() != null && listManager.getDatum().size() > 0) {
+            //有音乐
+
+            //获取当前播放的音乐
+            Song data = listManager.getData();
+            if (data != null) {
+                //显示初始化数据
+                showInitData(data);
+                //显示时长
+                showDuration(data);
+                //显示播放进度
+                showProgress(data);
+                //显示播放状态
+                showMusicPlayStatus();
+            }
+        }
+    }
+
+    //显示播放状态
+    private void showMusicPlayStatus() {
+        //注意：这里要判断，有可能播放的时候点击暂停了，所以需要判断播放状态
+        if (musicPlayerManager.isPlaying()) {//是已经播放
+            showPauseStatus();
+        } else {
+            showPlayStatus();
+        }
+    }
+
+    /**
+     * 显示播放状态
+     */
+    private void showPlayStatus() {
+        //这种图片切换可以使用Selector来实现
+        iv_play_small_control.setSelected(false);
+    }
+
+    /**
+     * 显示暂停状态
+     */
+    private void showPauseStatus() {//播放的，显示暂停状态
+        iv_play_small_control.setSelected(true);
+    }
+
+    /**
+     * 显示播放进度
+     */
+    private void showProgress(Song data) {
+        //设置进度条（这个进度，在MusicPlayerManagerImpl中play中定时器任务回到主线程中
+        // 用data.setProgress(player.getCurrentPosition());）保存到data里面，所以可以直接获取进度
+        pb_progress_small_control.setProgress((int) data.getProgress());
+    }
+
+    /**
+     * 显示音乐时长
+     *
+     * @param data
+     */
+    private void showDuration(Song data) {
+        //获取当前音乐时长
+        int end = (int) data.getDuration();
+
+        //设置到进度条(最大时长)
+        pb_progress_small_control.setMax(end);
+    }
+
+    /**
+     * 显示初始化数据
+     *
+     * @param data Song
+     */
+    private void showInitData(Song data) {
+        //显示封面
+        ImageUtil.show(getMainActivity(), iv_banner_small_control, data.getBanner());
+        //显示标题
+        tv_title_small_control.setText(data.getTitle());
+    }
 }
