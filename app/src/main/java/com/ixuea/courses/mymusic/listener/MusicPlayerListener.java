@@ -27,5 +27,14 @@ public interface MusicPlayerListener {
      */
     void onProgress(Song data);
 
-    void onCompletion(MediaPlayer mp);
+    /**
+     * 播放完成后回调
+     * <p>
+     * 申明为默认方法，那么就可以不重写他。
+     *
+     * @param mp
+     */
+    default void onCompletion(MediaPlayer mp) {
+
+    }
 }

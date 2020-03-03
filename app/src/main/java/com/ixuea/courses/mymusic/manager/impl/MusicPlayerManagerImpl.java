@@ -366,6 +366,7 @@ public class MusicPlayerManagerImpl
     /**
      * 播放完毕了回调
      *
+     * onCompletion:这个回调是MediaPlayer里面的
      * @param mp MediaPlayer
      */
     @Override
