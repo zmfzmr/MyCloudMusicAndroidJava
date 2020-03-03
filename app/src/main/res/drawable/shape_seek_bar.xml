@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><!--layer-list: 之前有次用到EditText（上 左 右移出外面，之外下面），这里是设置到progressDrawable中-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--注意：id不能随便乱写-->
+    <!--背景-->
+    <item android:id="@android:id/background">
+
+        <shape>
+            <solid android:color="@color/light_grey" />
+        </shape>
+    </item>
+
+    <!--注意:这里的第二进度，和进度，必须要加shape外层要套一个clip才行-->
+    <!--第二进度-->
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape>
+                <solid android:color="#0f0" />
+            </shape>
+        </clip>
+
+    </item>
+
+    <!--进度-->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <solid android:color="@color/colorPrimary" />
+            </shape>
+        </clip>
+
+    </item>
+
+</layer-list>

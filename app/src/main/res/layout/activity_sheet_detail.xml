@@ -23,6 +23,9 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
+        <!--包含迷你播放控制器-->
+        <include layout="@layout/play_control_small" />
+
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <!--分割线-->
+    <include layout="@layout/divider_small" />
+
+    <!--内容容器-->
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding_small"
+        android:background="@color/white"
+        android:orientation="horizontal">
+        <!--圆角容器-->
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/radius_small"
+            app:cardElevation="0dp">
+
+            <!--封面-->
+            <ImageView
+                android:id="@+id/iv_banner_small_control"
+                android:layout_width="@dimen/banner_height_small"
+                android:layout_height="@dimen/banner_height_small"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder" />
+        </androidx.cardview.widget.CardView>
+        <!--标题容器-->
+        <LinearLayout
+            android:layout_marginLeft="@dimen/padding_small"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <!--标题-->
+            <TextView
+                android:id="@+id/tv_title_small_control"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/text"
+                android:text="这是歌曲名称这是歌曲名称这是歌曲名称这是歌曲名称这是歌曲名称" />
+            <!--歌词-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_small"
+                android:text="这是歌词内容" />
+
+        </LinearLayout>
+
+        <!--播放暂停按钮-->
+        <ImageView
+            android:id="@+id/iv_play_small_control"
+            android:layout_width="@dimen/item_title_height"
+            android:layout_height="@dimen/item_title_height"
+            android:scaleType="centerCrop"
+            android:src="@drawable/selector_play_small" />
+
+        <!--下一曲-->
+        <ImageView
+            android:id="@+id/iv_next_small_control"
+            android:layout_width="@dimen/item_title_height"
+            android:layout_height="@dimen/item_title_height"
+            android:src="@drawable/ic_music_next_small" />
+
+        <!--播放列表按钮-->
+        <ImageView
+            android:id="@+id/iv_list_small_control"
+            android:layout_width="@dimen/item_title_height"
+            android:layout_height="@dimen/item_title_height"
+            android:src="@drawable/ic_music_list_small" />
+
+    </LinearLayout>
+
+    <!--进度条
+         android:progressDrawable="@drawable/shape_seek_bar"
+
+         shape_seek_bar：这里面用了layer-list，写了3个图层，根据id找到那个图层，shape_seek_bar里面的id不能随便乱写
+
+          进度和第二进度（视频播放缓存的时候用到）
+          android:progress="50"
+          android:secondaryProgress="80"
+    -->
+    <ProgressBar
+        android:id="@+id/pb_progress_small_control"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progressDrawable="@drawable/shape_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/progress_bar_height_small" />
+</LinearLayout>
