@@ -37,6 +37,8 @@ import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -242,6 +244,7 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
         //把当前歌单所有音乐设置到播放列表
         //有些应用
         //可能会实现添加到已经播放列表功能
+        //注意：data.getSongs和adapter.getData()结果是一样的
         listManager.setDatum(adapter.getData());
 
         //播放当前音乐
@@ -471,6 +474,11 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
         //显示收藏状态
         showCollectionStatus();
+
+        //显示当前播放的音乐
+        //fetchdata这里有网络请求（异步），rv.post也是异步；有可能网络请求还没有成功，
+        // 所以在网络请求成功需要在这里调用
+        scrollPositionAsync();
     }
 
     /**
@@ -711,6 +719,67 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
 
         //显示迷你播放控制器数据
         showSmallPlayControlData();
+
+        //选中播放的音乐
+        scrollPositionAsync();
+    }
+
+    /**
+     * 异步选中当前播放的音乐
+     */
+    private void scrollPositionAsync() {
+        //使用移除执行
+        rv.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollPosition();
+            }
+        });
+    }
+
+    /**
+     * 选中当前播放的音乐
+     * <p>
+     * 遍历歌单音乐找到和当前播放音乐一样的索引index
+     * 通过这个索引刷新某个item
+     */
+    private void scrollPosition() {
+        //data:Sheet歌单对象
+        if (data != null && data.getSongs() != null && data.getSongs().size() > 0) {
+            List<Song> datum = data.getSongs();//单曲集合
+
+            //获取当前播放的音乐
+            //data:Song对象
+            Song data = listManager.getData();
+            if (data != null) {//不等于null，说明正在播放音乐
+                int index = -1;
+                //遍历当前歌单所有音乐
+                //找到正在播放的音乐索引
+                Song song;//把整个提到外面可以节省资源，不用每次遍历都搞一个song对象
+                for (int i = 0; i < datum.size(); i++) {
+                    song = datum.get(i);
+                    //根据Song中的id判断（/找到了当前播放的音乐）
+                    if (song.getId().equals(data.getId())) {
+                        index = i;
+                        break;//记得跳出循环
+                    }
+                }
+
+                if (index != -1) {
+                    //本来是-1，如果选中了，则说明选中了
+
+                    //滚动到当前位置，因为加了个header，所以要+1
+//                    rv.smoothScrollToPosition(index + 1);
+
+                    adapter.setSelectedIndex(index + 1);
+                } else {
+                    //取消选中
+                    adapter.setSelectedIndex(-1);
+                }
+
+            }
+
+        }
     }
 
     /**
@@ -825,6 +894,9 @@ public class SheetDetailActivity extends BaseTitleActivity implements View.OnCli
     @Override
     public void onPrepared(MediaPlayer mp, Song data) {
         showInitData(data);
+
+        //选中当前播放的音乐
+        scrollPositionAsync();
     }
 
     @Override
