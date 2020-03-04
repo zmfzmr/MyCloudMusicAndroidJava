@@ -214,6 +214,15 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
             public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int position) {
                 //这个框架内部
                 //已经从adapter对应的列表中移除了对应位置的数据
+
+                //从播放列表中删除
+                listManager.delete(position);
+
+                //判断是否要关闭播放界面
+                if (listManager.getData() == null) {
+                    //表示没有音乐了
+                    finish();
+                }
             }
 
             @Override

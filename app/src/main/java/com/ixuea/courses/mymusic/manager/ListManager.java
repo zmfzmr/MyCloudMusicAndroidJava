@@ -43,4 +43,6 @@ public interface ListManager {
     int getLoopModel();//获取循环模式
 
     Song getData();//获取当前播放的音乐
+
+    void delete(int index);//删除音乐
 }
