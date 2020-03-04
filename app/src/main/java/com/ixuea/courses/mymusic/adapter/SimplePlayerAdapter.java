@@ -64,9 +64,19 @@ public class SimplePlayerAdapter extends BaseQuickAdapter<Song, BaseViewHolder> 
      */
     public void setSelectedIndex(int selectedIndex) {
         //刷新上一行
-        notifyItemChanged(this.selectedIndex);
+        selectIndex();
         this.selectedIndex = selectedIndex;
         //刷新当前行
-        notifyItemChanged(this.selectedIndex);
+        selectIndex();
+    }
+
+    /**
+     * 选中当前位置
+     */
+    private void selectIndex() {
+        if (selectedIndex != -1) {
+            //刷新当前位置
+            notifyItemChanged(selectedIndex);
+        }
     }
 }

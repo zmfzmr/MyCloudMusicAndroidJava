@@ -199,6 +199,11 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         showMusicPlayStatus();
 
         //滚动到当前音乐位置(并设置选中位置)
+
+        //这里的onResume（因为一点进来就播放音乐了，所以onResume肯定在播放之后（和RecyclerView列表加载数据完毕之后）
+        // 执行onResume）
+        //注意：必须要在onResume方法中，如果在onCreate中的话，可能列表数据没有加载完成，必须要在列表数据加载完成之后执行
+        //    这里onResume数据已经加载完成
         scrollPosition();
     }
 
@@ -468,6 +473,7 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         rv.post(new Runnable() {
             @Override
             public void run() {
+                //在onResume中列表数据加载完成，随后音乐开始播放，所以可以获取到播放的音乐对象Song（listManager.getData()）
                 int index = listManager.getDatum().indexOf(listManager.getData());
                 //滚动到该位置(默认滚动到顶部（这里的顶部是指：位置顶部看不见了，
                 // 这时点击下一曲，这个时候就会看到滚下来到顶部位置）)
