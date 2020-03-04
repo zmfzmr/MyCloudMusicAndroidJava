@@ -2,6 +2,7 @@ package com.ixuea.courses.mymusic.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
+import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SimplePlayerAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -21,6 +24,8 @@ import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -149,6 +154,85 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         //设置到适配器
         adapter.replaceData(listManager.getDatum());
 
+        //列表滑动删除
+
+        //其实这里就2部分：1设置拖拽还是滑动（禁用或开启） 2：设置滑动后的数据怎么显示（框架内部实现了）
+
+        //Item拖拽和滑动回调
+        ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(adapter) {
+            /**
+             * 获取移动参数
+             * <p>
+             * 主要就是告诉他是否开启拖拽，滑动
+             * 什么方向可以拖拽，滑动
+             */
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                //第一个参数控制拖拽
+                //第二个参数控制滑动
+
+                //禁用了拖拽
+                //开启了从右边滑动到左边
+
+                //ItemTouchHelper.ACTION_STATE_IDLE表示禁用
+                //ItemTouchHelper.LEFT:表示右向左滑动
+
+                //isViewCreateByAdapter(viewHolder):意思说:如果有添加header的，就禁用拖拽和滑动
+                return isViewCreateByAdapter(viewHolder)
+                        ? makeMovementFlags(ItemTouchHelper.ACTION_STATE_IDLE, ItemTouchHelper.ACTION_STATE_IDLE)
+                        : makeMovementFlags(ItemTouchHelper.ACTION_STATE_IDLE, ItemTouchHelper.LEFT);
+            }
+        };
+
+        //Item触摸帮助类(用来连接RecyclerView)
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);
+        //将帮助类附加到RecyclerView
+        itemTouchHelper.attachToRecyclerView(rv);
+        //开始滑动删除
+        adapter.enableSwipeItem();
+
+        //创建滑动监听器
+        //这里不详细讲解
+        //只讲解用到的功能
+        //因为他的功能还比较多
+        //如果大家想深入学习请学习《详解RecyclerView》课程
+        OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
+            @Override
+            public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int i) {
+
+            }
+
+            @Override
+            public void clearView(RecyclerView.ViewHolder viewHolder, int i) {
+
+            }
+
+            /**
+             * 当前侧滑完成时回调
+             */
+            @Override
+            public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int position) {
+                //这个框架内部
+                //已经从adapter对应的列表中移除了对应位置的数据
+            }
+
+            @Override
+            public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float v, float v1, boolean b) {
+
+            }
+        };
+        //设置滑动监听器
+        adapter.setOnItemSwipeListener(onItemSwipeListener);
+
+    }
+
+    /**
+     * 父类ItemDragAndSwipeCallback是私有的，所以这类拿出来放到外面
+     * 对应header来说，不能滑动删除，也不能拖拽它
+     */
+    private boolean isViewCreateByAdapter(@NonNull RecyclerView.ViewHolder viewHolder) {
+        int type = viewHolder.getItemViewType();
+        return type == 273 || type == 546 || type == 819 || type == 1365;
     }
 
     @Override
@@ -168,6 +252,7 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
             }
         });
     }
+
     /**
      * 进入了前台(界面可见了)
      */

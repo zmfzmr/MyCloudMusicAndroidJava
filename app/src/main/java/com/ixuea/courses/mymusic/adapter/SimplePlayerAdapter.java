@@ -2,17 +2,21 @@ package com.ixuea.courses.mymusic.adapter;
 
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 
 /**
  * 注意：这里Song对应到的是item对象
+ * 替换BaseQuickAdapter
+ * BaseItemDraggableAdapter：删除交互的用这个父类
  */
-public class SimplePlayerAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
+public class SimplePlayerAdapter extends BaseItemDraggableAdapter<Song, BaseViewHolder> {
 
     /**
      * 选中索引
@@ -28,7 +32,8 @@ public class SimplePlayerAdapter extends BaseQuickAdapter<Song, BaseViewHolder> 
      * 构造方法
      */
     public SimplePlayerAdapter(int layoutResId) {
-        super(layoutResId);
+        //new ArrayList<>()：这个匿名的，里面是空的
+        super(layoutResId, new ArrayList<>());
     }
 
     /**
