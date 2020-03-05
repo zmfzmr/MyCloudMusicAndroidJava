@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
+import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.SettingActivity;
 import com.ixuea.courses.mymusic.activity.WebViewActivity;
 import com.ixuea.courses.mymusic.adapter.MainAdapter;
@@ -38,7 +38,7 @@ import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseTitleActivity {
+public class MainActivity extends BaseMusicPlayerActivity {
 
     private static final String TAG = "MainActivity";
     /**

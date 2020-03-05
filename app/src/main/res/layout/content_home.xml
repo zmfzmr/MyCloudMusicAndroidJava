@@ -13,6 +13,10 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!--迷你控制器-->
+    <include layout="@layout/play_control_small" />
 
 </LinearLayout>

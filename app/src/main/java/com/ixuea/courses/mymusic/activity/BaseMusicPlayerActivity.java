@@ -14,10 +14,13 @@ import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.ImageUtil;
+import com.ixuea.courses.mymusic.util.LogUtil;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener {
+    private static final String TAG = "BaseMusicPlayerActivity";
     /**
      * 迷你播放控制器
      */
@@ -198,4 +201,49 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
         showProgress(data);
     }
     //end 监听MusicPlayManager中方法的调用情况
+
+    /**
+     * 迷你播放控制器 容器点击
+     */
+    @OnClick(R.id.ll_play_control_small)
+    public void onPlayControlSmallClick() {
+        LogUtil.d(TAG, "onPlayControlSmallClick");
+
+        //简单播放器界面
+        SimplePlayerActivity.start(getMainActivity());
+    }
+
+    /**
+     * 迷你播放控制器 播放（暂停）点击
+     */
+    @OnClick(R.id.iv_play_small_control)
+    public void onPlaySmallClick() {
+        LogUtil.d(TAG, "onPlaySmallClick");
+
+        if (musicPlayerManager.isPlaying()) {
+            musicPlayerManager.pause();
+        } else {
+            musicPlayerManager.resume();
+        }
+    }
+
+    /**
+     * 迷你播放控制器 下一曲点击
+     */
+    @OnClick(R.id.iv_next_small_control)
+    public void onNextSmallClick() {
+        LogUtil.d(TAG, "onNextSmallClick");
+        //获取下一首Song对象(获取下一首音乐)
+        Song data = listManager.next();
+        //播放
+        listManager.play(data);
+    }
+
+    /**
+     * 迷你播放控制器 播放列表
+     */
+    @OnClick(R.id.iv_list_small_control)
+    public void onListSmallClick() {
+        LogUtil.d(TAG, "onListSmallClick");
+    }
 }

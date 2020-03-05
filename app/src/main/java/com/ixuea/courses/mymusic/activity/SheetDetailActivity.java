@@ -39,7 +39,6 @@ import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import butterknife.OnClick;
 import retrofit2.Response;
 
 /**
@@ -623,51 +622,6 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
             LogUtil.d(TAG, "report menu click");
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * 迷你播放控制器 容器点击
-     */
-    @OnClick(R.id.ll_play_control_small)
-    public void onPlayControlSmallClick() {
-        LogUtil.d(TAG, "onPlayControlSmallClick");
-
-        //简单播放器界面
-        SimplePlayerActivity.start(getMainActivity());
-    }
-
-    /**
-     * 迷你播放控制器 播放（暂停）点击
-     */
-    @OnClick(R.id.iv_play_small_control)
-    public void onPlaySmallClick() {
-        LogUtil.d(TAG, "onPlaySmallClick");
-
-        if (musicPlayerManager.isPlaying()) {
-            musicPlayerManager.pause();
-        } else {
-            musicPlayerManager.resume();
-        }
-    }
-
-    /**
-     * 迷你播放控制器 下一曲点击
-     */
-    @OnClick(R.id.iv_next_small_control)
-    public void onNextSmallClick() {
-        LogUtil.d(TAG, "onNextSmallClick");
-        //获取下一首Song对象(获取下一首音乐)
-        Song data = listManager.next();
-        //播放
-        listManager.play(data);
-    }
-
-    /**
-     * 迷你播放控制器 播放列表
-     */
-    @OnClick(R.id.iv_list_small_control)
-    public void onListSmallClick() {
-        LogUtil.d(TAG, "onListSmallClick");
     }
 
     /**
