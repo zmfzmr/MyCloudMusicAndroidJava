@@ -216,7 +216,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="@string/music_count" />
+            tools:text="@string/music_count" />
         <!--收藏按钮 这里还是设置下高度吧，不然不同的手机上高度不一样的
             collection:收集 收藏
         -->
