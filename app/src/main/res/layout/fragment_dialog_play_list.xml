@@ -1,13 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f00">
-
-    <TextView
-        android:text="这是播放列表"
+    android:orientation="vertical">
+    <!--标题容器-->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="@dimen/item_song_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <!--图标-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_middle"
+            android:src="@drawable/ic_play_grey" />
+
+        <!--循环模式-->
+        <TextView
+            android:id="@+id/tv_loop_model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_middle"
+            android:text="列表循环"
+            android:textColor="@color/text" />
+        <!--歌曲数量-->
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="(0)"
+            android:textColor="@color/text" />
+
+        <!--收藏歌单按钮-->
+        <Button
+            android:id="@+id/bt_collection"
+            android:layout_marginRight="@dimen/padding_large"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height_small"
+            android:text="@string/collection_all"
+            android:background="@null"
+            android:drawableLeft="@drawable/ic_add_grey" />
+        <!--分割线-->
+        <include layout="@layout/divider_small_vertical" />
+        <!--删除全部按钮-->
+        <ImageButton
+            android:id="@+id/ib_delete_all"
+            android:layout_width="@dimen/item_song_height"
+            android:layout_height="@dimen/item_song_height"
+            android:src="@drawable/ic_remove"
+            android:background="@null" />
+
+    </LinearLayout>
+
+    <include layout="@layout/divider_small" />
+    <!--列表控件-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

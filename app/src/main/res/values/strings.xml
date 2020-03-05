@@ -106,6 +106,8 @@
     <string name="report">举报</string>
     <!--简单播放界面-->
     <string name="not_play_music">没有可播放的音乐</string>
+    <!--播放列表对话框-->
+    <string name="collection_all">收藏全部</string>
 
 
 </resources>
