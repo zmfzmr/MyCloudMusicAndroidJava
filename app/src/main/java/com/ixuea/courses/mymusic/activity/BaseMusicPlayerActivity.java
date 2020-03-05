@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.fragment.PlayListDialogFragment;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
@@ -19,6 +20,9 @@ import com.ixuea.courses.mymusic.util.LogUtil;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 迷你播放列表控制器
+ */
 public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener {
     private static final String TAG = "BaseMusicPlayerActivity";
     /**
@@ -245,5 +249,14 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
     @OnClick(R.id.iv_list_small_control)
     public void onListSmallClick() {
         LogUtil.d(TAG, "onListSmallClick");
+        showPlayListDialog();
+    }
+
+    /**
+     * 显示播放列表对话框
+     */
+    private void showPlayListDialog() {
+        //
+        PlayListDialogFragment.show(getSupportFragmentManager());
     }
 }
