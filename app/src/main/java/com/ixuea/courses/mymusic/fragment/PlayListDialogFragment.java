@@ -9,11 +9,9 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.PlayListAdapter;
-import com.ixuea.courses.mymusic.domain.event.PlayListChangeEvent;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
-
-import org.greenrobot.eventbus.EventBus;
+import com.ixuea.courses.mymusic.util.EventBusUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +20,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 迷你控制器 播放列表
@@ -122,10 +121,24 @@ public class PlayListDialogFragment extends BaseBottomSheetDialogFragment {
                     //步骤1.发送列表改变了通知（接下来，需要在某个类接收这个通知）
                     //2：这里是在BaseMusicPlayerActivity中注册（接收通知）
                     //3:BaseMusicPlayerActivity改变了事件onPlayListChangedEvent方法（接收通知后做的事情的方法）
-                    EventBus.getDefault().post(new PlayListChangeEvent());
+                    EventBusUtil.postPlayListChangeEvent();
                 }
             }
         });
+    }
+
+    /**
+     * 删除所有按钮点击
+     */
+    @OnClick(R.id.iv_delete_all)
+    public void onDeleteAll() {
+
+        //关闭对话框
+        dismiss();
+        //删除列表全部音乐
+        listManager.deleteAll();
+        //发送音乐列表改变通知
+        EventBusUtil.postPlayListChangeEvent();
     }
 
     /**

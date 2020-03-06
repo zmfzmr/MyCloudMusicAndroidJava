@@ -46,7 +46,7 @@
         <include layout="@layout/divider_small_vertical" />
         <!--删除全部按钮-->
         <ImageButton
-            android:id="@+id/ib_delete_all"
+            android:id="@+id/iv_delete_all"
             android:layout_width="@dimen/item_song_height"
             android:layout_height="@dimen/item_song_height"
             android:src="@drawable/ic_remove"

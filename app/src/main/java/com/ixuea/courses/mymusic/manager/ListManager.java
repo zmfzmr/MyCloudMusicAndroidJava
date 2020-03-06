@@ -45,4 +45,6 @@ public interface ListManager {
     Song getData();//获取当前播放的音乐
 
     void delete(int index);//删除音乐
+
+    void deleteAll();//删除所有列表音乐
 }
