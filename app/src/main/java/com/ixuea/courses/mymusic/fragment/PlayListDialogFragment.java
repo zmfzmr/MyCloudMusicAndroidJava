@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.ixuea.courses.mymusic.R;
 
 import androidx.annotation.NonNull;
@@ -23,15 +22,12 @@ import androidx.fragment.app.FragmentManager;
  * <p>
  * BottomSheetDialogFragment：这个是需要和父布局配合使用的（外层是CoordinatorLayout配合使用）
  */
-public class PlayListDialogFragment extends BottomSheetDialogFragment {
-
-
+public class PlayListDialogFragment extends BaseBottomSheetDialogFragment {
     /**
-     * 返回要显示的控件
+     * 返回布局
      */
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    protected View getLayoutView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dialog_play_list, null);
     }
 
