@@ -9,8 +9,11 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.PlayListAdapter;
+import com.ixuea.courses.mymusic.domain.event.PlayListChangeEvent;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
+
+import org.greenrobot.eventbus.EventBus;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -115,6 +118,11 @@ public class PlayListDialogFragment extends BaseBottomSheetDialogFragment {
 
                     //从列表管理器删除
                     listManager.delete(position);
+
+                    //步骤1.发送列表改变了通知（接下来，需要在某个类接收这个通知）
+                    //2：这里是在BaseMusicPlayerActivity中注册（接收通知）
+                    //3:BaseMusicPlayerActivity改变了事件onPlayListChangedEvent方法（接收通知后做的事情的方法）
+                    EventBus.getDefault().post(new PlayListChangeEvent());
                 }
             }
         });

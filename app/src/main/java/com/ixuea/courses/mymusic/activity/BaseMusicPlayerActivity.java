@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.event.PlayListChangeEvent;
 import com.ixuea.courses.mymusic.fragment.PlayListDialogFragment;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
@@ -16,6 +17,10 @@ import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -80,6 +85,15 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
 
         //显示迷你播放控制器数据
         showSmallPlayControlData();
+
+        //注册播放列表改变了监听
+        //之所以在这里注册是因为
+        //只是当前显示的界面监听就行了
+        //其他界面再次显示的时候会执行onResume方法
+
+        //注册了以后就可以接收EventBus发送的通知了
+        EventBus.getDefault().register(this);
+
     }
 
     /**
@@ -90,7 +104,23 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
         super.onPause();
         //移除播放管理器监听器
         musicPlayerManager.removeMusicPlayerListener(this);
+
+        //解除发布订阅框架注册
+        EventBus.getDefault().unregister(this);
     }
+
+    /**
+     * 注意：这个发送通知的事件类PlayListChangeEvent要写对
+     * 否则方法无法执行
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)//这里是线程模式为主线程
+    public void onPlayListDialogFragment(PlayListChangeEvent event) {
+        //显示迷你播放控制器(里面会判断，如果删除音乐，播放列表没有数据后，就会隐藏迷你播放列表控制器)
+        showSmallPlayControlData();
+    }
+
 
     /**
      * 显示迷你播放控制器数据
