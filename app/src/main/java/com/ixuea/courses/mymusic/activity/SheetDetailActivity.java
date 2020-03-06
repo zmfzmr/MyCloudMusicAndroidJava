@@ -23,6 +23,7 @@ import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.fragment.SongMoreDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
@@ -728,5 +729,7 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
     @Override
     public void onMoreClick(Song data) {
         LogUtil.d(TAG, "onMoreClick:" + data.getTitle());
+        //注意：参数2：Sheet 3：Song
+        SongMoreDialogFragment.show(getSupportFragmentManager(), this.data, data);
     }
 }
