@@ -101,6 +101,23 @@ public class PlayListDialogFragment extends BaseBottomSheetDialogFragment {
                 listManager.play(listManager.getDatum().get(position));
             }
         });
+
+        //item子控件点击事件 注意：这里是Child（也就是item里面的子控件点击事件）
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                //关闭弹窗
+                dismiss();
+                //由于这里只有一个按钮点击
+                //所以可以不判断
+                if (R.id.iv_remove == view.getId()) {
+                    //删除按钮点击
+
+                    //从列表管理器删除
+                    listManager.delete(position);
+                }
+            }
+        });
     }
 
     /**
