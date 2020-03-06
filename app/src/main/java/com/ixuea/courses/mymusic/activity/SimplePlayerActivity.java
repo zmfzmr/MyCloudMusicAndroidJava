@@ -21,6 +21,7 @@ import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.PlayListUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
@@ -30,10 +31,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_LIST;
-import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_ONE;
-import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_RANDOM;
 
 /**
  * 简单的播放器实现
@@ -389,27 +386,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         listManager.changeLoopModel();
 
         //显示循环模式
-        showLoopModel();
+        PlayListUtil.showLoopModel(listManager, bt_loop_model);
     }
-
-    private void showLoopModel() {
-        //获取当前循环模式
-        int model = listManager.getLoopModel();
-        switch (model) {
-            case MODEL_LOOP_LIST:
-                bt_loop_model.setText("列表模式");
-                break;
-            case MODEL_LOOP_RANDOM:
-                bt_loop_model.setText("随机模式");
-                break;
-            case MODEL_LOOP_ONE:
-                bt_loop_model.setText("单曲循环");
-                break;
-            default:
-                break;
-        }
-    }
-
 
     /**
      * 启动界面方法

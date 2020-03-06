@@ -123,13 +123,13 @@ public class Sheet extends BaseMultiItemEntity {
         this.comments_count = comments_count;
     }
 
-    public int getSongs_count() {
-        return songs_count;
-    }
-
-    public void setSongs_count(int songs_count) {
-        this.songs_count = songs_count;
-    }
+//    public int getSongs_count() {
+//        return songs_count;
+//    }
+//
+//    public void setSongs_count(int songs_count) {
+//        this.songs_count = songs_count;
+//    }
 
     public User getUser() {
         return user;
@@ -164,7 +164,7 @@ public class Sheet extends BaseMultiItemEntity {
                 .append("clicks_count", clicks_count)
                 .append("collections_count", collections_count)
                 .append("comments_count", comments_count)
-                .append("songs_count", songs_count)
+//                .append("songs_count", songs_count)
                 .append("user", user)
                 .append("songs", songs)
                 .append("collection_id", collection_id)

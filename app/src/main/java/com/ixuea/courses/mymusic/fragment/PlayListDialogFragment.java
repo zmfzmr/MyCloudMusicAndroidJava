@@ -12,6 +12,7 @@ import com.ixuea.courses.mymusic.adapter.PlayListAdapter;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.EventBusUtil;
+import com.ixuea.courses.mymusic.util.PlayListUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -85,6 +86,16 @@ public class PlayListDialogFragment extends BaseBottomSheetDialogFragment {
 
         //设置数据
         adapter.replaceData(listManager.getDatum());
+
+        //显示循环模式
+        PlayListUtil.showLoopModel(listManager, tv_loop_model);
+        //显示音乐数据
+        //真实项目中建议字符串都放到strings.xml文件中
+        //因为这样更方便复用，汉化
+        //这里只是给大家演示
+        //也可以直接这样写
+        tv_count.setText(String.format("(%d)", listManager.getDatum().size()));
+
     }
 
     @Override
