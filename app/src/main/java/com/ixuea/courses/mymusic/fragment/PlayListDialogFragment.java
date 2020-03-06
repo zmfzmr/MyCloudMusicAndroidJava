@@ -4,12 +4,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.PlayListAdapter;
+import com.ixuea.courses.mymusic.manager.ListManager;
+import com.ixuea.courses.mymusic.service.MusicPlayerService;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 
 /**
  * 迷你控制器 播放列表
@@ -23,6 +31,59 @@ import androidx.fragment.app.FragmentManager;
  * BottomSheetDialogFragment：这个是需要和父布局配合使用的（外层是CoordinatorLayout配合使用）
  */
 public class PlayListDialogFragment extends BaseBottomSheetDialogFragment {
+    /**
+     * 循环模式
+     */
+    @BindView(R.id.tv_loop_model)
+    TextView tv_loop_model;
+
+    /**
+     * 音量数量
+     */
+    @BindView(R.id.tv_count)
+    TextView tv_count;
+
+    /**
+     * 列表控件
+     */
+    @BindView(R.id.rv)
+    RecyclerView rv;
+    private PlayListAdapter adapter;//适配器
+    private ListManager listManager;//列表管理器
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+
+        //设置规定尺寸
+        rv.setHasFixedSize(true);
+
+        //设置布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
+        rv.setLayoutManager(layoutManager);
+
+        //分割线
+        DividerItemDecoration decoration = new DividerItemDecoration(getMainActivity(), RecyclerView.VERTICAL);
+
+        rv.addItemDecoration(decoration);
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        //创建列表管理器
+        listManager = MusicPlayerService.getListManager(getMainActivity());
+        //创建适配器
+        adapter = new PlayListAdapter(R.layout.item_play_list);
+
+        //设置适配器
+        rv.setAdapter(adapter);
+
+        //设置数据
+        adapter.replaceData(listManager.getDatum());
+    }
+
     /**
      * 返回布局
      */

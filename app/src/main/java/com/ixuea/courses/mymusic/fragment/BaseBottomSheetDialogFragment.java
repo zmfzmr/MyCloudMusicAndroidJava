@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.ixuea.courses.mymusic.activity.BaseCommonActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,5 +72,13 @@ public abstract class BaseBottomSheetDialogFragment extends BottomSheetDialogFra
         initViews();
         initDatum();
         initListeners();
+    }
+
+    /**
+     * 获取Activity
+     * 注意：这里获取的是Activity，不是Fragment；fragment中用getActivity并强转(BaseCommonActivity) getActivity()
+     */
+    protected BaseCommonActivity getMainActivity() {
+        return (BaseCommonActivity) getActivity();
     }
 }
