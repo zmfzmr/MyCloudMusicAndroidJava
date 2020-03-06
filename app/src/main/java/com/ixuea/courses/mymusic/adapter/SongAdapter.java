@@ -1,5 +1,7 @@
 package com.ixuea.courses.mymusic.adapter;
 
+import android.view.View;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ixuea.courses.mymusic.R;
@@ -15,6 +17,8 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
      * 选中索引
      */
     private int selectedIndex = -1;
+
+    private SongListener songListener;//监听器
 
     /**
      * 构造方法
@@ -49,6 +53,14 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
             helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.text));
         }
 
+        //设置更多点击事件
+        //可以像PlayListAdapter中那样的方法实现
+        //这里就用普通方法实现
+        View ib_more = helper.getView(R.id.ib_more);
+
+        //设置点击事件
+        ib_more.setOnClickListener(view -> songListener.onMoreClick(data));
+
     }
 
     /**
@@ -75,4 +87,28 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
             notifyItemChanged(selectedIndex);
         }
     }
+
+    /**
+     * 设置音乐监听器
+     */
+    public void setSongListener(SongListener songListener) {
+        this.songListener = songListener;
+    }
+
+    /**
+     * 定义监听器
+     * <p>
+     * 这里是定义在SongAdapter中
+     * 因为目前还没有其他位置使用
+     * 只是在SongAdapter中使用
+     */
+    public interface SongListener {
+        /**
+         * 音乐更多点击
+         *
+         * @param data Song
+         */
+        void onMoreClick(Song data);
+    }
+
 }

@@ -44,7 +44,7 @@ import retrofit2.Response;
 /**
  * 歌单详情界面
  */
-public class SheetDetailActivity extends BaseMusicPlayerActivity implements View.OnClickListener {
+public class SheetDetailActivity extends BaseMusicPlayerActivity implements View.OnClickListener, SongAdapter.SongListener {
 
     private static final String TAG = "SheetDetailActivity";
 
@@ -191,6 +191,8 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
 
             play(position);
         });
+
+        adapter.setSongListener(this);
     }
 
     /**
@@ -716,5 +718,15 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
 
         //选中当前播放的音乐
         scrollPositionAsync();
+    }
+
+    /**
+     * 音乐更多点击了
+     *
+     * @param data Song
+     */
+    @Override
+    public void onMoreClick(Song data) {
+        LogUtil.d(TAG, "onMoreClick:" + data.getTitle());
     }
 }
