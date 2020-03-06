@@ -13,6 +13,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
+        android:textColor="@color/text"
         tools:text="这是歌曲名称" />
 
     <!--移除-->

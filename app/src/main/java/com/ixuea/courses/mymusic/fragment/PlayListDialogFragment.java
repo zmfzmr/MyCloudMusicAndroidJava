@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.PlayListAdapter;
 import com.ixuea.courses.mymusic.manager.ListManager;
@@ -75,13 +76,31 @@ public class PlayListDialogFragment extends BaseBottomSheetDialogFragment {
         //创建列表管理器
         listManager = MusicPlayerService.getListManager(getMainActivity());
         //创建适配器
-        adapter = new PlayListAdapter(R.layout.item_play_list);
+        adapter = new PlayListAdapter(R.layout.item_play_list, listManager);
 
         //设置适配器
         rv.setAdapter(adapter);
 
         //设置数据
         adapter.replaceData(listManager.getDatum());
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        //设置item点击事件
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //关闭dialog
+                //可以根据具体的业务逻辑来决定是否关闭
+                dismiss();
+                //播放点击的这首音乐
+                //2中方式都可以
+//                listManager.play((Song) adapter.getItem(position));
+                listManager.play(listManager.getDatum().get(position));
+            }
+        });
     }
 
     /**
