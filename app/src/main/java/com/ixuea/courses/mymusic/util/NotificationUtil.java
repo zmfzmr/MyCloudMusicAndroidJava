@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.domain.Song;
 
 import androidx.core.app.NotificationCompat;
 
@@ -16,6 +17,7 @@ import androidx.core.app.NotificationCompat;
  */
 public class NotificationUtil {
     private static final String IMPORTANCE_HIGH_CHANNEL_ID = "IMPORTANCE_HIGH_CHANNEL_ID";
+    private static final String TAG = "NotificationUtil";
     private static NotificationManager notificationManager;//通知管理器实例
 
     /**
@@ -96,5 +98,12 @@ public class NotificationUtil {
      */
     public static void showNotification(int id, Notification notification) {
         notificationManager.notify(id, notification);
+    }
+
+    /**
+     * 显示音乐通知
+     */
+    public static void showMusicNotification(Context context, Song data, boolean isPlaying) {
+        LogUtil.d(TAG, "showMusicNotification:" + data.getTitle() + "," + isPlaying);
     }
 }

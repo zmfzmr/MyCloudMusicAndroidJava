@@ -71,6 +71,7 @@ public class MusicPlayerService extends Service {
         LogUtil.d(TAG, "onCreate");
 
         //初始化音乐通知管理器
+        //这里Service创建的时候，这个musicNotificationManager（音乐通知栏管理器就创建了）
         musicNotificationManager = MusicNotificationManager.getInstance(getApplicationContext());
     }
 
