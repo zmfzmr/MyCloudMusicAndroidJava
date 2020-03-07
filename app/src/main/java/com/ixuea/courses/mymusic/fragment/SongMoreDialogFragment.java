@@ -10,12 +10,16 @@ import android.widget.TextView;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.event.CollectSongClickEvent;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 歌曲-更多对话框
@@ -128,5 +132,18 @@ public class SongMoreDialogFragment extends BaseBottomSheetDialogFragment {
 
         //显示 参数2：tag，这里用不到，可以随便传
         fragment.show(fragmentManager, "song_more_dialog");
+    }
+
+    /**
+     * 收藏歌曲到歌单按钮点击
+     * 这里是发送通知，回调到SheetDetailActivity中处理
+     */
+    @OnClick(R.id.ll_collect_song)
+    public void onCollectSongClick() {
+        //关闭对话框
+        dismiss();
+
+        //可以使用监听器回调到Activity中，但是我们这里用的EventBus发送通知的这种方式
+        EventBus.getDefault().post(new CollectSongClickEvent(song));
     }
 }

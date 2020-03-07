@@ -22,6 +22,7 @@ import com.ixuea.courses.mymusic.adapter.SongAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.event.CollectSongClickEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.fragment.SongMoreDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
@@ -32,6 +33,8 @@ import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -732,4 +735,16 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
         //注意：参数2：Sheet 3：Song
         SongMoreDialogFragment.show(getSupportFragmentManager(), this.data, data);
     }
+
+    /**
+     * 这个EventBus已经在父类注册了，所以不用注册了
+     * <p>
+     * 收藏歌曲到歌单点击回调事件
+     * CollectSongClickEvent:这里发送通知的时候在构造方法传入了song
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCollectSongClickEvent(CollectSongClickEvent event) {
+        LogUtil.d(TAG, "onCollectSongClickEvent:" + event.getData().getTitle());
+    }
+
 }
