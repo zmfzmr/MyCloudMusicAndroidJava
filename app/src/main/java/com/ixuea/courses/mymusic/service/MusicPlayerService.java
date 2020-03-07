@@ -10,6 +10,7 @@ import android.os.IBinder;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.manager.impl.ListManagerImpl;
+import com.ixuea.courses.mymusic.manager.impl.MusicNotificationManager;
 import com.ixuea.courses.mymusic.manager.impl.MusicPlayerManagerImpl;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.NotificationUtil;
@@ -20,6 +21,7 @@ import com.ixuea.courses.mymusic.util.ServiceUtil;
  */
 public class MusicPlayerService extends Service {
     private static final String TAG = "MusicPlayerService";
+    private MusicNotificationManager musicNotificationManager;
 
     /**
      * 构造方法
@@ -67,6 +69,9 @@ public class MusicPlayerService extends Service {
     public void onCreate() {
         super.onCreate();
         LogUtil.d(TAG, "onCreate");
+
+        //初始化音乐通知管理器
+        musicNotificationManager = MusicNotificationManager.getInstance(getApplicationContext());
     }
 
     /**
