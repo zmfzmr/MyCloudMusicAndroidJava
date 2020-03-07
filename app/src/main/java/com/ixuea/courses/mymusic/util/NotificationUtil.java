@@ -139,9 +139,9 @@ public class NotificationUtil {
                 //设置样式
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 //自定义view内容
-                .setCustomContentView(contentView);
+                .setCustomContentView(contentView)
                 //设置大内容view
-//                .setCustomBigContentView(contentBigView);
+                .setCustomBigContentView(contentBigView);
 
         //显示通知
         //id一样，会替换通知；id不一样，会显示新通知；这里用的是常量（也就是以后id用的都是这个）

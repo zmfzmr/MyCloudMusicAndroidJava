@@ -55,6 +55,13 @@
     <dimen name="elevation">10dp</dimen>
     <!--进度条相关-->
     <dimen name="progress_bar_height_small">2dp</dimen>
+    <!--音乐大通知高度-->
+    <dimen name="notification_meddle_height">120dp</dimen>
+
+    <!--大通知里面的-->
+
+    <!--图标高度-->
+    <dimen name="icon_height">24dp</dimen>
 
 
 </resources>
