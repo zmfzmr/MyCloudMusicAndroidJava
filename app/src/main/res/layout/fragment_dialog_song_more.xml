@@ -1,199 +1,212 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--NestedScrollView 和CoordinatorLayout课程讲的，感觉应该和滑动冲突有关
+    添加这个主要内容多了话，显示不全，且无法滑动，添加NestedScrollView后显示不全后，是可以滑动的
+
+    可以知道，如果我们想我们的控件想和toolbar和CoordinatorLayout配合，必须是嵌套的控件才行
+    比如NestedScrollView这种
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
-
-    <!--歌曲信息
-        可以直接拷贝迷你播放器的布局
-        然后就行一些更改-->
+    android:layout_height="match_parent">
+    <!--内容容器-->
     <LinearLayout
-        android:gravity="center_vertical"
-        android:padding="@dimen/padding_middle"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!--封面容器-->
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/radius_small"
-            app:cardElevation="0dp">
-            <!--封面-->
-            <ImageView
-                android:layout_width="@dimen/button_height"
-                android:layout_height="@dimen/button_height"
-                android:scaleType="centerCrop"
-                tools:src="@drawable/placeholder" />
-        </androidx.cardview.widget.CardView>
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
-        <!--内容容器-->
+        <!--歌曲信息
+            可以直接拷贝迷你播放器的布局
+            然后就行一些更改-->
         <LinearLayout
-            android:layout_marginLeft="@dimen/padding_middle"
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_middle"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <!--封面容器-->
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/radius_small"
+                app:cardElevation="0dp">
+                <!--封面-->
+                <ImageView
+                    android:layout_width="@dimen/button_height"
+                    android:layout_height="@dimen/button_height"
+                    android:scaleType="centerCrop"
+                    tools:src="@drawable/placeholder" />
+            </androidx.cardview.widget.CardView>
+
+            <!--内容容器-->
+            <LinearLayout
+                android:layout_marginLeft="@dimen/padding_middle"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <!--标题-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/text"
+                    tools:text="这是歌曲标题这是歌曲标题这是歌曲标题这是歌曲标题这是歌曲标题这是歌曲标题" />
+
+                <!--歌手信息-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_small"
+                    tools:text="这是歌手信息" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--分割线-->
+        <include layout="@layout/divider_small" />
+
+        <!--按钮容器-->
+        <LinearLayout style="@style/ItemContainer">
+            <!--图标-->
+            <ImageView
+                style="@style/ItemIcon"
+                android:src="@drawable/ic_play_grey" />
 
             <!--标题-->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textColor="@color/text"
-                tools:text="这是歌曲标题这是歌曲标题这是歌曲标题这是歌曲标题这是歌曲标题这是歌曲标题" />
+                style="@style/ItemText"
+                android:text="@string/next_play" />
+        </LinearLayout>
 
-            <!--歌手信息-->
+        <!--分割线-->
+        <include layout="@layout/divider_small" />
+
+        <!--按钮容器-->
+        <LinearLayout
+            style="@style/ItemContainer"
+            android:id="@+id/ll_collect_song">
+            <!--图标-->
+            <ImageView
+                style="@style/ItemIcon"
+                android:src="@drawable/ic_play_grey" />
+
+            <!--标题-->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_small"
-                tools:text="这是歌手信息" />
+                style="@style/ItemText"
+                android:text="@string/collect_to_sheet" />
+        </LinearLayout>
 
+        <!--分割线-->
+        <include layout="@layout/divider_small" />
+
+        <!--按钮容器-->
+        <LinearLayout style="@style/ItemContainer">
+            <!--图标-->
+            <ImageView
+                style="@style/ItemIcon"
+                android:src="@drawable/ic_play_grey" />
+
+            <!--标题-->
+            <TextView
+                style="@style/ItemText"
+                android:text="@string/download" />
+        </LinearLayout>
+
+        <!--分割线-->
+        <include layout="@layout/divider_small" />
+
+        <!--按钮容器-->
+        <LinearLayout style="@style/ItemContainer">
+            <!--图标-->
+            <ImageView
+                style="@style/ItemIcon"
+                android:src="@drawable/ic_play_grey" />
+
+            <!--标题-->
+            <TextView
+                style="@style/ItemText"
+                android:id="@+id/tv_comment_count"
+                android:text="@string/comment_count" />
+        </LinearLayout>
+
+        <!--分割线-->
+        <include layout="@layout/divider_small" />
+
+        <!--按钮容器-->
+        <LinearLayout style="@style/ItemContainer">
+            <!--图标-->
+            <ImageView
+                style="@style/ItemIcon"
+                android:src="@drawable/ic_play_grey" />
+
+            <!--标题-->
+            <TextView
+                style="@style/ItemText"
+                android:text="@string/share" />
+        </LinearLayout>
+
+        <!--分割线-->
+        <include layout="@layout/divider_small" />
+
+        <!--按钮容器-->
+        <LinearLayout style="@style/ItemContainer">
+            <!--图标-->
+            <ImageView
+                style="@style/ItemIcon"
+                android:src="@drawable/ic_play_grey" />
+
+            <!--标题
+
+                注意：%1$s中的这里是s（歌手名称是：字符串；前面的评论是：数字，所以是$d）
+            -->
+            <TextView
+                style="@style/ItemText"
+                android:id="@+id/singer_name"
+                android:text="@string/singer_name" />
+        </LinearLayout>
+
+        <!--分割线-->
+        <include layout="@layout/divider_small" />
+
+        <!--按钮容器-->
+        <LinearLayout style="@style/ItemContainer">
+            <!--图标-->
+            <ImageView
+                style="@style/ItemIcon"
+                android:src="@drawable/ic_play_grey" />
+
+            <!--标题 专辑功能这里并没有实现 所以不用写id-->
+            <TextView
+                style="@style/ItemText"
+                android:text="专辑:测试专辑1" />
+        </LinearLayout>
+
+        <!--分割线-->
+        <include layout="@layout/divider_small" />
+
+        <!--按钮容器
+            这个 从歌单删除 先隐藏 ，因为这个只有在合适的时候才会显示出来
+        -->
+        <LinearLayout
+            style="@style/ItemContainer"
+            android:id="@+id/ll_delete_song_in_sheet"
+            android:visibility="gone">
+            <!--图标-->
+            <ImageView
+                style="@style/ItemIcon"
+                android:src="@drawable/ic_play_grey" />
+
+            <!--标题 -->
+            <TextView
+                style="@style/ItemText"
+                android:text="@string/delete_in_sheet" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <!--分割线-->
-    <include layout="@layout/divider_small" />
-
-    <!--按钮容器-->
-    <LinearLayout style="@style/ItemContainer">
-        <!--图标-->
-        <ImageView
-            style="@style/ItemIcon"
-            android:src="@drawable/ic_play_grey" />
-
-        <!--标题-->
-        <TextView
-            style="@style/ItemText"
-            android:text="@string/next_play" />
-    </LinearLayout>
-
-    <!--分割线-->
-    <include layout="@layout/divider_small" />
-
-    <!--按钮容器-->
-    <LinearLayout
-        style="@style/ItemContainer"
-        android:id="@+id/ll_collect_song">
-        <!--图标-->
-        <ImageView
-            style="@style/ItemIcon"
-            android:src="@drawable/ic_play_grey" />
-
-        <!--标题-->
-        <TextView
-            style="@style/ItemText"
-            android:text="@string/collect_to_sheet" />
-    </LinearLayout>
-
-    <!--分割线-->
-    <include layout="@layout/divider_small" />
-
-    <!--按钮容器-->
-    <LinearLayout style="@style/ItemContainer">
-        <!--图标-->
-        <ImageView
-            style="@style/ItemIcon"
-            android:src="@drawable/ic_play_grey" />
-
-        <!--标题-->
-        <TextView
-            style="@style/ItemText"
-            android:text="@string/download" />
-    </LinearLayout>
-
-    <!--分割线-->
-    <include layout="@layout/divider_small" />
-
-    <!--按钮容器-->
-    <LinearLayout style="@style/ItemContainer">
-        <!--图标-->
-        <ImageView
-            style="@style/ItemIcon"
-            android:src="@drawable/ic_play_grey" />
-
-        <!--标题-->
-        <TextView
-            style="@style/ItemText"
-            android:id="@+id/tv_comment_count"
-            android:text="@string/comment_count" />
-    </LinearLayout>
-
-    <!--分割线-->
-    <include layout="@layout/divider_small" />
-
-    <!--按钮容器-->
-    <LinearLayout style="@style/ItemContainer">
-        <!--图标-->
-        <ImageView
-            style="@style/ItemIcon"
-            android:src="@drawable/ic_play_grey" />
-
-        <!--标题-->
-        <TextView
-            style="@style/ItemText"
-            android:text="@string/share" />
-    </LinearLayout>
-
-    <!--分割线-->
-    <include layout="@layout/divider_small" />
-
-    <!--按钮容器-->
-    <LinearLayout style="@style/ItemContainer">
-        <!--图标-->
-        <ImageView
-            style="@style/ItemIcon"
-            android:src="@drawable/ic_play_grey" />
-
-        <!--标题
-
-            注意：%1$s中的这里是s（歌手名称是：字符串；前面的评论是：数字，所以是$d）
-        -->
-        <TextView
-            style="@style/ItemText"
-            android:id="@+id/singer_name"
-            android:text="@string/singer_name" />
-    </LinearLayout>
-
-    <!--分割线-->
-    <include layout="@layout/divider_small" />
-
-    <!--按钮容器-->
-    <LinearLayout style="@style/ItemContainer">
-        <!--图标-->
-        <ImageView
-            style="@style/ItemIcon"
-            android:src="@drawable/ic_play_grey" />
-
-        <!--标题 专辑功能这里并没有实现 所以不用写id-->
-        <TextView
-            style="@style/ItemText"
-            android:text="专辑:测试专辑1" />
-    </LinearLayout>
-
-    <!--分割线-->
-    <include layout="@layout/divider_small" />
-
-    <!--按钮容器-->
-    <LinearLayout
-        style="@style/ItemContainer"
-        android:id="@+id/ll_delete_song_in_sheet">
-        <!--图标-->
-        <ImageView
-            style="@style/ItemIcon"
-            android:src="@drawable/ic_play_grey" />
-
-        <!--标题 -->
-        <TextView
-            style="@style/ItemText"
-            android:text="@string/delete_in_sheet" />
-    </LinearLayout>
-
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>
