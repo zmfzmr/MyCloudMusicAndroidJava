@@ -33,6 +33,7 @@
                 app:cardElevation="0dp">
                 <!--封面-->
                 <ImageView
+                    android:id="@+id/iv_banner"
                     android:layout_width="@dimen/button_height"
                     android:layout_height="@dimen/button_height"
                     android:scaleType="centerCrop"
@@ -49,6 +50,7 @@
 
                 <!--标题-->
                 <TextView
+                    android:id="@+id/tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
@@ -58,6 +60,7 @@
 
                 <!--歌手信息-->
                 <TextView
+                    android:id="@+id/tv_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_small"
@@ -166,7 +169,7 @@
             -->
             <TextView
                 style="@style/ItemText"
-                android:id="@+id/singer_name"
+                android:id="@+id/tv_singer_name"
                 android:text="@string/singer_name" />
         </LinearLayout>
 

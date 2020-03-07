@@ -4,18 +4,97 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.ImageUtil;
+import com.ixuea.courses.mymusic.util.PreferenceUtil;
 
 import androidx.fragment.app.FragmentManager;
+import butterknife.BindView;
 
 /**
  * 歌曲-更多对话框
  */
 public class SongMoreDialogFragment extends BaseBottomSheetDialogFragment {
+    /**
+     * 封面图
+     */
+    @BindView(R.id.iv_banner)
+    ImageView iv_banner;
+
+    /**
+     * 标题
+     */
+    @BindView(R.id.tv_title)
+    TextView tv_title;
+
+    /**
+     * 歌手信息
+     */
+    @BindView(R.id.tv_info)
+    TextView tv_info;
+
+    /**
+     * 评论数
+     */
+    @BindView(R.id.tv_comment_count)
+    TextView tv_comment_count;
+
+    /**
+     * 歌手名称（这个和前面的歌手信息是一样的）
+     */
+    @BindView(R.id.tv_singer_name)
+    TextView tv_singer_name;
+
+    /**
+     * 从歌单中删除音乐容器
+     */
+    @BindView(R.id.ll_delete_song_in_sheet)
+    View ll_delete_song_in_sheet;
+
+    private Sheet sheet;//歌单
+    private Song song;//音乐
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+        //获取传递的对象
+        sheet = (Sheet) getArguments().getSerializable(Constant.SHEET);
+        song = (Song) getArguments().getSerializable(Constant.SONG);
+
+        //封面
+        ImageUtil.show(getMainActivity(), iv_banner, sheet.getBanner());
+
+        //标题（歌曲名称）
+        tv_title.setText(song.getTitle());
+
+        //歌手信息（歌手名字）
+        tv_info.setText(song.getSinger().getNickname());
+
+        //评论 (注意：本来是这里是Song的评论，而这里实现的是Sheet的评论)
+        tv_comment_count.setText(getResources().getString(R.string.comment_count, sheet.getComments_count()));
+
+
+        //歌手名称(分享 下面的 )
+        tv_singer_name.setText(
+                getResources().getString(R.string.singer_name, song.getSinger().getNickname()));
+
+        //只有我的歌单才能显示删除音乐
+        if (PreferenceUtil
+                .getInstance(getMainActivity())
+                .getUserId()
+                .equals(sheet.getUser().getId())) {
+            //当前登录的用户等于歌单的用户，才能显示删除
+            //(登录的用户信息保存在本地持久化里面)
+            ll_delete_song_in_sheet.setVisibility(View.VISIBLE);
+        }
+
+    }
 
     @Override
     protected View getLayoutView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
