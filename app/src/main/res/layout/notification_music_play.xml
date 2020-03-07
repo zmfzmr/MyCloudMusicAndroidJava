@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><!--最外层不用设置padding
+    因为新系统会自动留这个间歇
+    但如果是真实项目
+    还需要在测试其他手机
+    注意：height是wrap_content
+    -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="这是小通知" />
+</LinearLayout>
