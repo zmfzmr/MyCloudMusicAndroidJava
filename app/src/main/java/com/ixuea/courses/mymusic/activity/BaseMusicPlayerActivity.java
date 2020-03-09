@@ -244,7 +244,7 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
         LogUtil.d(TAG, "onPlayControlSmallClick");
 
         //简单播放器界面
-        SimplePlayerActivity.start(getMainActivity());
+        startMusicPlayerActivity();
     }
 
     /**
@@ -288,5 +288,14 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
     private void showPlayListDialog() {
         //
         PlayListDialogFragment.show(getSupportFragmentManager());
+    }
+
+    /**
+     * 进入音乐播放界面
+     */
+    protected void startMusicPlayerActivity() {
+        //简单播放器界面
+        SimplePlayerActivity.start(getMainActivity());
+
     }
 }

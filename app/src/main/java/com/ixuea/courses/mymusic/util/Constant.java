@@ -131,5 +131,9 @@ public class Constant {
     public static final String ACTION_LYRIC = "com.ixuea.courses.mymusic.ACTION_LYRIC";
     public static final String ACTION_UNLOCK_LYRIC = "com.ixuea.courses.mymusic.ACTION_UNLOCK_LYRIC";
 
+    /**
+     * 音乐播放通知-点击
+     */
+    public static final String ACTION_MUSIC_PLAY_CLICK = "com.ixuea.courses.mymusic.ACTION_MUSIC_PLAY_CLICK";
 
 }

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.ixuea.courses.mymusic.MainActivity;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
 
@@ -183,6 +184,23 @@ public class NotificationUtil {
         //设置通知点击事件（大通知）
         setClick(context, contentBigView);
 
+        //Activity中需要的PendingIntent，配合NotificationCompat.Builder中.setContentIntent(pendingIntent)使用
+        //设置通知点击后启动的界面
+        Intent intent = new Intent(context, MainActivity.class);
+        //传递一个动作
+        intent.setAction(Constant.ACTION_MUSIC_PLAY_CLICK);
+        //在Activity以外启动界面
+        //都要写这个标识
+        //具体的还比较复杂
+        //基础课程中讲解
+        //这里学会这样用就行了
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //创建通知点击的PendingIntent
+        PendingIntent contentPendingIntent = PendingIntent.getActivity(context
+                , Constant.ACTION_MUSIC_PLAY_CLICK.hashCode()
+                , intent
+                , PendingIntent.FLAG_UPDATE_CURRENT);
+
         //收藏和下一曲 是大通知里面有的（小通知没有）
 
         //点赞（收藏）
@@ -214,7 +232,9 @@ public class NotificationUtil {
                 //自定义view内容
                 .setCustomContentView(contentView)
                 //设置大内容view
-                .setCustomBigContentView(contentBigView);
+                .setCustomBigContentView(contentBigView)
+                //点击后执行的动作
+                .setContentIntent(contentPendingIntent);
 
         //显示通知
         //id一样，会替换通知；id不一样，会显示新通知；这里用的是常量（也就是以后id用的都是这个）
