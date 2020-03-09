@@ -120,4 +120,16 @@ public class Constant {
      * 音乐播放通知id（通知栏里面的）
      */
     public static final int NOTIFICATION_MUSIC_ID = 10000;
+
+    /**
+     * 音乐播放通知-播放
+     */
+    public static final String ACTION_PLAY = "com.ixuea.courses.mymusic.ACTION_PLAY";
+    public static final String ACTION_PREVIOUS = "com.ixuea.courses.mymusic.ACTION_PREVIOUS";
+    public static final String ACTION_NEXT = "com.ixuea.courses.mymusic.ACTION_NEXT";
+    public static final String ACTION_LIKE = "com.ixuea.courses.mymusic.ACTION_LIKE";
+    public static final String ACTION_LYRIC = "com.ixuea.courses.mymusic.ACTION_LYRIC";
+    public static final String ACTION_UNLOCK_LYRIC = "com.ixuea.courses.mymusic.ACTION_UNLOCK_LYRIC";
+
+
 }

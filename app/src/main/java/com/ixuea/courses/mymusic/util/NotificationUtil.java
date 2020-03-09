@@ -3,7 +3,9 @@ package com.ixuea.courses.mymusic.util;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -169,12 +171,37 @@ public class NotificationUtil {
         //显示数据 isPlaying:表示是否播放 banner:Bitmap对象
         setData(data, contentView, isPlaying, banner);
 
+        //设置通知点击事件
+        setClick(context, contentView);
 
         //创建大通知
         RemoteViews contentBigView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play_large);
 
         //显示数据 这个是contentBigView
         setData(data, contentBigView, isPlaying, banner);
+
+        //设置通知点击事件（大通知）
+        setClick(context, contentBigView);
+
+        //收藏和下一曲 是大通知里面有的（小通知没有）
+
+        //点赞（收藏）
+        PendingIntent likePendingIntent = PendingIntent.getBroadcast(context
+                , Constant.ACTION_LIKE.hashCode()
+                , new Intent(Constant.ACTION_LIKE)
+                , PendingIntent.FLAG_UPDATE_CURRENT);
+
+        contentBigView.setOnClickPendingIntent(R.id.iv_like, likePendingIntent);
+
+        //上一首
+        PendingIntent previousPendingIntent = PendingIntent.getBroadcast(context
+                , Constant.ACTION_PREVIOUS.hashCode()
+                , new Intent(Constant.ACTION_PREVIOUS)
+                , PendingIntent.FLAG_UPDATE_CURRENT);
+
+        contentBigView.setOnClickPendingIntent(R.id.iv_previous, previousPendingIntent);
+
+        //end 收藏和下一曲 是大通知里面有的（小通知没有）
 
         //创建NotificationCompat.Builder
         //这是构建者设计模式
@@ -194,9 +221,48 @@ public class NotificationUtil {
         NotificationUtil.notify(context, Constant.NOTIFICATION_MUSIC_ID, builder.build());
     }
 
+    private static void setClick(Context context, RemoteViews contentView) {
+        //播放按钮点击事件
+        //PendingIntent
+        //可以理解为某个时间
+        //就会触发的事件
+
+        //FLAG_UPDATE_CURRENT
+        //会替换到原来的广播（更新当前）
+        //更深入的原理在详解课程中设置
+
+        //2：标识请求码的
+        //hashCode():字符串的hashCode方法，转换成int值（同一个字符串，int值是一样；不同字符串，int值不一样）
+        //3:new Intent(Constant.ACTION_PLAY):通过intent 发送这个广播，动作是Constant.ACTION_PLAY;
+        //接收广播的时候注册广播监听到这个ACTION动作
+        PendingIntent playPendingIntent = PendingIntent.getBroadcast(context
+                , Constant.ACTION_PLAY.hashCode()
+                , new Intent(Constant.ACTION_PLAY)
+                , PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //设置到播放按钮
+        contentView.setOnClickPendingIntent(R.id.iv_play, playPendingIntent);
+
+        //下一曲点击事件
+        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context
+                , Constant.ACTION_NEXT.hashCode()
+                , new Intent(Constant.ACTION_NEXT)
+                , PendingIntent.FLAG_UPDATE_CURRENT);
+
+        contentView.setOnClickPendingIntent(R.id.iv_next, nextPendingIntent);
+
+        //歌词点击事件
+        PendingIntent lyricPendingIntent = PendingIntent.getBroadcast(context
+                , Constant.ACTION_LYRIC.hashCode()
+                , new Intent(Constant.ACTION_LYRIC)
+                , PendingIntent.FLAG_UPDATE_CURRENT);
+
+        contentView.setOnClickPendingIntent(R.id.iv_lyric, lyricPendingIntent);
+    }
+
     /**
      * 大小通知设置数据
-     *
+     * <p>
      * banner:Bitmap对象
      */
     private static void setData(Song data, RemoteViews contentView, boolean isPlaying, Bitmap banner) {
