@@ -4,13 +4,21 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.widget.RemoteViews;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 /**
@@ -108,10 +116,47 @@ public class NotificationUtil {
     }
 
     /**
-     * 显示音乐通知
+     * 显示音乐通知（3个参数的重载方法）
      */
     public static void showMusicNotification(Context context, Song data, boolean isPlaying) {
         LogUtil.d(TAG, "showMusicNotification:" + data.getTitle() + "," + isPlaying);
+
+
+        //先加载图片
+        //因为我们的图片是在线的
+        //而显示通知时没法直接显示网络图片
+        //所以需要我们先把图片下载下来
+
+        //创建请求选项
+
+        RequestOptions options = ImageUtil.getCommonRequestOptions();
+
+        //下载图片(使用Glide加载网络图片)
+        //注意： .asBitmap()和.apply(options)记得要设置
+        //into（这里是CustomTarget<Bitmap>）
+        Glide.with(context)
+                .asBitmap()
+                .load(ResourceUtil.resourceUri(data.getBanner()))
+                .apply(options)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap banner, @Nullable Transition<? super Bitmap> transition) {
+                        //图片下载完成
+                        showMusicNotification(context, data, isPlaying, banner);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
+    }
+
+    /**
+     * 显示音乐通知(4个参数的重载方法)
+     * 等3个参数重载方法，加载完成图片后，才显示这个通知
+     */
+    public static void showMusicNotification(Context context, Song data, boolean isPlaying, Bitmap banner) {
         //创建通知渠道
         createNotificationChannel();
 
@@ -121,15 +166,15 @@ public class NotificationUtil {
         //RemoteViews:远程的view，也就是说，这个通知栏，不属于应用里面，属于远程的view，所以用RemoteViews
         RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play);
 
-        //显示数据 isPlaying:表示是否播放
-        setData(data, contentView, isPlaying);
+        //显示数据 isPlaying:表示是否播放 banner:Bitmap对象
+        setData(data, contentView, isPlaying, banner);
 
 
         //创建大通知
         RemoteViews contentBigView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play_large);
 
         //显示数据 这个是contentBigView
-        setData(data, contentBigView, isPlaying);
+        setData(data, contentBigView, isPlaying, banner);
 
         //创建NotificationCompat.Builder
         //这是构建者设计模式
@@ -147,14 +192,16 @@ public class NotificationUtil {
         //显示通知
         //id一样，会替换通知；id不一样，会显示新通知；这里用的是常量（也就是以后id用的都是这个）
         NotificationUtil.notify(context, Constant.NOTIFICATION_MUSIC_ID, builder.build());
-
     }
 
     /**
      * 大小通知设置数据
+     *
+     * banner:Bitmap对象
      */
-    private static void setData(Song data, RemoteViews contentView, boolean isPlaying) {
-        //TODO 封面
+    private static void setData(Song data, RemoteViews contentView, boolean isPlaying, Bitmap banner) {
+        //封面
+        contentView.setImageViewBitmap(R.id.iv_banner, banner);
 
         //标题
         contentView.setTextViewText(R.id.tv_title, data.getTitle());

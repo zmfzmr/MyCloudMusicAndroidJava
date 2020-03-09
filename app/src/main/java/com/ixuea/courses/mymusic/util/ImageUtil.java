@@ -180,7 +180,7 @@ public class ImageUtil {
     /**
      * 获取公共配置
      */
-    private static RequestOptions getCommonRequestOptions() {
+    public static RequestOptions getCommonRequestOptions() {
         //创建配置选项
         RequestOptions options = new RequestOptions();
         //占位图
