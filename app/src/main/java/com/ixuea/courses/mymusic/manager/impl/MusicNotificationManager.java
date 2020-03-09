@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
+import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.Constant;
@@ -27,7 +28,9 @@ public class MusicNotificationManager implements MusicPlayerListener {
     private static final String TAG = "MusicNotificationManager";
     private static MusicNotificationManager instance;//实例
     private final Context context;//上下文
-    private final MusicPlayerManager musicPlayerManager;
+    private final MusicPlayerManager musicPlayerManager;//音乐播放管理器
+    private BroadcastReceiver musicNotificationBroadcastReceiver;//音乐通知广播接收器
+    private final ListManager listManager;//列表管理器
 
     /**
      * 构造方法
@@ -36,6 +39,9 @@ public class MusicNotificationManager implements MusicPlayerListener {
      */
     public MusicNotificationManager(Context context) {
         this.context = context.getApplicationContext();
+
+        //注意：这类是this.context
+        listManager = MusicPlayerService.getListManager(this.context);
 
         //获取播放管理器 注意:这里是用本对象的context
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(this.context);
@@ -52,7 +58,7 @@ public class MusicNotificationManager implements MusicPlayerListener {
      */
     private void initMusicNotificationReceiver() {
         //创建一个广播接受者
-        BroadcastReceiver musicNotificationBroadcastReceiver = new BroadcastReceiver() {
+        musicNotificationBroadcastReceiver = new BroadcastReceiver() {
             /**
              * 发生了广播（这个方法里面接收发送的广播）
              */
@@ -67,12 +73,24 @@ public class MusicNotificationManager implements MusicPlayerListener {
                 } else if (Constant.ACTION_PREVIOUS.equals(action)) {
                     //上一曲
                     LogUtil.d(TAG, "previous");
+                    //listManager.previous():上一曲的Song对象
+                    listManager.play(listManager.previous());
                 } else if (Constant.ACTION_PLAY.equals(action)) {
                     //播放
                     LogUtil.d(TAG, "play");
+
+                    if (musicPlayerManager.isPlaying()) {
+                        listManager.pause();
+                    } else {
+                        //因为这个通知栏出现的是偶，音乐已经播放量，所以可以直接调用resume方法
+                        listManager.resume();
+                    }
+
                 } else if (Constant.ACTION_NEXT.equals(action)) {
                     //下一曲
                     LogUtil.d(TAG, "next");
+
+                    listManager.play(listManager.next());
                 } else if (Constant.ACTION_LYRIC.equals(action)) {
                     //歌词
                     LogUtil.d(TAG, "lyric");
