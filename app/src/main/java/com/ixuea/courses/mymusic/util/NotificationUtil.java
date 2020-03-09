@@ -26,9 +26,7 @@ public class NotificationUtil {
      * 他只是一个测试通知
      * 无任何实际意义
      *
-     * @return
-     *
-     * 这里只是获取Notification，需要在MusicPlayerService配合startForeGround(0,notification) ，
+     * @return 这里只是获取Notification，需要在MusicPlayerService配合startForeGround(0,notification) ，
      * 设置称为前台通知，也就是设置成了前台Service（这样就提高了应用的保活，防止应用过一段被杀死）
      */
     public static Notification getServiceForeground(Context context) {
@@ -104,7 +102,6 @@ public class NotificationUtil {
 
     /**
      * 显示通知
-     *
      */
     public static void showNotification(int id, Notification notification) {
         notificationManager.notify(id, notification);
@@ -118,17 +115,21 @@ public class NotificationUtil {
         //创建通知渠道
         createNotificationChannel();
 
-        //这个布局的根View的尺寸不能引用dimen文件
-        //要写死
-
         //创建RemoteView
         //显示自定义通知固定写法
 
         //RemoteViews:远程的view，也就是说，这个通知栏，不属于应用里面，属于远程的view，所以用RemoteViews
         RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play);
 
+        //显示数据 isPlaying:表示是否播放
+        setData(data, contentView, isPlaying);
+
+
         //创建大通知
         RemoteViews contentBigView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play_large);
+
+        //显示数据 这个是contentBigView
+        setData(data, contentBigView, isPlaying);
 
         //创建NotificationCompat.Builder
         //这是构建者设计模式
@@ -147,6 +148,27 @@ public class NotificationUtil {
         //id一样，会替换通知；id不一样，会显示新通知；这里用的是常量（也就是以后id用的都是这个）
         NotificationUtil.notify(context, Constant.NOTIFICATION_MUSIC_ID, builder.build());
 
+    }
+
+    /**
+     * 大小通知设置数据
+     */
+    private static void setData(Song data, RemoteViews contentView, boolean isPlaying) {
+        //TODO 封面
+
+        //标题
+        contentView.setTextViewText(R.id.tv_title, data.getTitle());
+
+        //信息
+        //由于服务端没有实现专辑
+        //所以就显示测试信息
+        contentView.setTextViewText(R.id.tv_info, String.format("%s - 这是专辑1", data.getSinger().getNickname()));
+
+        //显示播放按钮
+        int playButtonResourceId = isPlaying ? R.drawable.ic_music_notification_pause
+                : R.drawable.ic_music_notification_play;
+
+        contentView.setImageViewResource(R.id.iv_play, playButtonResourceId);
     }
 
     /**
