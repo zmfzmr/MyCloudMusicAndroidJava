@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.domain;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * 保存歌曲信息
@@ -37,6 +38,7 @@ public class SongLocal extends RealmObject {
      * 歌曲Id
      * 数据库主键
      */
+    @PrimaryKey
     private String id;
     private String title;//歌曲标题
     private String banner;//歌曲封面

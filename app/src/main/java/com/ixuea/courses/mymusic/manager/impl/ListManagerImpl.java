@@ -8,7 +8,9 @@ import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
+import com.ixuea.courses.mymusic.util.DataUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 
 import java.util.LinkedList;
@@ -41,6 +43,7 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
      * 默认列表循环
      */
     private int model = MODEL_LOOP_LIST;
+    private final ORMUtil orm;//数据库工具类对象
 
 
     /**
@@ -58,6 +61,9 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         //（也就是说：本类(this)对musicPlayerManager方法的调用情况监听）
         //外界对我(musicPlayerManager)里面的方法调用，我(musicPlayerManager)能监听器到；然后回调一个参数给外界
         musicPlayerManager.addMusicPlayerListener(this);
+
+        //初始化数据库工具类
+        orm = ORMUtil.getInstance(this.context);
     }
 
     /**
@@ -78,10 +84,20 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
     public void setDatum(List<Song> datum) {
         LogUtil.d(TAG, "setDatum");
 
+        //将原来数据playList标志设置为false(这里是 播放列表的每一首音乐Song都设置为了false)
+        DataUtil.changePlayListFlag(this.datum, false);
+        //保存下原来的数据（保存到数据库）
+        saveAll();
+
         //清空原来的数据
-        this.datum.clear();
+        this.datum.clear();//注意：这里是全局的那个datum
         //添加新的数据
         this.datum.addAll(datum);
+
+        //更改播放列表标志
+        DataUtil.changePlayListFlag(this.datum, true);
+        //保存到数据库
+        saveAll();
     }
 
     @Override
@@ -285,6 +301,13 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         }
         //清空列表
         datum.clear();
+    }
+
+    /**
+     * 保存播放列表
+     */
+    private void saveAll() {
+        orm.saveAll(datum);
     }
 
     //音乐播放管理器

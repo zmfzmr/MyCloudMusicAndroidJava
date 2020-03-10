@@ -3,6 +3,9 @@ package com.ixuea.courses.mymusic.util;
 import android.content.Context;
 
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.SongLocal;
+
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -12,6 +15,7 @@ import io.realm.RealmConfiguration;
  */
 public class ORMUtil {
 
+    private static final String TAG = "ORMUtil";
     private static ORMUtil instance;
     private final Context context;
     private final PreferenceUtil sp;
@@ -38,11 +42,24 @@ public class ORMUtil {
     }
 
     public void saveSong(Song data) {
+
+        //将Song转为SongLocal对象
+        SongLocal songLocal = data.toSongLocal();
+
         //获取数据库对象
         Realm realm = getInstance();
 
+        realm.beginTransaction();//开启事务
+
+        //新增或更新(没有数据库或表就新增，有就更新)，传入保存的对象
+        realm.copyToRealmOrUpdate(songLocal);
+
+        realm.commitTransaction();//提交事务
+
         //记得关闭数据库
         realm.close();
+
+        LogUtil.d(TAG, "saveSong:" + songLocal.getTitle());
     }
 
     /**
@@ -70,5 +87,31 @@ public class ORMUtil {
      */
     public static void destroy() {
         instance = null;
+    }
+
+    /**
+     * 保存所有音乐
+     */
+    public void saveAll(List<Song> datum) {
+        //获取数据库对象 getInstance():这个是本类对象的（获取多用户的那个方法）
+        Realm realm = getInstance();
+
+        //开启事务
+        realm.beginTransaction();
+
+        SongLocal songLocal = null;//这个放在外面，效率高点，不用每次遍历都创建一个对象啦
+        for (Song data : datum) {
+            //将Song转为SongLocal对象
+            songLocal = data.toSongLocal();
+
+            //新增或者更新(根据主键来新增或者更新)
+            realm.copyToRealmOrUpdate(songLocal);
+        }
+
+        //提交事务
+        realm.commitTransaction();
+
+        //关闭数据库
+        realm.close();
     }
 }

@@ -40,6 +40,20 @@ public class Song extends BaseMultiItemEntity {
 
     //end 播放后才有值
 
+    /**
+     * 是否在播放列表
+     * true
+     */
+    private boolean playList;
+
+    /**
+     * 音乐来源
+     */
+    private int source;
+
+
+
+
     public String getTitle() {
         return title;
     }
@@ -128,6 +142,22 @@ public class Song extends BaseMultiItemEntity {
         this.progress = progress;
     }
 
+    public boolean isPlayList() {
+        return playList;
+    }
+
+    public void setPlayList(boolean playList) {
+        this.playList = playList;
+    }
+
+    public int getSource() {
+        return source;
+    }
+
+    public void setSource(int source) {
+        this.source = source;
+    }
+
     /**
      * 使用了BaseRecyclerViewAdapterHelper框架
      * 实现多类型列表
@@ -140,4 +170,39 @@ public class Song extends BaseMultiItemEntity {
         return TYPE_SONG;
     }
     //这里默认返回3，调用父类的getSpanSize方法
+
+    /**
+     * 将Song转为SongLocal对象
+     *
+     * @return
+     */
+    public SongLocal toSongLocal() {
+        //创建对象
+        SongLocal songLocal = new SongLocal();
+
+        //设置
+        songLocal.setId(getId());
+        songLocal.setTitle(title);
+        songLocal.setBanner(banner);
+        songLocal.setUri(uri);
+
+        //歌手相关的信息
+        songLocal.setSinger_id(getSinger().getId());
+        songLocal.setSinger_nickname(getSinger().getNickname());
+        songLocal.setSinger_avatar(getSinger().getAvatar());
+        //是否在播放列表
+        songLocal.setPlayList(playList);
+
+        //来源(这个也可以不保存，因为如果是本地的音乐，可以直接转成SongLocal)
+        //但是这里还是保存下，防止从数据库里面恢复出来，还是有的（这个source还是有的）
+        songLocal.setSource(source);
+
+        //音乐时长
+        songLocal.setDuration(duration);
+
+        //播放进度
+        songLocal.setProgress(progress);
+
+        return songLocal;//返回对象
+    }
 }
