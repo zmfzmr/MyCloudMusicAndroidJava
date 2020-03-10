@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 
 import java.io.Serializable;
@@ -24,6 +25,8 @@ public class BaseCommonActivity extends BaseActivity {
      * protected：这样子类才能访问
      */
     protected PreferenceUtil sp;
+    //数据库对象（这个应该是数据库工具类）
+    protected ORMUtil orm;
 
     @Override
     protected void initView() {
@@ -57,6 +60,8 @@ public class BaseCommonActivity extends BaseActivity {
     protected void initDatum() {
         super.initDatum();
         sp = PreferenceUtil.getInstance(getMainActivity());
+        //数据库工具类 (在父初始化这个数据库工具类，这样每个子类都能使用了)
+        orm = ORMUtil.getInstance(getApplicationContext());
     }
 
     /**

@@ -109,7 +109,10 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
         fetchBannerData();
 
         //测试数据库使用
-        testRealm();
+//        testRealm();
+
+        //测试有没有生成多用户文件（每个用户单独查看自己的内容）
+        orm.saveSong(new Song());
     }
 
     private void testRealm() {

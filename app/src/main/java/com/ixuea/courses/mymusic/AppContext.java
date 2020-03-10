@@ -8,6 +8,7 @@ import com.facebook.stetho.Stetho;
 import com.ixuea.courses.mymusic.activity.LoginOrRegisterActivity;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
+import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 import com.mob.MobSDK;
@@ -153,8 +154,12 @@ public class AppContext extends Application {
 
     /**
      * 退出后，可能需要做一些处理
+     *
+     * 主要用来做一些清理工作
+     * 例如：关闭推送，断开聊天服务器，销毁数据库对象
      */
     private void onLogout() {
-
+        //销毁数据库管理器
+        ORMUtil.destroy();
     }
 }
