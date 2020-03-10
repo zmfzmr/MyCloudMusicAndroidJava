@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 //应用ShareSDK
 apply plugin: 'com.mob.sdk'
+//realm数据库
+apply plugin: 'realm-android'
 
 android {
     //编译版本

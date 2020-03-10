@@ -21,6 +21,10 @@ buildscript {
         //真实项目中一定要写死版本
         //手动升级版本
         classpath "com.mob.sdk:MobSDK:2018.0319.1724"
+
+        //realm数据库
+        //https://realm.io/docs/java/latest
+        classpath "io.realm:realm-gradle-plugin:6.0.0"
     }
 }
 

@@ -20,6 +20,7 @@ import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Title;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.domain.test.Person;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -35,6 +36,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import io.reactivex.Observable;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * 首页-发现界面
@@ -104,6 +107,29 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
 
         //请求轮播图数据
         fetchBannerData();
+
+        //测试数据库使用
+        testRealm();
+    }
+
+    private void testRealm() {
+        //获取数据库实例
+        //内部相当于打开了数据库
+        Realm realm = Realm.getDefaultInstance();
+        //开启事务
+        realm.beginTransaction();//意思说所有的操作都在这个中进行
+
+        //保存人（其实就是创建了一个对象，这时还没有值，下面才是赋值）
+        Person person = realm.createObject(Person.class);
+        //赋值
+        person.setName("张三");
+        person.setName("17");
+        //提交事务
+        realm.commitTransaction();
+
+        RealmResults<Person> results = realm.where(Person.class).findAll();
+        LogUtil.d(TAG, "person count :" + results.size());
+        realm.close();//记得 ：关闭数据库
     }
 
     @Override

@@ -20,6 +20,7 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import es.dmoral.toasty.Toasty;
+import io.realm.Realm;
 
 /**
  * 全局Application
@@ -55,6 +56,13 @@ public class AppContext extends Application {
         //初始化Stetho抓包
         //使用默认参数初始化
         Stetho.initializeWithDefaults(this);
+
+        //初始化Realm数据库
+        //还有更多的初始化配置
+        //官网有介绍
+
+        //context:就是的当前的AppContext对象，全局的
+        Realm.init(context);
     }
 
     /**
