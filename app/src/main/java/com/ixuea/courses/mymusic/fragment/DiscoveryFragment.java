@@ -123,7 +123,7 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
         Person person = realm.createObject(Person.class);
         //赋值
         person.setName("张三");
-        person.setName("17");
+        person.setAge(17);
         //提交事务
         realm.commitTransaction();
 
