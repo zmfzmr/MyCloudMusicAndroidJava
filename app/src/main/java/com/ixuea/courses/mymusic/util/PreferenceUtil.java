@@ -14,6 +14,7 @@ public class PreferenceUtil {
     private static final String SHOW_GUIDE = "SHOW_GUIDE";
     private static final String SESSION = "SESSION";//用户登录session key
     private static final String USER_ID = "USER_ID";//用户登录UserId key
+    private static final String LAST_PLAY_SONG_ID = "LAST_PLAY_SONG_ID";//最后播放音乐id key
     private static PreferenceUtil instance;
     private final Context context;//上下文
     private final SharedPreferences preference;
@@ -107,6 +108,24 @@ public class PreferenceUtil {
     public void logout() {
         delete(USER_ID);
         delete(SESSION);
+    }
+
+    /**
+     * 获取最后播放的音乐Id
+     */
+    public String getLastPlaySongId() {
+        return preference.getString(LAST_PLAY_SONG_ID, null);
+    }
+
+    /**
+     * 设置当前播放音乐的id
+     * <p>
+     * commit：同步的（调用方法后马上就保存）  apply：异步的（在合适的时间保存）
+     */
+
+    public void setLastPlaySongId(String data) {
+//        putString(LAST_PLAY_SONG_ID,data);
+        preference.edit().putString(LAST_PLAY_SONG_ID, data).apply();
     }
 
 

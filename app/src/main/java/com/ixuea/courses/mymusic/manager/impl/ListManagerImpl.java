@@ -12,6 +12,7 @@ import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.DataUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ORMUtil;
+import com.ixuea.courses.mymusic.util.PreferenceUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 
 import java.util.LinkedList;
@@ -46,6 +47,7 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
     private int model = MODEL_LOOP_LIST;
     private final ORMUtil orm;//数据库工具类对象
     private long lastTime;//最后保存播放进度时间
+    private final PreferenceUtil sp;
 
 
     /**
@@ -66,6 +68,10 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
         //初始化数据库工具类
         orm = ORMUtil.getInstance(this.context);
+
+        //初始化偏好设置工具类
+        sp = PreferenceUtil.getInstance(this.context);
+
     }
 
     /**
@@ -119,6 +125,10 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         //播放音乐
         //这里是从SheetDetailActivity中，通过play(position)传递过来的Song
         musicPlayerManager.play(ResourceUtil.resourceUri(data.getUri()), data);
+
+        //设置最后播放音乐的Id(保存歌曲的id 到持久化)
+        sp.setLastPlaySongId(data.getId());
+
     }
 
     @Override
