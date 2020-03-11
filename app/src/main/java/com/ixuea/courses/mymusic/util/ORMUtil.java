@@ -104,7 +104,7 @@ public class ORMUtil {
             //将Song转为SongLocal对象
             songLocal = data.toSongLocal();
 
-            //新增或者更新(根据主键来新增或者更新)
+            //新增或者更新(根据主键来新增或者更新) 注意：这里传入的是Song转换过的SongLocal对象
             realm.copyToRealmOrUpdate(songLocal);
         }
 

@@ -216,6 +216,8 @@ public class MusicPlayerManagerImpl
 
         //启动进度通知(当Activity中onResume继续执行的时候，添加监听器后，
         // 重新调用startPublishProgress方法向activity，传递进度)
+        //原因：跳转到后台，监听器移除了，定时器没有开始定时（startPublishProgress判断的），
+        // 所以Activity中回到前台调用onResume方法，添加监听的时候，重新调用startPublishProgress 重新传递进度
         startPublishProgress();
     }
 

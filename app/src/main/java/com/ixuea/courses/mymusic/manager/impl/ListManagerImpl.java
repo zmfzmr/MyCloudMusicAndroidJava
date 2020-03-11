@@ -8,6 +8,7 @@ import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
+import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.DataUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ORMUtil;
@@ -44,6 +45,7 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
      */
     private int model = MODEL_LOOP_LIST;
     private final ORMUtil orm;//数据库工具类对象
+    private long lastTime;//最后保存播放进度时间
 
 
     /**
@@ -328,7 +330,20 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
     @Override
     public void onProgress(Song data) {
+        //保存当前音乐播放进度
+        //因为Android应用不太好监听应用被杀掉
+        //所以这里就在这里保存
 
+        //真实项目肯定需要对不同版本
+        //不同手机进行适配
+        //而不是采用下面的方法保存
+        long currentTimeMillis = System.currentTimeMillis();
+        if (currentTimeMillis - lastTime > Constant.SAVE_PROGRESS_TIME) {
+            //保持数据（回调到这个onProgress方法的时候，其实Song里面已经保存了progress进度了）
+            //那个duration总时长：在设置(音乐播放器监听器)中 onPrepared中就已经设置到Song对象里面
+            orm.saveSong(data);
+            lastTime = currentTimeMillis;
+        }
     }
 
     /**
