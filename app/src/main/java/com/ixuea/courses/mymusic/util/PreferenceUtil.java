@@ -121,6 +121,10 @@ public class PreferenceUtil {
      * 设置当前播放音乐的id
      * <p>
      * commit：同步的（调用方法后马上就保存）  apply：异步的（在合适的时间保存）
+     *
+     * 注意：id 这里用的是String，
+     * 我们后面用的StringUtils.isNotBlank 判断是否值
+     * 以为没有值的话 在getLastPlaySongId中默认为null
      */
 
     public void setLastPlaySongId(String data) {

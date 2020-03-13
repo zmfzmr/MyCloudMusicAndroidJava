@@ -5,10 +5,12 @@ import android.content.Context;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.SongLocal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 /**
  * 数据库工具类
@@ -114,4 +116,45 @@ public class ORMUtil {
         //关闭数据库
         realm.close();
     }
+
+    /**
+     * 从数据库中查询播放列表
+     */
+    public List<Song> queryPlayList() {
+        //获取数据库对象
+        Realm realm = getInstance();
+
+        //查询播放列表(这里查询的是多个单个SongLocal集合（因为这里调用了findAll()）)
+        RealmResults<SongLocal> songLocals = realm.where(SongLocal.class)
+                //查询的是SongLocal对象里面的成员变量playList，等于true，说明就是在播放列表中
+                //其实就是查询成员变量playList为true的SongLocal对象
+                .equalTo("playList", true)
+                .findAll();//查询所有的，返回一个集合
+//        //关闭数据库
+//        realm.close();//查询完后这里不应该关闭
+
+        //返回数据
+        return toSongs(songLocals, realm);//在这里方法里面转换成List，需要在toSongs，遍历完成后关闭
+    }
+
+    /**
+     * 将本地对象转换成音乐对象
+     */
+    private List<Song> toSongs(RealmResults<SongLocal> songLocals, Realm realm) {
+        //创建播放列表
+        List<Song> songs = new ArrayList<>();
+
+        //遍历每一个对象
+        for (SongLocal songLocal : songLocals) {
+            //转为song对象（集合里面添加（本地对象转换过的音乐对象））
+            songs.add(songLocal.toSong());
+        }
+
+        //关闭数据库
+        realm.close();//查询完后这里不应该关闭
+
+        return songs;
+    }
+
+
 }

@@ -469,7 +469,15 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
      */
     private void showDuration() {
         //获取正在播放音乐的时长
-        long end = musicPlayerManager.getData().getDuration();
+
+        //还没开始播放就获取时长，这是错误的
+        //还有为什么使用listManager就没问题呢，因为listManager对象的时候，
+        // 在构造方法初始化了播放列表（里面查询本地数据库的数据，然后匹配Song id，并赋值给this.data,
+        // 所以通过listManager.getData()可以获取到Song对象）
+        //因为之前保存了进度（ListManagerImpl（也就是listmanager对象）中onProgress中保存了进度）
+        //而时长，在音乐一开始播放的时候，在onPrepared就设置到
+//        long end = musicPlayerManager.getData().getDuration();
+        long end = listManager.getData().getDuration();
 
         //将格式化为分钟:秒
         //这里转换成了分钟秒
@@ -483,7 +491,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
      */
     private void showProgress() {
         //获取播放进度
-        long progress = musicPlayerManager.getData().getProgress();
+//        long progress = musicPlayerManager.getData().getProgress();
+        long progress = listManager.getData().getProgress();
         //格式化进度
         tv_start.setText(TimeUtil.formatMinuteSecond((int) progress));
         //设置到进度条

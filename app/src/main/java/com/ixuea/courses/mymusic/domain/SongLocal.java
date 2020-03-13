@@ -175,4 +175,43 @@ public class SongLocal extends RealmObject {
     public void setProgress(long progress) {
         this.progress = progress;
     }
+
+    /**
+     * 将SongLocal（本地）转换成Song（音乐）对象
+     * <p>
+     * 注意：歌手（Song对象里面有User对象，所以需要创建）
+     *
+     * @return
+     */
+    public Song toSong() {
+        //创建对象
+        Song song = new Song();
+        //赋值
+        song.setId(getId());
+        song.setTitle(title);
+        song.setBanner(banner);
+        song.setUri(uri);
+
+        //歌手（Song对象里面有User对象，所以需要创建）
+        User singer = new User();
+        singer.setId(singer_id);
+        singer.setNickname(singer_nickname);
+        singer.setAvatar(singer_avatar);
+        song.setSinger(singer);//设置到Song对象上
+
+        //播放列表标志(这个标志好像不用还原回来，可能用不到)
+        //playList：Song对象是否在播放列表
+        song.setPlayList(playList);
+
+        //来源(还原回来，目前也用不到)
+        song.setSource(source);
+
+        //音乐时长
+        song.setDuration(duration);
+
+        //播放进度
+        song.setProgress(progress);
+
+        return song;//返回数据
+    }
 }

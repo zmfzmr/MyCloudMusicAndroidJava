@@ -10,6 +10,8 @@ import java.util.List;
 public class DataUtil {
     /**
      * 更改是否在播放列表字段
+     *
+     * 这个方法的局部变量比如datum，如有变量传入进来，都是一起指向堆内存的对象的
      */
     public static void changePlayListFlag(List<Song> datum, boolean value) {
         //遍历播放列表所有Song，更改其标志（是否在播放列表）

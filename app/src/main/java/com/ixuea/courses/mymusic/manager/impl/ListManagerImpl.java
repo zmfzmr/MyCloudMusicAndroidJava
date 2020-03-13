@@ -15,6 +15,8 @@ import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -72,6 +74,59 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         //初始化偏好设置工具类
         sp = PreferenceUtil.getInstance(this.context);
 
+        //初始化播放列表
+        initPlayList();
+
+    }
+
+    /**
+     * 初始化播放列表（这里是从本地查询出来后，和持久化的最后播放的音乐对比，找到就赋值给this.data）
+     */
+    private void initPlayList() {
+        //查询播放列表
+        List<Song> datum = orm.queryPlayList();
+        if (datum.size() > 0) {
+            //添加到现在的播放列表
+            this.datum.clear();//这个可以不用清空（因为刚参加对象，这个播放列表是没有值的）
+            this.datum.addAll(datum);
+            //获取最后播放音乐id
+            // (还原回来当前播放列表里面的这个Song对象，从而在外界好方便展示)
+            String id = sp.getLastPlaySongId();
+
+            //获取出来记得判断
+            if (StringUtils.isNotBlank(id)) {//这个id并不是null的
+                //有最后音乐的id
+                for (Song s : datum) {
+                    if (s.getId().equals(id)) {
+                        //找到了(查询出来的对象和持久化里面的Song id（最后播放音乐的id）匹配)
+
+                        data = s;
+                        break;//找到了记得跳出循环，这样执行会快点
+                    }
+
+                }
+
+                if (data == null) {//因为没有找到，也就没有前面的 data = s;，所以data为null
+                    //表示没找到
+                    //可能各种原因（可能在数据库中把这首音乐给删除了，找不到这首音乐）
+                    defaultPlaySong();//默认初始化第一首音乐
+                } else {
+                    //找到了，可以不用做任何处理（当然这个else可以不用写）
+                }
+            } else {
+                //如果没有最后播放音乐
+                //默认第一首
+                defaultPlaySong();
+            }
+
+        }
+    }
+
+    /**
+     * 设置默认播放音乐
+     */
+    private void defaultPlaySong() {
+        data = datum.get(0);//获取第一首音乐
     }
 
     /**
@@ -128,6 +183,7 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
         //设置最后播放音乐的Id(保存歌曲的id 到持久化)
         sp.setLastPlaySongId(data.getId());
+
 
     }
 

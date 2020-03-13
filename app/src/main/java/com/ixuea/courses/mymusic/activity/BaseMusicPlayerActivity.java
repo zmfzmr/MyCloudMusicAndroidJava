@@ -126,6 +126,8 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
      * 显示迷你播放控制器数据
      */
     private void showSmallPlayControlData() {
+
+        //这个listManager.getDatum()有值的话，说明播放过音乐，并把Song添加到list集合里面
         if (listManager.getDatum() != null && listManager.getDatum().size() > 0) {
             //有音乐
 
