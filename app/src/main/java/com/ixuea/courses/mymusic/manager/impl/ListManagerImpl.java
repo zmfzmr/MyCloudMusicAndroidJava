@@ -392,6 +392,7 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
     @Override
     public void seekTo(int progress) {
+
         if (!musicPlayerManager.isPlaying()) {
             resume();//如果没有播放，就调用本类对象的resume（走else里面方法） 跳转到指定位置播放
         }
@@ -399,6 +400,7 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         //否则，滑动进度条的时候是在播放的，那就跳转到指定位置播放
         //从指定位置播放
         musicPlayerManager.seekTo(progress);
+
     }
 
     /**

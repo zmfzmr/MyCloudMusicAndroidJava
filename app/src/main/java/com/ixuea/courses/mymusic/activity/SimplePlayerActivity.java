@@ -415,7 +415,7 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         if (fromUser) {//注意：这里需要判断是否拖拽了
             //跳转到该位置播放
 //            musicPlayerManager.seekTo(progress);
-            listManager.seekTo(progress);
+            listManager.seekTo(progress);//滑动进度条到指定位置播放
         }
     }
 
