@@ -414,7 +414,8 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         LogUtil.d(TAG, "onProgressChanged: " + progress + ", " + fromUser);
         if (fromUser) {//注意：这里需要判断是否拖拽了
             //跳转到该位置播放
-            musicPlayerManager.seekTo(progress);
+//            musicPlayerManager.seekTo(progress);
+            listManager.seekTo(progress);
         }
     }
 

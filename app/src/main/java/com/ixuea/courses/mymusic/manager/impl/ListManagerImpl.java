@@ -204,6 +204,15 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
             //到这里，是应用开启后，第一次点继续播放
             //而这时内部其实还没有准备播放，所以应该调用播放
             play(data);
+
+            //这里开始后台杀死进程，会调动else里面的
+            if (data.getProgress() > 0) {
+                //有播放进度（查询数据库中找到了这首播放的音乐并赋值给data）
+
+                //就从上一次位置开始播放
+                musicPlayerManager.seekTo((int) data.getProgress());
+
+            }
         }
     }
 
@@ -379,6 +388,17 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
         //从数据库中删除
         orm.deleteAll();
+    }
+
+    @Override
+    public void seekTo(int progress) {
+        if (!musicPlayerManager.isPlaying()) {
+            resume();//如果没有播放，就调用本类对象的resume（走else里面方法） 跳转到指定位置播放
+        }
+
+        //否则，滑动进度条的时候是在播放的，那就跳转到指定位置播放
+        //从指定位置播放
+        musicPlayerManager.seekTo(progress);
     }
 
     /**
