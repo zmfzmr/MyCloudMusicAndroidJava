@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ixuea.courses.mymusic.MusicPlayerActivity;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.PlayListChangeEvent;
@@ -296,8 +297,10 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
      * 进入音乐播放界面
      */
     public void startMusicPlayerActivity() {
-        //简单播放器界面
-        SimplePlayerActivity.start(getMainActivity());
+//        //简单播放器界面
+//        SimplePlayerActivity.start(getMainActivity());
 
+        //黑胶唱片播放界面
+        MusicPlayerActivity.start(getMainActivity());
     }
 }
