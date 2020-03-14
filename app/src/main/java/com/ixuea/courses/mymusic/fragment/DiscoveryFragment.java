@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.SheetDetailActivity;
 import com.ixuea.courses.mymusic.activity.WebViewActivity;
 import com.ixuea.courses.mymusic.adapter.DiscoveryAdapter;
@@ -22,6 +23,8 @@ import com.ixuea.courses.mymusic.domain.Title;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.domain.test.Person;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.manager.ListManager;
+import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.youth.banner.Banner;
@@ -170,6 +173,23 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
 
                     //使用重构后的方法
                     startActivityExtraId(SheetDetailActivity.class, sheet.getId());
+                } else if (data instanceof Song) {
+                    //单曲
+
+                    //创建一个列表
+                    List<Song> datum = new ArrayList<>();
+                    Song song = (Song) data;
+                    datum.add(song);
+                    //获取播放列表管理器
+                    ListManager listManager = MusicPlayerService.getListManager(getMainActivity());
+                    //设置到播放列表
+                    listManager.setDatum(datum);
+                    //播放这首音乐
+                    listManager.play(song);
+
+                    //进入播放界面(向上转型（因为父类没有子类的方法）)
+                    ((BaseMusicPlayerActivity) getMainActivity()).startMusicPlayerActivity();
+
                 }
             }
         });

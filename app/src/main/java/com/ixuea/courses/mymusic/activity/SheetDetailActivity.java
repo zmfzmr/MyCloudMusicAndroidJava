@@ -197,6 +197,8 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
         });
 
         adapter.setSongListener(this);
+        //播放全部按钮点击
+        ll_play_all_container.setOnClickListener(this);
     }
 
     /**
@@ -510,6 +512,10 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
             case R.id.ll_user:
                 //用户容器点击
                 startActivityExtraId(UserDetailActivity.class, data.getUser().getId());
+                break;
+            case R.id.ll_play_all_container:
+                //从第一首音乐开始播放
+                play(0);
                 break;
             default:
                 break;
