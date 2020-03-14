@@ -326,6 +326,11 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         return data;
     }
 
+    /**
+     * datum 播放列表中的集合list
+     *
+     * @param index 索引
+     */
     @Override
     public void delete(int index) {
         //获取要删除的音乐
@@ -359,6 +364,8 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         //如果全部都删除之后，最终在简单播放界面onItemSwiped中判断，然后关闭界面
         datum.remove(song);
 
+        //从数据库中删除（这里是从播放列表中删除）
+        orm.deleteSong(song);//song：当前要删除的这首音乐
     }
 
     @Override

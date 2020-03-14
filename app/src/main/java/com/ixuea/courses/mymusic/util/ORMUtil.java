@@ -156,5 +156,45 @@ public class ORMUtil {
         return songs;
     }
 
+    /**
+     * 删除音乐
+     *
+     * @param data 当前点中要删除的音乐（或从播放列表删除（实际数据库中还在））
+     *             这里思路：找播放列表存到数据库中的音乐，标志位true和选中当前音乐，找到置为false
+     *             这样下次进来的时候，就不会显示这这首音乐了
+     */
+    public void deleteSong(Song data) {
+        //获取数据库对象
+        Realm realm = getInstance();
 
+        //没找到该框架通过Id删除数据
+        //所有要先查询到要删除的数据
+        //然后在删除
+        SongLocal songLocal = realm.where(SongLocal.class)
+                .equalTo("playList", true)
+                .and()//和（并且）
+                .equalTo("id", data.getId())
+                .findFirst();//查找第一条（因为我们这类设置了主键id，所以不可能有重复，所以这里不写也没关系）
+        //在事务删除(里面已经包含开始事务和提交事务)
+//        realm.executeTransaction(new Realm.Transaction() {
+//            @Override
+//            public void execute(Realm realm) {
+//                 //删除查询到的数据
+//                songLocal.deleteFromRealm();
+//            }
+//        });
+
+        //开启事务
+        realm.beginTransaction();
+
+        //设置播放列表标准
+
+        //因为ListManagerImpl构造方法中查询播放列表是根据标志位true的来查询的
+        //所以我们这里设置为false，这样查询的时候这首音乐查询不到，列表自然不显示
+        songLocal.setPlayList(false);
+        //提交事务
+        realm.commitTransaction();
+        //关闭数据库
+        realm.close();
+    }
 }
