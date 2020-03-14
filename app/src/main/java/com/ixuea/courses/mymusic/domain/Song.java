@@ -12,8 +12,8 @@ public class Song extends BaseMultiItemEntity {
     private String uri;//音乐地址
     private int clicks_count;//点击数
     private int comments_count;//评论数
-    private Integer style;//歌曲类型 (可以yogaInteger，因为这个可能没有值)
-    private String lyric;//歌曲内容
+    private Integer style;//歌词类型 (可以用Integer，因为这个可能没有值)
+    private String lyric;//歌词内容
     /**
      * 创建改音乐的人
      */
@@ -204,5 +204,13 @@ public class Song extends BaseMultiItemEntity {
         songLocal.setProgress(progress);
 
         return songLocal;//返回对象
+    }
+
+    /**
+     * 是否是本地音乐
+     */
+    public boolean isLocal() {
+        //source：默认是0  SOURCE_LOCAL：1  所以返回false 默认是其他音乐
+        return source == SongLocal.SOURCE_LOCAL;
     }
 }

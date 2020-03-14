@@ -6,8 +6,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.Consumer;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.util.ListUtil;
@@ -142,11 +145,61 @@ public class MusicPlayerManagerImpl
             //启动播放进度通知
             startPublishProgress();
 
+            //如果是本地音乐
+            //就去获取歌词
+            if (data.isLocal()) {
+                return;
+            }
+
+            if (data.getLyric() == null) {
+                //歌词处理
+                //真实项目可能会
+                //将歌词这个部分拆分到其他组件中
+
+                //没有歌词才请求
+                //真实项目中可以会缓存歌词
+                //获取歌词数据
+                Api.getInstance()
+                        .songDetail(data.getId())
+                        .subscribe(new HttpObserver<DetailResponse<Song>>() {
+                            @Override
+                            public void onSucceeded(DetailResponse<Song> songDetailResponse) {
+                                //请求成功 songDetailResponse:onSucceeded方法中局部变量
+                                //DetailResponse<Song>：Song外层包裹； songDetailResponse.getData()：就是Song对象
+                                if (songDetailResponse != null && songDetailResponse.getData() != null) {
+                                    //将数据设置歌曲对象(当前播放的Song对象)
+                                    data.setStyle(songDetailResponse.getData().getStyle());
+                                    data.setLyric(songDetailResponse.getData().getLyric());
+                                }
+
+                                //通知歌词改变了
+                                onLyricChanged();
+                            }
+                        });
+
+            } else {
+                //通知歌词改变了
+                // (data.getLyric不是null，说明当前播放的data是有歌词的，那么通知更改为当前播放的歌词，
+                // 否则歌词可能还是上一首的歌词)
+                onLyricChanged();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
             //TODO 错误了
         }
 
+    }
+
+    /**
+     * 通知歌词改变了
+     */
+    private void onLyricChanged() {
+        //这里只是通知歌词数据改变l
+        //但不一定就有歌词
+
+        //不管有没有歌词都要回调
+        ListUtil.eachListener(listeners, listener -> listener.onLyricChanged(data));
     }
 
     /**

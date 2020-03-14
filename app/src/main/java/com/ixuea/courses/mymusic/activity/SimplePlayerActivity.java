@@ -576,6 +576,11 @@ public class SimplePlayerActivity extends BaseTitleActivity implements SeekBar.O
         showProgress();
     }
 
+    @Override
+    public void onLyricChanged(Song data) {
+        LogUtil.d(TAG, "onLyricChanged: " + data.getLyric());
+    }
+
 //    @Override
 //    public void onCompletion(MediaPlayer mp) {
 //        LogUtil.d(TAG, "onCompletion");

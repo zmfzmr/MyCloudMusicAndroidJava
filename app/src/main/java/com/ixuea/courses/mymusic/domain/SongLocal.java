@@ -28,11 +28,11 @@ public class SongLocal extends RealmObject {
      * 其他来源音乐
      * 包括在线的，下载的
      */
-    private static final int SOURCE_OTHER = 0;
+    public static final int SOURCE_OTHER = 0;
     /**
      * 本地音乐
      */
-    private static final int SOURCE_LOCAL = 1;
+    public static final int SOURCE_LOCAL = 1;
 
     /**
      * 歌曲Id

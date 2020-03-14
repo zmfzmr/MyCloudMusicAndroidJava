@@ -270,6 +270,15 @@ public class Api {
     }
 
     /**
+     * 单曲详情
+     */
+    public Observable<DetailResponse<Song>> songDetail(String id) {
+        return service.songDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 广告列表
      *
      * @return Observable<ListResponse < Ad>> 广告的列表

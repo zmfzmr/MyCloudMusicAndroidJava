@@ -13,7 +13,7 @@ public class ListUtil {
      */
     public static <T> void eachListener(List<T> datum, Consumer<T> action) {
         for (T listener : datum) {
-            //将列表中每一个对象传递给action(将列表中对象传递给接口中的泛型方法中的参数)
+            //将列表中每一个对象传递给action(将列表中对象(这里列表中对象是监听器对象)传递给接口中的泛型方法中的参数)
             action.accept(listener);
         }
     }

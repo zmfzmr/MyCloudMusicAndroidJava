@@ -37,4 +37,12 @@ public interface MusicPlayerListener {
     default void onCompletion(MediaPlayer mp) {
 
     }
+
+    /**
+     * 歌词数据改变了
+     * 定义default，并不是每个页面都需要通知歌词改变了
+     */
+    default void onLyricChanged(Song data) {
+
+    }
 }
