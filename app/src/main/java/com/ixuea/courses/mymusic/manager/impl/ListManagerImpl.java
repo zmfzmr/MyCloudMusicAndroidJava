@@ -88,7 +88,7 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
         if (datum.size() > 0) {
             //添加到现在的播放列表
             this.datum.clear();//这个可以不用清空（因为刚参加对象，这个播放列表是没有值的）
-            this.datum.addAll(datum);
+            this.datum.addAll(datum);//这个一进来的时候，就把查询到的音乐添加到播放列表啦
             //获取最后播放音乐id
             // (还原回来当前播放列表里面的这个Song对象，从而在外界好方便展示)
             String id = sp.getLastPlaySongId();
