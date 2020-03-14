@@ -125,16 +125,26 @@ public class ORMUtil {
         Realm realm = getInstance();
 
         //查询播放列表(这里查询的是多个单个SongLocal集合（因为这里调用了findAll()）)
-        RealmResults<SongLocal> songLocals = realm.where(SongLocal.class)
-                //查询的是SongLocal对象里面的成员变量playList，等于true，说明就是在播放列表中
-                //其实就是查询成员变量playList为true的SongLocal对象
-                .equalTo("playList", true)
-                .findAll();//查询所有的，返回一个集合
+        RealmResults<SongLocal> songLocals = queryPlayListSongLocals(realm);//查询所有的，返回一个集合
+
 //        //关闭数据库
 //        realm.close();//查询完后这里不应该关闭
 
         //返回数据
         return toSongs(songLocals, realm);//在这里方法里面转换成List，需要在toSongs，遍历完成后关闭
+    }
+
+    /**
+     * 查询本地播放列表音乐
+     *
+     * @param realm Realm
+     */
+    private RealmResults<SongLocal> queryPlayListSongLocals(Realm realm) {
+        return realm.where(SongLocal.class)
+                //查询的是SongLocal对象里面的成员变量playList，等于true，说明就是在播放列表中
+                //其实就是查询成员变量playList为true的SongLocal对象
+                .equalTo("playList", true)
+                .findAll();
     }
 
     /**
@@ -192,6 +202,28 @@ public class ORMUtil {
         //因为ListManagerImpl构造方法中查询播放列表是根据标志位true的来查询的
         //所以我们这里设置为false，这样查询的时候这首音乐查询不到，列表自然不显示
         songLocal.setPlayList(false);
+        //提交事务
+        realm.commitTransaction();
+        //关闭数据库
+        realm.close();
+    }
+
+    /**
+     * 删除所有播放列表
+     */
+    public void deleteAll() {
+        //获取数据库对象
+        Realm realm = getInstance();
+        //查询所有播放列表数据
+        RealmResults<SongLocal> songLocals = queryPlayListSongLocals(realm);
+        //开启事务
+        realm.beginTransaction();
+        //遍历音乐
+        for (SongLocal songLocal : songLocals) {
+            //更改播放列表标志
+            //Realm查询回来更改值自动保存
+            songLocal.setPlayList(false);
+        }
         //提交事务
         realm.commitTransaction();
         //关闭数据库
