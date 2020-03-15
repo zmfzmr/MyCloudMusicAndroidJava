@@ -9,6 +9,7 @@
     <!--背景
         用ImageView是因为要用他的图片缩放模式-->
     <ImageView
+        android:id="@+id/iv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
