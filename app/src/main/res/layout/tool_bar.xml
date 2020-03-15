@@ -14,9 +14,11 @@
         PupupOverlay:翻译：折叠覆盖
 
         注意：上面
-              style="@style/AppTheme.AppBarOverlay"
+              style="@style/AppTheme.AppBarOverlay" 错误的
+              (AppBarLayout正确写法是：theme="@style/AppTheme.AppBarOverlay" 注意是：theme)
+
               app:popupTheme="@style/AppTheme.PopupOverlay"
-              的写法
+              (这个是toolbar的正确写法 app命名的)
 
        app:titleTextColor:标题字体颜色 app命名
 
