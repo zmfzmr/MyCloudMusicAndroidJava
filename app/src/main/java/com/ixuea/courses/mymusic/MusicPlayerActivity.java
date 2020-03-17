@@ -17,6 +17,7 @@ import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
+import com.ixuea.courses.mymusic.util.SwitchDrawableUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -125,8 +126,19 @@ public class MusicPlayerActivity extends BaseTitleActivity {
                      */
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        //设置到背景控件上
-                        iv_background.setImageDrawable(resource);
+//                        //设置到背景控件上
+//                        iv_background.setImageDrawable(resource);
+
+                        //创建切换你动画工具类(内部会根据这2个drawable合并成一个新的drawable)
+                        // Switch:切换的意思
+                        //为啥要2个drawable （一个在下  一个上面）上面的那个设置个淡出的效果（在原来背景（也就是下面的图片的基础上）实现这种效果）
+                        SwitchDrawableUtil switchDrawableUtil = new SwitchDrawableUtil(iv_background.getDrawable(), resource);
+
+                        //设置drawable到ImageView上
+                        iv_background.setImageDrawable(switchDrawableUtil.getDrawable());
+
+                        //开始动画
+                        switchDrawableUtil.start();
                     }
 
                     @Override
