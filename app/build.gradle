@@ -643,6 +643,13 @@ dependencies {
     //https://github.com/florent37/GlidePalette
     implementation 'com.github.florent37:glidepalette:2.1.2'
 
+    //和Glide配合处理图片
+    //可以实现很多效果
+    //模糊;圆角；圆
+    //我们这里是用它实现模糊效果
+    //https://github.com/wasabeef/glide-transformations
+    implementation 'jp.wasabeef:glide-transformations:4.1.0'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
