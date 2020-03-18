@@ -6,14 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".MusicPlayerActivity">
 
-    <!--背景
-        用ImageView是因为要用他的图片缩放模式-->
+    <!--
+        问题描述: 播放界面，高斯模糊的图片，其实是缩放的，也就说压扁了，不是等比缩放的。
+
+        默认背景
+            因为将默认背景设置到iv_background控件
+            由于使用的LayerDrawable
+            会导致背景不是centerCrop
+            所以这里就在添加一个图片控件
+            可以在看看具体问题在哪里-->
+
     <ImageView
-        android:id="@+id/iv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/default_album" />
+
+    <!--背景
+        用ImageView是因为要用他的图片缩放模式
+
+        注意：这类取消这个默认图片，默认图片放在上面的那个ImageView中即可
+        -->
+    <ImageView
+        android:id="@+id/iv_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
 
     <!--将Toolbar和真实内容放这里
        fitsSystemWindows="true"：表示布局的时候考虑状态栏
