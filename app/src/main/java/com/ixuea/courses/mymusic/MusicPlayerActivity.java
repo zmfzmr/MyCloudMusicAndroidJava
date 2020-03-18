@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +20,7 @@ import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.SwitchDrawableUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -148,6 +151,35 @@ public class MusicPlayerActivity extends BaseTitleActivity {
                 });
 
     }
+
+    /**
+     * 创建菜单方法
+     * <p>
+     * 有点类似显示布局要写到onCreate方法一样
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //加载布局文件
+        getMenuInflater().inflate(R.menu.menu_music_player, menu);
+        return true;//这个地方要返回true
+    }
+
+    /**
+     * menu item按钮点击了
+     *
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();//获取点击的菜单id
+        if (R.id.action_share == id) {
+            //分享按钮点击了
+            ToastUtil.successShortToast("你点击了分享按钮！");
+            return true;//注意：这里返回了true
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * 启动方法
      */
