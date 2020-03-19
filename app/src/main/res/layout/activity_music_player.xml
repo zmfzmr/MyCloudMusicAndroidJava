@@ -62,12 +62,167 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </com.google.android.material.appbar.AppBarLayout>
-        <!--真实内容布局-->
-        <TextView
-            android:layout_width="wrap_content"
+        <!--黑胶唱片布局-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!--迷你控制容器-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_control_height">
+
+            <!--点赞按钮-->
+            <ImageButton
+                android:id="@+id/ib_like"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/button_control_height"
+                android:background="@null"
+                android:src="@drawable/ic_like" />
+
+            <!--下载按钮-->
+            <ImageButton
+                android:id="@+id/ib_download"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/button_control_height"
+                android:background="@null"
+                android:src="@drawable/ic_download" />
+
+            <!--均衡器按钮-->
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/button_control_height"
+                android:background="@null"
+                android:src="@drawable/ic_eq" />
+
+            <!--评论按钮-->
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/button_control_height"
+                android:background="@null"
+                android:src="@drawable/ic_comment_count" />
+
+            <!--更多按钮-->
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/button_control_height"
+                android:background="@null"
+                android:src="@drawable/ic_music_more" />
+
+        </LinearLayout>
+
+        <!--进度容器-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:text="这是真实内容布局" />
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp">
+            <!--开始位置-->
+            <TextView
+                android:id="@+id/tv_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_small"
+                android:text="00:00" />
+
+            <!--进度条
+                shape_seek_bar：之前已经定义好的xml文件
+                android:progress="50"
+                android:secondaryProgress="80"：第二进度
+                maxHeight minHeight 最大和最小高度
+            -->
+            <SeekBar
+                android:id="@+id/sb_progress"
+                android:layout_marginLeft="@dimen/padding_middle"
+                android:layout_marginRight="@dimen/padding_middle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:maxHeight="@dimen/music_seek_bar_height"
+                android:minHeight="@dimen/music_seek_bar_height"
+                android:progressDrawable="@drawable/shape_seek_bar"
+                android:textColor="@color/white"
+                android:text="00:00" />
+
+            <!--结束位置-->
+            <TextView
+                android:id="@+id/tv_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_small"
+                android:text="00:00" />
+
+        </LinearLayout>
+
+        <!--控制容器-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--循环模式
+                ic_music_repeat_list:列表循环模式图标（列表循环也就是顺序循环）
+            -->
+            <ImageButton
+                android:id="@+id/ib_loop_model"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/button_play_height"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_music_repeat_list" />
+
+            <!--上一曲-->
+            <ImageButton
+                android:id="@+id/ib_previous"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/button_play_height"
+                android:scaleType="centerInside"
+                android:background="@null"
+                android:src="@drawable/ic_music_previous" />
+
+            <!--播放按钮-->
+            <ImageButton
+                android:id="@+id/ib_play"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/button_play_height"
+                android:scaleType="centerInside"
+                android:background="@null"
+                android:src="@drawable/ic_music_play" />
+
+            <!--下一曲-->
+            <ImageButton
+                android:id="@+id/ib_next"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/button_play_height"
+                android:scaleType="centerInside"
+                android:background="@null"
+                android:src="@drawable/ic_music_next" />
+
+            <!--播放列表-->
+            <ImageButton
+                android:id="@+id/ib_list"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/button_play_height"
+                android:scaleType="centerInside"
+                android:background="@null"
+                android:src="@drawable/ic_music_list" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
