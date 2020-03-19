@@ -26,6 +26,7 @@ import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.SwitchDrawableUtil;
+import com.ixuea.courses.mymusic.util.TimeUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
@@ -125,8 +126,26 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         //显示初始化数据
         showInitData();
 
+        //显示音乐时长
+        showDuration();
+        //显示播放进度
+        showProgress();
+        //显示播放状态
+        showMusicPlayStatus();
+
         //添加监听器
         musicPlayerManager.addMusicPlayerListener(this);
+    }
+
+    /**
+     * 显示播放状态
+     */
+    private void showMusicPlayStatus() {
+        if (musicPlayerManager.isPlaying()) {
+            showPauseStatus();
+        } else {
+            showPlayStatus();
+        }
     }
 
     /**
@@ -305,6 +324,72 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         LogUtil.d(TAG, "onListClick:");
     }
 
+
+    /**
+     * 显示播放进度
+     */
+    private void showProgress() {
+        //获取当前播放进度
+        long progress = listManager.getData().getProgress();
+
+        //格式化进度
+        tv_start.setText(TimeUtil.formatMinuteSecond((int) progress));
+
+        //设置到进度条
+        sb_progress.setProgress((int) progress);
+    }
+
+    /**
+     * 显示播放状态
+     */
+    private void showPlayStatus() {
+        ib_play.setImageResource(R.drawable.ic_music_play);
+    }
+
+    /**
+     * 显示暂停状态
+     */
+    private void showPauseStatus() {
+        ib_play.setImageResource(R.drawable.ic_music_pause);
+    }
+
+    //播放管理器回调
+    @Override
+    public void onPaused(Song data) {
+        showPlayStatus();
+    }
+
+    @Override
+    public void onPlaying(Song data) {
+        showPauseStatus();
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp, Song data) {
+        //显示初始化数据
+        showInitData();
+
+        //显示时长
+        showDuration();
+    }
+
+    private void showDuration() {
+        //获取音乐时长
+        long duration = listManager.getData().getDuration();
+        //格式化
+        tv_end.setText(TimeUtil.formatMinuteSecond((int) duration));
+        //设置到进度条（设置到进度条最大值）
+        sb_progress.setMax((int) duration);
+    }
+
+    @Override
+    public void onProgress(Song data) {
+
+        showProgress();
+    }
+
+    //end播放管理器回调
+
     /**
      * 启动方法
      */
@@ -312,26 +397,4 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         Intent intent = new Intent(activity, MusicPlayerActivity.class);
         activity.startActivity(intent);
     }
-
-    //播放管理器回调
-    @Override
-    public void onPaused(Song data) {
-
-    }
-
-    @Override
-    public void onPlaying(Song data) {
-
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mp, Song data) {
-
-    }
-
-    @Override
-    public void onProgress(Song data) {
-
-    }
-    //end播放管理器回调
 }
