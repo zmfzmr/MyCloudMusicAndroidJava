@@ -6,7 +6,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
@@ -18,6 +21,7 @@ import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
+import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.SwitchDrawableUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
@@ -27,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import butterknife.BindView;
+import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 
@@ -34,13 +39,53 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  * 黑胶唱片界面
  */
 public class MusicPlayerActivity extends BaseTitleActivity {
+    private static final String TAG = "MusicPlayerActivity";
     /**
      * 背景
      */
     @BindView(R.id.iv_background)
     ImageView iv_background;
-    private ListManager listManager;
-    private MusicPlayerManager musicPlayerManager;
+
+    /**
+     * 下载按钮
+     */
+    @BindView(R.id.ib_download)
+    ImageButton ib_download;
+
+    /**
+     * 开始位置
+     */
+    @BindView(R.id.tv_start)
+    TextView tv_start;
+
+
+    /**
+     * 进度条
+     */
+    @BindView(R.id.sb_progress)
+    SeekBar sb_progress;
+
+    /**
+     * 结束位置
+     */
+    @BindView(R.id.tv_end)
+    TextView tv_end;
+
+    /**
+     * 循环模式按钮
+     */
+    @BindView(R.id.ib_loop_model)
+    ImageButton ib_loop_model;
+
+    /**
+     * 播放按钮
+     */
+    @BindView(R.id.ib_play)
+    ImageButton ib_play;
+
+
+    private ListManager listManager;//列表管理器
+    private MusicPlayerManager musicPlayerManager;//音乐播放管理器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +223,55 @@ public class MusicPlayerActivity extends BaseTitleActivity {
             return true;//注意：这里返回了true
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 下载按钮点击
+     */
+    @OnClick(R.id.ib_download)
+    public void onDownLoadClick() {
+        LogUtil.d(TAG, "onDownLoadClick:");
+    }
+
+    /**
+     * 循环模式按钮点击
+     */
+    @OnClick(R.id.ib_loop_model)
+    public void onLoopModelClick() {
+        LogUtil.d(TAG, "onLoopModelClick:");
+    }
+
+
+    /**
+     * 上一曲按钮点击
+     */
+    @OnClick(R.id.ib_previous)
+    public void onPreviousClick() {
+        LogUtil.d(TAG, "onPreviousClick:");
+    }
+
+    /**
+     * 播放按钮
+     */
+    @OnClick(R.id.ib_play)
+    public void onPlayClick() {
+        LogUtil.d(TAG, "onPlayClick:");
+    }
+
+    /**
+     * 下一曲按钮点击
+     */
+    @OnClick(R.id.ib_next)
+    public void onNextClick() {
+        LogUtil.d(TAG, "onNextClick:");
+    }
+
+    /**
+     * 播放列表按钮点击
+     */
+    @OnClick(R.id.ib_list)
+    public void onListClick() {
+        LogUtil.d(TAG, "onListClick:");
     }
 
     /**
