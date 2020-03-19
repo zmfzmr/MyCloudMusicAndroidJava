@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusic;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
@@ -38,7 +40,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 /**
  * 黑胶唱片界面
  */
-public class MusicPlayerActivity extends BaseTitleActivity {
+public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener {
     private static final String TAG = "MusicPlayerActivity";
     /**
      * 背景
@@ -122,6 +124,20 @@ public class MusicPlayerActivity extends BaseTitleActivity {
 
         //显示初始化数据
         showInitData();
+
+        //添加监听器
+        musicPlayerManager.addMusicPlayerListener(this);
+    }
+
+    /**
+     * 界面隐藏了
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //移除播放监听器
+        musicPlayerManager.removeMusicPlayerListener(this);
     }
 
     /**
@@ -256,6 +272,21 @@ public class MusicPlayerActivity extends BaseTitleActivity {
     @OnClick(R.id.ib_play)
     public void onPlayClick() {
         LogUtil.d(TAG, "onPlayClick:");
+
+        playOrPause();
+    }
+
+    /**
+     * 播放或暂停
+     */
+    private void playOrPause() {
+        if (musicPlayerManager.isPlaying()) {
+//            musicPlayerManager.pause();
+            listManager.pause();
+        } else {
+//            musicPlayerManager.resume();
+            listManager.resume();
+        }
     }
 
     /**
@@ -281,4 +312,26 @@ public class MusicPlayerActivity extends BaseTitleActivity {
         Intent intent = new Intent(activity, MusicPlayerActivity.class);
         activity.startActivity(intent);
     }
+
+    //播放管理器回调
+    @Override
+    public void onPaused(Song data) {
+
+    }
+
+    @Override
+    public void onPlaying(Song data) {
+
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp, Song data) {
+
+    }
+
+    @Override
+    public void onProgress(Song data) {
+
+    }
+    //end播放管理器回调
 }
