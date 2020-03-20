@@ -19,6 +19,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.fragment.PlayListDialogFragment;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
@@ -360,8 +361,11 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @OnClick(R.id.ib_list)
     public void onListClick() {
         LogUtil.d(TAG, "onListClick:");
-    }
 
+        //显示播放列表对话框（弹窗）
+        PlayListDialogFragment.show(getSupportFragmentManager());
+
+    }
 
     /**
      * 显示播放进度
