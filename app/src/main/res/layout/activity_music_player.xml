@@ -63,10 +63,17 @@
 
         </com.google.android.material.appbar.AppBarLayout>
         <!--黑胶唱片布局-->
-        <View
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1">
+
+            <!--黑胶唱片列表控件-->
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/vp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
 
         <!--迷你控制容器-->
         <LinearLayout

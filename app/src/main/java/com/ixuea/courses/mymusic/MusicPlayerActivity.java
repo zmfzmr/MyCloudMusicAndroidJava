@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
+import com.ixuea.courses.mymusic.adapter.MusicPlayerAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.PlayListChangeEvent;
 import com.ixuea.courses.mymusic.fragment.PlayListDialogFragment;
@@ -38,6 +39,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -57,6 +59,12 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      */
     @BindView(R.id.iv_background)
     ImageView iv_background;
+
+    /**
+     * 黑胶唱片列表控件
+     */
+    @BindView(R.id.vp)
+    ViewPager vp;
 
     /**
      * 下载按钮
@@ -98,6 +106,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     private ListManager listManager;//列表管理器
     private MusicPlayerManager musicPlayerManager;//音乐播放管理器
+    private MusicPlayerAdapter recordAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +131,18 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //初始化播放管理器
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
+
+        //创建黑胶唱片列表适配器
+        recordAdapter = new MusicPlayerAdapter(getMainActivity(), getSupportFragmentManager());
+
+        //设置到控件
+        vp.setAdapter(recordAdapter);
+
+        //设置数据（ViewPager的页数和播放列表的Song数量一样）
+        //传递播放列表Song集合数据主要是
+        // 向MusicPlayerAdapter->getItem->MusicRecordFragment.newInstance(getData(position));
+        // 这里的进入Fragment中获取到当期getData(position)，也就是Song对象
+        recordAdapter.setDatum(listManager.getDatum());
 
     }
 
