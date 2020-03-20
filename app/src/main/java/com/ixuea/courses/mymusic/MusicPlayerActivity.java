@@ -37,6 +37,10 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
+import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_LIST;
+import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_ONE;
+import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_RANDOM;
+
 
 /**
  * 黑胶唱片界面
@@ -132,6 +136,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         showProgress();
         //显示播放状态
         showMusicPlayStatus();
+
+        //显示循环模式
+        showLoopModel();
 
         //添加监听器
         musicPlayerManager.addMusicPlayerListener(this);
@@ -274,6 +281,33 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @OnClick(R.id.ib_loop_model)
     public void onLoopModelClick() {
         LogUtil.d(TAG, "onLoopModelClick:");
+
+        //更改模式
+        listManager.changeLoopModel();
+
+        //显示循环模式
+        showLoopModel();
+    }
+
+    /**
+     * 显示循环模式
+     */
+    private void showLoopModel() {
+        //获取当循环模式
+        int model = listManager.getLoopModel();
+        switch (model) {
+            case MODEL_LOOP_RANDOM:
+                ib_loop_model.setImageResource(R.drawable.ic_music_repeat_random);
+                break;
+            case MODEL_LOOP_LIST:
+                ib_loop_model.setImageResource(R.drawable.ic_music_repeat_list);
+                break;
+            case MODEL_LOOP_ONE:
+                ib_loop_model.setImageResource(R.drawable.ic_music_repeat_one);
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -283,6 +317,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @OnClick(R.id.ib_previous)
     public void onPreviousClick() {
         LogUtil.d(TAG, "onPreviousClick:");
+
+        listManager.play(listManager.previous());
     }
 
     /**
@@ -314,6 +350,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @OnClick(R.id.ib_next)
     public void onNextClick() {
         LogUtil.d(TAG, "onNextClick:");
+
+        listManager.play(listManager.next());
     }
 
     /**
