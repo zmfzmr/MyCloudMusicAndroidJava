@@ -8,6 +8,8 @@ import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 
+import java.io.Serializable;
+
 import butterknife.ButterKnife;
 
 public abstract class BaseCommonFragment extends BaseFragment {
@@ -94,6 +96,14 @@ public abstract class BaseCommonFragment extends BaseFragment {
         startActivity(clazz);
         //关闭当前界面
         getActivity().finish();
+    }
+
+    /**
+     * 获取Data对象
+     */
+    protected Serializable extraData() {
+        //因为是用Bundle传递过来的，所以用getArguments()；
+        return getArguments().getSerializable(Constant.DATA);
     }
 
 
