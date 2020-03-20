@@ -148,6 +148,7 @@ public class PlayListDialogFragment extends BaseBottomSheetDialogFragment {
         dismiss();
         //删除列表全部音乐
         listManager.deleteAll();
+
         //发送音乐列表改变通知
         EventBusUtil.postPlayListChangeEvent();
     }
