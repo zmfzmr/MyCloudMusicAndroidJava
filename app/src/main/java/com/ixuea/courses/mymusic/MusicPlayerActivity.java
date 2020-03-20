@@ -179,6 +179,39 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //注册发布订阅框架
         EventBus.getDefault().register(this);
+
+        //滚动当前音乐位置
+        scrollPosition();
+    }
+
+    /**
+     * 滚动当前音乐位置
+     */
+    private void scrollPosition() {
+        //选中当前播放的音乐
+
+        //使用post方法是
+        //将方法放到了消息循环
+        //如果不这样做，在onCreate这样的方法中滚动无效
+        //因为这时候列表的数据还没有显示完成
+        //具体的这部分我们在《详解View》课程中讲解了
+        vp.post(new Runnable() {
+            @Override
+            public void run() {
+                //找到当前播放音乐的索引
+                int index = listManager.getDatum().indexOf(listManager.getData());
+                //也可以不判断（因为进入到这个界面，是有音乐播放的，可以不判断）
+                if (index != -1) {
+                    //滚动到改位置 如果用参数2 为true：说明是以动画的方式滚动上去 默认是为true的
+                    //setCurrentItem是ViewPager自带的
+
+                    //设置false不用动画，默认好像是从左到右的，设置false不用动画，效果，感觉会好点
+                    //有动画，动画可能会好点，因为可能我们会监听滚动完成以后，也就是动画执行完成以后，才能开始继续滚动
+                    //那么的话，这个时间的话是不那么好监听的
+                    vp.setCurrentItem(index, false);
+                }
+            }
+        });
     }
 
     /**
@@ -466,6 +499,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //显示时长
         showDuration();
+
+        //滚动到当前音乐位置
+        scrollPosition();
     }
 
     private void showDuration() {
