@@ -32,6 +32,7 @@ import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.DensityUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.SwitchDrawableUtil;
@@ -139,6 +140,17 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //缓存页面数量
         vp.setOffscreenPageLimit(3);
+
+        //黑胶唱片指针旋转点
+        //旋转点为15dp
+        //而设置需要单位为px
+        //所以要先转换
+        int rotate = DensityUtil.dip2px(getMainActivity(), 15);
+        //图片的锚点 默认是设置在中间的
+        //这里设置图片的锚点（这里设置的是在(15dp,15dp)这个锚点上），旋转的话，根据这个锚点来旋转
+        iv_record_thumb.setPivotX(rotate);
+        iv_record_thumb.setPivotX(rotate);
+
     }
 
     @Override
