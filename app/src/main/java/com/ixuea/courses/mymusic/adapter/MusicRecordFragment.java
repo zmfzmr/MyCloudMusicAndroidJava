@@ -18,6 +18,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -29,6 +32,21 @@ public class MusicRecordFragment extends BaseCommonFragment {
 
     private static final String TAG = "MusicRecordFragment";
     /**
+     * 每16毫秒旋转的角度
+     * 16毫秒是通过
+     * 每秒60帧计算出来的
+     * 也就是1000 / 60 = 16
+     * 也就是说绘制一帧要在16毫秒中完成
+     * 不然就能感觉卡顿
+     * 用秒表侧转一圈的时间
+     * <p>
+     * 假设：转一圈30s秒 360度  360/30 = 12  每秒转12度
+     * 1s转12度 换成毫秒  = 12 / 1000,这里是16毫秒，再乘以16，所以是12 /1000 *16 = 0.192
+     * <p>
+     * 这里用的0.2304F 秒转一圈360
+     */
+    private static final float ROTATION_PER = 0.2304F;//float 类型
+    /**
      * 黑胶唱片容器
      */
     @BindView(R.id.cl_content)
@@ -39,7 +57,10 @@ public class MusicRecordFragment extends BaseCommonFragment {
      */
     @BindView(R.id.iv_banner)
     CircleImageView iv_banner;
-    private Song data;
+    private Song data;//唱片fragment对应的Song对象
+    private TimerTask timerTask;//定时器任务
+    private Timer timer;
+    private float recordRotation;//旋转的角度 注意这里：是float类型
 
     @Override
     protected void initDatum() {
@@ -95,14 +116,51 @@ public class MusicRecordFragment extends BaseCommonFragment {
      * 停止转动
      */
     private void stopRecordRotate() {
+        //停止定时器任务
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
 
+        //停止定时器
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
 
     /**
      * 开始旋转
      */
     private void startRecordRotate() {
+        if (timerTask != null) {
+            //已经启动了
+            return;
+        }
+        //创建定时器任务
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //data:唱片fragment对应的Song对象
+                LogUtil.d(TAG, "startRecordRotate: " + data.getTitle());
 
+                //如果旋转的角度大于等于360
+                if (recordRotation >= 360) {
+                    //就设置为0
+                    recordRotation = 0;
+                }
+
+                //每次加旋转的偏移
+                recordRotation += ROTATION_PER;
+
+                //旋转（ConstraintLayout约束布局中设置  setRotation是父类View中的，所以说每个View子类都有）
+                cl_content.setRotation(recordRotation);
+            }
+        };
+        //创建定时器
+        timer = new Timer();
+        //创建定时器
+        timer.schedule(timerTask,0,16);
     }
 
     /**
