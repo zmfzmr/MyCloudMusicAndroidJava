@@ -21,6 +21,8 @@ import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
 import com.ixuea.courses.mymusic.adapter.MusicPlayerAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.OnPlayEvent;
+import com.ixuea.courses.mymusic.domain.event.OnStartRecordEvent;
+import com.ixuea.courses.mymusic.domain.event.OnStopRecordEvent;
 import com.ixuea.courses.mymusic.domain.event.PlayListChangeEvent;
 import com.ixuea.courses.mymusic.fragment.PlayListDialogFragment;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
@@ -514,6 +516,10 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         Song data = listManager.getData();
 
         LogUtil.d(TAG, "stopRecordRotate: " + data.getTitle());
+
+        //发送通知(停止通知)
+        EventBus.getDefault().post(new OnStopRecordEvent(data));
+
     }
 
     /**
@@ -524,6 +530,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         Song data = listManager.getData();//获取当前播放的音乐
 
         LogUtil.d(TAG, "startRecordRotate: " + data.getTitle());
+
+        //发送通知
+        EventBus.getDefault().post(new OnStartRecordEvent(data));
     }
 
     /**
@@ -653,7 +662,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
                 //判断播放状态
                 if (musicPlayerManager.isPlaying()) {
-                    //开始旋转（当前的唱片中的音乐是在播放，那么久旋转）
+                    //开始旋转（当前的唱片中的音乐是在播放，那么就旋转）
                     startRecordRotate();
                 }
 
