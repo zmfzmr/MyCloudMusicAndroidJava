@@ -84,6 +84,7 @@
                     61dp = 92(指针宽度) / 2 + (30(点宽度)/2)
                 -->
                 <ImageView
+                    android:id="@+id/iv_record_thumb"
                     android:layout_width="92dp"
                     android:layout_height="138dp"
                     android:layout_marginTop="@dimen/padding_middle"

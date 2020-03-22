@@ -149,4 +149,18 @@ public class Constant {
      * KSC歌词
      */
     public static final int KSC = 10;
+    //黑胶唱片指针旋转
+    /**
+     * 黑胶唱片指针暂停的角度
+     * 记得加上个F
+     */
+    public static final float THUMB_ROTATION_PAUSE = -25F;
+    /**
+     * 黑胶唱片指针旋转的角度（播放时候的角度）
+     */
+    public static final float THUMB_ROTATION_PLAY = 0F;
+    /**
+     * 黑胶唱片指针动画时间 毫秒
+     */
+    public static final long THUMB_DURATION = 300;
 }

@@ -1,5 +1,7 @@
 package com.ixuea.courses.mymusic;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -29,6 +31,7 @@ import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
+import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.SwitchDrawableUtil;
@@ -57,7 +60,7 @@ import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_RANDOM;
 /**
  * 黑胶唱片界面
  */
-public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener, SeekBar.OnSeekBarChangeListener, ViewPager.OnPageChangeListener {
+public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener, SeekBar.OnSeekBarChangeListener, ViewPager.OnPageChangeListener, ValueAnimator.AnimatorUpdateListener {
     private static final String TAG = "MusicPlayerActivity";
     /**
      * 背景
@@ -70,6 +73,12 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      */
     @BindView(R.id.vp)
     ViewPager vp;
+
+    /**
+     * 黑胶唱片指针
+     */
+    @BindView(R.id.iv_record_thumb)
+    ImageView iv_record_thumb;
 
     /**
      * 下载按钮
@@ -112,6 +121,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private ListManager listManager;//列表管理器
     private MusicPlayerManager musicPlayerManager;//音乐播放管理器
     private MusicPlayerAdapter recordAdapter;
+    private ObjectAnimator playThumbAnimation;
+    private ValueAnimator pauseThumbAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +162,28 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         // 向MusicPlayerAdapter->getItem->MusicRecordFragment.newInstance(getData(position));
         // 这里的进入Fragment中获取到当期getData(position)，也就是Song对象
         recordAdapter.setDatum(listManager.getDatum());
+
+
+        //创建黑胶唱片指针的属性动画
+
+        //属性动画的(对象动画)
+        //从暂停到播放状态动画
+        //从-25到0 （逆时针就是负数 ）
+        //rotation:这个对象的属性是 是父类View中的
+        //这里指的是 操作这个对象iv_record_thumb(ImageView中的)) rotation属性
+        playThumbAnimation = ObjectAnimator.ofFloat(iv_record_thumb, "rotation", Constant.THUMB_ROTATION_PAUSE,
+                Constant.THUMB_ROTATION_PLAY);
+
+        //设置执行时间
+        playThumbAnimation.setDuration(Constant.THUMB_DURATION);
+
+        //属性动画的（值动画）
+        //从播放到暂停状态动画
+        //注意：值动画这里没有用差值器（加速 减速的时候用到），默认是匀速的，所以就不用了
+        pauseThumbAnimation = ValueAnimator.ofFloat(Constant.THUMB_ROTATION_PLAY, Constant.THUMB_ROTATION_PAUSE);
+        pauseThumbAnimation.setDuration(Constant.THUMB_DURATION);//设置执行时间
+        //设置更新监听器
+        pauseThumbAnimation.addUpdateListener(this);
 
     }
 
@@ -512,6 +545,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      * 黑胶唱片指针回到暂停状态
      */
     private void stopRecordRotate() {
+        //停止旋转黑胶唱片指针
+        stopRecordThumbRotate();
+
         //获取当前播放的音乐
         Song data = listManager.getData();
 
@@ -527,12 +563,29 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      * 指针回到播放位置
      */
     private void startRecordRotate() {
+        //旋转黑胶唱片指针
+        startRecordThumbRotate();
+
         Song data = listManager.getData();//获取当前播放的音乐
 
         LogUtil.d(TAG, "startRecordRotate: " + data.getTitle());
 
         //发送通知
         EventBus.getDefault().post(new OnStartRecordEvent(data));
+    }
+
+    /**
+     * 黑胶唱片指针默认状态动画（播放状态）
+     */
+    public void startRecordThumbRotate() {
+        playThumbAnimation.start();
+    }
+
+    /**
+     * 黑胶唱片指针旋转-25度动画（暂停状态）
+     */
+    public void stopRecordThumbRotate() {
+        pauseThumbAnimation.start();
     }
 
     /**
@@ -676,6 +729,16 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     }
     //end ViewPager 页面改变监听(滚动监听器)
+
+    /**
+     * 属性动画回调
+     * @param animation ValueAnimator
+     */
+    @Override
+    public void onAnimationUpdate(ValueAnimator animation) {
+        //对控件设置 旋转（获取到的属性值设置到这个控件）
+        iv_record_thumb.setRotation((Float) animation.getAnimatedValue());
+    }
 
     /**
      * 启动方法
