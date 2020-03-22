@@ -56,6 +56,7 @@ import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
 import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_LIST;
 import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_ONE;
 import static com.ixuea.courses.mymusic.util.Constant.MODEL_LOOP_RANDOM;
+import static com.ixuea.courses.mymusic.util.Constant.THUMB_ROTATION_PAUSE;
 
 
 /**
@@ -597,6 +598,20 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      * 黑胶唱片指针旋转-25度动画（暂停状态）
      */
     public void stopRecordThumbRotate() {
+        //获取黑胶唱片指针旋转的角度
+        float thumbRotation = iv_record_thumb.getRotation();
+        LogUtil.d(TAG, "rotation: " + thumbRotation);
+
+        //如果不判断
+        //当前已经停止了
+        //如果再次执行停止动画
+        //就有跳动问题
+        if (THUMB_ROTATION_PAUSE == thumbRotation) {
+            //已经是停止状态了
+
+            //就返回
+            return;
+        }
         pauseThumbAnimation.start();
     }
 
