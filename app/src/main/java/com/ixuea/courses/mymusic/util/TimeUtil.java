@@ -27,4 +27,24 @@ public class TimeUtil {
         //比如：01:10中的1是不足2位的，所以加个0，即01
         return String.format("%02d:%02d", minute, second);
     }
+
+    /**
+     * 将分秒毫秒数据转为毫秒
+     *
+     * @param data 格式为：00:06.429
+     * @return
+     */
+    public static long parseToInt(String data) {
+        //将:替换成.
+        data = data.replace(":", ".");
+
+        //使用.拆分
+        String[] strings = data.split("\\.");
+        //分别取出分 秒 毫秒
+        int m = Integer.parseInt(strings[0]);//分
+        int s = Integer.parseInt(strings[1]);//秒
+        int ms = Integer.parseInt(strings[2]);//  毫秒  字符串转成int
+        //转为毫秒
+        return (m * 60 + s) * 1000 + ms;
+    }
 }
