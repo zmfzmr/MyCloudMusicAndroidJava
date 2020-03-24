@@ -11,11 +11,21 @@ public class Lyric implements Serializable {
 
     private List<Line> datum;//所有的歌词
 
+    private boolean isAccurate;//是否精确到字的歌词  Accurate:精确
+
     public List<Line> getDatum() {
         return datum;
     }
 
     public void setDatum(List<Line> datum) {
         this.datum = datum;
+    }
+
+    public boolean isAccurate() {
+        return isAccurate;
+    }
+
+    public void setAccurate(boolean accurate) {
+        isAccurate = accurate;
     }
 }
