@@ -20,11 +20,13 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
 import com.ixuea.courses.mymusic.adapter.LyricAdapter;
 import com.ixuea.courses.mymusic.adapter.MusicPlayerAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.OnPlayEvent;
+import com.ixuea.courses.mymusic.domain.event.OnRecordClickEvent;
 import com.ixuea.courses.mymusic.domain.event.OnStartRecordEvent;
 import com.ixuea.courses.mymusic.domain.event.OnStopRecordEvent;
 import com.ixuea.courses.mymusic.domain.event.PlayListChangeEvent;
@@ -68,7 +70,7 @@ import static com.ixuea.courses.mymusic.util.Constant.THUMB_ROTATION_PAUSE;
 /**
  * 黑胶唱片界面
  */
-public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener, SeekBar.OnSeekBarChangeListener, ViewPager.OnPageChangeListener, ValueAnimator.AnimatorUpdateListener {
+public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener, SeekBar.OnSeekBarChangeListener, ViewPager.OnPageChangeListener, ValueAnimator.AnimatorUpdateListener, BaseQuickAdapter.OnItemClickListener {
     private static final String TAG = "MusicPlayerActivity";
     /**
      * 背景
@@ -248,6 +250,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //添加滚动监听事件
         vp.addOnPageChangeListener(this);
+
+        //设置歌词点击事件
+        lyricAdapter.setOnItemClickListener(this);
     }
 
     /**
@@ -379,6 +384,35 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             finish();
         }
     }
+
+    /**
+     * 黑胶唱片点击事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRecordClickEvent(OnRecordClickEvent event) {
+
+        if (isLyricEmpty()) {
+            //没有歌词
+            ToastUtil.errorShortToast(R.string.lyric_empty);
+            return;
+        }
+
+        //隐藏黑胶唱片
+        //cl_record(就是ConstraintLayout:ViewPager和ImageView(指针的) 的父容器)
+        cl_record.setVisibility(View.GONE);
+
+        //显示歌词
+        rl_lyric.setVisibility(View.VISIBLE);
+
+    }
+
+    /**
+     * 是否没有歌词
+     */
+    private boolean isLyricEmpty() {
+        return lyricAdapter.getItemCount() == 0;//等于0 表示没有歌词，返回true
+    }
+
     /**
      * 显示初始化数据
      */
@@ -833,6 +867,23 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         iv_record_thumb.setRotation((Float) animation.getAnimatedValue());
     }
 
+
+    /**
+     * 歌词点击事件
+     *
+     * @param adapter
+     * @param view
+     * @param position
+     */
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        //显示黑胶唱片
+        cl_record.setVisibility(View.VISIBLE);
+
+        //隐藏歌词
+        rl_lyric.setVisibility(View.GONE);
+    }
+
     /**
      * 启动方法
      */
@@ -840,4 +891,5 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         Intent intent = new Intent(activity, MusicPlayerActivity.class);
         activity.startActivity(intent);
     }
+
 }

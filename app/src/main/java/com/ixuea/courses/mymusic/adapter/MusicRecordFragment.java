@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.event.OnRecordClickEvent;
 import com.ixuea.courses.mymusic.domain.event.OnStartRecordEvent;
 import com.ixuea.courses.mymusic.domain.event.OnStopRecordEvent;
 import com.ixuea.courses.mymusic.fragment.BaseCommonFragment;
@@ -23,6 +24,7 @@ import java.util.TimerTask;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -161,6 +163,18 @@ public class MusicRecordFragment extends BaseCommonFragment {
         timer = new Timer();
         //创建定时器
         timer.schedule(timerTask,0,16);
+    }
+
+    /**
+     * 黑胶唱片点击事件
+     */
+    @OnClick(R.id.cl_container)
+    public void onRecordClick() {
+        LogUtil.d(TAG, "onRecordClick");
+
+        //发送事件
+        EventBus.getDefault().post(new OnRecordClickEvent());
+
     }
 
     /**

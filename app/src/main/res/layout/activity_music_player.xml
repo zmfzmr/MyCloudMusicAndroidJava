@@ -73,7 +73,7 @@
                 android:id="@+id/rl_lyric"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <!--歌词列表控件-->
                 <androidx.recyclerview.widget.RecyclerView
@@ -84,11 +84,11 @@
             </RelativeLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:visibility="gone"
-                android:clickable="true"
                 android:id="@+id/cl_record"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:visibility="visible">
 
                 <!--黑胶唱片列表控件-->
                 <androidx.viewpager.widget.ViewPager
@@ -103,12 +103,12 @@
                     android:id="@+id/iv_record_thumb"
                     android:layout_width="92dp"
                     android:layout_height="138dp"
-                    android:layout_marginTop="@dimen/padding_middle"
                     android:layout_marginLeft="61dp"
+                    android:layout_marginTop="@dimen/padding_middle"
+                    android:src="@drawable/cd_thumb"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/cd_thumb" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
