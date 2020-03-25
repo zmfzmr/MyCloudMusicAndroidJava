@@ -15,6 +15,9 @@ import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.util.ListUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.lyric.LyricParser;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -168,6 +171,9 @@ public class MusicPlayerManagerImpl
                                 //DetailResponse<Song>：Song外层包裹； songDetailResponse.getData()：就是Song对象
                                 if (songDetailResponse != null && songDetailResponse.getData() != null) {
                                     //将数据设置歌曲对象(当前播放的Song对象)
+
+                                    //因为 this.data = data; 2个引用指向同一个对象
+                                    //所以走到这一步的时候，用data还是this.data都是操作Song这对象
                                     data.setStyle(songDetailResponse.getData().getStyle());
                                     data.setLyric(songDetailResponse.getData().getLyric());
                                 }
@@ -197,6 +203,14 @@ public class MusicPlayerManagerImpl
     private void onLyricChanged() {
         //这里只是通知歌词数据改变l
         //但不一定就有歌词
+
+        //解析歌词
+        //在这里解析的歌词的好处是
+        //外面不用多次接信息
+        if (StringUtils.isNotBlank(data.getLyric())) {
+            //有歌词
+            data.setParsedLyric(LyricParser.parse(data.getStyle(), data.getLyric()));
+        }
 
         //不管有没有歌词都要回调
         ListUtil.eachListener(listeners, listener -> listener.onLyricChanged(data));

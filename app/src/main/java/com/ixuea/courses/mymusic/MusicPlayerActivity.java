@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -20,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
+import com.ixuea.courses.mymusic.adapter.LyricAdapter;
 import com.ixuea.courses.mymusic.adapter.MusicPlayerAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.OnPlayEvent;
@@ -44,8 +46,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -69,6 +75,25 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      */
     @BindView(R.id.iv_background)
     ImageView iv_background;
+
+    /**
+     * 歌词容器
+     */
+    @BindView(R.id.rl_lyric)
+    View rl_lyric;
+
+    /**
+     * 列表控件(歌词列表)
+     */
+    @BindView(R.id.rv)
+    RecyclerView rv;
+
+    /**
+     * 黑胶唱片容器
+     */
+    @BindView(R.id.cl_record)
+    View cl_record;
+
 
     /**
      * 黑胶唱片列表控件
@@ -125,6 +150,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private MusicPlayerAdapter recordAdapter;
     private ObjectAnimator playThumbAnimation;
     private ValueAnimator pauseThumbAnimation;
+    private LyricAdapter lyricAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +177,13 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         //这里设置图片的锚点（这里设置的是在(15dp,15dp)这个锚点上），旋转的话，根据这个锚点来旋转
         iv_record_thumb.setPivotX(rotate);
         iv_record_thumb.setPivotX(rotate);
+
+        //尺寸固定
+        rv.setHasFixedSize(true);
+
+        //设置布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
+        rv.setLayoutManager(layoutManager);
 
     }
 
@@ -198,6 +231,12 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         //设置更新监听器
         pauseThumbAnimation.addUpdateListener(this);
 
+        //创建歌词列表适配器
+        lyricAdapter = new LyricAdapter(R.layout.item_lyric);
+
+        //设置适配器
+        rv.setAdapter(lyricAdapter);
+
     }
 
     @Override
@@ -239,6 +278,28 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //滚动当前音乐位置
         scrollPosition();
+
+        //显示歌词数据
+        showLyricData();
+    }
+
+    /**
+     * //显示歌词数据
+     */
+    private void showLyricData() {
+        //获取当前的音乐
+        Song data = listManager.getData();
+        if (data.getParsedLyric() == null) {
+            //Song 里面的解析过的歌词对象Lyric 为null（严格来说是里面的集合list大小为0，说明解析失败了）
+
+            //从 MusicPlayerManagerImpl->data.setParsedLyric(LyricParser.parse(data.getStyle(),data.getLyric()));
+            // --> LyricParser -> KSCLyricParser-parse 中知道 这个data.getParsedLyric()（不是null的）
+            //所以时候这里的if不会执行 ，所以这里写不写都无所谓
+            lyricAdapter.replaceData(new ArrayList<>());//空数组，里面没有数据，相等于替换了，数据没有了
+        } else {
+            //设置歌词数据 （这个数据把原来的数据替换掉了）
+            lyricAdapter.replaceData(data.getParsedLyric().getDatum());
+        }
     }
 
     /**
@@ -666,6 +727,11 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     public void onProgress(Song data) {
 
         showProgress();
+    }
+
+    @Override
+    public void onLyricChanged(Song data) {
+        showLyricData();
     }
 
     //end播放管理器回调

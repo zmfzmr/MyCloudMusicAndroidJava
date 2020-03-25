@@ -68,7 +68,23 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
+            <!--歌词容器-->
+            <RelativeLayout
+                android:id="@+id/rl_lyric"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <!--歌词列表控件-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </RelativeLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="gone"
                 android:clickable="true"
                 android:id="@+id/cl_record"
                 android:layout_width="match_parent"

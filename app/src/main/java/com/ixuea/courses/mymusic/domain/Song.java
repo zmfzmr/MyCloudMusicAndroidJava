@@ -1,5 +1,7 @@
 package com.ixuea.courses.mymusic.domain;
 
+import com.ixuea.courses.mymusic.domain.lyric.Lyric;
+
 import static com.ixuea.courses.mymusic.util.Constant.TYPE_SONG;
 
 /**
@@ -51,8 +53,10 @@ public class Song extends BaseMultiItemEntity {
      */
     private int source;
 
-
-
+    /**
+     * 已经解析后的歌词
+     */
+    private Lyric parsedLyric;
 
     public String getTitle() {
         return title;
@@ -156,6 +160,14 @@ public class Song extends BaseMultiItemEntity {
 
     public void setSource(int source) {
         this.source = source;
+    }
+
+    public Lyric getParsedLyric() {
+        return parsedLyric;
+    }
+
+    public void setParsedLyric(Lyric parsedLyric) {
+        this.parsedLyric = parsedLyric;
     }
 
     /**
