@@ -4,8 +4,8 @@ import com.ixuea.courses.mymusic.domain.BaseModel;
 
 /**
  * 一行歌词
- *                开始时间       结束时间      字数组         每个字持续的时间数组
- * KSC:karaoke.add('00:19.662', '00:22.609', '有没有一扇窗', '313,419,732,299,348,836');
+ *                开始时间       结束时间      整行歌词 和 字数组     每个字持续的时间数组
+ * KSC:karaoke.add('00:19.662', '00:22.609', '有没有一扇窗',   '313,419,732,299,348,836');
  */
 public class Line extends BaseModel {
     private String data;//整行歌词
@@ -14,6 +14,7 @@ public class Line extends BaseModel {
 
     private long endTime;//结束时间 单位毫秒
 
+    //注意：下面2个是个字符数组
     private String[] words;//每一个子（字数组）
 
     private Integer[] wordDurations;//每个字持续的时间数组
