@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -72,7 +73,7 @@ import static com.ixuea.courses.mymusic.util.Constant.THUMB_ROTATION_PAUSE;
 /**
  * 黑胶唱片界面
  */
-public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener, SeekBar.OnSeekBarChangeListener, ViewPager.OnPageChangeListener, ValueAnimator.AnimatorUpdateListener, BaseQuickAdapter.OnItemClickListener {
+public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener, SeekBar.OnSeekBarChangeListener, ViewPager.OnPageChangeListener, ValueAnimator.AnimatorUpdateListener, BaseQuickAdapter.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener {
     private static final String TAG = "MusicPlayerActivity";
     /**
      * 背景
@@ -148,6 +149,11 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     @BindView(R.id.ib_play)
     ImageButton ib_play;
 
+    /**
+     * 歌词滚动偏移
+     * 会在运行的时候动态计算
+     */
+    private int lyricOffsetX;
 
     private ListManager listManager;//列表管理器
     private MusicPlayerManager musicPlayerManager;//音乐播放管理器
@@ -156,6 +162,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private ValueAnimator pauseThumbAnimation;//黑胶唱片指针暂停状态动画
     private LyricAdapter lyricAdapter;//歌词适配器
     private int lineNumber;//当前Item歌词的索引
+    private LinearLayoutManager layoutManager;//布局管理器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +194,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         rv.setHasFixedSize(true);
 
         //设置布局管理器
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
+        layoutManager = new LinearLayoutManager(getMainActivity());
         rv.setLayoutManager(layoutManager);
 
     }
@@ -241,7 +248,6 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //设置适配器
         rv.setAdapter(lyricAdapter);
-
     }
 
     @Override
@@ -256,6 +262,10 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //设置歌词点击事件
         lyricAdapter.setOnItemClickListener(this);
+
+        //添加布局监听器
+        //:获取ViewTreeObserver：获取视图树观察者，设置全局布局监听器 GlobalL:全球
+        vp.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
     /**
@@ -820,8 +830,24 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
                 //选中到当前行歌词
                 lyricAdapter.setSelectedIndex(lineNumber);
 
-                //滚动到底部 (这个是带动画的，滚动到底部)
-                rv.smoothScrollToPosition(lineNumber);
+//                //滚动到底部 (这个是带动画的，滚动到底部)
+//                rv.smoothScrollToPosition(lineNumber);
+
+                //该方法会将指定item滚动到顶部
+                //offset是滚动到顶部后，在向下(+)偏移多少
+                //如果我们想让一个Item在RecyclerView中间
+                //那么偏移为RecyclerView.height/2(或者ViewPager / 2 这个2个都是一样的高度)
+
+                //动态获取RecyclerView.height
+                //兼容性更好
+
+                if (lyricOffsetX > 0) {
+                    //大于0才滚动(这里用的是LinearLayoutManager
+                    // 线性布局管理器的scrollToPositionWithOffset滚动顶部 偏移的方法)
+                    //lyricOffsetX:这个是顶部偏移到中心的距离（在回调方法onGlobalLayout获取的）
+                    layoutManager.scrollToPositionWithOffset(lineNumber, lyricOffsetX);
+                }
+
             }
         });
     }
@@ -945,6 +971,22 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //隐藏歌词
         rl_lyric.setVisibility(View.GONE);
+    }
+
+    /**
+     * 布局改变了（当前界面布局完成了以后）
+     * <p>
+     * 在这里获取宽度的原因是：我们在布局设置了权重为1，需要加载到屏幕上才知道宽高多少
+     * 不同的手机的屏幕不一样，需要等布局加载出来后才知道高是多少
+     */
+    @Override
+    public void onGlobalLayout() {
+        //获取控件高度 40是 歌词item里面写死的高度
+        lyricOffsetX = vp.getHeight() / 2 - (DensityUtil.dip2px(getMainActivity(), 40) / 2);
+
+        //用完以后要移出
+        //因为界面会一直变动 (这里用的是ViewPager，其实用RecyclerView和ViewPager效果都是一样的)
+        vp.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 
     /**
