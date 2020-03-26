@@ -817,7 +817,10 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         rv.post(new Runnable() {
             @Override
             public void run() {
-                //滚动到顶部 (这个是带动画的，滚动到顶部)
+                //选中到当前行歌词
+                lyricAdapter.setSelectedIndex(lineNumber);
+
+                //滚动到底部 (这个是带动画的，滚动到底部)
                 rv.smoothScrollToPosition(lineNumber);
             }
         });
