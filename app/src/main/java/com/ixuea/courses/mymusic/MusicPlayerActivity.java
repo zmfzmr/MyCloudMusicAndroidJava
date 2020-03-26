@@ -30,6 +30,8 @@ import com.ixuea.courses.mymusic.domain.event.OnRecordClickEvent;
 import com.ixuea.courses.mymusic.domain.event.OnStartRecordEvent;
 import com.ixuea.courses.mymusic.domain.event.OnStopRecordEvent;
 import com.ixuea.courses.mymusic.domain.event.PlayListChangeEvent;
+import com.ixuea.courses.mymusic.domain.lyric.Lyric;
+import com.ixuea.courses.mymusic.domain.lyric.LyricUtil;
 import com.ixuea.courses.mymusic.fragment.PlayListDialogFragment;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
@@ -149,10 +151,11 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     private ListManager listManager;//列表管理器
     private MusicPlayerManager musicPlayerManager;//音乐播放管理器
-    private MusicPlayerAdapter recordAdapter;
-    private ObjectAnimator playThumbAnimation;
-    private ValueAnimator pauseThumbAnimation;
-    private LyricAdapter lyricAdapter;
+    private MusicPlayerAdapter recordAdapter;//黑胶唱片适配器
+    private ObjectAnimator playThumbAnimation;//黑胶唱片指针播放状态动画
+    private ValueAnimator pauseThumbAnimation;//黑胶唱片指针暂停状态动画
+    private LyricAdapter lyricAdapter;//歌词适配器
+    private int lineNumber;//当前Item歌词的索引
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -761,6 +764,63 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     public void onProgress(Song data) {
 
         showProgress();
+
+        //显示歌词进度
+        showLyricProgress(listManager.getData().getProgress());
+    }
+
+    /**
+     * 显示歌词进度
+     */
+    private void showLyricProgress(long progress) {
+        //这个解析过的歌词对象Lyric 是在MusicPlayerManagerImpl中设置的setParsedLyric中从Song设置进来的对象Lyric对象
+        //而这里用的是listManager获取Song对象中的Lyric对象
+        //为什么?
+        //因为：MusicPlayerManagerImpl 回调onProgress-->ListManagerImpl中实现监听器-->在onProgress-->保存Song对象到数据库
+
+        //一播放的时候在ListManagerImpl中 onProgress方法，把Song对象保存到数据库
+        //而ListManagerImpl和MusicPlayerActivity同时实现了监听器，那个类中的onProgress先执行呢
+
+        //肯定是ListManagerImpl类中的onProgress先执行，因为进入activity中需要时间，比较慢点
+
+        //上面的第一种情况：第一次进入到Activity中播放
+        // （使用ListManagerImpl对象的时候，已经恢复Song对象赋值（从数据中找Song对象并赋值给成员变量）,
+        // 所以这个时候获取到的Song对象(listManager.getData)是MusicPlayerManagerImpl通过onProgress(data)回调回来的最新的Song对象）
+
+
+        //第二种情况：在当前activity中播放(包含 点击播放按钮 播放和后台杀死进入进度到activity播放(这种情况恢复数据Song对象))
+        // 播放的时候，使用ListManagerImpl中调用Play播放，
+        // 其实在调用Play播放之前，构造方法调用方法恢复了数据库中的数据，并赋值给当前对象Song
+
+        //简单点：在activity用listManager.getData()(Song对象就是从数据库中查找出来的)
+        Lyric lyric = listManager.getData().getParsedLyric();
+
+        if (lyric == null) {
+            //没有歌词(没有解析过的歌词)
+            return;
+        }
+
+        //获取当前时间对应的歌词索引
+        int newLineNumber = LyricUtil.getLineNumber(lyric, progress);
+
+        if (newLineNumber != lineNumber) {
+            //滚动到当前行
+            scrollLyricPosition(newLineNumber);
+            lineNumber = newLineNumber;//赋值给当前成员变量，记得写这个
+        }
+    }
+
+    /**
+     * 滚动到当前歌词行
+     */
+    private void scrollLyricPosition(int lineNumber) {
+        rv.post(new Runnable() {
+            @Override
+            public void run() {
+                //滚动到顶部 (这个是带动画的，滚动到顶部)
+                rv.smoothScrollToPosition(lineNumber);
+            }
+        });
     }
 
     @Override
