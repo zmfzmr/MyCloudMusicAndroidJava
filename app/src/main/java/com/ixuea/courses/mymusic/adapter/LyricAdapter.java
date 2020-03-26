@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 
 /**
  * 播放界面-歌词列表适配器
+ * Object:使用这个的原因，主要是歌词前面添加占位对象
  */
-public class LyricAdapter extends BaseQuickAdapter<Line, BaseViewHolder> {
+//public class LyricAdapter extends BaseQuickAdapter<Line, BaseViewHolder> {
+public class LyricAdapter extends BaseQuickAdapter<Object, BaseViewHolder> {
     /**
      * 选中索引
      */
@@ -29,10 +31,20 @@ public class LyricAdapter extends BaseQuickAdapter<Line, BaseViewHolder> {
      * 绑定数据
      */
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, Line data) {
-        //使用TextView实现 data.getData() ：获取到的是整行歌词
-        //显示歌词
-        helper.setText(R.id.tv, data.getData());
+    protected void convert(@NonNull BaseViewHolder helper, Object item) {
+
+        if (item instanceof String) {
+            //字符串
+            //用来填充占位符
+            helper.setText(R.id.tv, "");
+        } else {
+            //真实数据
+            Line data = (Line) item;
+
+            //使用TextView实现 data.getData() ：获取到的是整行歌词
+            //显示歌词
+            helper.setText(R.id.tv, data.getData());
+        }
 
         //出来选中状态
         if (selectedIndex == helper.getAdapterPosition()) {

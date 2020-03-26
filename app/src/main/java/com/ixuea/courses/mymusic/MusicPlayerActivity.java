@@ -52,6 +52,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -163,6 +164,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private LyricAdapter lyricAdapter;//歌词适配器
     private int lineNumber;//当前Item歌词的索引
     private LinearLayoutManager layoutManager;//布局管理器
+    private int lyricPlaceholdlerSize = 4;//歌词填充占位数据
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -315,8 +317,21 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             //所以时候这里的if不会执行 ，所以这里写不写都无所谓
             lyricAdapter.replaceData(new ArrayList<>());//空数组，里面没有数据，相等于替换了，数据没有了
         } else {
+            //创建列表
+            ArrayList<Object> datum = new ArrayList<>();
+
+            //前后添加占位数据
+            //添加占位数据
+            addLyricFillData(datum);
+
+            //添加真实数据
+            datum.addAll(data.getParsedLyric().getDatum());
+
+            //添加占位数据
+            addLyricFillData(datum);
+
             //设置歌词数据 （这个数据把原来的数据替换掉了）
-            lyricAdapter.replaceData(data.getParsedLyric().getDatum());
+            lyricAdapter.replaceData(datum);
         }
     }
 
@@ -810,8 +825,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             return;
         }
 
-        //获取当前时间对应的歌词索引
-        int newLineNumber = LyricUtil.getLineNumber(lyric, progress);
+        //获取当前时间对应的歌词索引 + lyricPlaceholdlerSize(占位的个数)
+        int newLineNumber = LyricUtil.getLineNumber(lyric, progress) + lyricPlaceholdlerSize;
 
         if (newLineNumber != lineNumber) {
             //滚动到当前行
@@ -990,11 +1005,21 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     }
 
     /**
+     * 添加歌词占位数据
+     *
+     * @param datum
+     */
+    public void addLyricFillData(List<Object> datum) {
+        for (int i = 0; i < lyricPlaceholdlerSize; i++) {
+            datum.add("fill");
+        }
+    }
+
+    /**
      * 启动方法
      */
     public static void start(Activity activity) {
         Intent intent = new Intent(activity, MusicPlayerActivity.class);
         activity.startActivity(intent);
     }
-
 }
