@@ -81,6 +81,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
+                <!--歌词拖拽容器-->
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_middle"
+                    android:layout_marginRight="@dimen/padding_middle">
+
+                    <!--歌词拖拽容器-->
+                    <ImageButton
+                        android:id="@+id/ib_lyric_play"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:src="@drawable/ic_lyric_music_play" />
+
+                    <!--分割线-->
+                    <View
+                        android:layout_marginLeft="@dimen/padding_middle"
+                        android:layout_marginRight="@dimen/padding_middle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/divider_small"
+                        android:background="@color/white" />
+
+                    <!--歌词时间-->
+                    <TextView
+                        android:id="@+id/tv_lyric_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="00:00" />
+
+                </LinearLayout>
+
             </RelativeLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
