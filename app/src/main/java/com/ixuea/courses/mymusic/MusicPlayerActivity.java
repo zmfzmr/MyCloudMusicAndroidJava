@@ -164,7 +164,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private LyricAdapter lyricAdapter;//歌词适配器
     private int lineNumber;//当前Item歌词的索引
     private LinearLayoutManager layoutManager;//布局管理器
-    private int lyricPlaceholdlerSize = 4;//歌词填充占位数据
+    private int lyricPlaceholderSize;//歌词填充占位数据
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -307,6 +307,32 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      * //显示歌词数据
      */
     private void showLyricData() {
+        if (lyricPlaceholderSize > 0) {
+            //已经计算了填充数量,不需要再次计算了，直接调用方法
+            next();
+        } else {
+            //还没有计算
+
+            //使用异步任务获取（之前是用vp.getViewTreeObserver().addOnGlobalLayoutListener(this);）
+            // 这种方式（不过这个用的是getHeight）
+            vp.post(() -> {
+                //计算占位数 (注意：这里用的是测量后的高 （因为是等布局加载出来才获取的）)
+                int height = vp.getMeasuredHeight();
+
+                //height / 1.0 :  因为整除，可能有小数，所以需要除以1.0（或者*1.0都行）
+                //height / 1.0 / 2: 这里得到的是控件高度的一半
+                //height / 1.0 / 2 / DensityUtil.dip2px(getMainActivity(), 40):算出需要多少item
+                //Math.ceil:因为除以可能会有小数，比如7.1 所以向上取整，调用这个方法Math.ceil方法
+                //如果填充7个，就会有一点无法滚动到中心，也就说只能多不能少。
+                lyricPlaceholderSize = (int) Math.ceil(height / 1.0 / 2 / DensityUtil.dip2px(getMainActivity(), 40));
+
+                //执行下一步操作
+                next();
+            });
+        }
+    }
+
+    private void next() {
         //获取当前的音乐
         Song data = listManager.getData();
         if (data.getParsedLyric() == null) {
@@ -322,7 +348,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
             //前后添加占位数据
             //添加占位数据
-            addLyricFillData(datum);
+            addLyricFillData(datum);//这个方法里面用到了 lyricPlaceholdlerSize变量
 
             //添加真实数据
             datum.addAll(data.getParsedLyric().getDatum());
@@ -825,8 +851,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             return;
         }
 
-        //获取当前时间对应的歌词索引 + lyricPlaceholdlerSize(占位的个数)
-        int newLineNumber = LyricUtil.getLineNumber(lyric, progress) + lyricPlaceholdlerSize;
+        //获取当前时间对应的歌词索引 + lyricPlaceholderSize(占位的个数)
+        int newLineNumber = LyricUtil.getLineNumber(lyric, progress) + lyricPlaceholderSize;
 
         if (newLineNumber != lineNumber) {
             //滚动到当前行
@@ -963,6 +989,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     /**
      * 属性动画回调
+     *
      * @param animation ValueAnimator
      */
     @Override
@@ -1010,7 +1037,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      * @param datum
      */
     public void addLyricFillData(List<Object> datum) {
-        for (int i = 0; i < lyricPlaceholdlerSize; i++) {
+        for (int i = 0; i < lyricPlaceholderSize; i++) {
             datum.add("fill");
         }
     }
