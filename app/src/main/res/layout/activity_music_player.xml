@@ -83,13 +83,15 @@
 
                 <!--歌词拖拽容器-->
                 <LinearLayout
+                    android:id="@+id/ll_lyric_drag"
                     android:gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/padding_middle"
-                    android:layout_marginRight="@dimen/padding_middle">
+                    android:layout_marginRight="@dimen/padding_middle"
+                    android:visibility="gone">
 
                     <!--歌词拖拽容器-->
                     <ImageButton

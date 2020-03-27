@@ -53,6 +53,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -93,6 +95,12 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      */
     @BindView(R.id.rv)
     RecyclerView rv;
+
+    /**
+     * 歌词拖拽容器
+     */
+    @BindView(R.id.ll_lyric_drag)
+    View ll_lyric_drag;
 
     /**
      * 黑胶唱片容器
@@ -165,6 +173,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private int lineNumber;//当前Item歌词的索引
     private LinearLayoutManager layoutManager;//布局管理器
     private int lyricPlaceholderSize;//歌词填充占位数据
+    private boolean isDrag;//歌词是否在拖拽状态
+    private TimerTask lyricTimerTask;//隐藏歌词拖拽效果任务
+    private Timer lyricTime;//隐藏歌词拖拽效果定时器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,6 +279,107 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         //添加布局监听器
         //:获取ViewTreeObserver：获取视图树观察者，设置全局布局监听器 GlobalL:全球
         vp.getViewTreeObserver().addOnGlobalLayoutListener(this);
+
+        //添加歌词列表滚动事件 注意：这类用的是addOnScrollListener（因为setOnScrollListener过时了）
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            /**
+             * 滚动状态改变了
+             * 状态ViewPager一样
+             */
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //SCROLL_STATE_DRAGGING:这个跟ViewPager是一样的（也可以用RecyclerView里面的静态变量）
+                if (SCROLL_STATE_DRAGGING == newState) {
+                    //拖拽状态
+                    showDragView();
+                } else if (SCROLL_STATE_IDLE == newState) {
+                    //空闲状态
+                    prepareScrollLyricView();
+                }
+
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+    }
+
+    /**
+     * 准备滚动歌词(其实就是：延迟几秒(然后调用enableScrollLyric 隐藏拖拽控件)
+     */
+    private void prepareScrollLyricView() {
+        //延迟几秒钟后隐藏
+
+        //取消隐藏歌词拖拽效果原来的任务（下一次拖拽的时候，原来的拖拽控件还在
+        // （还没有隐藏，定时器还是在使用中，而定时器是只能用一次的），先取消原来的定时器和定时任务）
+        cancelLyricTask();
+
+        //创建任务
+        lyricTimerTask = new TimerTask() {
+
+            @Override
+            public void run() {//定时器任务是在子线程的，操作UI需要在主线程中进行
+                //切换到主线程
+                vp.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        enableScrollLyric();//开启歌词滚动
+                    }
+                });
+            }
+        };
+        //创建定时器
+        lyricTime = new Timer();
+
+        //开始倒计时（第二个参数：其实就是延迟几秒(然后调用enableScrollLyric 隐藏拖拽控件)）
+        lyricTime.schedule(lyricTimerTask, Constant.LYRIC_HIDE_DRAG_TIME);
+        //注意：这个定时器 和定时器任务 都是只能用一次（不能重复使用）
+    }
+
+    /**
+     * 开启歌词滚动(隐藏拖拽控件 歌词滚动)
+     */
+    private void enableScrollLyric() {
+
+        isDrag = false;
+
+        //隐藏歌词拖拽效果
+        ll_lyric_drag.setVisibility(View.GONE);
+
+    }
+
+    /**
+     * 取消隐藏歌词拖拽效果原来的任务
+     */
+    private void cancelLyricTask() {
+        if (lyricTimerTask != null) {
+            lyricTimerTask.cancel();
+            lyricTimerTask = null;
+        }
+
+        if (lyricTime != null) {
+            lyricTime.cancel();
+            lyricTime = null;
+        }
+    }
+
+    /**
+     * 显示拖拽控件
+     */
+    private void showDragView() {
+        if (isLyricEmpty()) {
+            //没有歌词不能拖拽
+            return;
+        }
+
+        //拖拽状态
+        isDrag = true;
+
+        //显示歌词拖拽控件
+        ll_lyric_drag.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -848,6 +960,14 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         if (lyric == null) {
             //没有歌词(没有解析过的歌词)
+            return;
+        }
+
+        //因为这个方法 一直播放的话，onProgress->showLyricProgress 会一直调用的，
+        // 判断是在拖拽，就中断方法运行（停止滚动到当前歌词位置）
+        if (isDrag) {
+            //正在拖拽歌词
+            //就直接返回
             return;
         }
 

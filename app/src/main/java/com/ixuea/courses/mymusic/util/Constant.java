@@ -163,4 +163,10 @@ public class Constant {
      * 黑胶唱片指针动画时间 毫秒
      */
     public static final long THUMB_DURATION = 300;
+    //end黑胶唱片指针旋转
+
+    /**
+     * 隐藏歌词拖拽时间 毫秒
+     */
+    public static final long LYRIC_HIDE_DRAG_TIME = 4000;
 }
