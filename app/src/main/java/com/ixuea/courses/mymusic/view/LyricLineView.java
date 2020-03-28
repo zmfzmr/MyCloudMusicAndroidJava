@@ -30,6 +30,7 @@ public class LyricLineView extends View {
      * 颜色其实就是一个32位的值，用int就行
      */
     private static final int DEFAULT_LYRIC_TEXT_COLOR = Color.WHITE;
+    private static final int DEFAULT_LYRIC_SELECTED_TEXT_COLOR = Color.parseColor("#dd0000");//默认歌词高亮颜色
     private static final String HINT_LYRIC_EMPTY = "我的云音乐，听你想听";//默认歌词显示的内容
     private Line data;//歌词行对象
     private boolean accurate;//是否精确到字歌词
@@ -70,6 +71,8 @@ public class LyricLineView extends View {
         lyricTextSize = DensityUtil.dip2px(getContext(), DEFAULT_LYRIC_TEXT_SIZE);
         // lyricTextColor：变量    DEFAULT_LYRIC_TEXT_COLOR:常量   后面可能需要一些自定义配置 可能需要这样转换
         lyricTextColor = DEFAULT_LYRIC_TEXT_COLOR;
+
+        lyricSelectedTextColor = DEFAULT_LYRIC_SELECTED_TEXT_COLOR;
 
         //初始化画笔
 
@@ -119,14 +122,14 @@ public class LyricLineView extends View {
         //保存状态(这个调用save之前什么都没改变，相当于这个画布是空的，保存这种没改变的状态)
         canvas.save();
 
-//        if (isEmptyLyric()) {
-        //如果没有歌词
-        //绘制默认文本
-        drawDefaultText(canvas);
+        if (isEmptyLyric()) {
+            //如果没有歌词
+            //绘制默认文本
+            drawDefaultText(canvas);
 
-//        } else {
-//            drawText(canvas);//绘制真实文本
-//        }
+        } else {
+            drawLyricText(canvas);//绘制真实文本
+        }
 
         //恢复上下文（绘制完成后，恢复之前画布没有改变的状态）
         canvas.restore();
@@ -135,7 +138,40 @@ public class LyricLineView extends View {
     /**
      * 绘制真实文本
      */
-    private void drawText(Canvas canvas) {
+    private void drawLyricText(Canvas canvas) {
+        //绘制背景文字
+
+        //当前歌词的宽高
+        //data（Line对象）:是从适配器LyricAdapter设置进来的
+        //data.getData():获取整行歌词
+        float textWidth = TextUtil.getTextWidth(foregroundTextPaint, data.getData());
+        float textHeight = TextUtil.getTextHeight(foregroundTextPaint);
+        //水平中心位置
+        float centerX = getCenterX(textWidth);
+        //TextView绘制值从baseLine开始
+        //而不是左上角
+        Paint.FontMetrics fontMetrics = foregroundTextPaint.getFontMetrics();
+        float centerY = (getMeasuredHeight() - textHeight) / 2 + Math.abs(fontMetrics.top);
+        //先绘制背景歌词
+        canvas.drawText(data.getData(), centerX, centerY, backgroundTextPaint);
+
+        if (lineSelected) {
+            //选中了
+
+            //精确到行歌词
+            canvas.drawText(data.getData(), centerX, centerY, foregroundTextPaint);
+        }
+        //上面的是KSC歌词的写法，后面要根据这个写法实现（先实现背景歌词，后实现选中歌词）
+
+//        //这种是LRC歌词的写法
+//        if (lineSelected) {
+//            //选中了
+//
+//            //精确到行歌词
+//            canvas.drawText(data.getData(), centerX, centerY, backgroundTextPaint);
+//        } else {
+//            canvas.drawText(data.getData(),centerX,centerY,foregroundTextPaint);
+//        }
 
     }
 
