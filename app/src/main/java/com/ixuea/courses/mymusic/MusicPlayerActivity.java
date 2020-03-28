@@ -527,6 +527,16 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             //添加占位数据
             addLyricFillData(datum);
 
+            //设置歌词是否是精确到字
+            //data:当前播放的音乐Song对象
+            //data.getParsedLyric():Song对象里面的解析过的歌词对象Lyric
+            // isAccurate()：获取解析Lyric对象的accurate值（true还是false）
+            lyricAdapter.setAccurate(data.getParsedLyric().isAccurate());
+
+            //注意：这里是在替换数据集合前绘制（替换数据之前 当前播放的Song对象是否需要精确 设置到lyricAdapter里面；
+            // 适配器然后 绘制每一个item前走LyricAdapter convert-->llv（歌词文本控件）
+            // 设置传入进来的当前播放对象Song对象的精确（是否要精确true还是false）
+
             //设置歌词数据 （这个数据把原来的数据替换掉了）
             lyricAdapter.replaceData(datum);
         }

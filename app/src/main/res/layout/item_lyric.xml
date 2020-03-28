@@ -4,14 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="40dp">
 
-    <!--使用TextView实现-->
-    <TextView
-        android:id="@+id/tv"
-        android:gravity="center"
+    <!--    &lt;!&ndash;使用TextView实现&ndash;&gt;-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv"-->
+    <!--        android:gravity="center"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:textSize="@dimen/lyric_size"-->
+    <!--        android:textColor="@color/lyric_text_color"-->
+    <!--        android:text="这是歌词" />-->
+
+    <!--使用自定义控件实现-->
+    <com.ixuea.courses.mymusic.view.LyricLineView
+        android:id="@+id/llv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="@dimen/lyric_size"
-        android:textColor="@color/lyric_text_color"
-        android:text="这是歌词" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>
