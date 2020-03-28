@@ -1222,6 +1222,24 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     }
 
     /**
+     * 点击了歌词前面的播放按钮
+     */
+    @OnClick(R.id.ib_lyric_play)
+    public void onLyricPlayClick() {
+
+        //取消歌词定时器
+        cancelLyricTask();
+
+        //从该位置开始播放（歌词的开始位置开始播放）
+        listManager.seekTo((int) scrollSelectedLyricLine.getStartTime());
+
+        //马上滚动歌词
+        //(这里面  isDrag = false; 从开始位置播放音乐后，会回调onProgress -> showLyricProgress 滚动到歌词位置
+        // 因为 这里置为false  直接走完showLyricProgress后面的方法（也就是滚动到歌词的进度行 位置）)
+        enableScrollLyric();
+    }
+
+    /**
      * 启动方法
      */
     public static void start(Activity activity) {
