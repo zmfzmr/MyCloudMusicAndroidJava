@@ -46,6 +46,7 @@ import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.SwitchDrawableUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
+import com.ixuea.courses.mymusic.view.LyricLineView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -1025,9 +1026,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         // 其实在调用Play播放之前，构造方法调用方法恢复了数据库中的数据，并赋值给当前对象Song
 
         //简单点：在activity用listManager.getData()(Song对象就是从数据库中查找出来的)
-        Lyric lyric = listManager.getData().getParsedLyric();
+        Lyric data = listManager.getData().getParsedLyric();
 
-        if (lyric == null) {
+        if (data == null) {
             //没有歌词(没有解析过的歌词)
             return;
         }
@@ -1041,13 +1042,34 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         }
 
         //获取当前时间对应的歌词索引 + lyricPlaceholderSize(占位的个数)
-        int newLineNumber = LyricUtil.getLineNumber(lyric, progress) + lyricPlaceholderSize;
+        int newLineNumber = LyricUtil.getLineNumber(data, progress) + lyricPlaceholderSize;
 
         if (newLineNumber != lineNumber) {
             //滚动到当前行
             scrollLyricPosition(newLineNumber);
             lineNumber = newLineNumber;//赋值给当前成员变量，记得写这个
         }
+
+        //如果是精确到字歌曲
+        //还需要将时间分发到item中
+        //因为要持续绘制
+
+        // MusicPlayerManagerImpl --> onLyricChanged --> data.setParsedLyric(LyricParser.parse(data.getStyle(), data.getLyric()));
+        //在MusicPlayerManagerImpl中设置解析后的歌词到Song中时，根据类型 和歌词内容（data.getLyric()：获取到的是歌词内容），
+        // 判断如果是KSC歌词则把result.setAccurate(true);所以这事Lyric已经是精确了
+        if (data.isAccurate()) {//Lyric 如果是精确的
+            //获取View
+            //其实就是通过这个歌词item索引位置获取到当前item布局
+            View view = layoutManager.findViewByPosition(lineNumber);
+            if (view != null) {
+                //通过view找到歌词控件
+                LyricLineView llv = view.findViewById(R.id.llv);
+
+                //刷新控件
+                llv.onProgress();
+            }
+        }
+
     }
 
     /**

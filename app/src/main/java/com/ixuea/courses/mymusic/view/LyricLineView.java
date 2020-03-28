@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi;
  * 一行歌词控件
  */
 public class LyricLineView extends View {
+    private static final String TAG = "LyricLineView";
     /**
      * 默认歌词大小
      * 单位：dp
@@ -127,6 +128,7 @@ public class LyricLineView extends View {
             //绘制默认文本
             drawDefaultText(canvas);
 
+
         } else {
             drawLyricText(canvas);//绘制真实文本
         }
@@ -139,6 +141,9 @@ public class LyricLineView extends View {
      * 绘制真实文本
      */
     private void drawLyricText(Canvas canvas) {
+        //data：Line对象
+//        LogUtil.d(TAG,"drawLyricText:" + data.getData());
+
         //绘制背景文字
 
         //当前歌词的宽高
@@ -190,6 +195,9 @@ public class LyricLineView extends View {
      * 文本高度：画笔
      */
     private void drawDefaultText(Canvas canvas) {
+
+//        LogUtil.d(TAG,"drawDefaultText");
+
         //获取歌词内容的宽度
         float textWidth = TextUtil.getTextWidth(backgroundTextPaint, HINT_LYRIC_EMPTY);
 
@@ -233,5 +241,15 @@ public class LyricLineView extends View {
      */
     public void setLineSelected(boolean selected) {
         this.lineSelected = selected;
+    }
+
+    /**
+     * 歌词进度
+     */
+    public void onProgress() {
+        if (!isEmptyLyric()) {
+            //有歌词就刷新控件
+            invalidate();//会触发onDraw方法 16ms毫秒调用一次
+        }
     }
 }
