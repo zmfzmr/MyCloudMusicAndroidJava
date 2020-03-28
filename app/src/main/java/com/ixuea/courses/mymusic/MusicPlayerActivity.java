@@ -31,6 +31,7 @@ import com.ixuea.courses.mymusic.domain.event.OnRecordClickEvent;
 import com.ixuea.courses.mymusic.domain.event.OnStartRecordEvent;
 import com.ixuea.courses.mymusic.domain.event.OnStopRecordEvent;
 import com.ixuea.courses.mymusic.domain.event.PlayListChangeEvent;
+import com.ixuea.courses.mymusic.domain.lyric.Line;
 import com.ixuea.courses.mymusic.domain.lyric.Lyric;
 import com.ixuea.courses.mymusic.domain.lyric.LyricUtil;
 import com.ixuea.courses.mymusic.fragment.PlayListDialogFragment;
@@ -101,6 +102,11 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
      */
     @BindView(R.id.ll_lyric_drag)
     View ll_lyric_drag;
+    /**
+     * 当前歌词时间控件
+     */
+    @BindView(R.id.tv_lyric_time)
+    TextView tv_lyric_time;
 
     /**
      * 黑胶唱片容器
@@ -176,6 +182,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private boolean isDrag;//歌词是否在拖拽状态
     private TimerTask lyricTimerTask;//隐藏歌词拖拽效果任务
     private Timer lyricTime;//隐藏歌词拖拽效果定时器
+    private Line scrollSelectedLyricLine;//当前滚动位置的歌词行
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -300,9 +307,61 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
             }
 
+            /**
+             * 滚动了
+             *
+             * @param recyclerView
+             * @param dx
+             * @param dy
+             */
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                //这里的dy是当前这一次滚动的距离
+                //向上滚动+
+                //向下滚动-
+
+                //当前RecyclerView可视的第一个Item位置（可见的第一个item位置，注意：这个item不一定是0，可见的第一个可能是 1 2 3等）
+                //+填充占位数 （加上填充数，刚好是第一行歌词的item的位置，之后可见第一个item+1，那么这个数firstVisibleItemPosition也加1）
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition() + lyricPlaceholderSize;
+
+                LogUtil.d(TAG, "onPageScrolled dy:" + dy + ",firstVisibleItemPosition:"
+                        + firstVisibleItemPosition + ",lyricPlaceholderSize:" + lyricPlaceholderSize);
+                //根据这个获取到的item对象（从第一行歌词item对象（Line），获取到最后）（这个item对象包裹 占位对象和歌词对象）
+                Object data = lyricAdapter.getItem(firstVisibleItemPosition);
+                if (isDrag) {//拖拽状态才要显示这个歌词 开始时间
+
+                    if (data instanceof String) {
+
+                        //填充数据
+
+                        //判断是开始还是末尾
+                        //这个if 可以不用写，因为这里firstVisibleItemPosition是lyricPlaceholderSize相加后的结果
+                        //所以这个if不可能进入的，所以不写没有关系
+                        if (firstVisibleItemPosition < lyricPlaceholderSize) {
+//                            //开始位置的填充
+//
+//                            //第一行歌词
+//                            scrollSelectedLyricLine = (Line) lyricAdapter.getItem(lyricPlaceholderSize);
+                        } else {
+                            //末尾的填充
+
+                            //最后一行歌词(这些代码还是有必要的，因为可见第一个item位置+占位对象位置，可能是最后那几个占位对象)
+                            //所以需要判断下，-1是最后一个位置，-2是第二个，一次类推，最后一行歌词，位于占位对象后 减一位
+                            int index = lyricAdapter.getItemCount() - 1 - lyricPlaceholderSize;
+                            scrollSelectedLyricLine = (Line) lyricAdapter.getItem(index);
+                        }
+
+                    } else {
+                        //是歌词Line 直接赋值就行
+                        scrollSelectedLyricLine = (Line) data;
+                    }
+
+                    //显示当前歌词开始时间
+                    tv_lyric_time.setText(TimeUtil.formatMinuteSecond((int) scrollSelectedLyricLine.getStartTime()));
+
+                }
+
             }
         });
     }
