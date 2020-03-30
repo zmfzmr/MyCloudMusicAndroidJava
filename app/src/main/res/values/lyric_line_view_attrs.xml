@@ -7,5 +7,11 @@
     <declare-styleable name="LyricLineView">
         <!--歌词大小-->
         <attr name="text_size" format="dimension" />
+        <!--歌词默认颜色-->
+
+        <attr name="text_color" format="color" />
+
+        <!--歌词高亮颜色-->
+        <attr name="selected_text_color" format="color" />
     </declare-styleable>
 </resources>

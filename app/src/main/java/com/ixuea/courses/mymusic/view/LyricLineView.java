@@ -95,6 +95,12 @@ public class LyricLineView extends View {
 
             //lyricTextSize:已经由dp 转换成了px，所以直接用这个就可以了
             lyricTextSize = typedArray.getDimension(R.styleable.LyricLineView_text_size, lyricTextSize);
+            //歌词默认颜色
+            lyricTextColor = typedArray.getColor(R.styleable.LyricLineView_text_color, lyricTextColor);
+
+            //歌词高亮颜色
+            //DEFAULT_LYRIC_TEXT_COLOR = lyricTextColor  2个属性都是相等的，因为前面赋值了
+            lyricSelectedTextColor = typedArray.getColor(R.styleable.LyricLineView_selected_text_color, DEFAULT_LYRIC_TEXT_COLOR);
 
             //复用固定写法
             typedArray.recycle();//记得回收
