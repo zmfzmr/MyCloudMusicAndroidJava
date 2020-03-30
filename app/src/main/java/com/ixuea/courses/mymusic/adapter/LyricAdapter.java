@@ -78,6 +78,8 @@ public class LyricAdapter extends BaseQuickAdapter<Object, BaseViewHolder> {
 
             llv.setData((Line) item);
             llv.setAccurate(accurate);
+            //accurate:这个数据值 是从activity中那边传入进来的showLyricData->next中
+            // 替换数据前添加 lyricAdapter.setAccurate(data.getParsedLyric().isAccurate()); data：当前播放Song对象
         }
 
         //处理选中状态

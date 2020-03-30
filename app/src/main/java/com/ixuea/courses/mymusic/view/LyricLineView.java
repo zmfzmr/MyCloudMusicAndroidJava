@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -41,6 +42,10 @@ public class LyricLineView extends View {
     private int lyricSelectedTextColor;//选中的高亮歌词颜色
     private Paint backgroundTextPaint;//默认歌词画笔
     private Paint foregroundTextPaint;//高亮画笔
+    private Paint textPaint;
+    private int lyricCurrentWordIndex;//当前播放时间点，在该行的第几个字（索引）
+    private float lineLyricPlayedWidth;//当前行歌词已经唱过的宽度，也就是歌词高亮的宽度
+    private float wordPlayedTime;//当前字，已经播放的时间
 
 
     public LyricLineView(Context context) {
@@ -96,6 +101,14 @@ public class LyricLineView extends View {
         foregroundTextPaint.setTextSize(lyricTextSize);
         foregroundTextPaint.setColor(lyricSelectedTextColor);//注意：这个颜色跟前面的不一样
 
+        //测试画笔
+        textPaint = new TextPaint();
+        foregroundTextPaint.setDither(true);
+        foregroundTextPaint.setAntiAlias(true);
+        foregroundTextPaint.setColor(Color.BLUE);
+
+        //只绘制边框不填充
+        textPaint.setStyle(Paint.Style.STROKE);
     }
 
     @Override
@@ -163,8 +176,54 @@ public class LyricLineView extends View {
         if (lineSelected) {
             //选中了
 
-            //精确到行歌词
+            if (accurate) {//LyricAdapter那边传入进来的
+                //精确到字
+                if (lyricCurrentWordIndex == -1) { //注意：lyricCurrentWordIndex 和  lineLyricPlayedWidth是不同的
+                    //该行已经播放完了
+                    lineLyricPlayedWidth = textWidth;//行歌词播放宽度 == 整行歌词文本的宽度
+                } else {
+                    //逻辑：当前字前面的字的宽度 + 当前字播放宽度 = 播放总宽度
+
+                    //字数组（行 字数组）
+                    String[] lyricWords = data.getWords();
+                    //字 时间 数组
+                    Integer[] wordDurations = data.getWordDurations();
+                    //lyricCurrentWordIndex:当前播放的最后一个字的索引
+                    //获取 当前时间前面的文字
+                    String beforeText = data.getData().substring(0, lyricCurrentWordIndex);
+                    float beforeTextWidth = TextUtil.getTextWidth(foregroundTextPaint, beforeText);
+
+                    //获取当前字（根据lyricCurrentWordIndex索引 在字 数组 中 lyricWords 找）
+                    String currentWord = lyricWords[lyricCurrentWordIndex];
+                    //当前位置文本的宽度
+                    float currentWordTextWidth = TextUtil.getTextWidth(foregroundTextPaint, currentWord);
+
+                    //这里就是 路程（当前文字宽度 currentWordTextWidth）  速度 时间的概念
+
+                    //速度:currentWordTextWidth / wordDurations[lyricCurrentWordIndex] (路程 / 时间 = 速度)
+                    //时间：wordPlayedTime
+
+                    //currentWordTextWidth / wordDurations[lyricCurrentWordIndex] * wordPlayedTime:
+                    //速度 * wordPlayedTime时间 ：这个字播放的距离（长度）
+
+                    float currentWordPlayedWidth = currentWordTextWidth / wordDurations[lyricCurrentWordIndex] * wordPlayedTime;
+
+                    //这一行已经演唱的宽度
+                    lineLyricPlayedWidth = beforeTextWidth + currentWordPlayedWidth;
+                }
+
+                //绘制矩形宽高
+//                canvas.drawRect(centerX, 0, centerX + lineLyricPlayedWidth, getMeasuredHeight(),textPaint);
+
+                //裁剪矩形
+                //用来绘制已经唱的歌词
+                //这里：Top：0  bottom：控件的高  right：centerX + lineLyricPlayedWidth left：centerX（文字开始绘制的地方）
+                canvas.clipRect(centerX, 0, centerX + lineLyricPlayedWidth, getMeasuredHeight());
+            }
+
+            //精确到行歌词(绘制高亮)（如果是精确的话，就会走上面的canvas.clipRect ）
             canvas.drawText(data.getData(), centerX, centerY, foregroundTextPaint);
+
         }
         //上面的是KSC歌词的写法，后面要根据这个写法实现（先实现背景歌词，后实现选中歌词）
 
@@ -241,6 +300,20 @@ public class LyricLineView extends View {
      */
     public void setLineSelected(boolean selected) {
         this.lineSelected = selected;
+    }
+
+    /**
+     * 设置当前字索引
+     */
+    public void setLyricCurrentWordIndex(int lyricCurrentWordIndex) {
+        this.lyricCurrentWordIndex = lyricCurrentWordIndex;
+    }
+
+    /**
+     * 设置当前字已经播放的时间
+     */
+    public void setWordPlayedTime(float wordPlayedTime) {
+        this.wordPlayedTime = wordPlayedTime;
     }
 
     /**

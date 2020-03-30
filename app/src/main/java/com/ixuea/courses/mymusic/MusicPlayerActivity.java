@@ -1058,15 +1058,36 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         //在MusicPlayerManagerImpl中设置解析后的歌词到Song中时，根据类型 和歌词内容（data.getLyric()：获取到的是歌词内容），
         // 判断如果是KSC歌词则把result.setAccurate(true);所以这事Lyric已经是精确了
         if (data.isAccurate()) {//Lyric 如果是精确的
-            //获取View
-            //其实就是通过这个歌词item索引位置获取到当前item布局
-            View view = layoutManager.findViewByPosition(lineNumber);
-            if (view != null) {
-                //通过view找到歌词控件
-                LyricLineView llv = view.findViewById(R.id.llv);
+            //lineNumber：当前时间对应的歌词索引 + lyricPlaceholderSize(占位的个数)
+            //这里是获取这 集合里面的 对象
+            Object object = lyricAdapter.getData().get(lineNumber);
+            if (object instanceof Line) {
+                //只有歌词行才出来
+                Line line = (Line) object;
 
-                //刷新控件
-                llv.onProgress();
+                //获取当前时间是该行的第几个字（索引）
+                int lyricCurrentWordIndex = LyricUtil.getWordIndex(line, progress);
+
+                //获取当前时间该字
+                //已经播放的时间
+                float wordPlayedTime = LyricUtil.getWordPlayedTime(line, progress);
+
+                //获取View
+                //其实就是通过这个歌词item索引位置获取到当前item布局
+                View view = layoutManager.findViewByPosition(lineNumber);
+                if (view != null) {
+                    //通过view找到歌词控件
+                    LyricLineView llv = view.findViewById(R.id.llv);
+
+                    //将当前时间设置对应的字索引设置到控件
+                    llv.setLyricCurrentWordIndex(lyricCurrentWordIndex);
+
+                    //设置当前字已经播放的时间
+                    llv.setWordPlayedTime(wordPlayedTime);
+
+                    //刷新控件
+                    llv.onProgress();
+                }
             }
         }
 
