@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="40dp">
@@ -17,13 +16,15 @@
 
     <!--使用自定义控件实现
         自定义的属性 用app命名 这个app命名可以重写更改
+        gravity 里面只有left 和center2个属性 因为我们在lyric_line_view_attrs.xml中之定义了2个值
+
+        app:text_size="20sp"
+        app:text_color="#0f0"
+        app:selected_text_color="@color/colorPrimary"
+        app:gravity="left"
     -->
     <com.ixuea.courses.mymusic.view.LyricLineView
         android:id="@+id/llv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:text_size="20sp"
-        app:text_color="#0f0"
-        app:selected_text_color="@color/colorPrimary" />
-
+        android:layout_height="match_parent" />
 </LinearLayout>

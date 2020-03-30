@@ -13,5 +13,17 @@
 
         <!--歌词高亮颜色-->
         <attr name="selected_text_color" format="color" />
+
+        <!--歌词位置
+            这里类似于枚举 里面有几个变量
+
+            注意：里面用的是flag name  value
+                value写成16进制 规范点（字体也是这么命名的）这个16进制可以随便写
+        -->
+        <attr name="gravity">
+            <flag name="left" value="0x01" />
+            <flag name="center" value="0x10" />
+        </attr>
+
     </declare-styleable>
 </resources>

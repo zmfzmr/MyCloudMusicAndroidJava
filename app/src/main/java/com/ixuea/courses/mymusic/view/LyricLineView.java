@@ -10,6 +10,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.lyric.Line;
 import com.ixuea.courses.mymusic.util.DensityUtil;
@@ -48,6 +49,9 @@ public class LyricLineView extends View {
     private int lyricCurrentWordIndex;//当前播放时间点，在该行的第几个字（索引）
     private float lineLyricPlayedWidth;//当前行歌词已经唱过的宽度，也就是歌词高亮的宽度
     private float wordPlayedTime;//当前字，已经播放的时间
+    private static final int GRAVITY_LEFT = 0x01;//歌词位置   水平居左,垂直居中
+    private static final int GRAVITY_CENTER = 0x10;//歌词位置 垂直水平居中
+    private int lyricGravity;//歌词位置
 
 
     public LyricLineView(Context context) {
@@ -87,6 +91,7 @@ public class LyricLineView extends View {
         if (attrs != null) {//只要 这个lyric_line_view_attrs.xml 设置了LyricLineView的属性，那么这个AttributeSet就不等于null
             //获取属性值
             //R.styleable.LyricLineView:这个就是我们定义的 <declare-styleable name="LyricLineView">
+            //这类用的是上下文：getContext()
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.LyricLineView);
 
             //这个属性名为
@@ -101,6 +106,9 @@ public class LyricLineView extends View {
             //歌词高亮颜色
             //DEFAULT_LYRIC_TEXT_COLOR = lyricTextColor  2个属性都是相等的，因为前面赋值了
             lyricSelectedTextColor = typedArray.getColor(R.styleable.LyricLineView_selected_text_color, DEFAULT_LYRIC_TEXT_COLOR);
+
+            //歌词位置
+            lyricGravity = typedArray.getInt(R.styleable.LyricLineView_gravity, TabLayout.GRAVITY_CENTER);
 
             //复用固定写法
             typedArray.recycle();//记得回收
@@ -302,10 +310,19 @@ public class LyricLineView extends View {
     }
 
     /**
+     * 获取歌词在水平方向显示方式
      *
+     * 可以扩展支持垂直方向
+     * 只是这里用不到
      */
     private float getCenterX(float textWidth) {
-        return (getMeasuredWidth() - textWidth) / 2;
+        switch (lyricGravity) {
+            case GRAVITY_LEFT:// == 0x01    对应自定义属性xml文件中的那个value值
+                return 0;//因为X 轴 左边的位置为0 就是从这个距离左边为0的位置开始绘制
+            default:
+                return (getMeasuredWidth() - textWidth) / 2;
+        }
+
     }
 
     /**
