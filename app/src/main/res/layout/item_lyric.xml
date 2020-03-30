@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="40dp">
@@ -14,10 +15,13 @@
     <!--        android:textColor="@color/lyric_text_color"-->
     <!--        android:text="这是歌词" />-->
 
-    <!--使用自定义控件实现-->
+    <!--使用自定义控件实现
+        自定义的属性 用app命名 这个app命名可以重写更改
+    -->
     <com.ixuea.courses.mymusic.view.LyricLineView
         android:id="@+id/llv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:text_size="20sp" />
 
 </LinearLayout>

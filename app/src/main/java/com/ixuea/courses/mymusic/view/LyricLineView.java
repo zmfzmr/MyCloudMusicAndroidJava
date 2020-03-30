@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,6 +10,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.lyric.Line;
 import com.ixuea.courses.mymusic.util.DensityUtil;
 import com.ixuea.courses.mymusic.util.TextUtil;
@@ -50,35 +52,54 @@ public class LyricLineView extends View {
 
     public LyricLineView(Context context) {
         super(context);
-        init();
+        init(null);//没有AttributeSet 参数 传入null
     }
 
     public LyricLineView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
     }
 
     public LyricLineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(attrs);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public LyricLineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        init(attrs);
     }
 
     /**
      * 自定义初始化方法
+     * @param attrs
      */
-    private void init() {
+    private void init(AttributeSet attrs) {
         //将16dp转换为px
         lyricTextSize = DensityUtil.dip2px(getContext(), DEFAULT_LYRIC_TEXT_SIZE);
         // lyricTextColor：变量    DEFAULT_LYRIC_TEXT_COLOR:常量   后面可能需要一些自定义配置 可能需要这样转换
         lyricTextColor = DEFAULT_LYRIC_TEXT_COLOR;
 
         lyricSelectedTextColor = DEFAULT_LYRIC_SELECTED_TEXT_COLOR;
+
+        //解析自定义属性
+        if (attrs != null) {//只要 这个lyric_line_view_attrs.xml 设置了LyricLineView的属性，那么这个AttributeSet就不等于null
+            //获取属性值
+            //R.styleable.LyricLineView:这个就是我们定义的 <declare-styleable name="LyricLineView">
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.LyricLineView);
+
+            //这个属性名为
+            //declare-styleable name名称+属性名
+            //获取歌词大小
+
+            //lyricTextSize:已经由dp 转换成了px，所以直接用这个就可以了
+            lyricTextSize = typedArray.getDimension(R.styleable.LyricLineView_text_size, lyricTextSize);
+
+            //复用固定写法
+            typedArray.recycle();//记得回收
+
+        }
 
         //初始化画笔
 

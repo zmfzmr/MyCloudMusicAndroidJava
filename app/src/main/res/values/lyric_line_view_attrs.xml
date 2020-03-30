@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--定义一个名为LyricLineView样式
+         name="LyricLineView":这里为自定义的类名 说明是针对这类的属性
+         注意：这个名称是不能随便写的
+    -->
+    <declare-styleable name="LyricLineView">
+        <!--歌词大小-->
+        <attr name="text_size" format="dimension" />
+    </declare-styleable>
+</resources>
