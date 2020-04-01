@@ -477,6 +477,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     /**
      * //显示歌词数据
+     *
+     * 因为歌词容器这部分不是设置ViewPager中的Fragment中，所以可以直接在本Activity中设置数据
      */
     private void showLyricData() {
         if (lyricPlaceholderSize > 0) {
@@ -523,7 +525,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             addLyricFillData(datum);//这个方法里面用到了 lyricPlaceholdlerSize变量
 
             //添加真实数据
-            datum.addAll(data.getParsedLyric().getDatum());
+            datum.addAll(data.getParsedLyric().getDatum());//data.getParsedLyric().getDatum()：Lyric 中 获取List<Line>
 
             //添加占位数据
             addLyricFillData(datum);
@@ -1027,8 +1029,12 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //简单点：在activity用listManager.getData()(Song对象就是从数据库中查找出来的)
         Lyric data = listManager.getData().getParsedLyric();
+        //音乐已经播放，我这个歌词数据已经请求回来了，并解析完了，但是还没有设置LyricAdapter中
+        //那么下面的lyricAdapter.getData()获取的集合List<Line>有可能为null，这之间是时间的(也就是listManager.getData()和获取lyricAdapter.getData())
+//        if (data == null) {
+        //播放每16毫秒调用onProgress，可能这个时候歌词(网络延迟)还没有解析回来，所以需要判断下data == null return
+        if (data == null || lyricAdapter.getData() == null || lyricAdapter.getData().size() == 0) {
 
-        if (data == null) {
             //没有歌词(没有解析过的歌词)
             return;
         }

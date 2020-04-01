@@ -118,4 +118,15 @@ public class LyricUtil {
         //默认值
         return -1;
     }
+
+    /**
+     * 获取当前时间对应的歌词行
+     */
+    public static Line getLyricLine(Lyric data, long progress) {
+        //获取当前时间的行
+        int lineNumber = LyricUtil.getLineNumber(data, progress);//这个方法就是当前类的
+        //Lyric 保存了行对象Line对象的集合
+        //根据当前时间的行 返回这行的对象Line（获取当前时间歌词行）
+        return data.getDatum().get(lineNumber);
+    }
 }

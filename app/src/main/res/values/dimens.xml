@@ -70,6 +70,7 @@
     <dimen name="button_play_height">80dp</dimen>
     <!--歌词-->
     <dimen name="lyric_size">16sp</dimen>
+    <dimen name="lyric_height_small">14dp</dimen>
 
 
 </resources>

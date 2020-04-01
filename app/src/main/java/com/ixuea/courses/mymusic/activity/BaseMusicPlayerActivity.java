@@ -11,6 +11,9 @@ import com.ixuea.courses.mymusic.MusicPlayerActivity;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.PlayListChangeEvent;
+import com.ixuea.courses.mymusic.domain.lyric.Line;
+import com.ixuea.courses.mymusic.domain.lyric.Lyric;
+import com.ixuea.courses.mymusic.domain.lyric.LyricUtil;
 import com.ixuea.courses.mymusic.fragment.PlayListDialogFragment;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
@@ -18,6 +21,7 @@ import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.view.LyricLineView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,6 +51,11 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
     @BindView(R.id.tv_title_small_control)
     TextView tv_title_small_control;
     /**
+     * 迷你播放控制器 歌词控件
+     */
+    @BindView(R.id.llv)
+    LyricLineView llv;
+    /**
      * 迷你播放控制器 播放暂停按钮
      */
     @BindView(R.id.iv_play_small_control)
@@ -64,6 +73,14 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
      */
     protected ListManager listManager;//初始化列表管理器
     protected MusicPlayerManager musicPlayerManager;
+    private Song data;
+
+    @Override
+    protected void initView() {
+        super.initView();
+        //这一行歌词始终是选中状态
+        llv.setLineSelected(true);
+    }
 
     @Override
     protected void initDatum() {
@@ -146,11 +163,44 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
                 showProgress(data);
                 //显示播放状态
                 showMusicPlayStatus();
+
+                //显示歌词
+                showLyricData();
             }
         } else {
             //隐藏迷你播放控制器
             ll_play_control_small.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * 显示歌词
+     */
+    private void showLyricData() {
+        //获取当前播放的音乐
+        Song data = listManager.getData();
+        Lyric lyric = data.getParsedLyric();//获取当前音乐中解析的歌词
+        if (lyric == null) {
+            //清空原来的歌词(获取解析后的歌词为null，就在这个控件上 设置数据为null（就是没有歌词了）)
+            llv.setData(null);
+        } else {
+            //因为要别的activity继承 本类，所以当点击音乐进入 MusicPlayerActivity 回到主页面，这时音乐已经播放了
+            //不管哪个activity继承本类，必须要播放以后才能显示 迷你控制器（也就是listManager.getDatum().size() > 0）
+            //播放音乐的时候，已经把列表List<Song>集合添加到listManager中的 this.datum 并保存到了数据库中
+            //播放音乐：listManger.play -- > MusicPlayerManagerImpl.play
+            // (把请求的歌词并解析后(这时是否精确 已经设置到Song对象里面的Lyric对象了)，添加到Song对象)
+            //因为MusicPlayerManagerImpl中 用定时器 每16毫秒分发进度，所有在listManger onProgress中把回调回来的Song保存到了数据库中了
+
+            //设置歌词模式(设置是否是精确的)
+            llv.setAccurate(lyric.isAccurate());
+
+            //获取当前播放进度对应的歌词行设置歌词数据到歌词控件
+            Line line = LyricUtil.getLyricLine(lyric, data.getProgress());
+
+            //设置数据
+            llv.setData(line);
+        }
+
     }
 
     //显示播放状态
@@ -236,7 +286,50 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
     @Override
     public void onProgress(Song data) {
         showProgress(data);
+
+        //获取当前音乐歌词
+        Lyric lyric = data.getParsedLyric();//data 当前播放的Song对象
+
+        if (lyric == null) {
+            //没有歌词
+            return;
+        }
+
+        long progress = data.getProgress();
+        //获取当前进度对应的歌词行
+        Line line = LyricUtil.getLyricLine(lyric, progress);
+
+        //设置数据(之前已经设置数据了，为什么还要再设置呢 因为之前设置的是第一行的歌词，那么过会唱到第二行的歌词，
+        // 所以还是需要再设置一次(一直播放就会一直调用这个onProgress方法))
+
+        //setData:里面调用了invalidate 来绘制控件（这个主要是针对LRC歌词，因为下面的llv.onProgress是针对精确到字的KSC歌词绘制的
+        // 所以这里还是setData 还是调用invalidate一次 （并且是不等于当前行的时候调用） ）
+        if (line != llv.getData()) {//llv.getData():获取的是Line对象
+            llv.setData(line);//设置数据
+        }
+        //如果是精确到字歌曲
+        //因为要计算唱到那个字了
+        if (lyric.isAccurate()) {
+            //获取当前时间是该行第几个字
+            int lyricCurrentWordIndex = LyricUtil.getWordIndex(line, progress);
+            //当前时间对应的字已经播放的时间
+            float wordPlayedTime = LyricUtil.getWordPlayedTime(line, progress);
+            //设置当前时间第几个
+            llv.setLyricCurrentWordIndex(lyricCurrentWordIndex);
+            //设置该字已经播放的时间
+            llv.setWordPlayedTime(wordPlayedTime);
+            //刷新控件 里面调用invalidate 方法
+            llv.onProgress();
+        }
+
     }
+
+    @Override
+    public void onLyricChanged(Song data) {
+        //歌词改变了以后也要调用这个方法更新显示歌词
+        showLyricData();
+    }
+
     //end 监听MusicPlayManager中方法的调用情况
 
     /**
@@ -260,6 +353,8 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
         if (musicPlayerManager.isPlaying()) {
             musicPlayerManager.pause();
         } else {
+            //这个直接调用resume没问题 （因为肯定是播放了音乐后，这个迷你控制器次显示出来,
+            // 所以肯定是第一次播放音乐了，所以调用这个resume没啥问题）
             musicPlayerManager.resume();
         }
     }

@@ -153,8 +153,8 @@ public class MusicPlayerManagerImpl
             if (data.isLocal()) {
                 return;
             }
-
-            if (data.getLyric() == null) {
+            //每点击下一首歌曲 这里的Song歌曲对象都要变成List集合中的下一个对象，所以这里的都是null
+            if (data.getLyric() == null) {//data.getLyric():是歌词内容，不是Lyric对象
                 //歌词处理
                 //真实项目可能会
                 //将歌词这个部分拆分到其他组件中

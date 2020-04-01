@@ -10,10 +10,10 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.lyric.Line;
 import com.ixuea.courses.mymusic.util.DensityUtil;
+import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.TextUtil;
 
 import androidx.annotation.Nullable;
@@ -108,7 +108,7 @@ public class LyricLineView extends View {
             lyricSelectedTextColor = typedArray.getColor(R.styleable.LyricLineView_selected_text_color, DEFAULT_LYRIC_TEXT_COLOR);
 
             //歌词位置
-            lyricGravity = typedArray.getInt(R.styleable.LyricLineView_gravity, TabLayout.GRAVITY_CENTER);
+            lyricGravity = typedArray.getInt(R.styleable.LyricLineView_gravity, GRAVITY_CENTER);
 
             //复用固定写法
             typedArray.recycle();//记得回收
@@ -290,7 +290,7 @@ public class LyricLineView extends View {
      */
     private void drawDefaultText(Canvas canvas) {
 
-//        LogUtil.d(TAG,"drawDefaultText");
+        LogUtil.d(TAG, "drawDefaultText");
 
         //获取歌词内容的宽度
         float textWidth = TextUtil.getTextWidth(backgroundTextPaint, HINT_LYRIC_EMPTY);
@@ -330,6 +330,15 @@ public class LyricLineView extends View {
      */
     public void setData(Line data) {
         this.data = data;
+
+        invalidate();//这个是针对 LRC歌词刷新的
+    }
+
+    /**
+     * 获取当前行Line对象
+     */
+    public Line getData() {
+        return data;
     }
 
     /**
