@@ -9,6 +9,7 @@ import android.os.IBinder;
 
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
+import com.ixuea.courses.mymusic.manager.impl.GlobalLyricManagerImpl;
 import com.ixuea.courses.mymusic.manager.impl.ListManagerImpl;
 import com.ixuea.courses.mymusic.manager.impl.MusicNotificationManager;
 import com.ixuea.courses.mymusic.manager.impl.MusicPlayerManagerImpl;
@@ -73,6 +74,10 @@ public class MusicPlayerService extends Service {
         //初始化音乐通知管理器
         //这里Service创建的时候，这个musicNotificationManager（音乐通知栏管理器就创建了）
         musicNotificationManager = MusicNotificationManager.getInstance(getApplicationContext());
+
+        //初始化全局歌词管理器
+        GlobalLyricManagerImpl globalLyricManager = GlobalLyricManagerImpl.getInstance(getApplicationContext());
+
     }
 
     /**
