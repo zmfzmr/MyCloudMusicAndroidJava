@@ -6,9 +6,9 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.manager.GlobalLyricManager;
+import com.ixuea.courses.mymusic.view.GlobalLyricView;
 
 /**
  * 全局(桌面)歌词管理器实现
@@ -19,6 +19,7 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
     private final Context context;//上下文
     private WindowManager windowManager;//窗口管理器
     private WindowManager.LayoutParams layoutParams;//窗口的布局样式
+    private GlobalLyricView globalLyricView;//全局歌词View
 
     /**
      * 构造方法
@@ -38,13 +39,24 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
      * 创建全局歌词View
      */
     private void initGlobalLyricView() {
-        //创建一个测试文本(传入Context对象)
-        TextView tv = new TextView(context);
-        tv.setText("这是一个简单的文本");
-        if (tv.getParent() == null) {//tv.getParent():view的父容器（父view）
+//        //创建一个测试文本(传入Context对象)
+//        TextView tv = new TextView(context);
+//        tv.setText("这是一个简单的文本");
+//        if (tv.getParent() == null) {//tv.getParent():view的父容器（父view）
+//            //如果没有添加
+//            //就添加
+//            windowManager.addView(tv, layoutParams);
+//        }
+
+        if (globalLyricView == null) {
+            //创建全局歌词控件
+            globalLyricView = new GlobalLyricView(context);
+        }
+
+        if (globalLyricView.getParent() == null) {
             //如果没有添加
             //就添加
-            windowManager.addView(tv, layoutParams);
+            windowManager.addView(globalLyricView, layoutParams);
         }
 
     }

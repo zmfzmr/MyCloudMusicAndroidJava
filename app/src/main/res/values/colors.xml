@@ -24,9 +24,19 @@
         首页按钮未选中颜色
         argb
         a:透明度  ff:完全不透明
+
+        注意：透明是指前面的2位  后面的ffffff：表示白色
+        如果把aa改成ff，那就是完全不透明
     -->
     <color name="tab_normal">#aaffffff</color>
 
     <!--列表歌词颜色-->
     <color name="lyric_text_color">#eee</color>
+    <!--全局歌词View颜色
+        cc:是透明度
+        后面的是黑色
+
+        意思说：黑色的基础上有些透明
+    -->
+    <color name="global_lyric_background">#cc000000</color>
 </resources>
