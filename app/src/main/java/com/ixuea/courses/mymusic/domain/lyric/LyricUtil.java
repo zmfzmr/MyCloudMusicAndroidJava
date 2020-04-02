@@ -115,7 +115,7 @@ public class LyricUtil {
                 return data.getWordDurations()[i] - (startTime - progress);
             }
         }
-        //默认值
+        //默认值  这个什么时候返回 - 1呢，也就是 progress = startTime  就会返回 -1 ，这行歌词唱完了
         return -1;
     }
 

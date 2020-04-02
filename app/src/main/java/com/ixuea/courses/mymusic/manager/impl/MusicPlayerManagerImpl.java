@@ -208,7 +208,7 @@ public class MusicPlayerManagerImpl
         //在这里解析的歌词的好处是
         //外面不用多次接信息
         if (StringUtils.isNotBlank(data.getLyric())) {
-            //有歌词
+            //有歌词  这个解析返回的Lyric 如果KSC  Lyric对象里面已经设置accurate了
             data.setParsedLyric(LyricParser.parse(data.getStyle(), data.getLyric()));
         }
 

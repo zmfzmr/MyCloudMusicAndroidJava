@@ -7,6 +7,13 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 有前台服务 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <!--全局歌词悬浮窗权限
+        SYSTEM_ALERT_WINDOW:   翻译：系统警报窗口
+        SYSTEM_OVERLAY_WINDOW: 翻译：系统覆盖窗口
+    -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+
     <application
         android:name=".AppContext"
         android:allowBackup="true"

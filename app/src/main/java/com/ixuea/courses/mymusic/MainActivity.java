@@ -3,7 +3,10 @@ package com.ixuea.courses.mymusic;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +34,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -245,6 +250,70 @@ public class MainActivity extends BaseMusicPlayerActivity {
         //才获取用户信息
         //这样可以减少请求
         fetchData();
+    }
+
+    /**
+     * 之所以在在onResume设置的原因
+     *
+     * 防止用户授权 偷偷的在后台关闭权限；这样一回到应用中马上就能判断出来有没有权限
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //只有6.0以上版本才需要请求
+        //低版本默认就该权限
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            //检查是否有悬浮权限
+            requestDrawOverlays();
+        }
+    }
+
+    /**
+     * 请求悬浮权限
+     *
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean requestDrawOverlays() {
+        if (!Settings.canDrawOverlays(getMainActivity())) {
+            //如果没有显示浮窗的权限
+            //就跳转到设置界面
+
+            //真实项目中
+            //应该在使用的位置在请求
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getMainActivity().getPackageName()));
+            //开启界面返回值
+            startActivityForResult(intent, Constant.REQUEST_OVERLAY_PERMISSION);
+
+            return false;
+        }
+        //返回true 表示有权限(没有进入if里面 说明已经授权了)
+        return true;
+    }
+
+    /**
+     * 使用startActivityForResult启动界面后的回调
+     * 从第二个页面启动回来的回调方法
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case Constant.REQUEST_OVERLAY_PERMISSION:
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (requestDrawOverlays()) {
+                            //授权成功
+                            LogUtil.d(TAG, "onActivityResult DrawOverlays success");
+                        } else {
+                            //授权失败
+                            LogUtil.d(TAG, "onActivityResult DrawOverlays failed");
+                        }
+                    }
+                }
+                break;
+        }
     }
 
     /**

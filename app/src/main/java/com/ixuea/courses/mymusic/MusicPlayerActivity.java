@@ -1066,6 +1066,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         if (data.isAccurate()) {//Lyric 如果是精确的
             //lineNumber：当前时间对应的歌词索引 + lyricPlaceholderSize(占位的个数)
             //这里是获取这 集合里面的 对象
+            //lyricAdapter.getData():获取List<Line>
             Object object = lyricAdapter.getData().get(lineNumber);
             if (object instanceof Line) {
                 //只有歌词行才出来
@@ -1080,6 +1081,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
                 //获取View
                 //其实就是通过这个歌词item索引位置获取到当前item布局
+                //因为这里是是Activity类  RecyclerView放在activity类对应的layout布局中
+                //所以无法在本Activity类中通过R.id.llv获取item_lyric布局中的控件（getView(R.id.llv) 只能在LyricAdapter中获取）
+                //而在本activity类中 通过歌词滚动位置 获取它的item布局，然后通过布局view获取控件LyricLineView
                 View view = layoutManager.findViewByPosition(lineNumber);
                 if (view != null) {
                     //通过view找到歌词控件
