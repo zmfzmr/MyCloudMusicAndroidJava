@@ -1,13 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/global_lyric_background"
+    android:orientation="vertical"
     android:padding="@dimen/activity_margin">
-
-    <TextView
-        android:layout_width="wrap_content"
+    <!--标题容器-->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="这是自定义的全局歌词控件" />
+        android:orientation="horizontal">
+
+        <!--应用logo-->
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="@dimen/icon_height"
+            android:layout_height="@dimen/icon_height"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_launcher" />
+        <!--歌词容器-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <!--第一行歌词控件-->
+            <com.ixuea.courses.mymusic.view.LyricLineView
+                android:id="@+id/llv1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_lyric_height" />
+
+            <!--第二行歌词控件-->
+            <com.ixuea.courses.mymusic.view.LyricLineView
+                android:id="@+id/llv2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_lyric_height" />
+
+        </LinearLayout>
+
+        <!--关闭按钮-->
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="@dimen/icon_height"
+            android:layout_height="@dimen/icon_height"
+            android:src="@drawable/ic_close" />
+    </LinearLayout>
+
+    <!--播放控制按钮容器-->
+    <LinearLayout
+        android:id="@+id/ll_play_container"
+        android:layout_marginTop="@dimen/padding_middle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <!--锁定歌词按钮-->
+        <ImageView
+            android:id="@+id/iv_lock"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_global_lock" />
+
+        <!--上一首按钮-->
+        <ImageView
+            android:id="@+id/iv_previous"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_global_previous" />
+
+        <!--播放按钮-->
+        <ImageView
+            android:id="@+id/iv_play"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_global_play" />
+
+        <!--下一首按钮-->
+        <ImageView
+            android:id="@+id/iv_next"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_global_next" />
+
+        <!--设置按钮-->
+        <ImageView
+            android:id="@+id/iv_settings"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_global_settings" />
+
+    </LinearLayout>
 
 </LinearLayout>

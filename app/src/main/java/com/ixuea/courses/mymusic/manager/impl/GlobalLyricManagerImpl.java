@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.WindowManager;
 
 import com.ixuea.courses.mymusic.manager.GlobalLyricManager;
+import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.view.GlobalLyricView;
 
 /**
@@ -15,6 +16,7 @@ import com.ixuea.courses.mymusic.view.GlobalLyricView;
  */
 public class GlobalLyricManagerImpl implements GlobalLyricManager {
 
+    private static final String TAG = "GlobalLyricManagerImpl";
     private static GlobalLyricManagerImpl instance;//实例
     private final Context context;//上下文
     private WindowManager windowManager;//窗口管理器
@@ -32,7 +34,7 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
         initWindowManager();
 
         //创建全局歌词View
-        initGlobalLyricView();
+//        initGlobalLyricView();
     }
 
     /**
@@ -132,17 +134,24 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
 
     @Override
     public void show() {
+        LogUtil.d(TAG, "show");
 
+        //初始化全局全局歌词控件
+        initGlobalLyricView();
     }
 
     @Override
     public void hide() {
+        //移除全局歌词控件
+        windowManager.removeView(globalLyricView);
+        globalLyricView = null;//记得显示为null，下次显示的时候 就会重新创建这个globalLyricView对象了
 
     }
 
     @Override
     public boolean isShowing() {
-        return false;
+        //这个控件globalLyricView不为null 说明显示了（说明 窗口管理器已经添加view了：windowManager.addView(globalLyricView, layoutParams);）
+        return globalLyricView != null;
     }
 
     @Override

@@ -71,6 +71,7 @@
     <!--歌词-->
     <dimen name="lyric_size">16sp</dimen>
     <dimen name="lyric_height_small">14dp</dimen>
+    <dimen name="global_lyric_height">40dp</dimen>
 
 
 </resources>

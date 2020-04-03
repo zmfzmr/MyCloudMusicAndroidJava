@@ -311,7 +311,7 @@ public class NotificationUtil {
         //获取通知栏管理器
         getNotificationManager(context);
 
-        //显示通知
+        //显示通知(显示通知 需要用到通知管理器来时通知显示 这个通知管理器可能为null，所以前面先获取下)
         notificationManager.notify(id, notification);
 
     }

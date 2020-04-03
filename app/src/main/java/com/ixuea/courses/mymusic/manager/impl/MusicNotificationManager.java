@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
+import com.ixuea.courses.mymusic.manager.GlobalLyricManager;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
@@ -31,6 +32,10 @@ public class MusicNotificationManager implements MusicPlayerListener {
     private final MusicPlayerManager musicPlayerManager;//音乐播放管理器
     private BroadcastReceiver musicNotificationBroadcastReceiver;//音乐通知广播接收器
     private final ListManager listManager;//列表管理器
+    /**
+     * GlobalLyricManager:这里用的是接口
+     */
+    private final GlobalLyricManager globalLyricManager;//全局歌词管理器
 
     /**
      * 构造方法
@@ -48,9 +53,13 @@ public class MusicNotificationManager implements MusicPlayerListener {
 
         //添加播放管理器监听器
         musicPlayerManager.addMusicPlayerListener(this);
+
+        //获取全局歌词管理器(这里并没有 用MusicPlayerService来获取)
+        //用的是this.context
+        globalLyricManager = GlobalLyricManagerImpl.getInstance(this.context);
+
         //初始化音乐通知广播接收器
         initMusicNotificationReceiver();
-
     }
 
     /**
@@ -94,6 +103,9 @@ public class MusicNotificationManager implements MusicPlayerListener {
                 } else if (Constant.ACTION_LYRIC.equals(action)) {
                     //歌词
                     LogUtil.d(TAG, "lyric");
+
+                    //隐藏或显示全局歌词控件
+                    showOrHideGlobalLyric();
                 }
             }
         };
@@ -111,6 +123,17 @@ public class MusicNotificationManager implements MusicPlayerListener {
 
         //注册广播接受者
         context.registerReceiver(musicNotificationBroadcastReceiver, intentFilter);
+    }
+
+    /**
+     * 隐藏或显示全局歌词控件
+     */
+    private void showOrHideGlobalLyric() {
+        if (globalLyricManager.isShowing()) {
+            globalLyricManager.hide();//隐藏
+        } else {
+            globalLyricManager.show();//显示
+        }
     }
 
     /**
