@@ -15,6 +15,7 @@ public class PreferenceUtil {
     private static final String SESSION = "SESSION";//用户登录session key
     private static final String USER_ID = "USER_ID";//用户登录UserId key
     private static final String LAST_PLAY_SONG_ID = "LAST_PLAY_SONG_ID";//最后播放音乐id key
+    private static final String KEY_SHOW_GLOBAL_LYRIC = "KEY_SHOW_GLOBAL_LYRIC";//是否显示全局歌词 key
     private static PreferenceUtil instance;
     private final Context context;//上下文
     private final SharedPreferences preference;
@@ -132,6 +133,20 @@ public class PreferenceUtil {
         preference.edit().putString(LAST_PLAY_SONG_ID, data).apply();
     }
 
+    /**
+     * 是否显示全局歌词
+     */
+    public boolean isShowGlobalLyric() {
+        return getBoolean(KEY_SHOW_GLOBAL_LYRIC, false);
+    }
+
+    /**
+     * 设置是否显示全局歌词
+     */
+    public void setShowGlobalLyric(boolean data) {
+        putBoolean(KEY_SHOW_GLOBAL_LYRIC, data);
+    }
+
 
     //辅助方法 （就是添加 删除等之类的）
 
@@ -153,6 +168,13 @@ public class PreferenceUtil {
      */
     private void putBoolean(String key, boolean value) {
         preference.edit().putBoolean(key, value).commit();
+    }
+
+    /**
+     * 获取boolean值
+     */
+    private boolean getBoolean(String key, boolean defaultValue) {
+        return preference.getBoolean(key, defaultValue);
     }
 
     /**

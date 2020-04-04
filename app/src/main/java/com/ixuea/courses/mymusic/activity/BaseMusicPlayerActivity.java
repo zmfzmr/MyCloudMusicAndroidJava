@@ -355,7 +355,11 @@ public class BaseMusicPlayerActivity extends BaseTitleActivity implements MusicP
         } else {
             //这个直接调用resume没问题 （因为肯定是播放了音乐后，这个迷你控制器次显示出来,
             // 所以肯定是第一次播放音乐了，所以调用这个resume没啥问题）
-            musicPlayerManager.resume();
+//            musicPlayerManager.resume();
+
+            //上面说的可能有问题，杀掉程序重新播放后，点击播放就有问题了，（因为要从当前进度开始播放，用上面代码就有问题）
+            // 所以换成如下代码
+            listManager.resume();
         }
     }
 

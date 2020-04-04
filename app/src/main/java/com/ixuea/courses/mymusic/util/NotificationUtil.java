@@ -119,9 +119,9 @@ public class NotificationUtil {
     }
 
     /**
-     * 显示音乐通知（3个参数的重载方法）
+     * 显示音乐通知（3个参数的重载方法）+ 1个参数isShowGlobalLyric：是否显示桌面歌词（控件）
      */
-    public static void showMusicNotification(Context context, Song data, boolean isPlaying) {
+    public static void showMusicNotification(Context context, Song data, boolean isPlaying, boolean isShowGlobalLyric) {
         LogUtil.d(TAG, "showMusicNotification:" + data.getTitle() + "," + isPlaying);
 
 
@@ -145,7 +145,7 @@ public class NotificationUtil {
                     @Override
                     public void onResourceReady(@NonNull Bitmap banner, @Nullable Transition<? super Bitmap> transition) {
                         //图片下载完成
-                        showMusicNotification(context, data, isPlaying, banner);
+                        showMusicNotification(context, data, isPlaying, banner, isShowGlobalLyric);
                     }
 
                     @Override
@@ -159,7 +159,7 @@ public class NotificationUtil {
      * 显示音乐通知(4个参数的重载方法)
      * 等3个参数重载方法，加载完成图片后，才显示这个通知
      */
-    public static void showMusicNotification(Context context, Song data, boolean isPlaying, Bitmap banner) {
+    public static void showMusicNotification(Context context, Song data, boolean isPlaying, Bitmap banner, boolean isShowGlobalLyric) {
         //创建通知渠道
         createNotificationChannel();
 
@@ -170,7 +170,7 @@ public class NotificationUtil {
         RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play);
 
         //显示数据 isPlaying:表示是否播放 banner:Bitmap对象
-        setData(data, contentView, isPlaying, banner);
+        setData(data, contentView, isPlaying, banner, isShowGlobalLyric);
 
         //设置通知点击事件
         setClick(context, contentView);
@@ -179,7 +179,7 @@ public class NotificationUtil {
         RemoteViews contentBigView = new RemoteViews(context.getPackageName(), R.layout.notification_music_play_large);
 
         //显示数据 这个是contentBigView
-        setData(data, contentBigView, isPlaying, banner);
+        setData(data, contentBigView, isPlaying, banner, isShowGlobalLyric);
 
         //设置通知点击事件（大通知）
         setClick(context, contentBigView);
@@ -285,7 +285,7 @@ public class NotificationUtil {
      * <p>
      * banner:Bitmap对象
      */
-    private static void setData(Song data, RemoteViews contentView, boolean isPlaying, Bitmap banner) {
+    private static void setData(Song data, RemoteViews contentView, boolean isPlaying, Bitmap banner, boolean isShowGlobalLyric) {
         //封面
         contentView.setImageViewBitmap(R.id.iv_banner, banner);
 
@@ -302,6 +302,14 @@ public class NotificationUtil {
                 : R.drawable.ic_music_notification_play;
 
         contentView.setImageViewResource(R.id.iv_play, playButtonResourceId);
+
+        //歌词按钮图标
+        int lyricButtonResourceId = isShowGlobalLyric
+                ? R.drawable.ic_music_notification_lyric_selected
+                : R.drawable.ic_music_notification_lyric;
+
+        //设置歌词按钮图标
+        contentView.setImageViewResource(R.id.iv_lyric, lyricButtonResourceId);
     }
 
     /**

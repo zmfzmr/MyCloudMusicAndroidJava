@@ -8,7 +8,12 @@ import android.view.Gravity;
 import android.view.WindowManager;
 
 import com.ixuea.courses.mymusic.manager.GlobalLyricManager;
+import com.ixuea.courses.mymusic.manager.ListManager;
+import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
+import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.NotificationUtil;
+import com.ixuea.courses.mymusic.util.PreferenceUtil;
 import com.ixuea.courses.mymusic.view.GlobalLyricView;
 
 /**
@@ -22,6 +27,9 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
     private WindowManager windowManager;//窗口管理器
     private WindowManager.LayoutParams layoutParams;//窗口的布局样式
     private GlobalLyricView globalLyricView;//全局歌词View
+    private final PreferenceUtil sp;//偏好设置工具类
+    private final ListManager listManager;//列表管理器
+    private final MusicPlayerManager musicPlayerManager;//音乐播放管理器
 
     /**
      * 构造方法
@@ -30,11 +38,23 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
      */
     public GlobalLyricManagerImpl(Context context) {
         this.context = context.getApplicationContext();//记得写这个，否则会有内存泄漏
+        //初始化编号设置工具类
+        sp = PreferenceUtil.getInstance(this.context);
+
+        //初始音乐播放管理器
+        musicPlayerManager = MusicPlayerService.getMusicPlayerManager(this.context);
+
+        //初始化列表管理器
+        listManager = MusicPlayerService.getListManager(this.context);
+
         //初始化窗口管理器
         initWindowManager();
 
-        //创建全局歌词View
-//        initGlobalLyricView();
+        //从偏好设置中获取是否要显示全局歌词
+        if (sp.isShowGlobalLyric()) {
+            //创建全局歌词View
+            initGlobalLyricView();
+        }
     }
 
     /**
@@ -60,6 +80,13 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
             //就添加
             windowManager.addView(globalLyricView, layoutParams);
         }
+        //这个是杀死应用后，重新进入应用，显示桌面歌词控件后，显示通知（否则不写的话，通知不会显示的）
+
+        //显示音乐通知 (参数4：因为已经调用了initGlobalLyricView 来时显示控件 所以这里是显示了，传入true)
+        NotificationUtil.showMusicNotification(context,
+                listManager.getData(),
+                musicPlayerManager.isPlaying(),
+                true);
 
     }
 
@@ -138,6 +165,9 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
 
         //初始化全局全局歌词控件
         initGlobalLyricView();
+
+        //设置了显示了全局歌词(显示桌面歌词 这个控件  就把设置的结果保存到持久化数据文件中)
+        sp.setShowGlobalLyric(true);
     }
 
     @Override
@@ -145,7 +175,18 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
         //移除全局歌词控件
         windowManager.removeView(globalLyricView);
         globalLyricView = null;//记得显示为null，下次显示的时候 就会重新创建这个globalLyricView对象了
+        //设置没有显示全局歌词
+        sp.setShowGlobalLyric(false);
 
+        //重新显示音乐通知
+        //参数4：因为隐藏了，所以这里是false
+
+        //这里再写个通知，显示了2个通知（后面一个覆盖了前面的）
+        // （第一个通知在MusicNotificationManager的showOrHideGlobalLyric (只不过这个通知方法 第4个参数不一样，其实结果一样的)）
+        NotificationUtil.showMusicNotification(context,
+                listManager.getData(),
+                musicPlayerManager.isPlaying(),
+                false);
     }
 
     @Override

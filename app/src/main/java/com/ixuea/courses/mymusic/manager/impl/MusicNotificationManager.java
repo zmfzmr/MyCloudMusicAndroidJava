@@ -60,6 +60,18 @@ public class MusicNotificationManager implements MusicPlayerListener {
 
         //初始化音乐通知广播接收器
         initMusicNotificationReceiver();
+
+        //判断是否显示音乐通知
+        //(之前都是点击播放后才会显示音乐通知，这样可能体验没有那么好，所以这里设置播放列表有歌曲后就会显示音乐通知)
+        if (listManager.getDatum().size() > 0) {
+            //显示通知
+            //参数3：传入false（可能这个播放器初始化的时候，不是在播放音乐，所以这类传入false）
+            NotificationUtil.showMusicNotification(context,
+                    listManager.getData(),
+                    false,
+                    globalLyricManager.isShowing()
+            );
+        }
     }
 
     /**
@@ -134,6 +146,20 @@ public class MusicNotificationManager implements MusicPlayerListener {
         } else {
             globalLyricManager.show();//显示
         }
+
+        //重新显示通知
+        //这样才能看到歌词图标状态的变更
+
+        //为啥要再次显示通知呢
+
+        //因为第一次显示通知的时候，是音乐播放的时候（这个时候点击桌面歌词按钮是没有效果，
+        // 因为这个通知已经出来了；想要刷新通知里面的数据，除非再次显示通知覆盖原来的这个才可以）
+
+        //这里是在点击通过点击发放广播 回来的广播接受者处理（重新发送通知）
+        NotificationUtil.showMusicNotification(context,
+                listManager.getData(),
+                musicPlayerManager.isPlaying(),
+                globalLyricManager.isShowing());
     }
 
     /**
@@ -149,13 +175,16 @@ public class MusicNotificationManager implements MusicPlayerListener {
     @Override
     public void onPaused(Song data) {
         //显示通知 参数3：是否播放
-        NotificationUtil.showMusicNotification(context, data, false);
+        //1.因为偏好设置isShowGlobalLyric() 保存的是否显示桌面歌词控件的boolean值
+        //2.而这里globalLyricManager.isShowing()：控件不为null为true（也就是显示为true）；否则为false
+        //上面1 2 结果都是一样的
+        NotificationUtil.showMusicNotification(context, data, false, globalLyricManager.isShowing());
     }
 
     @Override
     public void onPlaying(Song data) {
         //显示通知 参数3：是否播放
-        NotificationUtil.showMusicNotification(context, data, true);
+        NotificationUtil.showMusicNotification(context, data, true, globalLyricManager.isShowing());
     }
 
     @Override
