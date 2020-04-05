@@ -9,6 +9,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.lyric.Line;
+import com.ixuea.courses.mymusic.domain.lyric.Lyric;
+import com.ixuea.courses.mymusic.domain.lyric.LyricUtil;
 import com.ixuea.courses.mymusic.listener.GlobalLyricListener;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
@@ -136,6 +140,9 @@ public class GlobalLyricView extends LinearLayout {
 
         //初始化View注入框架
         ButterKnife.bind(this);
+
+        //设置第一行歌词始终是选中状态(就是选中：行控件那边根据选中来绘制文本等)
+        llv1.setLineSelected(true);
     }
 
     /**
@@ -245,4 +252,84 @@ public class GlobalLyricView extends LinearLayout {
         LogUtil.d(TAG, "onSettingsClick:");
     }
 
+    /**
+     * 清除歌词
+     */
+    public void clearLyric() {
+        llv1.setData(null);
+        llv2.setData(null);
+        //没有歌词显示一行就够了，把另外一个llv2隐藏掉
+//        llv2.setVisibility(GONE);
+        llv2.setVisibility(INVISIBLE);
+    }
+
+    /**
+     * 设置歌词是否是精确模式
+     */
+    public void setAccurate(boolean accurate) {
+        llv1.setAccurate(accurate);
+    }
+
+    /**
+     * 设置播放状态
+     *
+     * @param playing
+     */
+    public void setPlay(boolean playing) {
+        iv_play.setImageResource(playing ? R.drawable.ic_global_pause : R.drawable.ic_global_play);
+    }
+
+    /**
+     * 音乐进度回调（里面代码跟BaseMusicPlayerActivity的onProgress写的差不多）
+     */
+    public void onProgress(Song data) {
+        //获取当前音乐歌词
+        Lyric lyric = data.getParsedLyric();
+
+        if (lyric == null) {
+            //没有歌词
+            return;
+        }
+
+        long progress = data.getProgress();
+        //获取当前进度对应的歌词行
+        Line line = LyricUtil.getLyricLine(lyric, progress);
+        llv1.setData(line);
+        //如果是精确到字歌词
+        //就需要计算已经播放到那个字相关信息
+        if (lyric.isAccurate()) {
+            //获取当前时间是该行那个字
+            int lyricCurrentWordIndex = LyricUtil.getWordIndex(line, progress);
+            //当前时间该字已经播放的时间
+            float wordPlayedTime = LyricUtil.getWordPlayedTime(line, progress);
+            //设置行 当前字索引和当前字播放时间 到行控件
+            llv1.setLyricCurrentWordIndex(lyricCurrentWordIndex);
+            llv1.setWordPlayedTime(wordPlayedTime);
+            //刷新控件
+            llv1.onProgress();
+        }
+
+
+        //第二行歌词控件
+
+        //获取当前时间对应的行数索引
+        int lineNumber = LyricUtil.getLineNumber(lyric, progress);
+
+        if (lineNumber < lyric.getDatum().size() - 1) {//lyric:解析的歌词对象
+            //还有下一行歌词
+
+            //获取下一行歌词
+            Line nextLine = lyric.getDatum().get(lineNumber + 1);
+            llv2.setData(nextLine);
+        }
+
+
+    }
+
+    /**
+     * 显示第二个歌词控件
+     */
+    public void setSecondLyricView() {
+        llv2.setVisibility(VISIBLE);
+    }
 }

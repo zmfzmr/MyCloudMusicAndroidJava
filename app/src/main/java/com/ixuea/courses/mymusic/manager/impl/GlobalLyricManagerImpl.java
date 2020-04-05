@@ -3,13 +3,16 @@ package com.ixuea.courses.mymusic.manager.impl;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.WindowManager;
 
 import com.ixuea.courses.mymusic.MainActivity;
+import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.listener.GlobalLyricListener;
+import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.GlobalLyricManager;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
@@ -23,7 +26,7 @@ import com.ixuea.courses.mymusic.view.GlobalLyricView;
 /**
  * 全局(桌面)歌词管理器实现
  */
-public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricListener {
+public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricListener, MusicPlayerListener {
 
     private static final String TAG = "GlobalLyricManagerImpl";
     private static GlobalLyricManagerImpl instance;//实例
@@ -47,6 +50,9 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
 
         //初始音乐播放管理器
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(this.context);
+
+        //添加播放监听器
+        musicPlayerManager.addMusicPlayerListener(this);
 
         //初始化列表管理器
         listManager = MusicPlayerService.getListManager(this.context);
@@ -88,6 +94,13 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
             //就添加
             windowManager.addView(globalLyricView, layoutParams);
         }
+
+        //显示初始化数据(这个桌面歌词显示后，就显示初始化数据)
+        showLyricData();
+
+        //显示播放状态
+        globalLyricView.setPlay(musicPlayerManager.isPlaying());
+
         //这个是杀死应用后，重新进入应用，显示桌面歌词控件后，显示通知（否则不写的话，通知不会显示的）
 
         //显示音乐通知 (参数4：因为已经调用了initGlobalLyricView 来时显示控件 所以这里是显示了，传入true)
@@ -213,6 +226,37 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
 
     }
 
+    /**
+     * 显示歌词数据
+     */
+    public void showLyricData() {
+        if (globalLyricView == null) {
+            return;
+        }
+
+        //获取当前播放的音乐
+        if (listManager.getData() == null || listManager.getData().getParsedLyric() == null) {
+            //清空原来的歌词
+            globalLyricView.clearLyric();
+        } else {
+            //显示第二个歌词控件
+            globalLyricView.setSecondLyricView();
+
+            //设置歌词模式
+            globalLyricView.setAccurate(listManager.getData().getParsedLyric().isAccurate());
+
+            //如果显示了歌词
+            //执行一次进度方法
+            //相当于初始化数据
+
+            //这里是直接调用进度回调方法，然后传入数据(就是第一次分发进度)
+            //（相当于第一次手动调用进度回调，之后如果一直播放，则一直调用onProgress）
+            //这里的作用是：点击（词）隐藏后，再次点击，能再次看到当前绘制的歌词
+            onProgress(listManager.getData());
+        }
+
+    }
+
     //全局歌词控件监听器
     @Override
     public void onLogoClick() {
@@ -267,4 +311,39 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
         listManager.play(listManager.next());
     }
     //end 全局歌词控件监听器
+
+    //播放管理器监听器
+    @Override
+    public void onPaused(Song data) {
+        if (globalLyricView != null) {
+            globalLyricView.setPlay(false);//设置播放状态为false
+        }
+    }
+
+    @Override
+    public void onPlaying(Song data) {
+        if (globalLyricView != null) {
+            globalLyricView.setPlay(true);//设置播放状态为true
+        }
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp, Song data) {
+
+    }
+
+    @Override
+    public void onProgress(Song data) {
+        if (globalLyricView != null) {
+            //可能让这个控件自己处理不是那么好，（控件不应该处理逻辑相关的）
+            globalLyricView.onProgress(data);
+        }
+    }
+
+    @Override
+    public void onLyricChanged(Song data) {
+        showLyricData();
+    }
+
+    //end 播放管理器监听器
 }
