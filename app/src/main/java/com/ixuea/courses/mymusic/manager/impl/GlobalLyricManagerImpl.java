@@ -1,17 +1,20 @@
 package com.ixuea.courses.mymusic.manager.impl;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.WindowManager;
 
+import com.ixuea.courses.mymusic.MainActivity;
 import com.ixuea.courses.mymusic.listener.GlobalLyricListener;
 import com.ixuea.courses.mymusic.manager.GlobalLyricManager;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
+import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.NotificationUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
@@ -214,11 +217,26 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     @Override
     public void onLogoClick() {
         LogUtil.d(TAG, "onLogoClick");
+        //参数1：是从外面传入进来的context
+        //这里传入MainActivity（希望用户点击播放界面返回后还是主界面）
+        //因为这里传入的action是Constant.ACTION_MUSIC_PLAY_CLICK，
+        // 所以进入MainActivity后判断跳转到MusicPlayerActivity了
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setAction(Constant.ACTION_MUSIC_PLAY_CLICK);
+        //在Activity以外启动界面
+        //都要写这个标识
+        //具体的还比较复杂
+        //基础课程中讲解
+        //这里学会这样用就行了
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     @Override
     public void onCloseClick() {
         LogUtil.d(TAG, "onCloseClick");
+
+        hide();//直接调用管理器的方法就行
     }
 
     @Override
@@ -229,16 +247,24 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     @Override
     public void onPreviousClick() {
         LogUtil.d(TAG, "onPreviousClick");
+
+        listManager.play(listManager.previous());
     }
 
     @Override
     public void onPlayClick() {
         LogUtil.d(TAG, "onPlayClick");
+        if (musicPlayerManager.isPlaying()) {
+            listManager.pause();
+        } else {
+            listManager.resume();
+        }
     }
 
     @Override
     public void onNextClick() {
         LogUtil.d(TAG, "onNextClick");
+        listManager.play(listManager.next());
     }
     //end 全局歌词控件监听器
 }
