@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.listener.GlobalLyricListener;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
 import androidx.annotation.Nullable;
@@ -55,6 +56,8 @@ public class GlobalLyricView extends LinearLayout {
      */
     @BindView(R.id.iv_play)
     ImageView iv_play;
+
+    private GlobalLyricListener globalLyricListener;//全局歌词控件监听器
 
     /**
      * 构造方法
@@ -115,11 +118,20 @@ public class GlobalLyricView extends LinearLayout {
     }
 
     /**
+     * 设置全局歌词控件监听器
+     */
+    public void setGlobalLyricListener(GlobalLyricListener globalLyricListener) {
+        this.globalLyricListener = globalLyricListener;
+    }
+
+    /**
      * logo点击
      */
     @OnClick(R.id.iv_logo)
     public void onLogoClick() {
         LogUtil.d(TAG, "onLogoClick");
+
+        globalLyricListener.onLogoClick();
     }
 
     /**
@@ -128,6 +140,7 @@ public class GlobalLyricView extends LinearLayout {
     @OnClick(R.id.iv_close)
     public void onCloseClick() {
         LogUtil.d(TAG, "onCloseClick");
+        globalLyricListener.onCloseClick();
     }
 
     /**
@@ -136,6 +149,7 @@ public class GlobalLyricView extends LinearLayout {
     @OnClick(R.id.iv_lock)
     public void onLockClick() {
         LogUtil.d(TAG, "onLockClick");
+        globalLyricListener.onLockClick();
     }
 
     /**
@@ -144,6 +158,7 @@ public class GlobalLyricView extends LinearLayout {
     @OnClick(R.id.iv_previous)
     public void onPreviousClick() {
         LogUtil.d(TAG, "onPreviousClick");
+        globalLyricListener.onPreviousClick();
     }
 
     /**
@@ -152,6 +167,7 @@ public class GlobalLyricView extends LinearLayout {
     @OnClick(R.id.iv_play)
     public void onPlayClick() {
         LogUtil.d(TAG, "onPlayClick:");
+        globalLyricListener.onPlayClick();
     }
 
     /**
@@ -160,6 +176,7 @@ public class GlobalLyricView extends LinearLayout {
     @OnClick(R.id.iv_next)
     public void onNextClick() {
         LogUtil.d(TAG, "onNextClick:");
+        globalLyricListener.onNextClick();
     }
 
     /**

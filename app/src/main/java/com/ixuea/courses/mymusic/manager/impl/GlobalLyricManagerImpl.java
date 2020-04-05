@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.WindowManager;
 
+import com.ixuea.courses.mymusic.listener.GlobalLyricListener;
 import com.ixuea.courses.mymusic.manager.GlobalLyricManager;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
@@ -19,7 +20,7 @@ import com.ixuea.courses.mymusic.view.GlobalLyricView;
 /**
  * 全局(桌面)歌词管理器实现
  */
-public class GlobalLyricManagerImpl implements GlobalLyricManager {
+public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricListener {
 
     private static final String TAG = "GlobalLyricManagerImpl";
     private static GlobalLyricManagerImpl instance;//实例
@@ -73,6 +74,10 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
         if (globalLyricView == null) {
             //创建全局歌词控件
             globalLyricView = new GlobalLyricView(context);
+
+            //设置回调
+            globalLyricView.setGlobalLyricListener(this);
+
         }
 
         if (globalLyricView.getParent() == null) {
@@ -204,4 +209,36 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager {
     public void tryShow() {
 
     }
+
+    //全局歌词控件监听器
+    @Override
+    public void onLogoClick() {
+        LogUtil.d(TAG, "onLogoClick");
+    }
+
+    @Override
+    public void onCloseClick() {
+        LogUtil.d(TAG, "onCloseClick");
+    }
+
+    @Override
+    public void onLockClick() {
+        LogUtil.d(TAG, "onLockClick");
+    }
+
+    @Override
+    public void onPreviousClick() {
+        LogUtil.d(TAG, "onPreviousClick");
+    }
+
+    @Override
+    public void onPlayClick() {
+        LogUtil.d(TAG, "onPlayClick");
+    }
+
+    @Override
+    public void onNextClick() {
+        LogUtil.d(TAG, "onNextClick");
+    }
+    //end 全局歌词控件监听器
 }
