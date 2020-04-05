@@ -49,7 +49,7 @@ public class GlobalLyricView extends LinearLayout {
      * 播放控制容器
      */
     @BindView(R.id.ll_play_container)
-    View ll_play_all_container;
+    View ll_play_container;
 
     /**
      * 播放按钮
@@ -88,6 +88,34 @@ public class GlobalLyricView extends LinearLayout {
      */
     private void init() {
         initViews();
+
+        initListener();
+    }
+
+    /**
+     * 初始化监听器
+     */
+    private void initListener() {
+        //歌词view点击
+        OnClickListener thisClickListener = new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (iv_logo.getVisibility() == View.VISIBLE) {
+                    //标准模式
+                    LogUtil.d(TAG, "normalStyle");
+                    //显示简单模式（现在是标准模式 切换到标准模式）
+                    simpleStyle();
+                } else {
+                    //简单模式
+                    LogUtil.d(TAG, "simpleStyle");
+                    //切换标准模式
+                    normalStyle();
+                }
+            }
+        };
+        //this：桌面歌词控件
+        this.setOnClickListener(thisClickListener);
     }
 
     /**
@@ -122,6 +150,36 @@ public class GlobalLyricView extends LinearLayout {
      */
     public void setGlobalLyricListener(GlobalLyricListener globalLyricListener) {
         this.globalLyricListener = globalLyricListener;
+    }
+
+    /**
+     * 简单样式
+     * 只有歌词
+     */
+    public void simpleStyle() {
+        //背景设置为透明
+        setBackgroundColor(getResources().getColor(R.color.transparent));
+
+        //隐藏logo
+        iv_logo.setVisibility(GONE);
+        //隐藏关闭按钮
+        iv_close.setVisibility(GONE);
+        //隐藏播放控制容器
+        ll_play_container.setVisibility(GONE);
+    }
+
+    /**
+     * 标准样式
+     * 都显示
+     */
+    public void normalStyle() {
+        //设置背景为半透明
+        setBackground();
+
+        //显示 logo 关闭按钮 和 播放控制容器
+        iv_logo.setVisibility(VISIBLE);
+        iv_close.setVisibility(VISIBLE);
+        ll_play_container.setVisibility(VISIBLE);
     }
 
     /**
