@@ -288,26 +288,28 @@ public class LyricLineView extends View {
      * <p>
      * 文本宽度：画笔 测量文本 就知道宽度
      * 文本高度：画笔
+     *
+     * 这里默认 统一改成前景画笔
      */
     private void drawDefaultText(Canvas canvas) {
 
         LogUtil.d(TAG, "drawDefaultText");
 
         //获取歌词内容的宽度
-        float textWidth = TextUtil.getTextWidth(backgroundTextPaint, HINT_LYRIC_EMPTY);
+        float textWidth = TextUtil.getTextWidth(foregroundTextPaint, HINT_LYRIC_EMPTY);
 
         //获取歌词内容的高度(这个高度，只和字体和字体大小有关，和你的文本没有关系
-        float textHeight = TextUtil.getTextHeight(backgroundTextPaint);
+        float textHeight = TextUtil.getTextHeight(foregroundTextPaint);
         //计算水平居中的坐标
         float centerX = getCenterX(textWidth);
         //这里用画笔获取这个这个字体测量标准（//获取和字体绘制相关测量类）
-        Paint.FontMetrics fontMetrics = backgroundTextPaint.getFontMetrics();
+        Paint.FontMetrics fontMetrics = foregroundTextPaint.getFontMetrics();
         //计算垂直居中的坐标
         //Math.abs :绝对值  高的话还需要加上这点绝对值，才行
         float centerY = (getMeasuredHeight() - textHeight) / 2 + Math.abs(fontMetrics.top);
         //绘制文本
         //这里根据这个字体，在坐标位置话（用画笔在画布上画）
-        canvas.drawText(HINT_LYRIC_EMPTY, centerX, centerY, backgroundTextPaint);
+        canvas.drawText(HINT_LYRIC_EMPTY, centerX, centerY, foregroundTextPaint);
     }
 
     /**
@@ -423,4 +425,26 @@ public class LyricLineView extends View {
         invalidate();//记得写上这个方法重新绘制
     }
 
+    /**
+     * 设置高亮颜色
+     *
+     * @param color
+     */
+    public void setLyricSelectedTextColor(int color) {
+        this.lyricSelectedTextColor = color;
+
+        //更改文本颜色（调用方法重新绘制）
+        updateTextColor();
+    }
+
+    /**
+     * 重新设置歌词高亮颜色
+     */
+    private void updateTextColor() {
+        //注意：这里设置高亮颜色，所以这里只设置前景画笔就行了，背景画笔 不需要设置颜色
+        foregroundTextPaint.setColor(lyricSelectedTextColor);
+
+        //刷新一次（如果没有播放音乐，更改了它的值，其实是看不到更改后的值的（这个没有仔细测过））
+        invalidate();//记得刷新
+    }
 }

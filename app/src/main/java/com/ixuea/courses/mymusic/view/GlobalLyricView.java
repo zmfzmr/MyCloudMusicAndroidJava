@@ -22,12 +22,20 @@ import androidx.annotation.RequiresApi;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.shihao.library.XRadioGroup;
 
 /**
  * 全局(桌面)歌词
  */
-public class GlobalLyricView extends LinearLayout {
+public class GlobalLyricView extends LinearLayout implements XRadioGroup.OnCheckedChangeListener {
     private static final String TAG = "GlobalLyricView";
+    private static final int[] LYRIC_COLORS = new int[]{
+            R.color.lyric_color0,
+            R.color.lyric_color1,
+            R.color.lyric_color2,
+            R.color.lyric_color3,
+            R.color.lyric_color4,
+    };
     /**
      * 第一行歌词控件
      */
@@ -67,6 +75,12 @@ public class GlobalLyricView extends LinearLayout {
      */
     @BindView(R.id.ll_lyric_edit_container)
     View ll_lyric_edit_container;
+
+    /**
+     * 自定义歌词颜色单选按钮组
+     */
+    @BindView(R.id.rg)
+    XRadioGroup rg;
 
     private GlobalLyricListener globalLyricListener;//全局歌词控件监听器
     private PreferenceUtil sp;
@@ -129,6 +143,9 @@ public class GlobalLyricView extends LinearLayout {
         };
         //this：桌面歌词控件
         this.setOnClickListener(thisClickListener);
+
+        //歌词颜色单选按钮组
+        rg.setOnCheckedChangeListener(this);
     }
 
     /**
@@ -406,5 +423,30 @@ public class GlobalLyricView extends LinearLayout {
      */
     public void setSecondLyricView() {
         llv2.setVisibility(VISIBLE);
+    }
+
+    /**
+     * 颜色单选按钮更改了
+     *
+     * @param group     前面通过id找到的XRadioGroup（布局中找到的）
+     * @param checkedId 布局中通过id命名的那个命名id（选中id）
+     */
+    @Override
+    public void onCheckedChanged(XRadioGroup group, int checkedId) {
+        //通过tag解析出索引 （group.findViewById(checkedId):通过选中id找到这个控件）
+        String tag = (String) group.findViewById(checkedId).getTag();
+
+        //将tag解析为int
+        int index = Integer.parseInt(tag);
+
+        //更改歌词颜色(通过这个tag 更改歌词颜色)
+        updateLyricTextColor(index);
+    }
+
+    private void updateLyricTextColor(int index) {
+        //获取颜色
+        int color = getResources().getColor(LYRIC_COLORS[index]);
+        //设置颜色到歌词控件（这里只设置选中的那个颜色）
+        llv1.setLyricSelectedTextColor(color);
     }
 }

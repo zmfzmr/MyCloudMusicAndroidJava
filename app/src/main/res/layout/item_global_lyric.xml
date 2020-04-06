@@ -114,6 +114,7 @@
             XRadioGroup:可以理解和系统RadioGroup是一样 只不过有个嵌套
         -->
         <me.shihao.library.XRadioGroup
+            android:id="@+id/rg"
             android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
