@@ -386,6 +386,7 @@ public class LyricLineView extends View {
      * @return
      */
     public int decrementTextSize() {
+        //原来是：将16dp转换为px  所以这里是px--（也就是像素--）
         lyricTextSize--;
         //因为外面 GlobalLyricView --> onLyricFontSizeIncrementClick用的是llv1调用这个方法
         //所以调用updateTextSize方法更新llv1的控件大小（当前另外一种方式：用llv1调用setLyricTextSize也是可以）

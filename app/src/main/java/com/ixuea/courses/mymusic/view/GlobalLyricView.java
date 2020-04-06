@@ -15,6 +15,7 @@ import com.ixuea.courses.mymusic.domain.lyric.Lyric;
 import com.ixuea.courses.mymusic.domain.lyric.LyricUtil;
 import com.ixuea.courses.mymusic.listener.GlobalLyricListener;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.PreferenceUtil;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -68,6 +69,7 @@ public class GlobalLyricView extends LinearLayout {
     View ll_lyric_edit_container;
 
     private GlobalLyricListener globalLyricListener;//全局歌词控件监听器
+    private PreferenceUtil sp;
 
     /**
      * 构造方法
@@ -99,6 +101,7 @@ public class GlobalLyricView extends LinearLayout {
     private void init() {
         initViews();
 
+        initDatum();
         initListener();
     }
 
@@ -149,6 +152,25 @@ public class GlobalLyricView extends LinearLayout {
 
         //设置第一行歌词始终是选中状态(就是选中：行控件那边根据选中来绘制文本等)
         llv1.setLineSelected(true);
+    }
+
+    /**
+     * 初始化数据
+     * <p>
+     * 为啥在initDatum使用，因为关闭桌面控件（也就是本类对象），再次打开需要重新创建
+     * 所以在initDatum获取保存的歌词大小
+     */
+    private void initDatum() {
+        //最好是GlobalLyricManagerImpl中获取（不过我们还是在这里初始化）
+        //这里是自定义View中，上下文的话传入: getContext()
+        sp = PreferenceUtil.getInstance(getContext());
+
+        //获取到偏好设置中到的字体大小(如果没有找到，有一个默认大小18（已转px）)
+        int lyricTextSize = sp.getGlobalLyricTextSize();
+
+        //设置到控件(setLyricTextSize:这个方法是我们之前定义的，里面已经设置大小到对象和设置画笔字体、调用了invalidate)
+        llv1.setLyricTextSize(lyricTextSize);
+        llv2.setLyricTextSize(lyricTextSize);
     }
 
     /**
@@ -274,6 +296,9 @@ public class GlobalLyricView extends LinearLayout {
         //设置歌词控件字体大小（llv1 和llv2）
         setLyricTextSize(currentSize);
 
+        //保存到配置文件
+        //这个sp 放在View中可能不太好（不过我们还是写在这个view中）
+        sp.setGlobalLyricTextSize(currentSize);
     }
 
     /**
@@ -286,6 +311,10 @@ public class GlobalLyricView extends LinearLayout {
 
         //设置个歌词控件字体大小
         setLyricTextSize(currentSize);
+
+        //保存到配置文件
+        //这个sp 放在View中可能不太好（不过我们还是写在这个view中）
+        sp.setGlobalLyricTextSize(currentSize);
     }
 
     /**

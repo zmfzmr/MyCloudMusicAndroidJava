@@ -16,6 +16,7 @@ public class PreferenceUtil {
     private static final String USER_ID = "USER_ID";//用户登录UserId key
     private static final String LAST_PLAY_SONG_ID = "LAST_PLAY_SONG_ID";//最后播放音乐id key
     private static final String KEY_SHOW_GLOBAL_LYRIC = "KEY_SHOW_GLOBAL_LYRIC";//是否显示全局歌词 key
+    private static final String KEY_GLOBAL_LYRIC_TEXT_SIZE = "KEY_GLOBAL_LYRIC_TEXT_SIZE";//全局歌词大小 key
     private static PreferenceUtil instance;
     private final Context context;//上下文
     private final SharedPreferences preference;
@@ -147,6 +148,21 @@ public class PreferenceUtil {
         putBoolean(KEY_SHOW_GLOBAL_LYRIC, data);
     }
 
+    /**
+     * 获取全局歌词大小
+     */
+    public int getGlobalLyricTextSize() {
+        return getInt(KEY_GLOBAL_LYRIC_TEXT_SIZE, DensityUtil.dip2px(context, 18));
+    }
+
+    /**
+     * 设置全局歌词大小
+     *
+     * @param data
+     */
+    public void setGlobalLyricTextSize(int data) {
+        putInt(KEY_GLOBAL_LYRIC_TEXT_SIZE, data);
+    }
 
     //辅助方法 （就是添加 删除等之类的）
 
@@ -196,6 +212,20 @@ public class PreferenceUtil {
         preference.edit().remove(key).commit();
     }
 
+    /**
+     * 获取一个int值
+     */
+    private int getInt(String key, int defaultValue) {
+        //获取一个int值
+        return preference.getInt(key, defaultValue);
+    }
+
+    /**
+     * 设置有一个int
+     */
+    private void putInt(String key, int data) {
+        preference.edit().putInt(key, data).apply();//记得写apply
+    }
 
     //end辅助方法
 }
