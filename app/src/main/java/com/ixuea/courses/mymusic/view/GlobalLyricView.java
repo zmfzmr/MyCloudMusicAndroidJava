@@ -265,6 +265,40 @@ public class GlobalLyricView extends LinearLayout {
     }
 
     /**
+     * 减小歌词字体大小按钮点击
+     */
+    @OnClick(R.id.iv_font_size_small)
+    public void onLyricFontSizeDecrementClick() {
+        //减小歌词字体大小
+        int currentSize = llv1.decrementTextSize();
+        //设置歌词控件字体大小（llv1 和llv2）
+        setLyricTextSize(currentSize);
+
+    }
+
+    /**
+     * 增大歌词字体大小按钮点击
+     */
+    @OnClick(R.id.iv_font_size_large)
+    public void onLyricFontSizeIncrementClick() {
+        //减小歌词字体大小
+        int currentSize = llv1.IncrementTextSize();
+
+        //设置个歌词控件字体大小
+        setLyricTextSize(currentSize);
+    }
+
+    /**
+     * 设置歌词文本大小（llv1 和llv2大小）
+     *
+     * @param currentSize
+     */
+    private void setLyricTextSize(int currentSize) {
+        //设置到第二个歌词控件（这里设置到llv2，llv1的话，在调用decrementTextSize或者IncrementTextSize的时候已经刷新大小显示了）
+        llv2.setLyricTextSize(currentSize);
+    }
+
+    /**
      * 清除歌词
      */
     public void clearLyric() {

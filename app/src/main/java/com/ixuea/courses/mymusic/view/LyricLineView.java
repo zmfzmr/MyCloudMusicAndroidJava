@@ -40,7 +40,7 @@ public class LyricLineView extends View {
     private Line data;//歌词行对象
     private boolean accurate;//是否精确到字歌词
     private boolean lineSelected;//是否选中（行选中）
-    private float lyricTextSize;//float类型  歌词文字大小
+    private int lyricTextSize;//float类型  歌词文字大小 更改为int 方便 减减 --
     private int lyricTextColor;//歌词颜色
     private int lyricSelectedTextColor;//选中的高亮歌词颜色
     private Paint backgroundTextPaint;//默认歌词画笔
@@ -99,7 +99,8 @@ public class LyricLineView extends View {
             //获取歌词大小
 
             //lyricTextSize:已经由dp 转换成了px，所以直接用这个就可以了
-            lyricTextSize = typedArray.getDimension(R.styleable.LyricLineView_text_size, lyricTextSize);
+            //上面已经更改为int了，所以这里需要转换成int类型
+            lyricTextSize = (int) typedArray.getDimension(R.styleable.LyricLineView_text_size, lyricTextSize);
             //歌词默认颜色
             lyricTextColor = typedArray.getColor(R.styleable.LyricLineView_text_color, lyricTextColor);
 
@@ -378,4 +379,47 @@ public class LyricLineView extends View {
             invalidate();//会触发onDraw方法 16ms毫秒调用一次
         }
     }
+
+    /**
+     * 减少字体大小
+     *
+     * @return
+     */
+    public int decrementTextSize() {
+        lyricTextSize--;
+        //因为外面 GlobalLyricView --> onLyricFontSizeIncrementClick用的是llv1调用这个方法
+        //所以调用updateTextSize方法更新llv1的控件大小（当前另外一种方式：用llv1调用setLyricTextSize也是可以）
+        updateTextSize();
+        return lyricTextSize;
+    }
+
+    /**
+     * 增大字体大小
+     *
+     * @return
+     */
+    public int IncrementTextSize() {
+        lyricTextSize++;
+        updateTextSize();//原理同decrementTextSize 里面的
+        return lyricTextSize;
+    }
+
+    /**
+     * 设置歌词大小
+     */
+    public void setLyricTextSize(int currentSize) {
+        this.lyricTextSize = currentSize;
+        updateTextSize();//更新歌词大小
+    }
+
+    /**
+     * 设置完歌词后，记得更新歌词（否则没有重新绘制，大小不会显示）
+     */
+    private void updateTextSize() {
+        backgroundTextPaint.setTextSize(lyricTextSize);
+        foregroundTextPaint.setTextSize(lyricTextSize);
+
+        invalidate();//记得写上这个方法重新绘制
+    }
+
 }
