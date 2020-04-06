@@ -17,6 +17,7 @@ public class PreferenceUtil {
     private static final String LAST_PLAY_SONG_ID = "LAST_PLAY_SONG_ID";//最后播放音乐id key
     private static final String KEY_SHOW_GLOBAL_LYRIC = "KEY_SHOW_GLOBAL_LYRIC";//是否显示全局歌词 key
     private static final String KEY_GLOBAL_LYRIC_TEXT_SIZE = "KEY_GLOBAL_LYRIC_TEXT_SIZE";//全局歌词大小 key
+    private static final String KEY_GLOBAL_LYRIC_TEXT_COLOR = "KEY_GLOBAL_LYRIC_TEXT_COLOR";//全局歌词颜色 key
     private static PreferenceUtil instance;
     private final Context context;//上下文
     private final SharedPreferences preference;
@@ -162,6 +163,21 @@ public class PreferenceUtil {
      */
     public void setGlobalLyricTextSize(int data) {
         putInt(KEY_GLOBAL_LYRIC_TEXT_SIZE, data);
+    }
+
+    /**
+     * 获取全局歌词颜色索引
+     */
+    public int getGlobalLyricTextColorIndex() {
+        //默认获取索引为 0
+        return getInt(KEY_GLOBAL_LYRIC_TEXT_COLOR, 0);
+    }
+
+    /**
+     * 设置全局歌词颜色索引
+     */
+    public void setGlobalLyricTextColorIndex(int index) {
+        putInt(KEY_GLOBAL_LYRIC_TEXT_COLOR, index);
     }
 
     //辅助方法 （就是添加 删除等之类的）

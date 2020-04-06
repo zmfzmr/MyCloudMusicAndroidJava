@@ -37,6 +37,16 @@ public class GlobalLyricView extends LinearLayout implements XRadioGroup.OnCheck
             R.color.lyric_color4,
     };
     /**
+     * 歌词颜色单选按钮Id 组
+     */
+    private static final int[] RADIO_BUTTONS = new int[]{
+            R.id.rb_0,
+            R.id.rb_1,
+            R.id.rb_2,
+            R.id.rb_3,
+            R.id.rb_4,
+    };
+    /**
      * 第一行歌词控件
      */
     @BindView(R.id.llv1)
@@ -188,6 +198,36 @@ public class GlobalLyricView extends LinearLayout implements XRadioGroup.OnCheck
         //设置到控件(setLyricTextSize:这个方法是我们之前定义的，里面已经设置大小到对象和设置画笔字体、调用了invalidate)
         llv1.setLyricTextSize(lyricTextSize);
         llv2.setLyricTextSize(lyricTextSize);
+
+        //获取歌词颜色索引
+        int lyricTextColorIndex = sp.getGlobalLyricTextColorIndex();
+        //更新歌词颜色（updateLyricTextColor:这个方法是之前定义的）
+        updateLyricTextColor(lyricTextColorIndex);
+
+        //方法1
+        //选中该颜色对应的单选按钮
+        //这代码还可以在优化
+//        switch(lyricTextColorIndex) {
+//            case 0:
+//                rg.check(R.id.rb_0);
+//                break;
+//            case 1:
+//                rg.check(R.id.rb_1);
+//                break;
+//            case 2:
+//                rg.check(R.id.rb_2);
+//                break;
+//            case 3:
+//                rg.check(R.id.rb_3);
+//                break;
+//            case 4:
+//                rg.check(R.id.rb_4);
+//                break;
+//        }
+
+        //方法2 推荐
+        int radioButtonId = RADIO_BUTTONS[lyricTextColorIndex];
+        rg.check(radioButtonId);
     }
 
     /**
@@ -441,8 +481,14 @@ public class GlobalLyricView extends LinearLayout implements XRadioGroup.OnCheck
 
         //更改歌词颜色(通过这个tag 更改歌词颜色)
         updateLyricTextColor(index);
+
+        //保存到编号设置(保存tag int值到持久化设置)
+        sp.setGlobalLyricTextColorIndex(index);
     }
 
+    /**
+     * 更改歌词颜色
+     */
     private void updateLyricTextColor(int index) {
         //获取颜色
         int color = getResources().getColor(LYRIC_COLORS[index]);
