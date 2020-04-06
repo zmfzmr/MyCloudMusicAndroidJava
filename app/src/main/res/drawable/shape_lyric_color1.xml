@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <!-- oval 椭圆 如果是单曲按钮这种，设置到这里的话，就是圆形（因为单选按钮本身就是一个圆形）
+         如果是矩形的话，就是椭圆-->
+
+    <!--填充颜色-->
+    <solid android:color="@color/lyric_color1" />
+
+
+</shape>

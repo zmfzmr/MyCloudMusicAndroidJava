@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <!--因为这个drawable（也就是shape）是透明，所以这里指不指定都是可以的，因为透明的看不出来-->
+
+    <!--填充颜色-->
+    <solid android:color="@color/transparent" />
+
+</shape>

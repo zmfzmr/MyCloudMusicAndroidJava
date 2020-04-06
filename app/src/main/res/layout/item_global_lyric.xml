@@ -107,7 +107,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_middle"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <!--支持嵌套的RadioGroup
             XRadioGroup:可以理解和系统RadioGroup是一样 只不过有个嵌套
@@ -130,9 +131,12 @@
                 -->
                 <RadioButton
                     android:id="@+id/rb_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="0" />
+                    android:layout_width="@dimen/icon_height"
+                    android:layout_height="@dimen/icon_height"
+                    android:tag="0"
+                    android:background="@drawable/shape_lyric_color0"
+                    android:button="@drawable/selector_global_lyric_radio_button"
+                    android:checked="true" />
 
             </LinearLayout>
 
@@ -146,9 +150,11 @@
                 <!--单选按钮-->
                 <RadioButton
                     android:id="@+id/rb_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="1" />
+                    android:layout_width="@dimen/icon_height"
+                    android:layout_height="@dimen/icon_height"
+                    android:tag="1"
+                    android:background="@drawable/shape_lyric_color1"
+                    android:button="@drawable/selector_global_lyric_radio_button" />
 
             </LinearLayout>
 
@@ -162,9 +168,11 @@
                 <!--单选按钮-->
                 <RadioButton
                     android:id="@+id/rb_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="2" />
+                    android:layout_width="@dimen/icon_height"
+                    android:layout_height="@dimen/icon_height"
+                    android:tag="2"
+                    android:background="@drawable/shape_lyric_color2"
+                    android:button="@drawable/selector_global_lyric_radio_button" />
 
             </LinearLayout>
 
@@ -178,9 +186,11 @@
                 <!--单选按钮-->
                 <RadioButton
                     android:id="@+id/rb_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="3" />
+                    android:layout_width="@dimen/icon_height"
+                    android:layout_height="@dimen/icon_height"
+                    android:tag="3"
+                    android:background="@drawable/shape_lyric_color3"
+                    android:button="@drawable/selector_global_lyric_radio_button" />
 
             </LinearLayout>
 
@@ -194,9 +204,11 @@
                 <!--单选按钮-->
                 <RadioButton
                     android:id="@+id/rb_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="4" />
+                    android:layout_width="@dimen/icon_height"
+                    android:layout_height="@dimen/icon_height"
+                    android:tag="4"
+                    android:background="@drawable/shape_lyric_color4"
+                    android:button="@drawable/selector_global_lyric_radio_button" />
 
             </LinearLayout>
 

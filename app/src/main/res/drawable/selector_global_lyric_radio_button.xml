@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--选中状态 RadioButton用的是state_checked 而不是state_selected-->
+    <item android:drawable="@drawable/ic_global_color_check" android:state_checked="true" />
+    <!--默认状态
+        shape_button_translucent:这个是之前定义的透明
+        因为选中状态用的是drawable
+        如果默认状态用的是color，那么久可能会报错，所以默认也用drawable，用的是shape图片
+        -->
+    <item android:drawable="@drawable/shape_translucent" />
+
+</selector>

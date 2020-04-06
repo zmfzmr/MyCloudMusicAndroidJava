@@ -39,4 +39,11 @@
         意思说：黑色的基础上有些透明
     -->
     <color name="global_lyric_background">#cc000000</color>
+
+    <!--全局歌词颜色-->
+    <color name="lyric_color0">#DD0000</color>
+    <color name="lyric_color1">#4EC6ED</color>
+    <color name="lyric_color2">#55E19B</color>
+    <color name="lyric_color3">#F2B34E</color>
+    <color name="lyric_color4">#A65EEA</color>
 </resources>
