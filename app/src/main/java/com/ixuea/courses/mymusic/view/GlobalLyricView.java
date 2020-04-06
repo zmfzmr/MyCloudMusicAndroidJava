@@ -61,6 +61,12 @@ public class GlobalLyricView extends LinearLayout {
     @BindView(R.id.iv_play)
     ImageView iv_play;
 
+    /**
+     * 自定义歌词样式容器
+     */
+    @BindView(R.id.ll_lyric_edit_container)
+    View ll_lyric_edit_container;
+
     private GlobalLyricListener globalLyricListener;//全局歌词控件监听器
 
     /**
@@ -250,6 +256,12 @@ public class GlobalLyricView extends LinearLayout {
     @OnClick(R.id.iv_settings)
     public void onSettingsClick() {
         LogUtil.d(TAG, "onSettingsClick:");
+
+        if (ll_lyric_edit_container.getVisibility() == VISIBLE) {
+            ll_lyric_edit_container.setVisibility(GONE);
+        } else {
+            ll_lyric_edit_container.setVisibility(VISIBLE);
+        }
     }
 
     /**

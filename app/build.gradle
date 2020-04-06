@@ -654,6 +654,10 @@ dependencies {
     //https://github.com/hdodenhof/CircleImageView
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
+    //可以嵌套的RadioGroup
+    //https://github.com/fodroid/XRadioGroup
+    implementation 'com.github.fodroid:XRadioGroup:1.5'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
