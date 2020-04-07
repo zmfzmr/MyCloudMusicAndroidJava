@@ -54,4 +54,29 @@ public class ServiceUtil {
 
         return false;
     }
+
+    /**
+     * 当前应用是否后台运行
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isBackgroundRunning(Context context) {
+        //获取活动管理器
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        //遍历所有进程
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            //进程名等于我们应用的包名
+            if (appProcess.processName.equals(context.getPackageName())) {
+                //找到了我们当前应用
+                //(IMPORTANCE_FOREGROUND：表示前台) 那么不等前台，那么就是后台的意思
+                //注意：其实这里的appProcess（也是指ActivityManager.RunningAppProcessInfo对象）
+                return appProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+            }
+        }
+        //默认就是前台（返回false表示前台，只有true才是后台）
+        return false;
+    }
 }

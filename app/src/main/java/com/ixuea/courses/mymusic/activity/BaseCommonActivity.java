@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.ixuea.courses.mymusic.manager.impl.GlobalLyricManagerImpl;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
+import com.ixuea.courses.mymusic.util.ServiceUtil;
 
 import java.io.Serializable;
 
@@ -27,6 +29,7 @@ public class BaseCommonActivity extends BaseActivity {
     protected PreferenceUtil sp;
     //数据库对象（这个应该是数据库工具类）
     protected ORMUtil orm;
+    private GlobalLyricManagerImpl globalLyricManager;
 
     @Override
     protected void initView() {
@@ -62,6 +65,9 @@ public class BaseCommonActivity extends BaseActivity {
         sp = PreferenceUtil.getInstance(getMainActivity());
         //数据库工具类 (在父初始化这个数据库工具类，这样每个子类都能使用了)
         orm = ORMUtil.getInstance(getApplicationContext());
+
+        //初始化全局歌词管理器
+        globalLyricManager = GlobalLyricManagerImpl.getInstance(getApplicationContext());
     }
 
     /**
@@ -123,6 +129,41 @@ public class BaseCommonActivity extends BaseActivity {
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             );
+        }
+    }
+
+    /**
+     * 界面显示了
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!ServiceUtil.isBackgroundRunning(getApplicationContext())) {
+            //如果当前程序在前台
+
+            //就尝试隐藏桌面歌词(可能桌面歌词控件没有显示出来，那么就是尝试隐藏)
+            globalLyricManager.tryHide();
+        }
+    }
+
+    /**
+     * 界面停止了（并不是说杀死了，或者终止，可以理解为暂停了了）
+     * <p>
+     * onPause：跳出弹窗就执行
+     * onStop：只要跳到另外一个界面才会执行onStop
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //要在onStop方法里面显示
+        //不能在onPause方法
+        //因为当onPause方法执行的时候
+        //系统的进程还没有后台
+        if (ServiceUtil.isBackgroundRunning(getApplicationContext())) {
+            //如果当前程序在后台
+
+            //就尝试显示桌面歌词（为啥呢，因为界面中还没有显示，所以尝试显示）
+            globalLyricManager.tryShow();
         }
     }
 

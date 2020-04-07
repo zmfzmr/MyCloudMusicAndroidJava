@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.ixuea.courses.mymusic.MainActivity;
@@ -24,6 +25,8 @@ import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.NotificationUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 import com.ixuea.courses.mymusic.view.GlobalLyricView;
+
+import static android.view.View.GONE;
 
 /**
  * 全局(桌面)歌词管理器实现
@@ -229,14 +232,26 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
         return globalLyricView != null;
     }
 
+    /**
+     * 注意：
+     * 这里的框架显示 和隐藏 并没有设置属性到 WindowManager.LayoutParams layoutParams
+     * 这个对象里面，所以(并不用)调用windowManager.updateViewLayout(globalLyricView, layoutParams);
+     * 来更新布局
+     */
     @Override
     public void tryHide() {
-
+        //sp.isShowGlobalLyric():表示已经显示桌面歌词控件了，那么切换到前台后 就隐藏桌面歌词控件
+        if (sp.isShowGlobalLyric()) {
+            globalLyricView.setVisibility(GONE);
+        }
     }
 
     @Override
     public void tryShow() {
-
+        //后台就显示桌面歌词控件
+        if (sp.isShowGlobalLyric()) {
+            globalLyricView.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
