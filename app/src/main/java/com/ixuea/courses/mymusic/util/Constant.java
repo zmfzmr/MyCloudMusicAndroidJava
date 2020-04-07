@@ -173,4 +173,8 @@ public class Constant {
      * 请求获取overlay权限请求码（悬浮窗权限请求码）
      */
     public static final int REQUEST_OVERLAY_PERMISSION = 100;
+    /**
+     * 解锁全局歌词Id
+     */
+    public static final int NOTIFICATION_UNLOCK_LYRIC_ID = 10001;
 }

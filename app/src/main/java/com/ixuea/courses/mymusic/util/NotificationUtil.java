@@ -24,6 +24,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import static com.ixuea.courses.mymusic.util.Constant.NOTIFICATION_UNLOCK_LYRIC_ID;
+
 /**
  * 通知相关工具类
  */
@@ -322,5 +324,51 @@ public class NotificationUtil {
         //显示通知(显示通知 需要用到通知管理器来时通知显示 这个通知管理器可能为null，所以前面先获取下)
         notificationManager.notify(id, notification);
 
+    }
+
+    /**
+     * 显示解锁全局歌词通知
+     */
+    public static void showUnLockGlobalLyricNotification(Context context) {
+        //创建渠道通知
+        getNotificationManager(context);
+
+        //创建通知渠道
+        createNotificationChannel();
+
+        //点击事件
+        //参数2 发送广播的请求码
+
+        // //FLAG_UPDATE_CURRENT
+        //会替换到原来的广播（更新当前）
+        PendingIntent contentPendingIntent = PendingIntent.getBroadcast(context,
+                Constant.ACTION_UNLOCK_LYRIC.hashCode(),
+                new Intent(Constant.ACTION_UNLOCK_LYRIC),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, IMPORTANCE_LOW_CHANNEL_ID)
+                //设置logo（小图标）
+                .setSmallIcon(R.mipmap.ic_launcher)
+                //设置标题
+                .setContentTitle(context.getResources().getString(R.string.lock_lyric_title))
+                //设置标题
+                .setContentText(context.getResources().getString(R.string.lock_lyric_content))
+                //设置点击后执行额意图
+                .setContentIntent(contentPendingIntent);
+
+        //显示通知
+        notify(context, NOTIFICATION_UNLOCK_LYRIC_ID, builder.build());
+
+    }
+
+    /**
+     * 解锁后清除通知
+     */
+    public static void clearUnlockGlobalLyricNotification(Context context) {
+        //创建渠道通知
+        getNotificationManager(context);
+
+        //清除通知
+        notificationManager.cancel(NOTIFICATION_UNLOCK_LYRIC_ID);
     }
 }

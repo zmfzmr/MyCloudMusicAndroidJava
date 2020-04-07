@@ -1,7 +1,9 @@
 package com.ixuea.courses.mymusic.manager.impl;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -37,6 +39,7 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     private final PreferenceUtil sp;//偏好设置工具类
     private final ListManager listManager;//列表管理器
     private final MusicPlayerManager musicPlayerManager;//音乐播放管理器
+    private BroadcastReceiver unLockGlobalLyricBroadcastReceiver;
 
     /**
      * 构造方法
@@ -60,10 +63,17 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
         //初始化窗口管理器
         initWindowManager();
 
+        //后台杀掉 重新进入应用的情况
+
         //从偏好设置中获取是否要显示全局歌词
         if (sp.isShowGlobalLyric()) {
             //创建全局歌词View
             initGlobalLyricView();
+
+            //如果原来锁定了歌词
+            if (sp.isGlobalLyricLock()) {
+                lock();
+            }
         }
     }
 
@@ -160,6 +170,9 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
 
             //目前是写死的
             layoutParams.y = 100;
+
+            //设置全局歌词控件状态
+            setGlobalLyricStatus();
 
         }
 
@@ -286,6 +299,119 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     @Override
     public void onLockClick() {
         LogUtil.d(TAG, "onLockClick");
+
+        lock();
+    }
+
+    /**
+     * 锁定全局歌词锁定状态
+     */
+    private void lock() {
+        //保存歌词锁定状态
+        sp.setGlobalLyricLock(true);
+
+        //设置全局歌词控件状态
+        setGlobalLyricStatus();
+
+        //显示简单模式
+        globalLyricView.simpleStyle();
+
+        //更新布局
+        //这个必须要更新布局（因为禁用参数的 flag是设置到layoutParams对象中，再点击lock按钮之前，
+        // 这个layoutParams对象已经使用了，所以不更新布局的话，不会生效的）
+        updateView();
+
+        //显示解锁全局歌词通知
+        NotificationUtil.showUnLockGlobalLyricNotification(context);
+
+        //注册接收解锁全局歌词广播接收器
+        //虽然在点击锁定的时候注册了 广播，但是还没有发送广播，这里面的回调方法onReceive不会执行
+        registerUnLockGlobalLyricReceiver();
+    }
+
+    /**
+     * 注解接收解锁全局歌词广播接收器
+     */
+    private void registerUnLockGlobalLyricReceiver() {
+        //创建广播接收者
+        unLockGlobalLyricBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (Constant.ACTION_UNLOCK_LYRIC == intent.getAction()) {
+                    //歌词解锁事件
+                    unlock();
+                }
+            }
+        };
+
+        IntentFilter intentFilter = new IntentFilter();
+
+        //只监听歌词解析 (ACTION_UNLOCK_LYRIC:点击通知发送的那个广播值)
+        intentFilter.addAction(Constant.ACTION_UNLOCK_LYRIC);
+        context.registerReceiver(unLockGlobalLyricBroadcastReceiver, intentFilter);
+    }
+
+    /**
+     * 解锁歌词
+     */
+    private void unlock() {
+        //设置没有锁定歌词
+        sp.setGlobalLyricLock(false);
+        //设置歌词状态
+        setGlobalLyricStatus();
+
+        //结果后显示标准样式
+        globalLyricView.normalStyle();
+
+        //更新view
+        updateView();
+
+        //清除歌词解锁通知
+        //不用清除（系统默认解锁后就会清除）之前那个音乐通知没有消息 是设置了setAutoCancel(false):点击不消失
+//        NotificationUtil.clearUnlockGlobalLyricNotification(context);
+
+        //解除接收全局歌词时间广播接接收者
+        unRegisterUnlockGlobalLyricReceiver();
+
+    }
+
+    /**
+     * 解除接收全局歌词时间广播接接收者
+     */
+    private void unRegisterUnlockGlobalLyricReceiver() {
+        if (unLockGlobalLyricBroadcastReceiver != null) {
+            context.unregisterReceiver(unLockGlobalLyricBroadcastReceiver);
+            unLockGlobalLyricBroadcastReceiver = null;
+        }
+    }
+
+    /**
+     * 更新布局
+     */
+    private void updateView() {
+        windowManager.updateViewLayout(globalLyricView, layoutParams);
+    }
+
+    private void setGlobalLyricStatus() {
+        if (sp.isGlobalLyricLock()) {
+            //已经锁定了
+
+            //窗口不接受任何事件
+            //FLAG_NOT_TOUCHABLE:表示不接受事件（禁止触摸控件）
+            //FLAG_NOT_FOCUSABLE:这个记得加上，否则返回按钮不能使用
+            layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+
+        } else {
+            //没有锁定
+
+            //窗口可以接受触摸事件
+            //FLAG_NOT_TOUCH_MODAL和FLAG_NOT_FOCUSABLE 表示可以：接受触摸事件
+            //注意FLAG_NOT_TOUCH_MODAL：和上面的FLAG_NOT_TOUCHABLE区别
+            layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        }
+
     }
 
     @Override

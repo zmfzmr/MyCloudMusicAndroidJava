@@ -117,6 +117,8 @@
     <string name="singer_name">歌手:%1$s</string>
     <string name="delete_in_sheet">从歌单中删除</string>
     <string name="lyric_empty">当前音乐没有歌词!</string>
+    <string name="lock_lyric_title">桌面歌词已经锁定</string>
+    <string name="lock_lyric_content">点击解锁</string>
 
 
 </resources>
