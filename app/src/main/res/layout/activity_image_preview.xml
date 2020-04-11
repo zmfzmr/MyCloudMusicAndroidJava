@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".activity.ImagePreviewActivity">
-    <!--标题控件-->
-    <include layout="@layout/tool_bar" />
 
-    <!--内容容器-->
-    <LinearLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+    <!--    &lt;!&ndash;标题控件&ndash;&gt;-->
+    <!--    <include layout="@layout/tool_bar" />-->
+
+    <!--    &lt;!&ndash;内容容器&ndash;&gt;-->
+    <!--    <LinearLayout-->
+    <!--        app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent">-->
+
+    <!--        <TextView-->
+    <!--            android:text="图片预览界面"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content" />-->
+
+    <!--    </LinearLayout>-->
+
+    <!--手势缩放图标控件-->
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/pv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <TextView
-            android:text="图片预览界面"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

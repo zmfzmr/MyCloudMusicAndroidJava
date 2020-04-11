@@ -658,6 +658,10 @@ dependencies {
     //https://github.com/fodroid/XRadioGroup
     implementation 'com.github.fodroid:XRadioGroup:1.5'
 
+    //图片手势缩放控件
+    //https://github.com/chrisbanes/PhotoView
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
