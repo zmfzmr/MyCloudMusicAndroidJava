@@ -16,6 +16,7 @@ import com.ixuea.courses.mymusic.MainActivity;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.listener.GlobalLyricListener;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
+import com.ixuea.courses.mymusic.listener.OnGlobalLyricDragListener;
 import com.ixuea.courses.mymusic.manager.GlobalLyricManager;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
@@ -24,6 +25,7 @@ import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.NotificationUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
+import com.ixuea.courses.mymusic.util.SizeUtil;
 import com.ixuea.courses.mymusic.view.GlobalLyricView;
 
 import static android.view.View.GONE;
@@ -31,7 +33,7 @@ import static android.view.View.GONE;
 /**
  * 全局(桌面)歌词管理器实现
  */
-public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricListener, MusicPlayerListener {
+public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricListener, MusicPlayerListener, OnGlobalLyricDragListener {
 
     private static final String TAG = "GlobalLyricManagerImpl";
     private static GlobalLyricManagerImpl instance;//实例
@@ -99,6 +101,9 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
 
             //设置回调
             globalLyricView.setGlobalLyricListener(this);
+
+            //设置歌词拖拽回调
+            globalLyricView.setOnGlobalLyricDragListener(this);
 
         }
 
@@ -172,7 +177,9 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
             //可能还会实现不同的用户有不同的偏好设置
 
             //目前是写死的
-            layoutParams.y = 100;
+//            layoutParams.y = 100;
+            //这里换成从持久化数据文件中获取
+            layoutParams.y = sp.getGlobalLyricViewY();
 
             //设置全局歌词控件状态
             setGlobalLyricStatus();
@@ -487,4 +494,21 @@ public class GlobalLyricManagerImpl implements GlobalLyricManager, GlobalLyricLi
     }
 
     //end 播放管理器监听器
+
+    /**
+     * 全局歌词拖拽回调
+     *
+     * @param y y轴方向上移动的距离
+     */
+    @Override
+    public void onGlobalLyricDrag(int y) {
+        //只有减去状态栏的高度， 因为这个控件不需要移动到状态栏上面
+        layoutParams.y = y - SizeUtil.getStatusBarHeight(context);
+
+        //更新view(因为更改了layoutParams的参数，所以是需要更改布局的)
+        updateView();
+
+        //保存歌词y坐标(注意：这里保存的是layoutParams.y)
+        sp.setGlobalLyricViewY(layoutParams.y);
+    }
 }

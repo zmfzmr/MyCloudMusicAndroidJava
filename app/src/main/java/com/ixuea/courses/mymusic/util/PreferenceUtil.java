@@ -19,6 +19,7 @@ public class PreferenceUtil {
     private static final String KEY_GLOBAL_LYRIC_TEXT_SIZE = "KEY_GLOBAL_LYRIC_TEXT_SIZE";//全局歌词大小 key
     private static final String KEY_GLOBAL_LYRIC_TEXT_COLOR = "KEY_GLOBAL_LYRIC_TEXT_COLOR";//全局歌词颜色 key
     private static final String KEY_GLOBAL_LYRIC_LOCK = "KEY_GLOBAL_LYRIC_LOCK";//全局歌词锁定 key
+    private static final String KEY_GLOBAL_LYRIC_VIEW_Y = "KEY_GLOBAL_LYRIC_VIEW_Y";//获取全局Y坐标 key
     private static PreferenceUtil instance;
     private final Context context;//上下文
     private final SharedPreferences preference;
@@ -194,6 +195,20 @@ public class PreferenceUtil {
      */
     public void setGlobalLyricLock(boolean data) {
         putBoolean(KEY_GLOBAL_LYRIC_LOCK, data);
+    }
+
+    /**
+     * 获取全局歌词y坐标
+     */
+    public int getGlobalLyricViewY() {
+        return getInt(KEY_GLOBAL_LYRIC_VIEW_Y, 0);
+    }
+
+    /**
+     * 设置全局歌词控件y坐标
+     */
+    public void setGlobalLyricViewY(int data) {
+        putInt(KEY_GLOBAL_LYRIC_VIEW_Y, data);
     }
 
     //辅助方法 （就是添加 删除等之类的）

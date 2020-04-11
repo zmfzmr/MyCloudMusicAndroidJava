@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -14,6 +16,7 @@ import com.ixuea.courses.mymusic.domain.lyric.Line;
 import com.ixuea.courses.mymusic.domain.lyric.Lyric;
 import com.ixuea.courses.mymusic.domain.lyric.LyricUtil;
 import com.ixuea.courses.mymusic.listener.GlobalLyricListener;
+import com.ixuea.courses.mymusic.listener.OnGlobalLyricDragListener;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 
@@ -46,6 +49,10 @@ public class GlobalLyricView extends LinearLayout implements XRadioGroup.OnCheck
             R.id.rb_3,
             R.id.rb_4,
     };
+    /**
+     * 全局歌词拖拽监听器
+     */
+    private OnGlobalLyricDragListener onGlobalLyricDragListener;
     /**
      * 第一行歌词控件
      */
@@ -94,6 +101,10 @@ public class GlobalLyricView extends LinearLayout implements XRadioGroup.OnCheck
 
     private GlobalLyricListener globalLyricListener;//全局歌词控件监听器
     private PreferenceUtil sp;
+    private boolean isIntercept;//判断是否拦截该事件
+    private float lastX;//按下X坐标
+    private float lastY;//按下Y坐标
+    private float touchSlop;//最博鳌滑动距离，目的是过滤不必要的滑动
 
     /**
      * 构造方法
@@ -179,6 +190,13 @@ public class GlobalLyricView extends LinearLayout implements XRadioGroup.OnCheck
 
         //设置第一行歌词始终是选中状态(就是选中：行控件那边根据选中来绘制文本等)
         llv1.setLineSelected(true);
+
+        //获取View的配置
+        ViewConfiguration viewConfiguration = ViewConfiguration.get(getContext());
+
+        //获取最小滑动距离(getScaledTouchSlop:记住这样写就行了)
+        touchSlop = viewConfiguration.getScaledTouchSlop();
+
     }
 
     /**
@@ -258,6 +276,9 @@ public class GlobalLyricView extends LinearLayout implements XRadioGroup.OnCheck
         iv_close.setVisibility(GONE);
         //隐藏播放控制容器
         ll_play_container.setVisibility(GONE);
+
+        //隐藏编辑容器（就是控件最后一栏 RadioButton那父容器）
+        ll_lyric_edit_container.setVisibility(GONE);
     }
 
     /**
@@ -494,5 +515,86 @@ public class GlobalLyricView extends LinearLayout implements XRadioGroup.OnCheck
         int color = getResources().getColor(LYRIC_COLORS[index]);
         //设置颜色到歌词控件（这里只设置选中的那个颜色）
         llv1.setLyricSelectedTextColor(color);
+    }
+
+    /**
+     * 用来判断是否拦截该事件
+     */
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        switch (ev.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                //不拦截
+                isIntercept = false;
+
+                //获取第一次按下的坐标
+                lastX = ev.getX();
+                lastY = ev.getY();
+
+                break;
+            case MotionEvent.ACTION_MOVE:
+                // 上下拉   下上拉（这个要绝对值） 所以最好加个返回值
+                //touchSlop:就是系统的一个阀值
+                if (Math.abs(getY() - lastY) > touchSlop) {
+                    //如果在y轴
+                    isIntercept = true;
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                //抬起不拦截
+                isIntercept = false;
+                break;
+            default:
+                break;
+        }
+        //返回是否拦截
+        return isIntercept;
+    }
+
+    /**
+     * 如果当前控件拦截了事件
+     * 就会执行现在这个方法
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getActionMasked()) {
+            //这类监听不到ACTION_DOWN
+            //因为onInterceptTouchEvent方法没有拦截
+            //（因为如果拦截ACTION_DOWN事件，后续的move up事件都会交由该控件处理；那么子控件就接收不到事件了）
+            case MotionEvent.ACTION_MOVE:
+                //滑动的距离
+                float distanceX = event.getX() - lastX;
+                float distanceY = event.getY() - lastY;
+
+                if (Math.abs(distanceX) > touchSlop) {
+                    //要处理事件
+
+                    //获取绝对坐标(包含状态栏)
+                    //getRawY:这个是触摸的那个点 相对屏幕顶部的（相对根父容器）的Y距离
+                    //getY：触摸的点击，相对本控件里面Y的距离
+                    float rawY = event.getRawY();
+
+                    //这里为啥是上一次的Y值，因为点击要控件移动，随拖拽而移动，里面的event.getY()是没有变的
+
+                    float moveY = rawY - lastY;
+
+                    //将拖拽的位置回调到外部
+                    onGlobalLyricDragListener.onGlobalLyricDrag((int) moveY);
+
+                    LogUtil.d(TAG, "onTouchEvent ACTION_MOVE:" + distanceY + ",rawY:" + rawY);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    /**
+     * 设置全局歌词拖拽监听器
+     */
+    public void setOnGlobalLyricDragListener(OnGlobalLyricDragListener onGlobalLyricDragListener) {
+        this.onGlobalLyricDragListener = onGlobalLyricDragListener;
     }
 }
