@@ -540,6 +540,8 @@ dependencies {
     //提供通过注解的方式找控件
     //绑定方法
     //https://github.com/JakeWharton/butterknife
+
+    //下面的这个annotationProcessor,要通过注解，去查找控件，所以添加这个
     implementation 'com.jakewharton:butterknife:10.2.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
 
@@ -661,6 +663,19 @@ dependencies {
     //图片手势缩放控件
     //https://github.com/chrisbanes/PhotoView
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+    //通用IO相关工具类
+    //在真实项目中，通常会操作文件，例如：移动文件，复制文件，改名，文件夹复制等；
+    // 像这些功能，自己写很有可能会有Bug，所以我们这里添加第三方框架。
+    //http://commons.apache.org/proper/commons-io/
+    implementation 'commons-io:commons-io:2.6'
+
+    //动态处理权限
+    //https://github.com/permissions-dispatcher/PermissionsDispatcher
+    //annotationProcessor:这个可以理解为注解预处理的接口；就是在编译的时候，
+    // 把我们添加的注解，生成系统获取动态权限的API，其实是在编译后给我们生成完了，其实没有什么性能影响
+    implementation 'org.permissionsdispatcher:permissionsdispatcher:4.5.0'
+    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:4.5.0"
 
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
