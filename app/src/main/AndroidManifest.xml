@@ -23,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MusicPlayerActivity"></activity>
+        <activity android:name=".activity.ImagePreviewActivity"></activity>
+        <activity android:name=".MusicPlayerActivity" />
         <!--
          播放音乐的服务
              android:priotity = "1000" 其实这优先级没多大作用

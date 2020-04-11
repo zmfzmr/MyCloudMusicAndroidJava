@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.ImagePreviewActivity;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.OnRecordClickEvent;
 import com.ixuea.courses.mymusic.domain.event.OnStartRecordEvent;
@@ -25,6 +26,7 @@ import java.util.TimerTask;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -177,6 +179,14 @@ public class MusicRecordFragment extends BaseCommonFragment {
 
     }
 
+    /**
+     * 黑胶唱片长按事件
+     */
+    @OnLongClick(R.id.cl_container)
+    public void onRecordLongClick() {
+        //data:Song对象  data.getId()：这首歌的id data.getBanner():uri
+        ImagePreviewActivity.start(getMainActivity(), data.getId(), data.getBanner());
+    }
     /**
      * 返回要显示的控件
      */
