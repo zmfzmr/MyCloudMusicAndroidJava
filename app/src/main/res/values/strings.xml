@@ -123,6 +123,7 @@
     <string name="allow">运行授权</string>
     <string name="deny">拒绝</string>
     <string name="save_image">保存图片</string>
+    <string name="activity_select_lyric">选择歌词</string>
 
 
 </resources>

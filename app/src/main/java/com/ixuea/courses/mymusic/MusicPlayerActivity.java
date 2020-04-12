@@ -23,6 +23,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
+import com.ixuea.courses.mymusic.activity.SelectLyricActivity;
 import com.ixuea.courses.mymusic.adapter.LyricAdapter;
 import com.ixuea.courses.mymusic.adapter.MusicPlayerAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -78,7 +79,7 @@ import static com.ixuea.courses.mymusic.util.Constant.THUMB_ROTATION_PAUSE;
 /**
  * 黑胶唱片界面
  */
-public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener, SeekBar.OnSeekBarChangeListener, ViewPager.OnPageChangeListener, ValueAnimator.AnimatorUpdateListener, BaseQuickAdapter.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener {
+public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlayerListener, SeekBar.OnSeekBarChangeListener, ViewPager.OnPageChangeListener, ValueAnimator.AnimatorUpdateListener, BaseQuickAdapter.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener, BaseQuickAdapter.OnItemLongClickListener {
     private static final String TAG = "MusicPlayerActivity";
     /**
      * 背景
@@ -191,6 +192,14 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         setContentView(R.layout.activity_music_player);
     }
 
+    /**
+     * 启动方法
+     */
+    public static void start(Activity activity) {
+        Intent intent = new Intent(activity, MusicPlayerActivity.class);
+        activity.startActivity(intent);
+    }
+
     @Override
     protected void initView() {
         super.initView();
@@ -283,6 +292,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //设置歌词点击事件
         lyricAdapter.setOnItemClickListener(this);
+
+        //设置歌词长按事件
+        lyricAdapter.setOnItemLongClickListener(this);
 
         //添加布局监听器
         //:获取ViewTreeObserver：获取视图树观察者，设置全局布局监听器 GlobalL:全球
@@ -1303,10 +1315,20 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     }
 
     /**
-     * 启动方法
+     * 歌词长按事件
+     * @param adapter
+     * @param view
+     * @param position
+     * @return
      */
-    public static void start(Activity activity) {
-        Intent intent = new Intent(activity, MusicPlayerActivity.class);
-        activity.startActivity(intent);
+    @Override
+    public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+        //获取当前播放的音乐
+        Song data = listManager.getData();
+
+        //跳转到歌词选中界面
+        startActivityExtraData(SelectLyricActivity.class, data);
+
+        return true;//这里返回true
     }
 }

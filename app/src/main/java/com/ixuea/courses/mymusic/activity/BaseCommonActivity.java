@@ -197,6 +197,21 @@ public class BaseCommonActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    /**
+     * 启动界面，可以传递一个Serializable参数
+     * 传递的是对象，所以参数是Serializable
+     */
+    protected void startActivityExtraData(Class<?> clazz, Serializable data) {
+        //创建intent
+        Intent intent = new Intent(getMainActivity(), clazz);
+
+        //传递数据
+        intent.putExtra(Constant.DATA, data);
+
+        //启动界面（startActivity：这个参数是 Activity里面的）
+        startActivity(intent);
+    }
+
     protected void startActivityAfterFinishThis(Class<?> clazz) {
         startActivity(clazz);
         //关闭当前界面
