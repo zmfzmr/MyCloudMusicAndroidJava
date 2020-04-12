@@ -122,6 +122,7 @@
     <string name="permisson_hint">我们需要获取权限，请同意，否则无法使用</string>
     <string name="allow">运行授权</string>
     <string name="deny">拒绝</string>
+    <string name="save_image">保存图片</string>
 
 
 </resources>

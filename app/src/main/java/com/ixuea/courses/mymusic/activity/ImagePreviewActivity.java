@@ -4,18 +4,27 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
+import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ResourceUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
+
+import java.io.File;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 图片预览界面
  * 可以把该界面实现为项目中通用的图片预览界面
  */
 public class ImagePreviewActivity extends BaseCommonActivity {
+    private static final String TAG = "ImagePreviewActivity";
     /**
      * 找到添加的依赖 PhotoView控件
      */
@@ -72,5 +81,51 @@ public class ImagePreviewActivity extends BaseCommonActivity {
 
         //启动界面
         activity.startActivity(intent);
+    }
+
+    /**
+     * 保存图片按钮点击
+     */
+    @OnClick(R.id.bt_save)
+    public void onSaveClick() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //FutureTarget会阻塞
+                    //所以需要在子线程调用
+                    FutureTarget<File> target = Glide.with(getMainActivity())
+                            .asFile()//返回一个文件对象
+                            .load(ResourceUtil.resourceUri(url))
+                            .submit();
+                    //将文件拷贝到我们需要的位置
+                    File file = target.get();
+
+                    //TODO 将下载的文件保存到相册
+                    //getAbsolutePath:获取绝对路径
+                    LogUtil.d(TAG, "download image:" + file.getAbsolutePath());
+                    //通过这种方法也可以切换到主线程
+                    //但只能在activity中使用
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //弹出提示
+                            ToastUtil.successShortToast("下载完成");
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    //下载出错了
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //弹出提示
+                            ToastUtil.errorShortToast("下载失败了,请稍后再试");
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 }

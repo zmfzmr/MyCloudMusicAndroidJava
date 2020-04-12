@@ -1,27 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
     tools:context=".activity.ImagePreviewActivity">
-
-
-    <!--    &lt;!&ndash;标题控件&ndash;&gt;-->
-    <!--    <include layout="@layout/tool_bar" />-->
-
-    <!--    &lt;!&ndash;内容容器&ndash;&gt;-->
-    <!--    <LinearLayout-->
-    <!--        app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent">-->
-
-    <!--        <TextView-->
-    <!--            android:text="图片预览界面"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content" />-->
-
-    <!--    </LinearLayout>-->
 
     <!--手势缩放图标控件-->
     <com.github.chrisbanes.photoview.PhotoView
@@ -29,4 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</LinearLayout>
+    <!--保存图片按钮-->
+    <Button
+        android:id="@+id/bt_save"
+        android:layout_marginBottom="@dimen/padding_large"
+        android:layout_width="@dimen/button_width_small"
+        android:layout_height="@dimen/button_height"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:text="@string/save_image"
+        android:background="@drawable/shape_button_border_white" />
+
+</RelativeLayout>

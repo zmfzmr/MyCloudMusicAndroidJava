@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--圆角-->
+    <corners android:radius="@dimen/radius_button" />
+    <!--填充颜色
+        3fff:这个其实就是和33ffffff 效果一样
+        参考 shape_translucent.xml：文件
+
+        00：表示完全透明
+    -->
+    <solid android:color="#3fff" />
+
+</shape>
