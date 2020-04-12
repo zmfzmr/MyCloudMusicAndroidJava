@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding_middle">
+
+    <!--歌词-->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="这是歌词内容"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_large" />
+
+    <!--选中图标  默认隐藏，只有选中以后才会显示-->
+    <ImageView
+        android:id="@+id/iv_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_global_color_check"
+        android:visibility="gone" />
+
+</RelativeLayout>
