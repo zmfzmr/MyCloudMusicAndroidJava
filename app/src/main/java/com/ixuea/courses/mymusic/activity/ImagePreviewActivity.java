@@ -12,6 +12,7 @@ import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
+import com.ixuea.courses.mymusic.util.StorageUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import java.io.File;
@@ -101,7 +102,9 @@ public class ImagePreviewActivity extends BaseCommonActivity {
                     //将文件拷贝到我们需要的位置
                     File file = target.get();
 
-                    //TODO 将下载的文件保存到相册
+                    //将下载的文件保存到相册
+                    boolean result = StorageUtil.savePicture(getMainActivity(), file);
+
                     //getAbsolutePath:获取绝对路径
                     LogUtil.d(TAG, "download image:" + file.getAbsolutePath());
                     //通过这种方法也可以切换到主线程
@@ -109,8 +112,14 @@ public class ImagePreviewActivity extends BaseCommonActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //弹出提示
-                            ToastUtil.successShortToast("下载完成");
+                            if (result) {
+                                //弹出提示
+                                ToastUtil.successShortToast("下载完成");
+                            } else {
+                                //下载失败
+                                showDownloadImageError();
+                            }
+
                         }
                     });
                 } catch (Exception e) {
@@ -120,12 +129,16 @@ public class ImagePreviewActivity extends BaseCommonActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //弹出提示
-                            ToastUtil.errorShortToast("下载失败了,请稍后再试");
+                            showDownloadImageError();
                         }
                     });
                 }
             }
         }).start();
+    }
+
+    private void showDownloadImageError() {
+        //弹出提示
+        ToastUtil.errorShortToast("下载失败了,请稍后再试");
     }
 }

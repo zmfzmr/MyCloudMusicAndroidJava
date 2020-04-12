@@ -31,9 +31,22 @@ public class SwitchDrawableUtil {
     public SwitchDrawableUtil(Drawable backgroundDrawable, Drawable foregroundDrawable) {
         ////创建数据
         Drawable[] drawables = new Drawable[2];
-        //添加drawable
-        drawables[INDEX_BACKGROUND] = backgroundDrawable;
-        drawables[INDEX_FOREGROUND] = foregroundDrawable;
+        //如果在API为28的版本上崩溃
+        //为啥崩溃呢，因为传入进来的iv_background.getDrawable()中的 这个ImageView控件没有设置图片
+        //backgroundDrawable就会在低版本的手机上为null，但是如果设置图片的话，这个drawable就会变形
+
+        //解决办法里面2个都为foregroundDrawable（背景drawable设置为：前景drawable）
+        //不是null的话，就保持原来的drawable
+        if (backgroundDrawable == null) {
+            //添加drawable(这个前景的drawable 当做背景的drawable也是没有问题的)
+            drawables[INDEX_BACKGROUND] = foregroundDrawable;
+            drawables[INDEX_FOREGROUND] = foregroundDrawable;
+        } else {
+            //添加drawable
+            drawables[INDEX_BACKGROUND] = backgroundDrawable;
+            drawables[INDEX_FOREGROUND] = foregroundDrawable;
+        }
+
         //创建多层drawable
         layerDrawable = new LayerDrawable(drawables);
         //初始化动画
