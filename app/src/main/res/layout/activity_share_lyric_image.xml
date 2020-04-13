@@ -8,12 +8,86 @@
     <!--标题控件-->
     <include layout="@layout/tool_bar" />
 
-    <!--内容布局-->
-    <LinearLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-    </LinearLayout>
+    <!--滚动容器
+         android:scrollbars="none"：表示隐藏拖动条
+    -->
+    <ScrollView
+        android:id="@+id/lyric_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/padding_middle"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!--内容容器 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--封面图容器 SquareLinearLayout: 这个是之前自定义好的 -->
+            <com.ixuea.courses.mymusic.view.SquareLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!--封面 -->
+                <ImageView
+                    android:id="@+id/iv_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder" />
+
+            </com.ixuea.courses.mymusic.view.SquareLinearLayout>
+            <!--歌词
+                lineSpacingMultiplier="1.5" :表示这是字体的1.5 倍
+            -->
+            <TextView
+                android:id="@+id/tv_lyric"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_middle"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.5"
+                tools:text="这是歌词这是歌词这是歌词这是歌词\n这是歌词这是歌词这是歌词这这是歌词这是歌词这是歌词这是歌词\n这是歌词这是歌词这是歌词这这是歌词这是歌词这是歌词这是歌词\n这是歌词这是歌词这是歌词这这是歌词这是歌词这是歌词这是歌词\n这是歌词这是歌词这是歌词这是歌词这是歌词这是歌词这是歌词"
+                android:textColor="@color/text" />
+
+            <!--歌曲信息  歌词右下边-->
+            <TextView
+                android:id="@+id/tv_song"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="right"
+                tools:text="@string/share_song_name"
+                android:textColor="@color/light_grey" />
+            <!--尾巴-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!--图标-->
+                <ImageView
+                    android:layout_width="@dimen/share_lyric_logo_width"
+                    android:layout_height="@dimen/share_lyric_logo_width"
+                    android:src="@mipmap/ic_launcher" />
+
+                <!--尾巴文本-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:layout_weight="1"
+                    android:text="来自我的云音乐•歌词分享"
+                    android:textSize="@dimen/text_small" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

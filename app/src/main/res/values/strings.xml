@@ -130,5 +130,6 @@
     <string name="lyric_image">歌词图片</string>
     <string name="lyric_video">歌词视频</string>
     <string name="hint_select_lyric">请选择歌词</string>
+    <string name="share_song_name">--%1$s . %2$s</string>
 
 </resources>
