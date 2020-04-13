@@ -124,6 +124,9 @@
     <string name="deny">拒绝</string>
     <string name="save_image">保存图片</string>
     <string name="activity_select_lyric">选择歌词</string>
+    <string name="share_lyric">分享歌词</string>
+    <string name="lyric_image">歌词图片</string>
+    <string name="lyric_video">歌词视频</string>
 
 
 </resources>
