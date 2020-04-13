@@ -104,7 +104,7 @@ public class SelectLyricActivity extends BaseTitleActivity implements BaseQuickA
         //获取选中的歌词
         String lyricString = getSelectLyricString(", ");
         if (TextUtils.isEmpty(lyricString)) {
-            ToastUtil.errorShortToast("请选择歌词");
+            ToastUtil.errorShortToast(R.string.hint_select_lyric);
             return;
         }
 
@@ -144,5 +144,16 @@ public class SelectLyricActivity extends BaseTitleActivity implements BaseQuickA
     @OnClick(R.id.bt_share_lyric_image)
     public void onShareLyricImageClick() {
         LogUtil.d(TAG, "onShareLyricImageClick");
+
+        String lyricString = getSelectLyricString("\n");
+
+        if (TextUtils.isEmpty(lyricString)) {
+            ToastUtil.errorShortToast(R.string.hint_select_lyric);
+            return;
+        }
+
+        //跳转到歌词图片分享界面
+        //参数2，上一个页面传递过来的Song对象 3，选中的歌词（已经用\n换行了）
+        ShareLyricImageActivity.start(getMainActivity(), data, lyricString);
     }
 }

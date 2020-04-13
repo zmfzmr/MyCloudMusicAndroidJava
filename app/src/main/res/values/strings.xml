@@ -7,6 +7,8 @@
     <string name="activity_comment">评论</string>
     <string name="activity_user_detail">用户详情</string>
     <string name="activity_simple_player">简单播放器</string>
+    <string name="activity_share_lyric_image">歌词图片</string>
+    <string name="activity_select_lyric">选择歌词</string>
 
     <!--版本文本-->
     <string name="copyright">Copyright © 2019 Ixuea. All Rights Reserved</string>
@@ -123,10 +125,10 @@
     <string name="allow">运行授权</string>
     <string name="deny">拒绝</string>
     <string name="save_image">保存图片</string>
-    <string name="activity_select_lyric">选择歌词</string>
+    <!--歌词-->
     <string name="share_lyric">分享歌词</string>
     <string name="lyric_image">歌词图片</string>
     <string name="lyric_video">歌词视频</string>
-
+    <string name="hint_select_lyric">请选择歌词</string>
 
 </resources>
