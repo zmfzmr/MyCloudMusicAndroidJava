@@ -3,6 +3,8 @@ package com.ixuea.courses.mymusic.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +13,7 @@ import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
+import com.ixuea.courses.mymusic.util.LogUtil;
 
 import butterknife.BindView;
 
@@ -19,6 +22,7 @@ import butterknife.BindView;
  */
 public class ShareLyricImageActivity extends BaseTitleActivity {
 
+    private static final String TAG = "ShareLyricImageActivity";
     /**
      * 歌词容器
      */
@@ -83,5 +87,31 @@ public class ShareLyricImageActivity extends BaseTitleActivity {
         tv_song.setText(getResources().getString(R.string.share_song_name,
                 data.getSinger().getNickname(),
                 data.getTitle()));
+    }
+
+    /**
+     * 创建菜单方法
+     * <p>
+     * 有点类似显示布局要写到onCreate方法一样
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //加载布局文件
+        getMenuInflater().inflate(R.menu.menu_share_lyric_image, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 菜单点击了回调
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                //分享点击了
+                LogUtil.d(TAG, "share click");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
