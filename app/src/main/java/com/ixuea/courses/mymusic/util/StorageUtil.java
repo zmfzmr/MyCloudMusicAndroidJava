@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 
@@ -20,6 +21,8 @@ import static android.os.Build.VERSION_CODES.Q;
  * 存储工具
  */
 public class StorageUtil {
+    public static final String JPG = "jpg";//jpg图片
+
     /**
      * 保存图片到系统相册
      * <p>
@@ -106,4 +109,44 @@ public class StorageUtil {
         return context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
     }
 
+    /**
+     * 获取应用sdcard中的路径
+     *
+     * @param context 上下文
+     * @param userId  用户id
+     * @param title   标题
+     * @param suffix  类型（后缀）
+     * @return
+     */
+    public static File getExternalPath(Context context, String userId, String title, String suffix) {
+        //获取下载文件类型目录
+        //该路径下的文件卸载应用后会清空
+        //在Android 10路径为：
+        // /storage/emulated/0/Android/data/com.ixuea.courses.mymusic/files/Download/
+        //  /storage/emulated/0 = /sdcard/ 就是外部目录 = sd卡目录
+        //如果是10.0以下的路径，那么可能是其他路径
+
+        //这里不用担心是什么路径，目前这种写法，对于10和10以下的版本也就是兼容的
+        File dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+
+        //格式化路径(例如：MyCloudMusic/1/jpg/share.jpg)
+        String path = String.format("MyCloudMusic/%s/%s/%s.%s", userId, suffix, title, suffix);
+
+        //创建文件对象(这个文件对象，可能是目录，也可能是具体的文件)
+        //dir：/storage/emulated/0/Android/data/com.ixuea.courses.mymusic/files/Download/
+        //path:  MyCloudMusic/1/jpg/share.jpg
+        File file = new File(dir, path);//拼接起来创建一个文件对象
+
+        if (!file.getParentFile().exists()) {
+            //如果上级目录不存在，
+
+            // 就创建(mkdirs：加s，表示可以创建多个层级的目录)
+            //其实file指的是：share.jpg
+            //父目录：指的是/storage/emulated/0/Android/data/com.ixuea.courses.mymusic/files/Download/MyCloudMusic/1/jpg/
+            //就是把这个目录创建出来（这个要file.getParentFile().mkdirs()，不要写成了file.mkdirs()）
+            file.getParentFile().mkdirs();
+        }
+        //返回文件file 外界肯需要用到这个file对象
+        return file;
+    }
 }

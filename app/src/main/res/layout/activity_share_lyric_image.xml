@@ -13,17 +13,17 @@
          android:scrollbars="none"：表示隐藏拖动条
     -->
     <ScrollView
-        android:id="@+id/lyric_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/padding_middle"
         android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!--内容容器 -->
         <LinearLayout
+            android:id="@+id/lyric_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="@dimen/padding_middle"
             android:orientation="vertical">
 
             <!--封面图容器 SquareLinearLayout: 这个是之前自定义好的 -->
