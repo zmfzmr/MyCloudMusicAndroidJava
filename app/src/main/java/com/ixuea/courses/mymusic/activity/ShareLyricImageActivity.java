@@ -16,6 +16,7 @@ import com.ixuea.courses.mymusic.util.BitmapUtil;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ShareUtil;
 import com.ixuea.courses.mymusic.util.StorageUtil;
 import com.ixuea.courses.mymusic.util.ViewUtil;
 
@@ -135,7 +136,7 @@ public class ShareLyricImageActivity extends BaseTitleActivity {
 
         LogUtil.d(TAG, "onShareClick: " + bitmap);
 
-        //先保存到自己应用的私有目录
+        //先保存到自己应用的私有目录(外部存储(SD卡私有目录))
         //例如：/storage/emulated/0/Android/data/com.ixuea.courses.mymusicold/files/Download/MyCloudMusic/1/jpg/share.jpg
         //Android10.0以下，是以下的写法，但是10.0后就不能这么写了
         //File targetFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath().concat("/MyCloudMusic"),"share.jpg");
@@ -145,7 +146,20 @@ public class ShareLyricImageActivity extends BaseTitleActivity {
 
         //保存图片到文件（也就是保存Bitmap到文件）
         BitmapUtil.saveToFile(bitmap, file);
-        //file.getAbsolutePath() 和
+
         LogUtil.d(TAG, "2:" + file.getAbsolutePath());
+
+        //将私有路径的图片保存到相册
+        //这样其他应用才能访问
+        //savePicture:这个方法是前面实现（固定写法） file：SD卡（外部存储）私有目录file对象(通过对象可以获取路径)
+        boolean result = StorageUtil.savePicture(getMainActivity(), file);
+        //获取uri路径（也就是保存到本地相册的那个路径，是个绝对路径）
+        // /storage/emulated/0/Pictures/share.jpg 等于/sdcard/Pictures/share.jpg
+        String path = StorageUtil.getMediaStorePath(getMainActivity(), StorageUtil.getUri());
+
+        LogUtil.d(TAG, "onShareClick save bitmap to file success:" + path);
+
+        //分享图片
+        ShareUtil.shareImage(getMainActivity(), path);
     }
 }

@@ -72,4 +72,23 @@ public class ShareUtil {
         //启动分享
         oks.show(context);
     }
+
+    /**
+     * 分析图片
+     *
+     * @param context
+     * @param path
+     */
+    public static void shareImage(Context context, String path) {
+        //创建一键分享
+        OnekeyShare oks = new OnekeyShare();
+        //关闭sso授权
+        oks.disableSSOWhenAuthorize();
+        //imagePath是图片的本地路径
+        //Linked-In以外的平台都支持此参数
+        //确保sdcard下面存在此张图片
+        oks.setImagePath(path);
+        // 启动分享GUI
+        oks.show(context);
+    }
 }

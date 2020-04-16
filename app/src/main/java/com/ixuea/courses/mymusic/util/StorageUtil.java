@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusic.util;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -19,9 +20,17 @@ import static android.os.Build.VERSION_CODES.Q;
 
 /**
  * 存储工具
+ *
+ * 知识：Uri：统一资源标识符（比如名称或者网址）  URl：统一资源定位符（比如网址等）（URl都是Uri）
  */
 public class StorageUtil {
     public static final String JPG = "jpg";//jpg图片
+    /**
+     * MediaStore，ContentProviders内容提供者data列
+     * 这个值不能更改（因为列名就是这个，根据这个查询）
+     */
+    private static final String COLUMN_DATA = "_data";
+    private static Uri uri;//savePicture方法执行后的uri
 
     /**
      * 保存图片到系统相册
@@ -30,7 +39,7 @@ public class StorageUtil {
      */
     public static boolean savePicture(Context context, File file) {
         //创建媒体路径
-        Uri uri = insertPictureMediaStore(context, file);
+        uri = insertPictureMediaStore(context, file);
 
         if (uri == null) {
             //获取路径失败
@@ -148,5 +157,66 @@ public class StorageUtil {
         }
         //返回文件file 外界肯需要用到这个file对象
         return file;
+    }
+
+    /**
+     * 获取Uri
+     *
+     * @return
+     */
+    public static Uri getUri() {
+        return uri;
+    }
+
+    /**
+     * 获取MediaStore uri路径
+     *
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static String getMediaStorePath(Context context, Uri uri) {
+        return getDataColumn(context, uri);
+    }
+
+    /**
+     * 获取uri对应的data列值
+     * 其实就是文件路径
+     * 这种写法支持MediaStore，ContentProviders
+     */
+    private static String getDataColumn(Context context, Uri uri) {
+        Cursor cursor = null;
+        try {
+            cursor = context  //获取内容提供者
+                    .getContentResolver()
+                    //查询数据
+                    /**
+                     * @param uri 以content://开通的地址
+                     * @param projection 返回哪些列
+                     * @param selection 查询条件，类似sql中where条件
+                     * @param selectionArgs 查询条件参数
+                     * @param sortOrder 排序参数
+                     */
+                    .query(uri, new String[]{COLUMN_DATA},
+                            null,
+                            null,
+                            null);
+            if (cursor != null && cursor.moveToFirst()) {
+                //获取这一列的索引 (getColumnIndexOrThrow:如果没有找到该列名,会抛出IllegalArgumentException异常)
+                int index = cursor.getColumnIndexOrThrow(COLUMN_DATA);
+
+                //获取这一列字符类型数据
+                return cursor.getString(index);
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } finally {
+            //关闭游标
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return null;
     }
 }
