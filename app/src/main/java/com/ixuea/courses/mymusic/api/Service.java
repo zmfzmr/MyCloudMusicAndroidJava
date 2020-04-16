@@ -2,6 +2,7 @@ package com.ixuea.courses.mymusic.api;
 
 import com.ixuea.courses.mymusic.domain.Ad;
 import com.ixuea.courses.mymusic.domain.BaseModel;
+import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -154,4 +155,14 @@ public interface Service {
      */
     @DELETE("v1/collections/{id}")
     Observable<Response<Void>> deleteCollect(@Path("id") String id);
+
+    /**
+     * 评论列表
+     *
+     * @param data
+     * @return 注意: @QueryMap是个注解，前面要有@符号
+     * @QueryMap: 就是放一些参数进这map里面  这里key和value都是String类型
+     */
+    @GET("v1/comments")
+    Observable<ListResponse<Comment>> comments(@QueryMap Map<String, String> data);
 }
