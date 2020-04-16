@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusic.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ShareUtil;
 import com.ixuea.courses.mymusic.util.StorageUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
 import com.ixuea.courses.mymusic.util.ViewUtil;
 
 import java.io.File;
@@ -152,14 +154,20 @@ public class ShareLyricImageActivity extends BaseTitleActivity {
         //将私有路径的图片保存到相册
         //这样其他应用才能访问
         //savePicture:这个方法是前面实现（固定写法） file：SD卡（外部存储）私有目录file对象(通过对象可以获取路径)
-        boolean result = StorageUtil.savePicture(getMainActivity(), file);
-        //获取uri路径（也就是保存到本地相册的那个路径，是个绝对路径）
-        // /storage/emulated/0/Pictures/share.jpg 等于/sdcard/Pictures/share.jpg
-        String path = StorageUtil.getMediaStorePath(getMainActivity(), StorageUtil.getUri());
+        Uri uri = StorageUtil.savePicture(getMainActivity(), file);
 
-        LogUtil.d(TAG, "onShareClick save bitmap to file success:" + path);
+        if (uri != null) {
+            //获取uri路径（也就是保存到本地相册的那个路径，是个绝对路径）
+            // /storage/emulated/0/Pictures/share.jpg 等于/sdcard/Pictures/share.jpg
+            String path = StorageUtil.getMediaStorePath(getMainActivity(), uri);
 
-        //分享图片
-        ShareUtil.shareImage(getMainActivity(), path);
+            LogUtil.d(TAG, "onShareClick save bitmap to file success:" + path);
+
+            //分享图片
+            ShareUtil.shareImage(getMainActivity(), path);
+        } else {
+            ToastUtil.errorShortToast(R.string.error_share_failed);
+        }
+
     }
 }

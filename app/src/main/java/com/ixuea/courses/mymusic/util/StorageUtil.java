@@ -30,31 +30,33 @@ public class StorageUtil {
      * 这个值不能更改（因为列名就是这个，根据这个查询）
      */
     private static final String COLUMN_DATA = "_data";
-    private static Uri uri;//savePicture方法执行后的uri
+//    private static Uri uri;//savePicture方法执行后的uri
 
     /**
      * 保存图片到系统相册
      * <p>
      * 写法是Android 10写法，也兼容低版本
      */
-    public static boolean savePicture(Context context, File file) {
+    public static Uri savePicture(Context context, File file) {
         //创建媒体路径
-        uri = insertPictureMediaStore(context, file);
+        Uri uri = insertPictureMediaStore(context, file);
 
         if (uri == null) {
             //获取路径失败
-            return false;
+            return null;
         }
+        // content://media/external/images/media/30
+//        LogUtil.d("调试：", "1" + uri);
 
         //将原来的图片保存到目标uri
         //也就是保存到系统图片媒体库
-        return saveFile(context, file, uri);
+        return saveFile(context, file, uri);//这个方法返回的是 uri
     }
 
     /**
      * 将file保存到uri对应的路径
      */
-    private static boolean saveFile(Context context, File file, Uri uri) {
+    private static Uri saveFile(Context context, File file, Uri uri) {
         FileOutputStream fileOutputStream = null;
 
         try {
@@ -70,8 +72,11 @@ public class StorageUtil {
             //将file拷贝到输出流
             FileUtils.copyFile(file, fileOutputStream);
 
-            //操作成功
-            return true;
+            //content://media/external/images/media/30 这个和savePicture方法里面传入进来的一样，没有变过
+//            LogUtil.d("调试2：", "2" + uri);
+
+            //操作成功 返回uri
+            return uri;
         } catch (IOException e) {
             //发生了异常
             e.printStackTrace();
@@ -87,8 +92,8 @@ public class StorageUtil {
             }
         }
 
-        //操作失败
-        return false;
+        //操作失败 返回null
+        return null;
     }
 
     /**
@@ -159,17 +164,19 @@ public class StorageUtil {
         return file;
     }
 
-    /**
-     * 获取Uri
-     *
-     * @return
-     */
-    public static Uri getUri() {
-        return uri;
-    }
+    //因为前面已经return uri，所以下面这些代码不需要了
+//    /**
+//     * 获取Uri
+//     *
+//     * @return
+//     */
+//    public static Uri getUri() {
+//        return uri;
+//    }
 
     /**
      * 获取MediaStore uri路径
+     * (通过savePicture 方法返回的uri(可以理解为表)， 通过列名(_data) 找到保存到相册的这个路径)
      *
      * @param context
      * @param uri
@@ -181,14 +188,47 @@ public class StorageUtil {
 
     /**
      * 获取uri对应的data列值
+     * (通过savePicture 方法返回的uri(可以理解为表)， 通过列名(_data) 找到保存到相册的这个路径)
+     *
      * 其实就是文件路径
      * 这种写法支持MediaStore，ContentProviders
      */
     private static String getDataColumn(Context context, Uri uri) {
-        Cursor cursor = null;
-        try {
-            cursor = context  //获取内容提供者
-                    .getContentResolver()
+//        Cursor cursor = null;
+//        try {
+//            cursor = context  //获取内容提供者
+//                    .getContentResolver()
+//                    //查询数据
+//                    /**
+//                     * @param uri 以content://开通的地址
+//                     * @param projection 返回哪些列
+//                     * @param selection 查询条件，类似sql中where条件
+//                     * @param selectionArgs 查询条件参数
+//                     * @param sortOrder 排序参数
+//                     */
+//                    .query(uri, new String[]{COLUMN_DATA},
+//                            null,
+//                            null,
+//                            null);
+//            if (cursor != null && cursor.moveToFirst()) {
+//                //获取这一列的索引 (getColumnIndexOrThrow:如果没有找到该列名,会抛出IllegalArgumentException异常)
+//                int index = cursor.getColumnIndexOrThrow(COLUMN_DATA);
+//
+//                //获取这一列字符类型数据
+//                return cursor.getString(index);
+//            }
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//        } finally {
+//            //关闭游标
+//            if (cursor != null) {
+//                cursor.close();
+//            }
+//        }
+
+        //改进：这样Cursor对象不用释放了
+        try (Cursor cursor = context  //获取内容提供者
+                .getContentResolver()
                     //查询数据
                     /**
                      * @param uri 以content://开通的地址
@@ -200,7 +240,8 @@ public class StorageUtil {
                     .query(uri, new String[]{COLUMN_DATA},
                             null,
                             null,
-                            null);
+                            null)) {
+
             if (cursor != null && cursor.moveToFirst()) {
                 //获取这一列的索引 (getColumnIndexOrThrow:如果没有找到该列名,会抛出IllegalArgumentException异常)
                 int index = cursor.getColumnIndexOrThrow(COLUMN_DATA);
@@ -208,13 +249,9 @@ public class StorageUtil {
                 //获取这一列字符类型数据
                 return cursor.getString(index);
             }
-        } catch (IllegalArgumentException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            //关闭游标
-            if (cursor != null) {
-                cursor.close();
-            }
         }
 
         return null;

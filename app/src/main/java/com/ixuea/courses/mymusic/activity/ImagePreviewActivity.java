@@ -2,6 +2,7 @@ package com.ixuea.courses.mymusic.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -102,8 +103,8 @@ public class ImagePreviewActivity extends BaseCommonActivity {
                     //将文件拷贝到我们需要的位置
                     File file = target.get();
 
-                    //将下载的文件保存到相册
-                    boolean result = StorageUtil.savePicture(getMainActivity(), file);
+                    //将下载的文件保存到相册 (这个uri是相册的路径，比如:content://media/external/images/media/30)
+                    Uri uri = StorageUtil.savePicture(getMainActivity(), file);
 
                     //getAbsolutePath:获取绝对路径
                     LogUtil.d(TAG, "download image:" + file.getAbsolutePath());
@@ -112,7 +113,7 @@ public class ImagePreviewActivity extends BaseCommonActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (result) {
+                            if (uri != null) {
                                 //弹出提示
                                 ToastUtil.successShortToast("下载完成");
                             } else {
