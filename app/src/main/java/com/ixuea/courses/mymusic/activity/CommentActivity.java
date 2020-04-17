@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusic.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.api.Api;
@@ -14,12 +15,30 @@ import com.ixuea.courses.mymusic.util.LogUtil;
 
 import java.util.HashMap;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.OnClick;
+
 /**
  * 评论界面
  */
 public class CommentActivity extends BaseTitleActivity {
 
     private static final String TAG = "CommentActivity";
+    /**
+     * 列表控件
+     */
+    @BindView(R.id.rv)
+    RecyclerView rv;
+
+    /**
+     * 输入框
+     */
+    @BindView(R.id.et_content)
+    EditText et_content;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +46,22 @@ public class CommentActivity extends BaseTitleActivity {
         setContentView(R.layout.activity_comment);
         //请求数据
         fetchData();
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        //固定高度
+        rv.setHasFixedSize(true);
+
+        //设置布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
+        rv.setLayoutManager(layoutManager);
+
+        //设置分割线
+        DividerItemDecoration decoration = new DividerItemDecoration(getMainActivity(), DividerItemDecoration.HORIZONTAL);
+        rv.addItemDecoration(decoration);
     }
 
     /**
@@ -46,6 +81,13 @@ public class CommentActivity extends BaseTitleActivity {
                 });
     }
 
+    /**
+     * 发送按钮点击回调
+     */
+    @OnClick(R.id.bt_send)
+    public void onSendClick() {
+        LogUtil.d(TAG, "onSendClick");
+    }
     /**
      * 启动评论界面
      * 重构为方法的好初始化

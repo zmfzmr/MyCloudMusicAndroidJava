@@ -677,6 +677,18 @@ dependencies {
     implementation 'org.permissionsdispatcher:permissionsdispatcher:4.5.0'
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:4.5.0"
 
+    //封了RecyclerView
+    //https://github.com/jdsjlzx/LRecyclerView
+
+    //真实项目中要么自己封装
+    //要么用一个库
+    //很少像这类依赖两个框架
+    //我们这里的目的是想给大家在讲解一个一个框架的使用
+    //这样大家工作中就多一个选择
+
+    //总结起来就是：像分组这样的功能还是LRecyclerView用着方便点
+    implementation 'com.github.jdsjlzx:LRecyclerView:1.5.4.4'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
