@@ -18,6 +18,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     private Context context;
@@ -82,33 +84,48 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public class CommentViewHolder extends RecyclerView.ViewHolder {
         //item布局中用到的是CircleImageView 继承ImageView ；我们这里没有用到CircleImageView里面的方法，
         // 所以没有什么影响
-        private final ImageView iv_avatar;//头像
-        private final TextView tv_nickname;//昵称
-        private final TextView tv_time;//时间
-        private final View ll_like_container;//点赞容器
-        private final TextView tv_like_count;//点赞数
-        private final TextView tv_content;//评论内容
+        @BindView(R.id.iv_avatar)
+        ImageView iv_avatar;//头像
+
+        @BindView(R.id.tv_nickname)
+        TextView tv_nickname;//昵称
+
+        @BindView(R.id.tv_time)
+        TextView tv_time;//时间
+
+        @BindView(R.id.ll_like_container)
+        View ll_like_container;//点赞容器
+
+        @BindView(R.id.tv_like_count)
+        TextView tv_like_count;//点赞数
+        @BindView(R.id.tv_content)
+        TextView tv_content;//评论内容
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            //头像
-            iv_avatar = itemView.findViewById(R.id.iv_avatar);
+            //使用ButterKnife
+            //1:绑定当前对象
+            //2：绑定哪个view（这个view是之前inflater.inflate(R.layout.item_comment, parent, false)加载进来的）
+            ButterKnife.bind(this, itemView);
 
-            //昵称
-            tv_nickname = itemView.findViewById(R.id.tv_nickname);
-
-            //时间
-            tv_time = itemView.findViewById(R.id.tv_time);
-
-            //点赞容器
-            ll_like_container = itemView.findViewById(R.id.ll_like_container);
-
-            //点赞数
-            tv_like_count = itemView.findViewById(R.id.tv_like_count);
-
-            //评论
-            tv_content = itemView.findViewById(R.id.tv_content);
+//            //头像
+//            iv_avatar = itemView.findViewById(R.id.iv_avatar);
+//
+//            //昵称
+//            tv_nickname = itemView.findViewById(R.id.tv_nickname);
+//
+//            //时间
+//            tv_time = itemView.findViewById(R.id.tv_time);
+//
+//            //点赞容器
+//            ll_like_container = itemView.findViewById(R.id.ll_like_container);
+//
+//            //点赞数
+//            tv_like_count = itemView.findViewById(R.id.tv_like_count);
+//
+//            //评论
+//            tv_content = itemView.findViewById(R.id.tv_content);
         }
 
         /**
