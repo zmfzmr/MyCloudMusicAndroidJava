@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.util.ImageUtil;
+import com.ixuea.courses.mymusic.util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,8 +122,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             //昵称
             tv_nickname.setText(data.getUser().getNickname());
 
-            //时间(这里后面实现)
-//            tv_time.setText(TimeUtil.);
+            //时间
+            tv_time.setText(TimeUtil.commentFormat(data.getCreated_at()));
 
             //点赞数 (这类Comment类中 是long类型，转换成String类型)
             tv_like_count.setText(String.valueOf(data.getLikes_count()));

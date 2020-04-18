@@ -689,6 +689,17 @@ dependencies {
     //总结起来就是：像分组这样的功能还是LRecyclerView用着方便点
     implementation 'com.github.jdsjlzx:LRecyclerView:1.5.4.4'
 
+    //更方便的日期时间，运算，解析格式化框架
+    //https://www.joda.org/joda-time/index.html
+
+    //所以我们项目中所有的日期时间格式，都是ISO8601这种表示方法，例如：如下时间：
+
+    //年   月  日 时 分  秒 毫秒 时区
+    //2200-04-10T00:28:49.000Z (手机上默认有这个时区，Z 代表0时，如果是中国的，那么在这个基础上 + 8时，添加的框架帮我们处理)
+    //但这样的日期时间格式，如果自己解析不太好解析，所以我们可以使用joda-time框架，他是为Java日期和时间类提供了
+    // 一个高质量的替代品；他可以很方便的处理ISO8601格式，有比Java 自带api更强大的功能，易用的api;同时相同的功能，该框架能明显缩减代码。
+    implementation 'joda-time:joda-time:2.10.5'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
