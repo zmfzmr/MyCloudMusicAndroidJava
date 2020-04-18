@@ -318,4 +318,13 @@ public class Api {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    /**
+     * 创建评论
+     */
+    public Observable<DetailResponse<Comment>> createComment(Comment data) {
+        return service.createComment(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

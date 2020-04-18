@@ -165,4 +165,16 @@ public interface Service {
      */
     @GET("v1/comments")
     Observable<ListResponse<Comment>> comments(@QueryMap Map<String, String> data);
+
+    /**
+     * 创建评论
+     * <p>
+     * 这里用DetailResponse和用BaseModel效果是一样的
+     *
+     * @return 用@Body，retrofit这个框架，才知道把这个对象转换成json
+     * <p>
+     * 创建的话是post请求（因为是请求服务器创建评论）， 而GET是获取请求
+     */
+    @POST("v1/comments")
+    Observable<DetailResponse<Comment>> createComment(@Body Comment data);
 }
