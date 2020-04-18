@@ -7,11 +7,13 @@ import android.widget.EditText;
 
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.BaseRecyclerViewAdapter;
 import com.ixuea.courses.mymusic.adapter.CommentAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.listener.OnItemClickListener;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
@@ -84,6 +86,19 @@ public class CommentActivity extends BaseTitleActivity {
         //设置适配器
         rv.setAdapter(adapterWrapper);
 
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //设置item点击事件
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseRecyclerViewAdapter.ViewHolder holder, int position) {
+                LogUtil.d(TAG, "onItemClick: " + position);
+            }
+        });
     }
 
     /**
