@@ -2,7 +2,6 @@ package com.ixuea.courses.mymusic.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,40 +12,37 @@ import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
-    private Context context;
-    private List<Comment> datum = new ArrayList<>();//数据列表
-    private final LayoutInflater inflater;//创建布局加载器
-
+public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdapter.CommentViewHolder> {
     /**
      * 构造方法
      *
      * @param context
      */
     public CommentAdapter(Context context) {
-        this.context = context;
-
-        //创建布局加载器
-        inflater = LayoutInflater.from(context);
+        super(context);
     }
 
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //inflate:  参数1.布局id 2：父容器（也就是根布局） 3：是否附加进去，这里是：不附加传入false
-        return new CommentViewHolder(inflater.inflate(R.layout.item_comment, parent, false));
+        //getInflater():父类里面的方法
+        return new CommentViewHolder(getInflater().inflate(R.layout.item_comment, parent, false));
     }
 
+    /**
+     * 绑定数据
+     *
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+
         //获取当前位置数据
         Comment data = getData(position);
 
@@ -54,34 +50,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.bindData(data);
     }
 
-    @Override
-    public int getItemCount() {
-        return datum.size();
-    }
-
-    /**
-     * 获取当前位置数据
-     */
-    private Comment getData(int position) {
-        return datum.get(position);
-    }
-
-    /**
-     * 设置数据
-     */
-    public void setDatum(List<Comment> datum) {
-        this.datum.clear();//先清除原来的数据
-
-        //添加数据
-        this.datum.addAll(datum);
-
-        notifyDataSetChanged();
-    }
-
     /**
      * 评论ViewHolder
      */
-    public class CommentViewHolder extends RecyclerView.ViewHolder {
+    public class CommentViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
         //item布局中用到的是CircleImageView 继承ImageView ；我们这里没有用到CircleImageView里面的方法，
         // 所以没有什么影响
         @BindView(R.id.iv_avatar)
@@ -103,34 +75,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            //使用ButterKnife
-            //1:绑定当前对象
-            //2：绑定哪个view（这个view是之前inflater.inflate(R.layout.item_comment, parent, false)加载进来的）
-            ButterKnife.bind(this, itemView);
-
-//            //头像
-//            iv_avatar = itemView.findViewById(R.id.iv_avatar);
-//
-//            //昵称
-//            tv_nickname = itemView.findViewById(R.id.tv_nickname);
-//
-//            //时间
-//            tv_time = itemView.findViewById(R.id.tv_time);
-//
-//            //点赞容器
-//            ll_like_container = itemView.findViewById(R.id.ll_like_container);
-//
-//            //点赞数
-//            tv_like_count = itemView.findViewById(R.id.tv_like_count);
-//
-//            //评论
-//            tv_content = itemView.findViewById(R.id.tv_content);
         }
 
         /**
          * 绑定数据
          */
+
         public void bindData(Comment data) {
             //显示头像(里面需要传入Activity，向下转型)
             //因为是CircleImageView 圆形头像, 所以用showAvatar
