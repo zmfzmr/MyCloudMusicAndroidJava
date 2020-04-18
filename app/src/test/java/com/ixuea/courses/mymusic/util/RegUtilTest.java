@@ -22,7 +22,19 @@ public class RegUtilTest {
         //测试字符串有1个mention和2个hashTag(这个我们这里暂时不关心)
         assertEquals(RegUtil.findMentions(str1).size(), 1);
 
-        //测试字符串没有任务号要高亮的信息
+        //测试字符串没有任何要高亮的信息（也就是每找到 @爱学啊 这样的字符串）
         assertEquals(RegUtil.findMentions(str2).size(), 0);
+    }
+
+    /**
+     * 测试查找话题
+     */
+    @Test
+    public void testFindHashTag() {
+        //测试字符串有1个mention和2个hashTag
+        assertEquals(RegUtil.findHashTag(str1).size(), 2);//注意：结果是 2 因为#12# 这样的有2个
+
+        //测试字符串没有任何话题
+        assertEquals(RegUtil.findHashTag(str2).size(), 0);
     }
 }
