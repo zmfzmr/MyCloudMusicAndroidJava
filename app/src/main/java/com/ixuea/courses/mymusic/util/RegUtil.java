@@ -40,29 +40,8 @@ public class RegUtil {
      * @return
      */
     public static List<MatchResult> findMentions(String data) {
-        List<MatchResult> results = new ArrayList<>();
-        //编译正则表达式
-        Pattern pattern = Pattern.compile(REG_MENTION);
-        //通过正则表达式匹配内容
-        Matcher matcher = pattern.matcher(data);
-
-        //用while循环，如果有则继续查找匹配内容
-        while (matcher.find()) {
-            //如果还有匹配到的内容
-
-            //将开始位置
-            //结束位置
-            //保存到一个类中
-
-            //1:开始位置 2：结束位置 3：内容（matcher.group(0).trim()：第一次匹配到的内容）
-            MatchResult matchResult = new MatchResult(matcher.start(), matcher.end(), matcher.group(0).trim());
-
-            //添加到列表list
-            results.add(matchResult);
-        }
-
         //返回结果
-        return results;
+        return find(REG_MENTION, data);
     }
 
     /**
@@ -85,10 +64,20 @@ public class RegUtil {
      * 所以最终结果匹配为： a
      */
     public static List<MatchResult> findHashTag(String data) {
+        return find(REG_HASH_TAG, data);
+    }
+
+    /**
+     * 查找话题(重构后的方法)
+     *
+     * @param reg  正则表达式
+     * @param data 匹配的数据
+     */
+    public static List<MatchResult> find(String reg, String data) {
         //创建结果列表
         List<MatchResult> results = new ArrayList<>();
         //编译正则表达式
-        Pattern pattern = Pattern.compile(REG_HASH_TAG);//注意：这个匹配的表达式不一样
+        Pattern pattern = Pattern.compile(reg);
         //通过正则表达式匹配内容
         Matcher matcher = pattern.matcher(data);
 
