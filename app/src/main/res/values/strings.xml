@@ -137,5 +137,10 @@
     <string name="send">发送</string>
     <string name="enter_content">请输入评论内容</string>
     <string name="comment_create_success">评论发布成功</string>
+    <!--
+            \@: 需要用斜杆转义  因为这里字符串放到xml中，所以一个斜杠就可以了
+             %1$s:第一个是字符串 %2$s：第二个是字符串
+    -->
+    <string name="reply_comment">\@%1$s：%2$s</string>
 
 </resources>

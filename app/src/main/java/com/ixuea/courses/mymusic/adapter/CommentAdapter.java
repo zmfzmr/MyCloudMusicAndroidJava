@@ -83,6 +83,12 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
         @BindView(R.id.tv_content)
         TextView tv_content;//评论内容
 
+        @BindView(R.id.replay_container)
+        View replay_container;//被恢复评论的容器
+
+        @BindView(R.id.tv_reply_content)
+        TextView tv_reply_content;//被恢复评论的内容
+
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
         }
@@ -110,41 +116,81 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
             //StringUtil.processHighlight 传入评论内容，方法找到的是里面是有高亮的文本
 //            tv_content.setText(StringUtil.processHighlight(context, data.getContent()));
 
-            //设置后才可以点击（MovementMethod：翻译：移动方法 ），这里传入的是：LinkMovementMethod：链接移动方法
-            tv_content.setMovementMethod(LinkMovementMethod.getInstance());
+            //这2个方法（setMovementMethod和setLinkTextColor重构到一个方法里面，方便重用）
+//            //设置后才可以点击（MovementMethod：翻译：移动方法 ），这里传入的是：LinkMovementMethod：链接移动方法
+//            tv_content.setMovementMethod(LinkMovementMethod.getInstance());
             //这里返回SpannableString（富文本：里面包含 @12和#123#和其他没有高亮的文本）
             //必须同时设置setMovementMethod(LinkMovementMethod.getInstance());才能实现点击
             tv_content.setText(processContent(data.getContent()));
-            //因为这里设置了点击，所以不能用上面的那种方法来设置高亮颜色，使用下面的这种
-            tv_content.setLinkTextColor(context.getResources().getColor(R.color.text_highlight));
-        }
 
-        /**
-         * * 处理文本点击事件
-         * * 这部分可以用监听器回调到Activity中处理
-         *
-         * @param content
-         */
-        private SpannableString processContent(String content) {
-            SpannableString result = StringUtil.processContent(context, content, new OnTagClickListener() {
-                @Override
-                public void onTagClick(String data, MatchResult matchResult) {
-                    String clickText = StringUtil.removePlaceHolderString(data);
-                    LogUtil.d(TAG, "processContent mention click:" + clickText);
+//            //因为这里设置了点击，所以不能用上面的那种方法来设置高亮颜色，使用下面的这种
+//            tv_content.setLinkTextColor(context.getResources().getColor(R.color.text_highlight));
 
-                    //跳转到用户详情
-                    //参数1：上下文 2：点击的文本（没有@）
-                    UserDetailActivity.startWithNickname(context, clickText);
-                }
-            }, (data, matchResult) -> {
-                String clickText = StringUtil.removePlaceHolderString(data);
-                LogUtil.d(TAG, "processContent hash tag click:" + clickText);
+            //被恢复的评论
+            //data.getParent(): 获取的是Comment（评论对象）里面的 Comment对象（回复的对象）
+            if (data.getParent() == null) {
+                //没有被恢复的评论
+                replay_container.setVisibility(View.GONE);
+            } else {
+                //有回复的评论
+                replay_container.setVisibility(View.VISIBLE);
 
-                //跳转到话题详情
-                TopicDetailActivity.startWithTitle(context, clickText);
-            });
-            //SpannableString结果(富文本：里面包含 @12和#123#和其他没有高亮的文本)
-            return result;
+                //设置后才可以的点击
+                setCommon(tv_reply_content);
+
+                //内容（\@%1$s：%2$s）这个是拼接后 以@爱学啊 等昵称开头
+                //  \@: 需要用斜杆转义  因为这里字符串放到xml中，所以一个斜杠就可以了
+                // %1$s:第一个是字符串 %2$s：第二个是字符串
+                String content = context.getString(R.string.reply_comment,
+                        data.getParent().getUser().getNickname(),
+                        data.getParent().getContent());
+                //设置内容
+                tv_reply_content.setText(processContent(content));
+            }
         }
     }
+
+    /**
+     * 设置文本通用配置
+     *
+     * @param tv TextView
+     */
+    private void setCommon(TextView tv) {
+        //设置后才可以点击（MovementMethod：翻译：移动方法 ），这里传入的是：LinkMovementMethod：链接移动方法
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+
+        //因为这里设置了点击，所以不能用上面的那种方法来设置高亮颜色，使用下面的这种
+        tv.setLinkTextColor(context.getResources().getColor(R.color.text_highlight));
+    }
+
+    /**
+     * * 处理文本点击事件
+     * * 这部分可以用监听器回调到Activity中处理
+     * <p>
+     * 这个方法放在CommentAdapter外面
+     *
+     * @param content
+     */
+    private SpannableString processContent(String content) {
+        SpannableString result = StringUtil.processContent(context, content, new OnTagClickListener() {
+            @Override
+            public void onTagClick(String data, MatchResult matchResult) {
+                String clickText = StringUtil.removePlaceHolderString(data);
+                LogUtil.d(TAG, "processContent mention click:" + clickText);
+
+                //跳转到用户详情
+                //参数1：上下文 2：点击的文本（没有@）
+                UserDetailActivity.startWithNickname(context, clickText);
+            }
+        }, (data, matchResult) -> {
+            String clickText = StringUtil.removePlaceHolderString(data);
+            LogUtil.d(TAG, "processContent hash tag click:" + clickText);
+
+            //跳转到话题详情
+            TopicDetailActivity.startWithTitle(context, clickText);
+        });
+        //SpannableString结果(富文本：里面包含 @12和#123#和其他没有高亮的文本)
+        return result;
+    }
+
 }

@@ -85,4 +85,32 @@
         android:text="这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容"
         android:textColor="@color/text" />
 
+    <!--被恢复评论容器-->
+    <LinearLayout
+        android:id="@+id/replay_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="@dimen/padding_middle"
+        android:layout_marginRight="@dimen/padding_middle"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <!--分割线-->
+        <View
+            android:layout_width="@dimen/divider_comment_reply"
+            android:layout_height="match_parent"
+            android:background="@color/divider_color" />
+        <!--被恢复评论的内容  replay:恢复  -->
+        <TextView
+            android:id="@+id/tv_reply_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_middle"
+            android:lineSpacingMultiplier="@dimen/line_space"
+            android:text="这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容，这是评论内容"
+            android:textColor="@color/light_grey" />
+
+    </LinearLayout>
+
 </LinearLayout>
