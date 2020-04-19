@@ -25,6 +25,9 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.TopicDetailActivity"
+            android:label="@string/activity_topic_detail" />
+        <activity
             android:name=".activity.ShareLyricImageActivity"
             android:label="@string/activity_share_lyric_image" />
         <activity

@@ -9,6 +9,7 @@
     <string name="activity_simple_player">简单播放器</string>
     <string name="activity_share_lyric_image">歌词图片</string>
     <string name="activity_select_lyric">选择歌词</string>
+    <string name="activity_topic_detail">话题详情</string>
 
     <!--版本文本-->
     <string name="copyright">Copyright © 2019 Ixuea. All Rights Reserved</string>

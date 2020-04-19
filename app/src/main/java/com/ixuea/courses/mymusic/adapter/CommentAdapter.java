@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.TopicDetailActivity;
+import com.ixuea.courses.mymusic.activity.UserDetailActivity;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.listener.OnTagClickListener;
 import com.ixuea.courses.mymusic.util.ImageUtil;
@@ -129,10 +131,17 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
                 public void onTagClick(String data, MatchResult matchResult) {
                     String clickText = StringUtil.removePlaceHolderString(data);
                     LogUtil.d(TAG, "processContent mention click:" + clickText);
+
+                    //跳转到用户详情
+                    //参数1：上下文 2：点击的文本（没有@）
+                    UserDetailActivity.startWithNickname(context, clickText);
                 }
             }, (data, matchResult) -> {
                 String clickText = StringUtil.removePlaceHolderString(data);
                 LogUtil.d(TAG, "processContent hash tag click:" + clickText);
+
+                //跳转到话题详情
+                TopicDetailActivity.startWithTitle(context, clickText);
             });
             //SpannableString结果(富文本：里面包含 @12和#123#和其他没有高亮的文本)
             return result;
