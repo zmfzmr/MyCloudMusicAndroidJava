@@ -152,6 +152,8 @@ public class TimeUtil {
     /**
      * 转为分钟
      *
+     * 传入的date是:毫秒,先转换成秒， 然后秒 / 60 那么就是分钟
+     * 简单就是: 毫秒->秒->分钟
      * @param date
      * @return
      */
@@ -161,7 +163,7 @@ public class TimeUtil {
 
     /**
      * 转为小时
-     *
+     * 毫秒->分钟->小时
      * @param date
      * @return
      */
@@ -171,7 +173,7 @@ public class TimeUtil {
 
     /**
      * 转为天
-     *
+     * 毫秒->小时->天
      * @param date
      * @return
      */

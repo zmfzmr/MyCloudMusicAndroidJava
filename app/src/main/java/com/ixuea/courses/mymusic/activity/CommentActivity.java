@@ -75,7 +75,7 @@ public class CommentActivity extends BaseTitleActivity {
         rv.setLayoutManager(layoutManager);
 
         //设置分割线
-        DividerItemDecoration decoration = new DividerItemDecoration(getMainActivity(), DividerItemDecoration.HORIZONTAL);
+        DividerItemDecoration decoration = new DividerItemDecoration(getMainActivity(), DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(decoration);
     }
 
