@@ -127,10 +127,12 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
             SpannableString result = StringUtil.processContent(context, content, new OnTagClickListener() {
                 @Override
                 public void onTagClick(String data, MatchResult matchResult) {
-                    LogUtil.d(TAG, "processContent mention click:" + data);
+                    String clickText = StringUtil.removePlaceHolderString(data);
+                    LogUtil.d(TAG, "processContent mention click:" + clickText);
                 }
             }, (data, matchResult) -> {
-                LogUtil.d(TAG, "processContent hash tag click:" + data);
+                String clickText = StringUtil.removePlaceHolderString(data);
+                LogUtil.d(TAG, "processContent hash tag click:" + clickText);
             });
             //SpannableString结果(富文本：里面包含 @12和#123#和其他没有高亮的文本)
             return result;

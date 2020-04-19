@@ -179,4 +179,28 @@ public class StringUtil {
         }, matchResult.getStart(), matchResult.getEnd(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
     }
+
+    /**
+     * 移除字符串中首的@
+     * 移除首尾的#
+     *
+     * @param data 高亮内容（比如 @123 #123# ）
+     * @return 123 没有占位符的字符串
+     */
+    public static String removePlaceHolderString(String data) {
+        if (data.startsWith(Constant.MENTION)) {
+            //@人字符串
+
+            //从1开始截取到末尾
+            return data.substring(1);
+        } else if (data.startsWith(Constant.HASH_TAG)) {
+            //话题字符串
+
+            //截取1~最后一个字符串(不包括最后一个)
+            return data.substring(1, data.length() - 1);
+        }
+        //如果不满足格式
+        //就直接返回
+        return data;
+    }
 }

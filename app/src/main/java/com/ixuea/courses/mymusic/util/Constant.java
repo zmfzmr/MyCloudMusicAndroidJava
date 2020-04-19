@@ -177,4 +177,12 @@ public class Constant {
      * 解锁全局歌词Id
      */
     public static final int NOTIFICATION_UNLOCK_LYRIC_ID = 10001;
+    /**
+     * @ 开头
+     */
+    public static final String MENTION = "@";
+    /**
+     * HASH_TAG 开头（以#开头）
+     */
+    public static final String HASH_TAG = "#";
 }
