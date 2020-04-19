@@ -3,12 +3,17 @@ package com.ixuea.courses.mymusic.util;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.listener.OnTagClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 import static com.ixuea.courses.mymusic.util.Constant.REGEX_EMAIL;
 import static com.ixuea.courses.mymusic.util.Constant.REGEX_PHONE;
@@ -126,5 +131,52 @@ public class StringUtil {
         }
         //返回结果
         return result;
+    }
+
+    /**
+     * 处理文本添加点击事件
+     * 注意：这类的context暂时没有用到
+     */
+    public static SpannableString processContent(Context context, String data,
+                                                 OnTagClickListener onMentionClickListener,
+                                                 OnTagClickListener onHashTagClickListener) {
+        //创建结果字符串
+        SpannableString result = new SpannableString(data);
+
+        //查找@
+        List<MatchResult> tags = RegUtil.findMentions(data);
+
+        //遍历
+        for (MatchResult matchResult : tags) {
+            processInner(result, matchResult, onMentionClickListener);
+        }
+
+        //查找话题
+        //这里用上面的tags就可以了（不论是点击@还是#123#这样的字符还是不收影响的）
+        tags = RegUtil.findHashTag(data);
+
+        //这个和上面是类似的，可以重构
+        for (MatchResult matchResult : tags) {
+            processInner(result, matchResult, onHashTagClickListener);
+        }
+
+        //返回结果
+        return result;
+    }
+
+    /**
+     * 内部处理点击事件方法
+     */
+    private static void processInner(SpannableString result, MatchResult matchResult,
+                                     OnTagClickListener onTagClickListener) {
+
+        result.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                //这里回调 1点击的内容  2:matchResult 点击范围(是一个对象，保存了开始 和结果 和点击的内容)
+                onTagClickListener.onTagClick(matchResult.getContent(), matchResult);
+            }
+        }, matchResult.getStart(), matchResult.getEnd(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
     }
 }
