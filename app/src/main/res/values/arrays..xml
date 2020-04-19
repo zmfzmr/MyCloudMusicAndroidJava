@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--评论更多对话框列表  这个xml文件是在values中创建的-->
+    <string-array name="dialog_comment_more">
+        <item>恢复评论</item>
+        <item>分享评论</item>
+        <item>复制评论</item>
+        <item>举报评论</item>
+    </string-array>
+</resources>

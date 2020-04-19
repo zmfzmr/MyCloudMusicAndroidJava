@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.fragment.CommentMoreDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.listener.OnItemClickListener;
 import com.ixuea.courses.mymusic.util.Constant;
@@ -107,8 +109,59 @@ public class CommentActivity extends BaseTitleActivity {
             @Override
             public void onItemClick(BaseRecyclerViewAdapter.ViewHolder holder, int position) {
                 LogUtil.d(TAG, "onItemClick: " + position);
+                Object data = adapter.getDatum().get(position);
+                if (data instanceof Comment) {
+                    showCommentMoreDialogFragment((Comment) data);
+                }
+
             }
         });
+    }
+
+    /**
+     * 显示评论更多对话框fragment
+     *
+     * @param data Comment
+     */
+    private void showCommentMoreDialogFragment(Comment data) {
+        //创建CommentMoreDialogFragment对象
+        CommentMoreDialogFragment dialogFragment = CommentMoreDialogFragment.newInstance();
+
+        dialogFragment.show(getSupportFragmentManager(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();//关闭对话框
+
+                //which：点击的索引 data：点击的item的对象
+                processOnClick(which, data);
+            }
+        });
+
+    }
+
+    /**
+     * 处理评论更多对话框点击事件
+     *
+     * @param which 点击的索引
+     * @param data  item对象
+     */
+    private void processOnClick(int which, Comment data) {
+
+        LogUtil.d(TAG, "which " + data.getContent());
+        switch (which) {
+            case 0:
+                //TODO 回复评论
+                break;
+            case 1:
+                //TODO 分享评论
+                break;
+            case 2:
+                //TODO 复制评论
+                break;
+            case 3:
+                //TODO 举报评论
+                break;
+        }
     }
 
     /**
