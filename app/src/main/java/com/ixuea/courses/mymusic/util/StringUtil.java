@@ -1,5 +1,12 @@
 package com.ixuea.courses.mymusic.util;
 
+import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+
+import com.ixuea.courses.mymusic.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,5 +92,39 @@ public class StringUtil {
         }
         //转为数组
         return results.toArray(new String[results.size()]);
+    }
+
+    /**
+     * 只是对文本进行高亮
+     * 不添加点击事件(点击事件后面实现)
+     *
+     * @param context 传入这个，主要是是获取颜色
+     *                SpannableString :  这个就是Android中的富文本字符串；哪块高亮 ，哪块有点击事件，哪块字体变小
+     *                需要给我设置上才知道，所以需要遍历所有的数据并处理
+     * @return 思路：mentionAndHashTags（集合）：找到匹配的内容放到这里面，然后创建SpannableString（传入data）。
+     * 接着遍历mentionAndHashTags集合，然后设置SpannableString文本高亮
+     * <p>
+     * 简单: 设置SpannableString文本高亮（mentionAndHashTags（集合）遍历找到匹配内容）
+     */
+    public static SpannableString processHighlight(Context context, String data) {
+        //找到匹配@(这里返回集合)
+        List<MatchResult> mentionAndHashTags = RegUtil.findMentions(data);
+        //匹配话题
+        //这个集合又添加另外一个匹配的集合（匹配的hashTag 比如 #123#）
+        mentionAndHashTags.addAll(RegUtil.findHashTag(data));
+        //设置span
+        //SPAN_EXCLUSIVE_EXCLUSIVE:不包括开始结束位置
+        SpannableString result = new SpannableString(data);
+        for (MatchResult matchResult : mentionAndHashTags) {
+            ForegroundColorSpan span =
+                    new ForegroundColorSpan(context.getResources().getColor(R.color.text_highlight));
+            //只是高亮颜色，但是要高亮哪一块，需要告诉它
+            //1:设置高亮（这里传入ForegroundColorSpan对象） 2. 3:高亮的范围
+            //设置span
+            //SPAN_EXCLUSIVE_EXCLUSIVE:不包括开始结束位置
+            result.setSpan(span, matchResult.getStart(), matchResult.getEnd(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        //返回结果
+        return result;
     }
 }

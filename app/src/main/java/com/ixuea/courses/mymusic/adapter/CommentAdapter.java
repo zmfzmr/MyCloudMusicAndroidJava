@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.util.ImageUtil;
+import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 
 import androidx.annotation.NonNull;
@@ -96,8 +97,9 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
             tv_like_count.setText(String.valueOf(data.getLikes_count()));
 
             //评论
-            tv_content.setText(data.getContent());
-
+//            tv_content.setText(data.getContent());
+            //StringUtil.processHighlight 传入评论内容，方法找到的是里面是有高亮的文本
+            tv_content.setText(StringUtil.processHighlight(context, data.getContent()));
         }
     }
 }
