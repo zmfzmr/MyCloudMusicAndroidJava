@@ -3,12 +3,12 @@ package com.ixuea.courses.mymusic.util;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.listener.OnTagClickListener;
+import com.ixuea.courses.mymusic.span.ClickableSpan;
 
 import java.util.ArrayList;
 import java.util.List;
