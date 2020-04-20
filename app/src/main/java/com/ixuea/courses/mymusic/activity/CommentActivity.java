@@ -10,7 +10,9 @@ import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.BaseRecyclerViewAdapter;
 import com.ixuea.courses.mymusic.adapter.CommentAdapter;
+import com.ixuea.courses.mymusic.adapter.CommentAdapterListener;
 import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
@@ -33,11 +35,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
+import retrofit2.Response;
 
 /**
  * 评论界面
  */
-public class CommentActivity extends BaseTitleActivity {
+public class CommentActivity extends BaseTitleActivity implements CommentAdapterListener {
 
     private static final String TAG = "CommentActivity";
     /**
@@ -121,6 +124,9 @@ public class CommentActivity extends BaseTitleActivity {
 
             }
         });
+
+        //设置评论适配器监听器
+        adapter.setCommentAdapterListener(this);
 
         //添加列表滚动监听器
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -293,5 +299,77 @@ public class CommentActivity extends BaseTitleActivity {
         intent.putExtra(Constant.SHEET_ID, sheetId);
         //启动界面
         activity.startActivity(intent);
+    }
+
+    /**
+     * 头像点击了
+     */
+    @Override
+    public void onAvatarClick(Comment data) {
+        //携带用户id跳转到用户详情界面
+        UserDetailActivity.startWithId(getMainActivity(), data.getUser().getId());
+    }
+
+    /**
+     * 点赞 点击
+     * <p>
+     * 思路是：点赞成功后，返回一个id（保存到Comment对象的 like_id字段上）
+     * 取消点赞，传入Comment对象的 like_id字段值，取消点赞
+     *
+     * @param data
+     */
+    @Override
+    public void onLikeClick(Comment data) {
+        if (data.isLiked()) {
+            //已经点赞了
+
+            //取消点赞
+
+            //传递的是这条Comment对象中 关联 的Id
+            Api.getInstance()
+                    //data.getId():该item评论对象Comment的id
+                    .deleteLike(data.getLike_id())
+                    .subscribe(new HttpObserver<Response<Void>>() {
+                        @Override
+                        public void onSucceeded(Response<Void> d) {
+                            //在原来的基础上 - 1
+                            data.setLikes_count(data.getLikes_count() - 1);
+
+                            //取消点赞后，记得把整个 字符串数据置为null
+                            data.setLike_id(null);
+
+                            //通知适配器刷新数据
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+
+        } else {
+            //没有点赞
+
+            //点赞
+            Api.getInstance()
+                    //data.getId():该item评论对象Comment的id
+                    .like(data.getId())
+                    .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                        @Override
+                        public void onSucceeded(DetailResponse<BaseModel> d) {
+                            //这里在本地的List集合中的Comment对象中的 likes_count+1，其实这个时候，服务器那边的点赞数据已经改变了
+                            //而我们这里不用重新调用网络请求，直接在item对象(Comment对象)上+1
+                            //刷新的时候根据List中的Comment对象的字段值 来刷新的
+
+                            //我们关闭界面后，重新进入界面，这个时候才是网络请求（这个时候的数据就是从服务器返回的）
+                            //2个区别：前面的：1.网络请求后，在本地Comment对象字段值+1
+                            //               2:关闭界面，重新进入界面网络请求显示数据
+
+                            //在原来的基础上 + 1
+                            data.setLikes_count(data.getLikes_count() + 1);
+
+                            //点赞成功后，会返回一个id（把整个id设置到Comment对象关联的字段上like_id上）
+                            data.setLike_id(d.getData().getId());
+                            //通知适配器刷新数据
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+        }
     }
 }

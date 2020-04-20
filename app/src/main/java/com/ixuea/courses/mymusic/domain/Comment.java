@@ -1,5 +1,6 @@
 package com.ixuea.courses.mymusic.domain;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -151,5 +152,15 @@ public class Comment extends BaseModel {
         result = 31 * result + (parent_id != null ? parent_id.hashCode() : 0);
         result = 31 * result + (sheet_id != null ? sheet_id.hashCode() : 0);
         return result;
+    }
+
+    /**
+     * 是否点赞了
+     *
+     * @return
+     */
+    public boolean isLiked() {
+        //不为null  返回true说明点赞了
+        return StringUtils.isNotBlank(like_id);
     }
 }

@@ -327,4 +327,23 @@ public class Api {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    /**
+     * 点赞
+     * 目前只实现了评论点赞
+     */
+    public Observable<DetailResponse<BaseModel>> like(String commentId) {
+        return service.like(commentId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 取消点赞
+     */
+    public Observable<Response<Void>> deleteLike(String id) {
+        return service.deleteLike(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

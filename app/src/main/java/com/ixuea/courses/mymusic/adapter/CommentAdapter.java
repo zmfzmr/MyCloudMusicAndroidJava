@@ -22,9 +22,14 @@ import com.ixuea.courses.mymusic.util.TimeUtil;
 
 import androidx.annotation.NonNull;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdapter.CommentViewHolder> {
     private static final String TAG = "CommentAdapter";
+    /**
+     * 评论适配器 监听器
+     */
+    private CommentAdapterListener commentAdapterListener;
 
     /**
      * 构造方法
@@ -61,6 +66,15 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
     }
 
     /**
+     * 设置评论适配器 监听器
+     *
+     * @param commentAdapterListener CommentAdapterListener
+     */
+    public void setCommentAdapterListener(CommentAdapterListener commentAdapterListener) {
+        this.commentAdapterListener = commentAdapterListener;
+    }
+
+    /**
      * 评论ViewHolder
      */
     public class CommentViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
@@ -80,6 +94,10 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
 
         @BindView(R.id.tv_like_count)
         TextView tv_like_count;//点赞数
+
+        @BindView(R.id.iv_like)
+        ImageView iv_like;//点赞图标
+
         @BindView(R.id.tv_content)
         TextView tv_content;//评论内容
 
@@ -88,6 +106,17 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
 
         @BindView(R.id.tv_reply_content)
         TextView tv_reply_content;//被恢复评论的内容
+        private Comment data;//item评论对象
+
+        /**
+         * 头像点击了
+         */
+        @OnClick(R.id.iv_avatar)
+        public void onAvatarClick() {
+            if (commentAdapterListener != null) {
+                commentAdapterListener.onAvatarClick(data);
+            }
+        }
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,6 +127,7 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
          */
 
         public void bindData(Comment data) {
+            this.data = data;
             //显示头像(里面需要传入Activity，向下转型)
             //因为是CircleImageView 圆形头像, 所以用showAvatar
             ImageUtil.showAvatar((Activity) context, iv_avatar, data.getUser().getAvatar());
@@ -151,6 +181,33 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
                 //设置内容
                 tv_reply_content.setText(processContent(content));
             }
+
+            //显示点赞状态(data:Comment对象)
+            if (data.isLiked()) {
+                //点赞了
+
+                //设置图片
+                iv_like.setImageResource(R.drawable.ic_comment_liked);
+                //设置点赞数 颜色
+                tv_like_count.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+            } else {
+                //没有点赞
+
+                //设置图标
+                iv_like.setImageResource(R.drawable.ic_comment_like);
+                //设置点赞数 颜色
+                tv_like_count.setTextColor(context.getResources().getColor(R.color.light_grey));
+            }
+
+            //设置点赞容器事件
+            ll_like_container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (commentAdapterListener != null) {
+                        commentAdapterListener.onLikeClick(data);
+                    }
+                }
+            });
         }
     }
 

@@ -64,6 +64,7 @@
 
             <!--图标-->
             <ImageView
+                android:id="@+id/iv_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_small"

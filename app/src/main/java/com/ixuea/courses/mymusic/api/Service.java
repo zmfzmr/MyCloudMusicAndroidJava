@@ -142,14 +142,16 @@ public interface Service {
      * 如果是json就是这种{"sheet_id","1"}
      * 记得加上这个@POST
      * <p>
-     * Response<Void>：这个表示接收的返回值没有，所以用这个
+     * Response<Void>：这个表示接收的返回值没有，所以用这个，虽然返回code字段，但是我们并没有定义这个字段
      */
     @FormUrlEncoded
     @POST("v1/collections")
     Observable<Response<Void>> collect(@Field("sheet_id") String id);
 
     /**
-     * 因为后面只跟一个具体数字，所以用 @ Path
+     * http://dev-my-cloud-music-api-rails.ixuea.com/v1/collections/1
+     * <p>
+     * 因为后面只跟一个具体数字，后面并没有?sheet_id = 1或者携带body（就是json数据）所以用 @ Path
      * <p>
      * 注意：这里用的是@DELETE，从服务器端删除收藏内容
      */
@@ -177,4 +179,27 @@ public interface Service {
      */
     @POST("v1/comments")
     Observable<DetailResponse<Comment>> createComment(@Body Comment data);
+
+    /**
+     * 评论点赞
+     *
+     * @return
+     * @ Field 这种就是表单形式 比如后面携带的?sheet_id=1
+     */
+    @FormUrlEncoded
+    @POST("v1/likes")
+    Observable<DetailResponse<BaseModel>> like(@Field("comment_id") String commentId);
+
+    /**
+     * 取消评论点赞
+     * 因为服务端返回null
+     * 所以这里要用Response<Void>
+     * 不然会有异常
+     * <p>
+     * Response<Void>：这个表示接收的返回值没有，所以用这个，虽然返回code字段，但是我们并没有定义这个字段
+     * 因为后面只跟一个具体数字，后面并没有?id = 1或者携带body（就是json数据）所以用 @ Path
+     * //这里跟取消收藏是类似的
+     */
+    @DELETE("v1/likes/{id}")
+    Observable<Response<Void>> deleteLike(@Path("id") String id);
 }

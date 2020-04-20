@@ -29,7 +29,7 @@ public class UserDetailActivity extends BaseTitleActivity {
      * @param context 上下文
      * @param id      用户id
      */
-    public static void start(Context context, String id) {
+    public static void startWithId(Context context, String id) {
         start(context, id, null);
     }
 
