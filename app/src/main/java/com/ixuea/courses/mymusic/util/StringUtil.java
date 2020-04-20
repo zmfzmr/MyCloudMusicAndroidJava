@@ -153,6 +153,9 @@ public class StringUtil {
 
         //查找话题
         //这里用上面的tags就可以了（不论是点击@还是#123#这样的字符还是不收影响的）
+        //因为总的字符串是：result（富文本字符串：比如：我们@爱学啊 123 #123#是 ），
+        // 包含了mention(@)和hashTag（#123#），而设置点击事件的是用SpannableString对象设置的
+        //设置点击事件完成后，跟前面的那个那个tags集合没有关系了，所以可以直接赋值前面的那个tags
         tags = RegUtil.findHashTag(data);
 
         //这个和上面是类似的，可以重构
