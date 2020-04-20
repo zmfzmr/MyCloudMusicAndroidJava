@@ -141,6 +141,10 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
                 //内容（\@%1$s：%2$s）这个是拼接后 以@爱学啊 等昵称开头
                 //  \@: 需要用斜杆转义  因为这里字符串放到xml中，所以一个斜杠就可以了
                 // %1$s:第一个是字符串 %2$s：第二个是字符串
+
+                //data.getParent().getUser().getNickname():恢复评论的用户名
+                //data.getParent().getContent():回复的内容
+                //上面2个（用户名和回复内容）没有包含关系
                 String content = context.getString(R.string.reply_comment,
                         data.getParent().getUser().getNickname(),
                         data.getParent().getContent());
