@@ -17,6 +17,7 @@ import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.fragment.CommentMoreDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.listener.OnItemClickListener;
+import com.ixuea.courses.mymusic.util.ClipBoardUtil;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.KeyBoardUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -62,8 +63,8 @@ public class CommentActivity extends BaseTitleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
-        //请求数据
-        fetchData();
+//        //请求数据
+//        fetchData();//这个应该放到initDatum中
     }
 
     @Override
@@ -98,6 +99,9 @@ public class CommentActivity extends BaseTitleActivity {
 
         //设置适配器
         rv.setAdapter(adapterWrapper);
+
+        //请求数据
+        fetchData();
 
     }
 
@@ -151,7 +155,7 @@ public class CommentActivity extends BaseTitleActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();//关闭对话框
 
-                //which：点击的索引 data：点击的item的对象
+                //which：点击的索引(弹出框里面的item索引) data：点击的item的对象
                 processOnClick(which, data);
             }
         });
@@ -178,7 +182,11 @@ public class CommentActivity extends BaseTitleActivity {
                 //TODO 分享评论
                 break;
             case 2:
-                //TODO 复制评论
+                //复制评论
+                //参数2：data.getContent()：评论的内容
+                ClipBoardUtil.copyText(getMainActivity(), data.getContent());
+
+                ToastUtil.successShortToast(R.string.copy_success);
                 break;
             case 3:
                 //TODO 举报评论

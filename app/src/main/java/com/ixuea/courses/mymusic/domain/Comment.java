@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Comment extends BaseModel {
     private String content;//评论内容
     private long likes_count;//点赞数
-    private String created_at;//日期时间（包含秒 毫秒）
+    //    private String created_at;//日期时间（包含秒 毫秒）//父类已经有了，这里不需要
     private User user;//评论发布人
     private Sheet sheet;//评论关联的歌单
     /**
@@ -49,13 +49,13 @@ public class Comment extends BaseModel {
         this.likes_count = likes_count;
     }
 
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
-    }
+//    public String getCreated_at() {
+//        return created_at;
+//    }
+//
+//    public void setCreated_at(String created_at) {
+//        this.created_at = created_at;
+//    }
 
     public User getUser() {
         return user;
