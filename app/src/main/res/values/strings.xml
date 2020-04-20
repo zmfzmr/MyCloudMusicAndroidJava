@@ -142,5 +142,6 @@
              %1$s:第一个是字符串 %2$s：第二个是字符串
     -->
     <string name="reply_comment">\@%1$s：%2$s</string>
+    <string name="reply_hint">回复%1$s：</string>
 
 </resources>

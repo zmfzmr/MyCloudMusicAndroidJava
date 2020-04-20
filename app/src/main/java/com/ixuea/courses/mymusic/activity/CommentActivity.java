@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -116,6 +117,24 @@ public class CommentActivity extends BaseTitleActivity {
 
             }
         });
+
+        //添加列表滚动监听器
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (Math.abs(dy) > 100) {
+                    //y轴滚动方向大于100
+
+                    if (StringUtils.isEmpty(et_content.getText().toString())) {
+                        //并且还没有输入内容
+                        //才清除回复
+                        clearInputContent();
+                    }
+                }
+
+            }
+        });
     }
 
     /**
@@ -150,7 +169,10 @@ public class CommentActivity extends BaseTitleActivity {
         LogUtil.d(TAG, "which " + data.getContent());
         switch (which) {
             case 0:
-                //TODO 回复评论
+                //回复评论
+                parentId = data.getId();//该条评论的id
+                //比如 ： 回复爱学啊
+                et_content.setHint(getResources().getString(R.string.reply_hint, data.getUser().getNickname()));
                 break;
             case 1:
                 //TODO 分享评论
@@ -206,7 +228,8 @@ public class CommentActivity extends BaseTitleActivity {
         //设置评论对象
         Comment data = new Comment();
 
-        //设置被恢复评论的id
+        //设置被恢复评论的id(这个parentId：是点击弹出对话框中的 标题才会有值的)
+        //这个id如果有值的话，那么就是回复别人的评论
         data.setParent_id(parentId);
 
         //设置内容

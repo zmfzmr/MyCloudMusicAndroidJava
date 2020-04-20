@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * 评论模型
  */
-public class Comment {
+public class Comment extends BaseModel {
     private String content;//评论内容
     private long likes_count;//点赞数
     private String created_at;//日期时间（包含秒 毫秒）
