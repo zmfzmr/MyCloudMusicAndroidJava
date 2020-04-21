@@ -16,6 +16,7 @@ import com.ixuea.courses.mymusic.adapter.CommentAdapterListener;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Comment;
+import com.ixuea.courses.mymusic.domain.event.SelectedTopEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.fragment.CommentMoreDialogFragment;
@@ -25,9 +26,13 @@ import com.ixuea.courses.mymusic.util.ClipBoardUtil;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.KeyBoardUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 
@@ -92,6 +97,11 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
     @Override
     protected void initDatum() {
         super.initDatum();
+        //注册发布订阅框架
+        //最好的实现是：用户选择了话题，或者选择了好友的时候注册，为了简单，我们在initDatum里面注册EventBus
+        //如果用户没有点击话题等，这个资源也就是会浪费的（但是如果要实现用户点击了话题后才去注册，
+        // 需要复杂一点（比较点击话题的是在另外一个界面点击））
+        EventBus.getDefault().register(this);
 
         //获取传递的数据（这里是歌单id）
         sheetId = extraString(Constant.SHEET_ID);
@@ -425,7 +435,7 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
             //用户删除到@,#符号也会跳转
 
             //获取现在的文本
-            String data = s.toString().trim();
+            String data = s.toString();
 
             if (data.endsWith(Constant.HASH_TAG)) {
                 //结尾输入了#
@@ -439,4 +449,38 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
 
     }
     //end 文本监听器
+
+    /**
+     * 选中了话题回调
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectedTopic(SelectedTopEvent event) {
+        //添加话题标题
+        //(event.getData():获取的是传过来的topic item对象)
+        //因为在编辑框中结尾中 输入了# 跳转页面
+        //点击话题返回本页面中，
+        et_content.append(event.getData().getTitle());
+
+        //添加结尾字符
+        et_content.append("# ");
+
+        //设置文本高亮(参数2：编辑框文本：这里是重新获取添加后的内容)
+        et_content.setText(StringUtil.processHighlight(getMainActivity(),
+                et_content.getText().toString()));
+
+        //设置光标位置(这里传入文本长度：表示光标放到最后)
+        et_content.setSelection(et_content.getText().toString().length());
+    }
+
+    /**
+     * 页面销毁了会调用
+     */
+    @Override
+    protected void onDestroy() {
+        //取消注册发布订阅框架
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }

@@ -1,14 +1,19 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.os.Bundle;
+import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.TopicAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Topic;
+import com.ixuea.courses.mymusic.domain.event.SelectedTopEvent;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.LogUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +23,7 @@ import butterknife.BindView;
 /**
  * 选择话题界面
  */
-public class SelectTopicActivity extends BaseTitleActivity {
+public class SelectTopicActivity extends BaseTitleActivity implements BaseQuickAdapter.OnItemClickListener {
 
     private static final String TAG = "SelectTopicActivity";
 
@@ -59,6 +64,14 @@ public class SelectTopicActivity extends BaseTitleActivity {
         fetchData();
     }
 
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //设置点击事件
+        adapter.setOnItemClickListener(this);
+    }
+
     private void fetchData() {
         Api.getInstance()
                 .topics()
@@ -70,5 +83,24 @@ public class SelectTopicActivity extends BaseTitleActivity {
                         adapter.replaceData(data.getData());
                     }
                 });
+    }
+
+    /**
+     * item点击事件
+     *
+     * @param adapter
+     * @param view
+     * @param position
+     */
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        //获取当前点击的数据
+        Topic data = (Topic) adapter.getItem(position);
+
+        //将点击的话题发送出去
+        EventBus.getDefault().post(new SelectedTopEvent(data));
+
+        //把当前界面关闭掉(记得关闭)
+        finish();
     }
 }
