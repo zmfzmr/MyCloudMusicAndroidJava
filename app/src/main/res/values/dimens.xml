@@ -76,6 +76,8 @@
     <dimen name="lyric_height_small">14dp</dimen>
     <dimen name="global_lyric_height">40dp</dimen>
     <dimen name="share_lyric_logo_width">12dp</dimen>
+    <!--话题相关-->
+    <dimen name="item_topic_height">60dp</dimen>
 
 
 </resources>
