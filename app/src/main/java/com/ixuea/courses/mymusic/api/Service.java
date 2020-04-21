@@ -6,6 +6,7 @@ import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.Topic;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
@@ -202,4 +203,11 @@ public interface Service {
      */
     @DELETE("v1/likes/{id}")
     Observable<Response<Void>> deleteLike(@Path("id") String id);
+
+    /**
+     * 话题列表
+     * 目前没有参数携带
+     */
+    @GET("v1/topics")
+    Observable<ListResponse<Topic>> topics();
 }
