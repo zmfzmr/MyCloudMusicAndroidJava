@@ -32,6 +32,7 @@
     <!--用户相关-->
     <dimen name="avatar_width_small">25dp</dimen>
     <dimen name="avatar_width_meddle">40dp</dimen>
+    <dimen name="avatar_width_meddle2">40dp</dimen>
     <dimen name="avatar_width">80dp</dimen>
     <!--菜单相关 抽屉布局每个item的高-->
     <dimen name="menu_item_height">45dp</dimen>

@@ -5,7 +5,7 @@ import com.ixuea.courses.mymusic.domain.Topic;
 /**
  * 选中了话题事件
  */
-public class SelectedTopEvent {
+public class SelectedTopicEvent {
     private Topic data;
 
     /**
@@ -13,7 +13,7 @@ public class SelectedTopEvent {
      *
      * @param data
      */
-    public SelectedTopEvent(Topic data) {
+    public SelectedTopicEvent(Topic data) {
         this.data = data;
     }
 

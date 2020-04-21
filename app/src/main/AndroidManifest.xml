@@ -25,6 +25,9 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.SelectFriendActivity"
+            android:label="@string/activity_select_friend" />
+        <activity
             android:name=".activity.SelectTopicActivity"
             android:label="@string/activity_select_topic" />
         <activity

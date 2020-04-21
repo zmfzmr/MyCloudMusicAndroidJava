@@ -16,7 +16,8 @@ import com.ixuea.courses.mymusic.adapter.CommentAdapterListener;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Comment;
-import com.ixuea.courses.mymusic.domain.event.SelectedTopEvent;
+import com.ixuea.courses.mymusic.domain.event.SelectedFriendEvent;
+import com.ixuea.courses.mymusic.domain.event.SelectedTopicEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.fragment.CommentMoreDialogFragment;
@@ -442,6 +443,11 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
 
                 //跳转到选择话题界面 (startActivity:是父类BaseCommonActivity的)
                 startActivity(SelectTopicActivity.class);
+            } else if (data.endsWith(Constant.MENTION)) {
+                //输入了@
+
+                //跳转到选择好友界面
+                startActivity(SelectFriendActivity.class);
             }
         }
         //保存当前长度
@@ -456,7 +462,7 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onSelectedTopic(SelectedTopEvent event) {
+    public void onSelectedTopic(SelectedTopicEvent event) {
         //添加话题标题
         //(event.getData():获取的是传过来的topic item对象)
         //因为在编辑框中结尾中 输入了# 跳转页面
@@ -466,6 +472,32 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
         //添加结尾字符
         et_content.append("# ");
 
+        //高亮文本
+        highlightText();
+
+    }
+
+    /**
+     * 选择了好友（关注的人）回调
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectedFriend(SelectedFriendEvent event) {
+
+        //添加用户
+        et_content.append(event.getUser().getNickname());
+
+        //对于@ 这种结尾添加空格就行了
+        et_content.append(" ");
+
+        highlightText();
+    }
+
+    /**
+     * 高亮文本
+     */
+    private void highlightText() {
         //设置文本高亮(参数2：编辑框文本：这里是重新获取添加后的内容)
         et_content.setText(StringUtil.processHighlight(getMainActivity(),
                 et_content.getText().toString()));

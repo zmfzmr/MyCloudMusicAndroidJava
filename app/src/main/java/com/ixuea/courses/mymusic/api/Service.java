@@ -210,4 +210,16 @@ public interface Service {
      */
     @GET("v1/topics")
     Observable<ListResponse<Topic>> topics();
+
+    /**
+     * 好友列表(我关注的人)
+     * <p>
+     * <p>
+     * ListResponse<User>: 好友列表(我关注的人) 可能有多个 用集合装起来
+     * 注意：id 后面还有个 /following  通过id查看是谁的好友(我关注的人)
+     *
+     * @return
+     */
+    @GET("v1/users/{id}/following")
+    Observable<ListResponse<User>> friends(@Path("id") String id);
 }

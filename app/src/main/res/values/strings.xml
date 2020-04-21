@@ -11,6 +11,7 @@
     <string name="activity_select_lyric">选择歌词</string>
     <string name="activity_topic_detail">话题详情</string>
     <string name="activity_select_topic">选择话题</string>
+    <string name="activity_select_friend">选择好友</string>
 
     <!--版本文本-->
     <string name="copyright">Copyright © 2019 Ixuea. All Rights Reserved</string>
@@ -134,6 +135,8 @@
     <string name="hint_select_lyric">请选择歌词</string>
     <string name="share_song_name">--%1$s . %2$s</string>
     <string name="error_share_failed">分享失败，请稍后再试!</string>
+
+    <!--评论相关-->
     <string name="hint_comment">人生苦短，我们只做好课!</string>
     <string name="send">发送</string>
     <string name="enter_content">请输入评论内容</string>
@@ -145,6 +148,8 @@
     <string name="reply_comment">\@%1$s：%2$s</string>
     <string name="reply_hint">回复%1$s：</string>
     <string name="copy_success">拷贝成功</string>
+
+    <!--话题-->
     <string name="join_count">%1$d人参与</string>
 
 </resources>

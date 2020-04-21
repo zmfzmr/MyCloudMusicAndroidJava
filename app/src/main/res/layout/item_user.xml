@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_middle"
+    android:gravity="center_vertical">
+
+    <!--圆形头像 (这里头像或者封面的话，统一用iv_banner)-->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_banner"
+        android:layout_width="@dimen/avatar_width_meddle2"
+        android:layout_height="@dimen/avatar_width_meddle2"
+        android:src="@drawable/placeholder" />
+
+    <!--内容容器-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/padding_middle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <!--昵称(这里昵称 或者标题 都统一用 tv_title)-->
+        <TextView
+            android:id="@+id/tv_title"
+            android:text="这是昵称"
+            android:textColor="@color/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <!--详细信息-->
+        <TextView
+            android:id="@+id/tv_info"
+            android:layout_marginTop="@dimen/padding_middle"
+            android:textColor="@color/light_grey"
+            android:text="这是描述"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
