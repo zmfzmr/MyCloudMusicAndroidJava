@@ -62,6 +62,7 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
     private LRecyclerViewAdapter adapterWrapper;
     private String parentId;//设置被恢复评论的id
     private String sheetId;//传递过来的歌单id
+    private int lastContentLength;//上一次的编辑框 文本长度
 
 
     @Override
@@ -403,22 +404,39 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
     /**
      * 文本改变了后调用
      *
+     * 修复了减少文本跳转的bug（比如：123#123   删除123变成 123# 会跳转页面的bug）
+     *
+     * 但是还是有个小问题：比如从中间输入文本也是会跳转的（比如：123#  中间输入 1253# 还是会跳转）
+     * //这里我们就不处理，处理起来还是有点麻烦
      * @param s
      */
     @Override
     public void afterTextChanged(Editable s) {
         //s.toString():输入框中的文本
         LogUtil.d(TAG, "afterTextChanged:" + s.toString());
+        //获取当前文本长度
+        int currentLength = s.toString().length();
 
-        //获取现在的文本
-        String data = s.toString().trim();
+        //如果当前的长度大于原来的长度
+        if (currentLength > lastContentLength) {
+            //新增内容
 
-        if (data.endsWith(Constant.HASH_TAG)) {
-            //结尾输入了#
+            //如果不判断
+            //用户删除到@,#符号也会跳转
 
-            //跳转到选择话题界面 (startActivity:是父类BaseCommonActivity的)
-            startActivity(SelectTopicActivity.class);
+            //获取现在的文本
+            String data = s.toString().trim();
+
+            if (data.endsWith(Constant.HASH_TAG)) {
+                //结尾输入了#
+
+                //跳转到选择话题界面 (startActivity:是父类BaseCommonActivity的)
+                startActivity(SelectTopicActivity.class);
+            }
         }
+        //保存当前长度
+        lastContentLength = currentLength;
+
     }
     //end 文本监听器
 }
