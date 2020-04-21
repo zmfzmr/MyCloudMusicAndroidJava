@@ -10,6 +10,7 @@
     <string name="activity_share_lyric_image">歌词图片</string>
     <string name="activity_select_lyric">选择歌词</string>
     <string name="activity_topic_detail">话题详情</string>
+    <string name="activity_select_topic">选择话题</string>
 
     <!--版本文本-->
     <string name="copyright">Copyright © 2019 Ixuea. All Rights Reserved</string>

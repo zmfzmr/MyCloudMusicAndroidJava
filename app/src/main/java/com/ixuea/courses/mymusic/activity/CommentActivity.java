@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
@@ -40,7 +42,7 @@ import retrofit2.Response;
 /**
  * 评论界面
  */
-public class CommentActivity extends BaseTitleActivity implements CommentAdapterListener {
+public class CommentActivity extends BaseTitleActivity implements CommentAdapterListener, TextWatcher {
 
     private static final String TAG = "CommentActivity";
     /**
@@ -145,6 +147,9 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
 
             }
         });
+
+        //输入框添加文本监听器
+        et_content.addTextChangedListener(this);
     }
 
     /**
@@ -372,4 +377,48 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
                     });
         }
     }
+    //文本监听器
+
+    /**
+     * 文本改变前调用
+     */
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        LogUtil.d(TAG, "beforeTextChanged:" + s + "," + et_content.getText().toString());
+    }
+
+    /**
+     * 文本改变了调用
+     *
+     * @param s
+     * @param start
+     * @param before
+     * @param count
+     */
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        LogUtil.d(TAG, "onTextChanged:" + s + "," + et_content.getText().toString());
+    }
+
+    /**
+     * 文本改变了后调用
+     *
+     * @param s
+     */
+    @Override
+    public void afterTextChanged(Editable s) {
+        //s.toString():输入框中的文本
+        LogUtil.d(TAG, "afterTextChanged:" + s.toString());
+
+        //获取现在的文本
+        String data = s.toString().trim();
+
+        if (data.endsWith(Constant.HASH_TAG)) {
+            //结尾输入了#
+
+            //跳转到选择话题界面 (startActivity:是父类BaseCommonActivity的)
+            startActivity(SelectTopicActivity.class);
+        }
+    }
+    //end 文本监听器
 }
