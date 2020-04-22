@@ -54,6 +54,23 @@ public class User extends BaseModel {
     @SerializedName("city_code")
     private String cityCode;//市编码
 
+    //本地过滤字段
+    /**
+     * 拼音 比如：aixuea
+     */
+    private String pinyin;
+
+    /**
+     * 拼音首字母 比如：axa
+     */
+    private String pinyinFirst;
+
+    /**
+     * 拼音首字母的首字母 比如：首字母axa中 a
+     */
+    private String first;
+    //end 本地过滤字段
+
     public String getPhone() {
         return phone;
     }
@@ -172,6 +189,30 @@ public class User extends BaseModel {
 
     public void setCityCode(String cityCode) {
         this.cityCode = cityCode;
+    }
+
+    public String getPinyin() {
+        return pinyin;
+    }
+
+    public void setPinyin(String pinyin) {
+        this.pinyin = pinyin;
+    }
+
+    public String getPinyinFirst() {
+        return pinyinFirst;
+    }
+
+    public void setPinyinFirst(String pinyinFirst) {
+        this.pinyinFirst = pinyinFirst;
+    }
+
+    public String getFirst() {
+        return first;
+    }
+
+    public void setFirst(String first) {
+        this.first = first;
     }
 
     //辅助方法
