@@ -16,6 +16,18 @@ public class PinyinUtil {
      * 除中文以外字符保存不变
      */
     public static String pinyin(String value) {
+        //false：表示不获取首字母
+        return pinyin(value, false);
+    }
+
+    /**
+     * 全拼
+     * 除中文以外字符保存不变
+     *
+     *
+     * 或者获取首字母
+     */
+    public static String pinyin(String value, boolean isFirst) {
         //创建拼音配置
         //拼音的大小还是小写 音调多音怎么来处理等，这个配置主要是来配置这个
         HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
@@ -60,8 +72,17 @@ public class PinyinUtil {
                     //这里只取第一个[
                     String pinyin = temp[0];
 
-                    sb.append(pinyin);
+                    if (isFirst) {
+                        //如果是true：表示需要添加拼音的首字母
 
+                        //首字母（StringBuilder中添加首字母(截取拼音的首字母)）
+                        //比如：传递进来的是 （爱学啊 ：拼音为：aixuea）
+                        //因为这里思路是：爱学啊-->字符数组遍历-->是中文(ai xue  a)分别截取首字母：axa
+                        sb.append(pinyin.substring(0, 1));
+                    } else {
+                        //全拼
+                        sb.append(pinyin);
+                    }
                 } else {
                     //普通字母
                     //就直接转为字符串
@@ -75,5 +96,14 @@ public class PinyinUtil {
 
         //转换成字符串 return
         return sb.toString();
+    }
+
+    /**
+     * 全拼 首字母
+     * 除中文以外字符保存不变
+     */
+    public static String pinyinFirst(String data) {
+        //true：表示 获取首字母
+        return pinyin(data, true);
     }
 }

@@ -25,7 +25,14 @@ public class PinyinUtilTest {
          *
          */
         assertEquals(PinyinUtil.pinyin("爱学啊"), "aixuea");
+    }
 
-
+    /**
+     * 测试 首字母
+     */
+    @Test
+    public void testPinyinFirst() {
+        //PinyinUtil.pinyinFirst:因为这里思路是：爱学啊-->字符数组遍历-->是中文(ai xue  a)分别截取首字母：axa
+        assertEquals(PinyinUtil.pinyinFirst("爱学啊"), "axa");
     }
 }
