@@ -700,6 +700,10 @@ dependencies {
     // 一个高质量的替代品；他可以很方便的处理ISO8601格式，有比Java 自带api更强大的功能，易用的api;同时相同的功能，该框架能明显缩减代码。
     implementation 'joda-time:joda-time:2.10.5'
 
+    //中文转拼音
+    //https://github.com/belerweb/pinyin4j
+    implementation 'com.belerweb:pinyin4j:2.5.0'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
