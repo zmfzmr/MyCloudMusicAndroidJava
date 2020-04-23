@@ -1,7 +1,11 @@
 package com.ixuea.courses.mymusic.util;
 
+import com.google.common.collect.Ordering;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.UserResult;
+
+import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +47,76 @@ public class DataUtil {
         }
         //记得返回list(此时list user中不仅包含了昵称,还包含了昵称的拼音)
         return datum;
+    }
+
+    /**
+     * 根据用户首字母分组(List<User>排序，遍历并添加标题如A和user对象到list集合中，用UserResult包装起来)
+     * <p>
+     * UserResult:为啥要创建一个对象，后面要返回多个数据，所以用result包装下
+     * <p>
+     * 添加
+     * A (标题)
+     * user(包含有用户昵称和拼音)
+     * user
+     * B(标题)
+     * user
+     * user
+     * 这种形式
+     * 添加到集合list<Object>上,并用UserResult包装到里面
+     */
+    public static UserResult processUser(List<User> datum) {
+
+        //创建结果数组(这里用Object：要添加不同的类型)
+        List<Object> results = new ArrayList<>();
+
+        //按照第一个字母排序
+        //这里使用的Guava提供的排序方法(需要添加依赖，google给我们封装的)
+        //也可以使用Java的排序方法
+        Ordering<User> byFirst = new Ordering<User>() {
+            @Override
+            public int compare(@NullableDecl User left, @NullableDecl User right) {
+                //根据第一个字母排序(这里是字母升序a-z)
+                //如果是降序则把left和right倒过来就行了
+                return left.getFirst().compareTo(right.getFirst());
+            }
+        };
+
+        //按照拼音首字母的第一个字母分组
+        //这些操作都可以使用响应式编程方法
+        //这里为了简单使用了最普通的方法
+        //因为只要明白了原理
+        //使用其他方法就是语法不同而已
+
+        //排序(//immutable:表示返回的数组不可变，不可变可以理解为在一定程度是是更高效的)
+        datum = byFirst.immutableSortedCopy(datum);
+
+        //循环所有数据
+
+        //上一次用户
+        User lastUser = null;
+
+        for (User data :
+                datum) {
+            if (lastUser != null && lastUser.getFirst().endsWith(data.getFirst())) {
+                //相等
+                //上一次用户的首字母，是否等于当前用户的首字母
+                //这个用户昵称(比如:爱学啊smile1 和 爱学啊smile2 的首字母 都是a)，
+                // 所以就不添加大写，直接添加用户user到集合就行了
+            } else {
+                //添加标题(就是把首字母大写添加 到results集合list里面)
+                String letter = data.getFirst().toUpperCase();
+
+                //添加标题
+                results.add(letter);
+            }
+
+            //添加用户(添加用户User对象)
+            results.add(data);
+            //赋值给上一个用户(记得赋值给上一次用户)
+            lastUser = data;
+        }
+        //包装到UserResult对象上
+        return new UserResult(results);
     }
 
     /**

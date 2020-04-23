@@ -704,6 +704,15 @@ dependencies {
     //https://github.com/belerweb/pinyin4j
     implementation 'com.belerweb:pinyin4j:2.5.0'
 
+    //Google实现的Java核心工具类
+    //相对于Apache的工具包来说
+    //Apache更多的用在Java Web项目
+    //而Guava在Android中用的更多
+    //具体的性能这里就不比较了
+    //大家感兴趣可以搜索下
+    //https://github.com/google/guava
+    implementation 'com.google.guava:guava:28.1-android'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

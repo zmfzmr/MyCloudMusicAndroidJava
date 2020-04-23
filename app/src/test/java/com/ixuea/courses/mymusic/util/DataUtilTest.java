@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.util;
 
 import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.UserResult;
 
 import org.junit.Test;
 
@@ -67,5 +68,23 @@ public class DataUtilTest {
 
         assertEquals(user.getFirst(), "a");
 
+    }
+
+    /**
+     * 测试 根据首字母分组
+     */
+    @Test
+    public void testProcessUser() {
+        //获取测试数据
+        List<User> users = DataUtil.getTestUserData();
+        //获取拼音(把list中user都设置拼音)
+        users = DataUtil.processUserPinyin(users);
+        //分组(UserResult:包含了list（分组数据的集合）)
+        UserResult userResult = DataUtil.processUser(users);
+        //判断总数据数量
+        List<Object> datum = userResult.getDatum();
+        //3组数据+2个标题
+        assertEquals(userResult.getDatum().size(), 152);
+        //TODO 更多测试条件
     }
 }
