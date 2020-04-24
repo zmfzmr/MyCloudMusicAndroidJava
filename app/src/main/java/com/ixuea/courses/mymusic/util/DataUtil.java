@@ -77,6 +77,10 @@ public class DataUtil {
             public int compare(@NullableDecl User left, @NullableDecl User right) {
                 //根据第一个字母排序(这里是字母升序a-z)
                 //如果是降序则把left和right倒过来就行了
+
+                //这种情况是：用户昵称为大写，比如：ZMF，首字母为Z
+//                return left.getFirst().toLowerCase().compareTo(right.getFirst().toLowerCase());
+                //默认是这种
                 return left.getFirst().compareTo(right.getFirst());
             }
         };
@@ -155,5 +159,49 @@ public class DataUtil {
         }
         //List<User>  user中包含了昵称
         return results;
+    }
+
+    /**
+     * 过滤用户数据
+     *
+     * @param datum
+     * @param query
+     */
+    public static List<User> filterUser(List<User> datum, String query) {
+        List<User> results = new ArrayList<>();
+        for (User data : datum) {
+            //虽然在isMatchUser中调用toLowercase转换成小写，但是并没有设置到对象的成员变量上，
+            // 所以对象的值还是没有改变；
+            //如果需要改变调用set方法设置下就行
+//            data.setNickname(data.getNickname().toLowerCase());
+            if (isMatchUser(data, query)) {
+                //看这个用户User是否匹配，匹配就添加进去
+                results.add(data);
+            }
+        }
+        return results;
+    }
+
+    /**
+     * 用户是否匹配给定的关键字
+     *
+     * @param data
+     * @param query
+     * @return
+     */
+    private static boolean isMatchUser(User data, String query) {
+        //nickname是否包含搜索的字符串
+        //全拼是否包含
+        //首字母是否包含
+
+        //如果需要更多的条件可以在加
+        //条件越多
+        //就更容易搜索到
+        //但结果就越多
+
+        //data.getNickname().toLowerCase():这个昵称中 有大写字母 会转换成小写
+        return data.getNickname().toLowerCase().contains(query) ||
+                data.getPinyin().contains(query) ||
+                data.getPinyinFirst().contains(query);
     }
 }

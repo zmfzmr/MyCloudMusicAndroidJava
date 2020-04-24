@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -37,6 +38,7 @@ public class SelectFriendActivity extends BaseTitleActivity {
      * 用户数据处理结果(里面包含了分组的集合)
      */
     private UserResult userResult;
+    private List<User> datum;//用户数据，这个集合list中user已经有了拼音
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,7 @@ public class SelectFriendActivity extends BaseTitleActivity {
 //                        adapter.replaceData(data.getData());
 
                         //获取( 好友列表(我关注的人) 集合)
-                        List<User> datum = data.getData();
+                        datum = data.getData();
                         //处理拼音
                         datum = DataUtil.processUserPinyin(datum);
                         //设置数据
@@ -201,5 +203,25 @@ public class SelectFriendActivity extends BaseTitleActivity {
      */
     private void onSearchTextChanged(String query) {
         LogUtil.d(TAG, "onSearchTextChanged");
+
+        filterData(query);
+    }
+
+    /**
+     * 过滤数据(本地数据过滤(这个数据已经从网络请求下来后经过添加过拼音进User对象的))
+     */
+    private void filterData(String query) {
+        if (TextUtils.isEmpty(query)) {
+            //没有关键字
+
+            //显示完整数据
+            setData(datum);//这个时候的datum没有分组
+        } else {
+            //关键字要转成小写
+            List<User> data = DataUtil.filterUser(datum, query.toLowerCase());
+
+            //把过滤出来的数据 分组并设置到adapter中
+            setData(data);//这个data是：List<User>
+        }
     }
 }
