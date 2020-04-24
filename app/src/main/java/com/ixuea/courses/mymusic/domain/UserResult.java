@@ -8,6 +8,7 @@ import java.util.List;
 public class UserResult {
     /**
      * 用来在列表显示的
+     * 注意:是Object类型
      */
     private List<Object> datum;
 

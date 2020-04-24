@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="@color/divider_color"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/title_height"
-    android:layout_marginLeft="@dimen/padding_middle"
-    android:layout_marginRight="@dimen/padding_middle"
+    android:layout_height="@dimen/title_height_small"
+    android:paddingLeft="@dimen/padding_middle"
+    android:paddingRight="@dimen/padding_middle"
     android:gravity="center_vertical">
 
     <!--tools:预览时可见，实际运行时看不见的-->

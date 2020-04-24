@@ -92,6 +92,11 @@ public class Constant {
     public static final int TYPE_SONG = 2;
 
     /**
+     * 用户
+     */
+    public static final int TYPE_USER = 3;
+
+    /**
      * 播放进度通知
      */
     public static final int MESSAGE_PROGRESS = 0;

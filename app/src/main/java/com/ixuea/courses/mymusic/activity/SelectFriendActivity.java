@@ -1,18 +1,17 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.os.Bundle;
-import android.view.View;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.FriendAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.User;
-import com.ixuea.courses.mymusic.domain.event.SelectedFriendEvent;
+import com.ixuea.courses.mymusic.domain.UserResult;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.DataUtil;
 
-import org.greenrobot.eventbus.EventBus;
+import java.util.List;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +28,10 @@ public class SelectFriendActivity extends BaseTitleActivity {
     @BindView(R.id.rv)
     RecyclerView rv;
     private FriendAdapter adapter;
+    /**
+     * 用户数据处理结果(里面包含了分组的集合)
+     */
+    private UserResult userResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,8 @@ public class SelectFriendActivity extends BaseTitleActivity {
         super.initDatum();
 
         //创建适配器
-        adapter = new FriendAdapter(R.layout.item_user);
+//        adapter = new FriendAdapter(R.layout.item_user);
+        adapter = new FriendAdapter(getMainActivity());
         //设置适配器
         rv.setAdapter(adapter);
 
@@ -66,20 +70,20 @@ public class SelectFriendActivity extends BaseTitleActivity {
     protected void initListeners() {
         super.initListeners();
 
-        //设置item监听器
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                //获取点击的数据
-                User data = (User) adapter.getItem(position);
-
-                //发送数据
-                EventBus.getDefault().post(new SelectedFriendEvent(data));
-
-                //关闭界面
-                finish();
-            }
-        });
+//        //设置item监听器
+//        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                //获取点击的数据
+//                User data = (User) adapter.getItem(position);
+//
+//                //发送数据
+//                EventBus.getDefault().post(new SelectedFriendEvent(data));
+//
+//                //关闭界面
+//                finish();
+//            }
+//        });
     }
 
     private void fetchData() {
@@ -90,8 +94,28 @@ public class SelectFriendActivity extends BaseTitleActivity {
                     @Override
                     public void onSucceeded(ListResponse<User> data) {
                         //设置数据
-                        adapter.replaceData(data.getData());
+//                        adapter.replaceData(data.getData());
+
+                        //获取( 好友列表(我关注的人) 集合)
+                        List<User> datum = data.getData();
+                        //处理拼音
+                        datum = DataUtil.processUserPinyin(datum);
+                        //设置数据
+                        setData(datum);
                     }
                 });
+    }
+
+    /**
+     * 设置数据
+     *
+     * @param datum
+     */
+    private void setData(List<User> datum) {
+        //处理数据(分组) (processUser:方法里面是根据拼音来分组的)
+        userResult = DataUtil.processUser(datum);
+
+        //设置到适配器
+        adapter.setDatum(userResult.getDatum());
     }
 }

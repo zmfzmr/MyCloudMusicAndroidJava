@@ -37,7 +37,8 @@
     <!--菜单相关 抽屉布局每个item的高-->
     <dimen name="menu_item_height">45dp</dimen>
     <!--Item高度 （这里用到了RecyclerView item中）-->
-    <dimen name="item_title_height">50dp</dimen>
+    <dimen name="title_height">50dp</dimen>
+    <dimen name="title_height_small">30dp</dimen>
     <dimen name="song_banner_width">90dp</dimen>
 
     <!--发现界面头部背景高度-->

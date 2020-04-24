@@ -65,23 +65,23 @@
         <!--播放暂停按钮 注意：这里的按钮，用的是ImageView-->
         <ImageView
             android:id="@+id/iv_play_small_control"
-            android:layout_width="@dimen/item_title_height"
-            android:layout_height="@dimen/item_title_height"
+            android:layout_width="@dimen/title_height"
+            android:layout_height="@dimen/title_height"
             android:scaleType="centerCrop"
             android:src="@drawable/selector_play_small" />
 
         <!--下一曲-->
         <ImageView
             android:id="@+id/iv_next_small_control"
-            android:layout_width="@dimen/item_title_height"
-            android:layout_height="@dimen/item_title_height"
+            android:layout_width="@dimen/title_height"
+            android:layout_height="@dimen/title_height"
             android:src="@drawable/ic_music_next_small" />
 
         <!--播放列表按钮-->
         <ImageView
             android:id="@+id/iv_list_small_control"
-            android:layout_width="@dimen/item_title_height"
-            android:layout_height="@dimen/item_title_height"
+            android:layout_width="@dimen/title_height"
+            android:layout_height="@dimen/title_height"
             android:src="@drawable/ic_music_list_small" />
 
     </LinearLayout>
