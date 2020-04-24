@@ -151,5 +151,7 @@
 
     <!--话题-->
     <string name="join_count">%1$d人参与</string>
+    <!--好友-->
+    <string name="hint_search_user">昵称，拼音，首字母</string>
 
 </resources>

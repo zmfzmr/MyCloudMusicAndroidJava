@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--搜索按钮
+        android:orderInCategory="100" 配置顺序，因为就一个，所以配不配置影响不大
+
+        androidx.appcompat.widget.SearchView:导入的是androidx里面的包
+
+        actionViewClass：搜索逻辑实现类(搜索的这个效果是通过这个类来实现的)
+        当然也可以自定义，这里就不在讲解
+    -->
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search"
+        android:orderInCategory="100"
+        android:title="@string/search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always" />
+
+</menu>
