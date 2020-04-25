@@ -713,6 +713,10 @@ dependencies {
     //https://github.com/google/guava
     implementation 'com.google.guava:guava:28.1-android'
 
+    //类似微信联系人界面右侧字母索引
+    //https://github.com/Vanish136/IndexBar
+    implementation 'com.lwkandroid:IndexBar:1.0.1'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

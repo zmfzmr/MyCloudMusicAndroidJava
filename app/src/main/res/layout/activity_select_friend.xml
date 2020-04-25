@@ -11,10 +11,10 @@
     <include layout="@layout/tool_bar" />
 
     <!--内容容器-->
-    <LinearLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!--列表控件-->
         <androidx.recyclerview.widget.RecyclerView
@@ -22,6 +22,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </LinearLayout>
+        <!--字母索引
+            属性解释在官方文档：https://github.com/Vanish136/IndexBar
+
+            bg_color_normal:正常(默认)颜色
+         -->
+        <com.lwkandroid.widget.indexbar.IndexBar
+            android:id="@+id/ib"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            app:bg_color_normal="@color/transparent"
+            app:bg_color_pressed="#10000000"
+            app:text_color_normal="#3c3c3c"
+            app:text_color_pressed="#000093"
+            app:text_size_normal="14sp"
+            app:text_size_pressed="16sp" />
+
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

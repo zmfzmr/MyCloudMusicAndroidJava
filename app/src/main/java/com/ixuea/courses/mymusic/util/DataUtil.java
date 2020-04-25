@@ -69,6 +69,12 @@ public class DataUtil {
         //创建结果数组(这里用Object：要添加不同的类型)
         List<Object> results = new ArrayList<>();
 
+        //创建字母列表
+        ArrayList<String> letters = new ArrayList<>();
+
+        //字母索引列表
+        ArrayList<Integer> indexes = new ArrayList<>();
+
         //按照第一个字母排序
         //这里使用的Guava提供的排序方法(需要添加依赖，google给我们封装的)
         //也可以使用Java的排序方法
@@ -107,11 +113,31 @@ public class DataUtil {
                 //这个用户昵称(比如:爱学啊smile1 和 爱学啊smile2 的首字母 都是a)，
                 // 所以就不添加大写，直接添加用户user到集合就行了
             } else {
+                /*
+                   indexs  results  letters
+       (开始前面添加为0)0     Z       Z
+                            user
+                     2       A       A
+                            user
+
+            可以看出,第一次索引组为0,对应results组的第一个字母Z；
+                    第二次索引组添加2(前面results添加了user所以为size=2),对应对应results组的字母A(这个字母A在results中的索引也是为2)
+
+                    注意：一定要在results前 使用indexs添加(因为在前面添加，刚好results结果为0, 0索引刚刚对应下面results添加的字母Z(Z在results所以为0))
+                         //否则如果在后面添加的话，这个时候results已经为1了，这个时候indexs添加1, 1就不是对应results中的0索引(也就是第一个)
+                 */
+
                 //添加标题(就是把首字母大写添加 到results集合list里面)
                 String letter = data.getFirst().toUpperCase();
 
-                //添加标题
+                //添加字母索引
+                indexes.add(results.size());
+
+                //添加标题ô
                 results.add(letter);
+
+                //添加字母
+                letters.add(letter);
             }
 
             //添加用户(添加用户User对象)
@@ -119,8 +145,17 @@ public class DataUtil {
             //赋值给上一个用户(记得赋值给上一次用户)
             lastUser = data;
         }
+
+        //字母列表转为数组
+        String[] letterArray = letters.toArray(new String[letters.size()]);
+
+        //字母索引转为数组
+        Integer[] indexArray = indexes.toArray(new Integer[indexes.size()]);
+        //参数1：结果数据(包含 A user user B等数据) 2：字母数组(包含A B C ) 3：索引数据(0(对应results中第一个) 2 5)
+        return new UserResult(results, letterArray, indexArray);
+
         //包装到UserResult对象上
-        return new UserResult(results);
+//        return new UserResult(results);
     }
 
     /**

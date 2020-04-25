@@ -14,6 +14,7 @@ import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.DataUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.lwkandroid.widget.indexbar.IndexBar;
 
 import java.util.List;
 
@@ -26,13 +27,19 @@ import butterknife.BindView;
 /**
  * 选择好友界面
  */
-public class SelectFriendActivity extends BaseTitleActivity {
+public class SelectFriendActivity extends BaseTitleActivity implements IndexBar.OnIndexLetterChangedListener {
     private String TAG = "SelectFriendActivity";
     /**
      * 列表控件
      */
     @BindView(R.id.rv)
     RecyclerView rv;
+    /**
+     * 字母索引控件
+     */
+    @BindView(R.id.ib)
+    IndexBar ib;
+
     private FriendAdapter adapter;
     /**
      * 用户数据处理结果(里面包含了分组的集合)
@@ -56,6 +63,9 @@ public class SelectFriendActivity extends BaseTitleActivity {
         //分割线
         DividerItemDecoration decoration = new DividerItemDecoration(getMainActivity(), DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(decoration);
+
+        //索引默认为空(因为默认会有A到Z的字符，设置为null（传入空字符串数组）)
+        ib.setTextArray(new String[]{});
 
     }
 
@@ -91,6 +101,9 @@ public class SelectFriendActivity extends BaseTitleActivity {
 //                finish();
 //            }
 //        });
+
+        //添加字母索引监听器
+        ib.setOnIndexLetterChangedListener(this);
     }
 
     private void fetchData() {
@@ -115,7 +128,7 @@ public class SelectFriendActivity extends BaseTitleActivity {
 
     /**
      * 设置数据
-     *
+     * (第一次进来网络请求和过滤数据的时候用到)
      * @param datum
      */
     private void setData(List<User> datum) {
@@ -124,6 +137,9 @@ public class SelectFriendActivity extends BaseTitleActivity {
 
         //设置到适配器
         adapter.setDatum(userResult.getDatum());
+
+        //设置索引(这里面获取的是 字母数组(比如：[A B C])
+        ib.setTextArray(userResult.getLetters());
     }
 
     /**
@@ -223,5 +239,27 @@ public class SelectFriendActivity extends BaseTitleActivity {
             //把过滤出来的数据 分组并设置到adapter中
             setData(data);//这个data是：List<User>
         }
+    }
+
+    /**
+     * 手指按下和抬起会回调这里
+     *
+     * @param touched 是否按下了
+     */
+    @Override
+    public void onTouched(boolean touched) {
+        LogUtil.d(TAG, "onTouched:" + touched);
+    }
+
+    /**
+     * 索引字母改变时会回调这里
+     *
+     * @param indexChar 字母
+     * @param index     索引
+     * @param y         按下位置垂直距离
+     */
+    @Override
+    public void onLetterChanged(CharSequence indexChar, int index, float y) {
+        LogUtil.d(TAG, "onLetterChanged:" + indexChar + "," + index + "," + y);
     }
 }
