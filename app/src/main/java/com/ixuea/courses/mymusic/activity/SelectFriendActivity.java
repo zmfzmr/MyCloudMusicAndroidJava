@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.FriendAdapter;
@@ -39,6 +41,11 @@ public class SelectFriendActivity extends BaseTitleActivity implements IndexBar.
      */
     @BindView(R.id.ib)
     IndexBar ib;
+    /**
+     * 索引提示控件
+     */
+    @BindView(R.id.tv_index)
+    TextView tv_index;
 
     private FriendAdapter adapter;
     /**
@@ -46,6 +53,7 @@ public class SelectFriendActivity extends BaseTitleActivity implements IndexBar.
      */
     private UserResult userResult;
     private List<User> datum;//用户数据，这个集合list中user已经有了拼音
+    private LinearLayoutManager layoutManager;//布局管理器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +66,7 @@ public class SelectFriendActivity extends BaseTitleActivity implements IndexBar.
         super.initView();
         //设置尺寸固定
         rv.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
+        layoutManager = new LinearLayoutManager(getMainActivity());
         rv.setLayoutManager(layoutManager);
         //分割线
         DividerItemDecoration decoration = new DividerItemDecoration(getMainActivity(), DividerItemDecoration.VERTICAL);
@@ -117,7 +125,11 @@ public class SelectFriendActivity extends BaseTitleActivity implements IndexBar.
 //                        adapter.replaceData(data.getData());
 
                         //获取( 好友列表(我关注的人) 集合)
-                        datum = data.getData();
+//                        datum = data.getData();
+
+                        //上面的那个是网络数据，我们这里自己创建数据来测试
+                        datum = DataUtil.getTestUserData();
+
                         //处理拼音
                         datum = DataUtil.processUserPinyin(datum);
                         //设置数据
@@ -244,11 +256,24 @@ public class SelectFriendActivity extends BaseTitleActivity implements IndexBar.
     /**
      * 手指按下和抬起会回调这里
      *
-     * @param touched 是否按下了
+     * @param touched 是否按下了   如果手抬起来再调用一次onTouched，并且手抬起来后，touched为false
+     *
+     *                总结：手指按下和抬起都会调用
      */
     @Override
     public void onTouched(boolean touched) {
         LogUtil.d(TAG, "onTouched:" + touched);
+        if (touched) {
+            //按下了
+
+            //显示索引
+            tv_index.setVisibility(View.VISIBLE);
+        } else {
+            //没有按下
+
+            //隐藏索引
+            tv_index.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -257,9 +282,20 @@ public class SelectFriendActivity extends BaseTitleActivity implements IndexBar.
      * @param indexChar 字母
      * @param index     索引
      * @param y         按下位置垂直距离
+     *
+     * 比如IndexBar中设置进去的字母数组为：[A,B,C]
+     *     点击第一个A，索引index为0，通过索引0，去UserResult中Indexs中找到对应的索引
+     *                  注意：这里是通过(索引index)去Indexs中找(对应索引)
      */
     @Override
     public void onLetterChanged(CharSequence indexChar, int index, float y) {
         LogUtil.d(TAG, "onLetterChanged:" + indexChar + "," + index + "," + y);
+        //让列表滚动到相应的位置
+        //参数1：滚动到指定索引的item 参数2：偏移，这里写0表示不偏移
+        //注意：滚动位置的，用哪个布局管理器，就用哪个滚动
+        layoutManager.scrollToPositionWithOffset(userResult.getIndexes()[index], 0);
+
+        //显示索引(indexChar:参数中回调的)
+        tv_index.setText(indexChar);
     }
 }

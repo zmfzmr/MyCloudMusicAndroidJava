@@ -39,6 +39,19 @@
             app:text_size_normal="14sp"
             app:text_size_pressed="16sp" />
 
+        <!--提示-->
+        <TextView
+            android:id="@+id/tv_index"
+            android:layout_width="@dimen/index_title_width"
+            android:layout_height="@dimen/index_title_width"
+            android:layout_centerInParent="true"
+            android:background="@drawable/shape_index_title"
+            android:gravity="center"
+            android:text="A"
+            android:textColor="@color/white"
+            android:textSize="35sp"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

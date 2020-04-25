@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--圆角-->
+    <corners android:radius="@dimen/radius_small" />
+    <!--填充颜色
+        命名：表示在黑色的上面有88的透明度
+    -->
+    <solid android:color="@color/transparent_88_black" />
+</shape>

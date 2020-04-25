@@ -49,4 +49,6 @@
     <color name="lyric_color4">#A65EEA</color>
     <!--高亮文本-->
     <color name="text_highlight">#3385ff</color>
+    <!--索引提示-->
+    <color name="transparent_88_black">#88000000</color>
 </resources>
