@@ -23,6 +23,7 @@ import com.ixuea.courses.mymusic.domain.event.SelectedFriendEvent;
 import com.ixuea.courses.mymusic.domain.event.SelectedTopicEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.domain.response.Meta;
 import com.ixuea.courses.mymusic.fragment.CommentMoreDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.listener.OnItemClickListener;
@@ -47,6 +48,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import retrofit2.Response;
+
+import static com.ixuea.courses.mymusic.util.Constant.SHEET_ID;
 
 /**
  * 评论界面
@@ -74,6 +77,7 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
     private String parentId;//设置被恢复评论的id
     private String sheetId;//传递过来的歌单id
     private int lastContentLength;//上一次的编辑框 文本长度
+    private Meta pageMeta;//分页模型对象
 
 
     @Override
@@ -110,7 +114,7 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
         EventBus.getDefault().register(this);
 
         //获取传递的数据（这里是歌单id）
-        sheetId = extraString(Constant.SHEET_ID);
+        sheetId = extraString(SHEET_ID);
 
         adapter = new CommentAdapter(getMainActivity());
 
@@ -230,10 +234,33 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
 
     /**
      * 请求数据
+     * http://dev-my-cloud-music-api-rails.ixuea.com/v1/comments?SHEET_ID=1&page=1&order=10
+     *
+     * SHEET_ID=1&page=1&order=10
+     * SHEET_ID 歌单id
+     * page 页数
+     * order 最热评论(点赞数最多) 只要传递了这个参数，返回的json评论数据就是点赞数 多到少排序
+     *
+     * 这里请求成功后，调用了loadMore，再次进行网络请求
+     * http://dev-my-cloud-music-api-rails.ixuea.com/v1/comments?SHEET_ID=1&page=1
+     * 这里是请求回来的数据在 原来（上一次请求的数据中）再次添加（没有情况） adapter.addDatum(data.getData());
+     * loadMore请求回来的数据并没有按照最热评论(点赞数多少排序)，这里是默认排序
+     *
+     * 总结：fetchData里本来请求的是10条数据，在里面调用loadMore方法请求10条数据后
+     * 所以总的数据是20条
+     *
      */
     private void fetchData() {
         //查询参数
-        HashMap<String, String> query = new HashMap<>();
+        HashMap<String, String> query = getQuery();
+
+        //添加最热查询参数
+        //http://dev-my-cloud-music-api-rails.ixuea.com/v1/comments?page=1&order=10
+        //这里的page没有添加,不过不影响(因为总的数据为10条)
+        //后面添加参数order=10 表示按最热评论(点赞数按多到少排序)
+        //如果没有添加后面的order=10参数，那么就是默认排序
+        query.put(Constant.ORDER, String.valueOf(Constant.ORDER_HOT));
+
         //请求最新评论列表
         Api.getInstance()
                 .comments(query)
@@ -243,6 +270,54 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
                         LogUtil.d(TAG, "data size:" + data.getData().size());
                         //设置数据
                         adapter.setDatum(data.getData());
+                        //告诉控件刷新完成了(参数2：默认刷新的数据：10条)
+//                        rv.refreshComplete(Constant.DEFAULT_PAGE_SIZE);
+
+                        //加载更多评论
+                        loadMore();
+                    }
+                });
+    }
+
+    /**
+     * 获取查询参数
+     *
+     * @return
+     */
+    private HashMap<String, String> getQuery() {
+        //创建map
+        HashMap<String, String> query = new HashMap<>();
+
+        //添加歌单id
+        if (StringUtils.isNotBlank(sheetId)) {
+            //这个SHEET_ID=1  是我们和服务器协商好要传递的参数
+            query.put(SHEET_ID, sheetId);
+        }
+        return query;
+    }
+
+    /**
+     * 加载更多评论
+     * http://dev-my-cloud-music-api-rails.ixuea.com/v1/comments?SHEET_ID=1&page=1
+     */
+    private void loadMore() {
+        //查询参数
+        HashMap<String, String> query = getQuery();
+        //添加分页查询参数
+        query.put(Constant.PAGE, String.valueOf(Meta.nextPage(pageMeta)));
+        //最新评论(因为没有添加最新那个参数：order=10；所以默认就是最新的)
+        Api.getInstance()
+                .comments(query)//此时中参数包括了SHEET_ID和page这2个字段参数
+                .subscribe(new HttpObserver<ListResponse<Comment>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Comment> data) {
+                        //保存分页参数
+                        pageMeta = data.getMeta();
+
+                        //添加数据到适配器
+                        //因为这里是上拉加载更多，是不能包原来的数据清空的，所以用addDatum
+                        adapter.addDatum(data.getData());
+
                         //告诉控件刷新完成了(参数2：默认刷新的数据：10条)
                         rv.refreshComplete(Constant.DEFAULT_PAGE_SIZE);
                     }
@@ -326,7 +401,7 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
         //意图：就是你要干什么
         Intent intent = new Intent(activity, CommentActivity.class);
         //传递歌单id
-        intent.putExtra(Constant.SHEET_ID, sheetId);
+        intent.putExtra(SHEET_ID, sheetId);
         //启动界面
         activity.startActivity(intent);
     }
@@ -531,18 +606,73 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
 
     /**
      * 下拉刷新回调
+     *  下拉刷新的时候记得置为null(让数据回到原来的1)
+     *  query.put(Constant.PAGE,String.valueOf(Meta.nextPage(pageMeta)));
+     *  也就是这里pageMeta为null，那么Meta.nextPage(pageMeta)的值为：默认返回1
+     *  那么query添加键值对：page = 1
      */
     @Override
     public void onRefresh() {
         LogUtil.d(TAG, "onRefresh");
         fetchData();
+
+        //刷新的时候记得置为null(让数据回到原来的1 page = 1)
+        pageMeta = null;
     }
 
     /**
      * 上拉加载更多回调方法
+     *
+     *     "meta": {
+     *         "current_page": 1,
+     *         "next_page": 2,
+     *         "prev_page": null,
+     *         "total_pages": 11,
+     *         "total_count": 102
+     *     }
+     *
+     * 因为返回的Meta对象中有个current_page，当我们每次进入网络请求的时候，
+     * 我们会在地址：比如http://dev-my-cloud-music-api-rails.ixuea.com/v1/comments?SHEET_ID=1&page=1
+     * 字段中的page +1
+     * 然后第二次进行网络请求时地址变为http://dev-my-cloud-music-api-rails.ixuea.com/v1/comments?SHEET_ID=1&page=2
+     * 那么返回的对象Meta中
+     *
+     *     "meta": {
+     *          "current_page": 2,
+     *          "next_page": 3,
+     *          "prev_page": 1,
+     *          "total_pages": 11,
+     *          "total_count": 102
+     *          },
+     * 这个current_page就会变为2
+     * 那么我们只要判断请求回来的 current_page(当前页) < total_pages(总页数) 说明还可以加载下一页
+     * 否则加载完成了
      */
     @Override
     public void onLoadMore() {
         LogUtil.d(TAG, "onLoadMore");
+        //第一次 pageMeta == null，进入到if里面
+        //第二次 pageMeta不等于null，但是pageMeta.getCurrent_page() < pageMeta.getTotal_pages()为true，进入if里面
+        if (pageMeta == null || pageMeta.getCurrent_page() < pageMeta.getTotal_pages()) {
+            //还有数据
+
+            //加载更多
+            loadMore();
+
+            //告诉框架有更多数据了(因为如果有新的数据进来了，直接调用loadMore()方法进行下拉刷新的话，是没有数据的；
+            // 但是上拉加载更多的时候是有数据的；所以这里通知LRecyclerView控件)
+            /*
+              数据
+              1 2 3 4  比如第一次加载2条也就是1 2(第一页的数据 1 2)，此时有数据0进来
+              变成了0 1 2 3 4  此时可能获取的是3 4(当然不一定是3 4，只是举个例子)
+              //当然上面的表述也不一定准确，最好还是设置下，通知有更多的数据加载进来了
+             */
+            rv.setNoMore(false);
+        } else {
+            //没有数据了
+
+            //告诉框架没有更多数据了
+            rv.setNoMore(true);
+        }
     }
 }

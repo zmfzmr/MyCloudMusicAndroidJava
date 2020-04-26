@@ -194,4 +194,17 @@ public class Constant {
      * 列表接口默认返回数量(默认10条数据) 评论列表下拉刷新默认10条
      */
     public static final int DEFAULT_PAGE_SIZE = 10;
+
+    /**
+     * 评论排序字段
+     */
+    public static final String ORDER = "order";
+    /**
+     * 评论排序 最热
+     */
+    public static final int ORDER_HOT = 10;
+    /**
+     * 分页参数字段
+     */
+    public static final String PAGE = "page";
 }

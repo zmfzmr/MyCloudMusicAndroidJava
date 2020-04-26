@@ -165,6 +165,14 @@ public interface Service {
      * @param data
      * @return 注意: @QueryMap是个注解，前面要有@符号
      * @QueryMap: 就是放一些参数进这map里面  这里key和value都是String类型
+     * 原来的地址：
+     * http://dev-my-cloud-music-api-rails.ixuea.com/v1/comments
+     *
+     * order=10 以键值对的方式添加到Map集合里面变成如下
+     * http://dev-my-cloud-music-api-rails.ixuea.com/v1/comments?order=10
+     *
+     * 当然也可以用列表(@Field("sheet_id") String id)这种方式
+     * //但是我们这里是查询，后面需要不断的更改参数，所以用@QueryMap 在这Map在里面添加参数即可
      */
     @GET("v1/comments")
     Observable<ListResponse<Comment>> comments(@QueryMap Map<String, String> data);
