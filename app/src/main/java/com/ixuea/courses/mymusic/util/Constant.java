@@ -190,4 +190,8 @@ public class Constant {
      * HASH_TAG 开头（以#开头）
      */
     public static final String HASH_TAG = "#";
+    /**
+     * 列表接口默认返回数量(默认10条数据) 评论列表下拉刷新默认10条
+     */
+    public static final int DEFAULT_PAGE_SIZE = 10;
 }

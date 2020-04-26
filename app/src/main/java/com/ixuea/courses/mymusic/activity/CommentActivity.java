@@ -8,6 +8,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
+import com.github.jdsjlzx.interfaces.OnRefreshListener;
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.BaseRecyclerViewAdapter;
@@ -48,16 +51,18 @@ import retrofit2.Response;
 /**
  * 评论界面
  */
-public class CommentActivity extends BaseTitleActivity implements CommentAdapterListener, TextWatcher {
+public class CommentActivity extends BaseTitleActivity implements CommentAdapterListener, TextWatcher, OnRefreshListener, OnLoadMoreListener {
 
     private static final String TAG = "CommentActivity";
     /**
      * 列表控件
      * 布局中用的是LRecyclerView extends RecyclerView
      * RecyclerView：父类
+     *
+     * 改：用LRecyclerView，用到了里面的方法
      */
     @BindView(R.id.rv)
-    RecyclerView rv;
+    LRecyclerView rv;
 
     /**
      * 输入框
@@ -162,6 +167,12 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
 
         //输入框添加文本监听器
         et_content.addTextChangedListener(this);
+
+        //设置列表下拉刷新监听器
+        rv.setOnRefreshListener(this);
+
+        //设置列表上拉加载更多监听器
+        rv.setOnLoadMoreListener(this);
     }
 
     /**
@@ -232,6 +243,8 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
                         LogUtil.d(TAG, "data size:" + data.getData().size());
                         //设置数据
                         adapter.setDatum(data.getData());
+                        //告诉控件刷新完成了(参数2：默认刷新的数据：10条)
+                        rv.refreshComplete(Constant.DEFAULT_PAGE_SIZE);
                     }
                 });
     }
@@ -514,5 +527,22 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
         //取消注册发布订阅框架
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    /**
+     * 下拉刷新回调
+     */
+    @Override
+    public void onRefresh() {
+        LogUtil.d(TAG, "onRefresh");
+        fetchData();
+    }
+
+    /**
+     * 上拉加载更多回调方法
+     */
+    @Override
+    public void onLoadMore() {
+        LogUtil.d(TAG, "onLoadMore");
     }
 }
