@@ -38,6 +38,7 @@ public class DataUtilTest {
         //官方文档中有多音配置文件方法
 
         //数据中：我的云音乐1 类似的数据有50个，这里获取其中一个
+        //这里的索引40，其实是获取第41个用户，所以是wodeyunyinle40(这个索引为40的User对象拼音)
         User user = results.get(40);
         //因为第40条的昵称是：我的云音乐40；在前面的DataUtil.processUserPinyin(users)处理的时候，
         // 里面调用PinyinUtil.pinyin等方法处理的时候，会遍历每一个字符，因为40不是中文，所以没有转成拼音，
