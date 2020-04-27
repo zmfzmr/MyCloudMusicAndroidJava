@@ -717,6 +717,12 @@ dependencies {
     //https://github.com/Vanish136/IndexBar
     implementation 'com.lwkandroid:IndexBar:1.0.1'
 
+    //emoji支持库
+    implementation 'androidx.emoji:emoji-appcompat:1.0.0'
+
+    //emoji控件
+    implementation 'androidx.emoji:emoji-bundled:1.0.0'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

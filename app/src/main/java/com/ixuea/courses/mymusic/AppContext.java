@@ -15,6 +15,8 @@ import com.mob.MobSDK;
 
 import org.greenrobot.eventbus.EventBus;
 
+import androidx.emoji.bundled.BundledEmojiCompatConfig;
+import androidx.emoji.text.EmojiCompat;
 import androidx.multidex.MultiDex;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
@@ -64,6 +66,10 @@ public class AppContext extends Application {
 
         //context:就是的当前的AppContext对象，全局的
         Realm.init(context);
+
+        //初始化emoji(表情符号)
+        BundledEmojiCompatConfig config = new BundledEmojiCompatConfig(this);
+        EmojiCompat.init(config);
     }
 
     /**

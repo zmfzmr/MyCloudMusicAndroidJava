@@ -44,8 +44,11 @@
             <!--输入框
                 140:评论输入框，这里固定140，
                 为啥是140 呢，可以去搜索下
+
+                换成EmojiAppCompatEditText
             -->
-            <EditText
+            <!--            <EditText-->
+            <androidx.emoji.widget.EmojiAppCompatEditText
                 android:id="@+id/et_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

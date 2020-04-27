@@ -76,8 +76,13 @@
 
     <!--评论内容
         头像：40dp  头像右边距离为5dp  加起来就是45dp
+
+        TextView换成 EmojiAppCompatTextView
+        其实这个如果在高版本的话，那些emoji(表情符号)是可以显示出来；如果是在低版本，那么久需要用这个兼容类
+        否则不能显示那些表情符号
     -->
-    <TextView
+    <!--    <TextView-->
+    <androidx.emoji.widget.EmojiAppCompatTextView
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -102,8 +107,10 @@
             android:layout_width="@dimen/divider_comment_reply"
             android:layout_height="match_parent"
             android:background="@color/divider_color" />
-        <!--被恢复评论的内容  replay:恢复  -->
-        <TextView
+        <!--被恢复评论的内容  replay:恢复
+            这里换成 EmojiAppCompatTextView
+         -->
+        <androidx.emoji.widget.EmojiAppCompatTextView
             android:id="@+id/tv_reply_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
