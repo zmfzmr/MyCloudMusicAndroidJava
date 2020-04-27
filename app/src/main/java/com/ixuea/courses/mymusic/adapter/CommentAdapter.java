@@ -24,7 +24,15 @@ import androidx.annotation.NonNull;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdapter.CommentViewHolder> {
+import static com.ixuea.courses.mymusic.util.Constant.TYPE_COMMENT;
+import static com.ixuea.courses.mymusic.util.Constant.TYPE_TITLE;
+
+/**
+ * 我们要添加多种类型的数据，所以这类数据对象是Object
+ */
+//public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdapter.CommentViewHolder> {
+//public class CommentAdapter extends BaseRecyclerViewAdapter<Object, CommentAdapter.CommentViewHolder> {
+public class CommentAdapter extends BaseRecyclerViewAdapter<Object, BaseRecyclerViewAdapter.ViewHolder> {
     private static final String TAG = "CommentAdapter";
     /**
      * 评论适配器 监听器
@@ -42,9 +50,15 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
 
     @NonNull
     @Override
-    public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BaseRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //inflate:  参数1.布局id 2：父容器（也就是根布局） 3：是否附加进去，这里是：不附加传入false
         //getInflater():父类里面的方法
+
+        if (TYPE_TITLE == viewType) {
+            //创建标题ViewHolder
+            return new CommentAdapter.TitleViewHolder(getInflater().inflate(R.layout.item_title_small, parent, false));
+        }
+        //创建评论ViewHolder
         return new CommentViewHolder(getInflater().inflate(R.layout.item_comment, parent, false));
     }
 
@@ -55,14 +69,31 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
      * @param position
      */
     @Override
-    public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseRecyclerViewAdapter.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
 
         //获取当前位置数据
-        Comment data = getData(position);
+//        Comment data = getData(position);
+        Object data = getData(position);
 
         //绑定数据
         holder.bindData(data);
+    }
+
+    /**
+     * 返回类型
+     */
+    @Override
+    public int getItemViewType(int position) {
+        //获取当前位置数据
+        Object data = getData(position);
+
+        if (data instanceof String) {
+            //返回标题类型
+            return TYPE_TITLE;
+        }
+        //评论类型
+        return TYPE_COMMENT;
     }
 
     /**
@@ -126,8 +157,9 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
          * 绑定数据
          */
 
-        public void bindData(Comment data) {
-            this.data = data;
+//        public void bindData(Comment data) {
+        public void bindData(Object d) {
+            this.data = (Comment) d;//进行转换
             //显示头像(里面需要传入Activity，向下转型)
             //因为是CircleImageView 圆形头像, 所以用showAvatar
             ImageUtil.showAvatar((Activity) context, iv_avatar, data.getUser().getAvatar());
@@ -254,4 +286,22 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Comment, CommentAdap
         return result;
     }
 
+    /**
+     * 标题ViewHolder
+     */
+    public class TitleViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
+        @BindView(R.id.tv_title)
+        TextView tv_title;//标题
+
+        public TitleViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        @Override
+        public void bindData(Object data) {
+            super.bindData(data);
+            //设置标题
+            tv_title.setText((String) data);
+        }
+    }
 }

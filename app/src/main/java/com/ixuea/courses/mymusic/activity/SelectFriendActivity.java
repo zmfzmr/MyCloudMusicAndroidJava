@@ -8,15 +8,20 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.BaseRecyclerViewAdapter;
 import com.ixuea.courses.mymusic.adapter.FriendAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.UserResult;
+import com.ixuea.courses.mymusic.domain.event.SelectedFriendEvent;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.listener.OnItemClickListener;
 import com.ixuea.courses.mymusic.util.DataUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.lwkandroid.widget.indexbar.IndexBar;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -95,7 +100,28 @@ public class SelectFriendActivity extends BaseTitleActivity implements IndexBar.
     protected void initListeners() {
         super.initListeners();
 
-//        //设置item监听器
+        //设置item监听器
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseRecyclerViewAdapter.ViewHolder holder, int position) {
+                //获取点击的数据
+//                User data = (User) adapter.getItem(position);
+                //因为用的是我们自己封装的适配器，所以没有getItem，只有getData方法
+                //获取点击的数据
+                Object data = adapter.getData(position);
+
+                if (data instanceof User) {
+                    //只能选择用户数据
+
+                    //发送数据
+                    EventBus.getDefault().post(new SelectedFriendEvent((User) data));
+
+                    //关闭界面
+                    finish();
+                }
+            }
+        });
+
 //        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

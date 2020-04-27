@@ -95,6 +95,10 @@ public class Constant {
      * 用户
      */
     public static final int TYPE_USER = 3;
+    /**
+     * 评论
+     */
+    public static final int TYPE_COMMENT = 4;
 
     /**
      * 播放进度通知

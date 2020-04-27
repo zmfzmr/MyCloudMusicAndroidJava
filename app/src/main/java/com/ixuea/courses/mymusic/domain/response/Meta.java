@@ -13,6 +13,7 @@ public class Meta {
     private int total_count;//总数据量
 
     /**
+     * 获取下一页(也就是page = 1  中page中对应的键值：如1)
      * 当前Meta对象中有next_page这个字段，直接用这个就行
      * 如果没有，则用page+1 (当前页+1)
      *

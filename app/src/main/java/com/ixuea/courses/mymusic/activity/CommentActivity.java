@@ -39,7 +39,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -78,6 +80,10 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
     private String sheetId;//传递过来的歌单id
     private int lastContentLength;//上一次的编辑框 文本长度
     private Meta pageMeta;//分页模型对象
+    /**
+     * 列表数据源（用来转不同类型的数据）
+     */
+    private List<Object> datum = new ArrayList<>();
 
 
     @Override
@@ -251,6 +257,12 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
      *
      */
     private void fetchData() {
+        //清空原来的数据
+        datum.clear();
+
+        //添加标题
+        datum.add("最热评论");
+
         //查询参数
         HashMap<String, String> query = getQuery();
 
@@ -268,8 +280,16 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
                     @Override
                     public void onSucceeded(ListResponse<Comment> data) {
                         LogUtil.d(TAG, "data size:" + data.getData().size());
+
                         //设置数据
-                        adapter.setDatum(data.getData());
+//                        adapter.setDatum(data.getData());
+
+                        //这里添加到成员变量持久的列表集合中
+                        datum.addAll(data.getData());
+
+                        //添加标题
+                        datum.add("最新评论");
+
                         //告诉控件刷新完成了(参数2：默认刷新的数据：10条)
 //                        rv.refreshComplete(Constant.DEFAULT_PAGE_SIZE);
 
@@ -314,9 +334,14 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
                         //保存分页参数
                         pageMeta = data.getMeta();
 
+                        //添加到列表(成员变量添加的多类型list<Object>)
+                        datum.addAll(data.getData());
+
                         //添加数据到适配器
                         //因为这里是上拉加载更多，是不能包原来的数据清空的，所以用addDatum
-                        adapter.addDatum(data.getData());
+//                        adapter.addDatum(data.getData());
+
+                        adapter.setDatum(datum);
 
                         //告诉控件刷新完成了(参数2：默认刷新的数据：10条)
                         rv.refreshComplete(Constant.DEFAULT_PAGE_SIZE);
