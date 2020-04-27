@@ -6,11 +6,60 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.Sheet;
+import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.domain.ui.MeGroup;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.LogUtil;
+
+import java.util.ArrayList;
+
+import io.reactivex.Observable;
 
 /**
  * 首页-我的界面
  */
 public class MeFragment extends BaseCommonFragment {
+
+    private static final String TAG = "MeFragment";
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        //数据类表
+        ArrayList<MeGroup> datum = new ArrayList<>();
+
+        //创建歌单请求
+        Observable<ListResponse<Sheet>> createSheetApi = Api.getInstance()
+                .createSheets(sp.getUserId());
+        //收藏到的歌单请求
+        Observable<ListResponse<Sheet>> collectSheetsApi = Api.getInstance()
+                .collectSheets(sp.getUserId());
+
+        //普通的方式
+        //请求是线性(一个人干活，干完了另外一个人干)
+        createSheetApi.subscribe(new HttpObserver<ListResponse<Sheet>>() {
+            @Override
+            public void onSucceeded(ListResponse<Sheet> data) {
+                //添加数据
+                //这里MeGroup 参数3：是否显示右侧按钮 这是是创建的歌单，就显示右侧按钮
+                datum.add(new MeGroup("创建的歌单", data.getData(), true));
+
+                collectSheetsApi.subscribe(new HttpObserver<ListResponse<Sheet>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Sheet> data) {
+                        //添加数据(这里是收藏歌单，所以MeGroup 参数3：表示不显示右侧按钮)
+                        datum.add(new MeGroup("收藏的歌单", data.getData(), false));
+
+                        //TODO 设置数据到适配器
+                        LogUtil.d(TAG, "get sheets success: " + datum.size());
+                    }
+                });
+            }
+        });
+    }
 
     /**
      * 构造方法

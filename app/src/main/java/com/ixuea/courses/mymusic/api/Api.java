@@ -365,4 +365,22 @@ public class Api {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    /**
+     * 获取用户创建的歌单
+     */
+    public Observable<ListResponse<Sheet>> createSheets(String userId) {
+        return service.createSheets(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 获取用户收藏的歌单
+     */
+    public Observable<ListResponse<Sheet>> collectSheets(String userId) {
+        return service.collectSheets(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

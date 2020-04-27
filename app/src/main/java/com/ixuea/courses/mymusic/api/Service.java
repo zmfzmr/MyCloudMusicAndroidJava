@@ -230,4 +230,21 @@ public interface Service {
      */
     @GET("v1/users/{id}/following")
     Observable<ListResponse<User>> friends(@Path("id") String id);
+
+    /**
+     * 获取用户创建的歌单
+     * <p>
+     * 这里之所以要传递id，主要是获取其他用户的歌单(查看其他人的歌单)
+     */
+    @GET("v1/users/{userId}/create")
+    Observable<ListResponse<Sheet>> createSheets(@Path("userId") String userId);
+
+    /**
+     * 获取用户收藏的歌单(传递的id，主要是查看别人的歌单)
+     *
+     * @param userId
+     * @return
+     */
+    @GET("v1/users/{userId}/collect")
+    Observable<ListResponse<Sheet>> collectSheets(@Path("userId") String userId);
 }

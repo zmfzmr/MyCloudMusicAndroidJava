@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 
 public abstract class BaseCommonFragment extends BaseFragment {
 
-    private PreferenceUtil sp;
+    protected PreferenceUtil sp;
     /**
      * 改为protected 这样子类才能调用
      * <p>
