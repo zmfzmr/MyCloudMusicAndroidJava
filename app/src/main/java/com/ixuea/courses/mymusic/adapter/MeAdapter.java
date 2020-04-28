@@ -157,7 +157,7 @@ public class MeAdapter extends BaseExpandableListAdapter {
         }
 
         //绑定数据(这里是每个ViewHolder绑定一组数据(根据组索引获取这组数据))
-        //只要点击了组，那么这个isExpanded就是为true 的
+        //只要点击了组(展开了组)，那么这个isExpanded就是为true 的（isExpanded：是本方法getGroupView参数里面的）
         viewHolder.bindData(getGroupData(groupPosition), isExpanded);
 
         //返回view
