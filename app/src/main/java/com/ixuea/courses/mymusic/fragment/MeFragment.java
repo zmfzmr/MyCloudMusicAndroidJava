@@ -77,10 +77,23 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
                         LogUtil.d(TAG, "get sheets success: " + datum.size());
 
                         adapter.setDatum(datum);
+
+                        //展开所有组
+                        expandedAll();
                     }
                 });
             }
         });
+    }
+
+    /**
+     * 展开所有组
+     */
+    private void expandedAll() {
+        //adapter.getGroupCount():组的个数
+        for (int i = 0; i < adapter.getGroupCount(); i++) {
+            elv.expandGroup(i);
+        }
     }
 
     @Override

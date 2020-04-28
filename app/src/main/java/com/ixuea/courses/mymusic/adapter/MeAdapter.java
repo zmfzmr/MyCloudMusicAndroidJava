@@ -157,6 +157,7 @@ public class MeAdapter extends BaseExpandableListAdapter {
         }
 
         //绑定数据(这里是每个ViewHolder绑定一组数据(根据组索引获取这组数据))
+        //只要点击了组，那么这个isExpanded就是为true 的
         viewHolder.bindData(getGroupData(groupPosition), isExpanded);
 
         //返回view
@@ -264,6 +265,8 @@ public class MeAdapter extends BaseExpandableListAdapter {
      * 这里就不需要继承任何类，ListView这样的控件没有这个要求(而RecyclerView 的ViewHolder有这个要求)
      */
     class GroupViewHolder {
+        @BindView(R.id.iv_status)
+        ImageView iv_status;//显示展开状态图标
         /**
          * 标题
          */
@@ -293,6 +296,13 @@ public class MeAdapter extends BaseExpandableListAdapter {
         public void bindData(MeGroup data, boolean isExpanded) {
             //标题
             tv_title.setText(data.getTitle());
+
+            //处理展开状态(arrow:箭头 up:向上)
+            if (isExpanded) {
+                iv_status.setImageResource(R.drawable.ic_arrow_up);
+            } else {
+                iv_status.setImageResource(R.drawable.ic_arrow_down);
+            }
         }
     }
 

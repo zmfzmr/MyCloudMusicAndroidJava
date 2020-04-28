@@ -11,10 +11,13 @@
 
         他可以实现列表展开功能，RecyclerView也可以实现折叠效果，
         只是要自己实现，或者使用第三方框架；顶部是通过头部实现的。
+
+        android:groupIndicator="@null":隐藏默认的图标（就是向上或者向下的按个箭头 ）
         -->
     <ExpandableListView
         android:id="@+id/elv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:groupIndicator="@null" />
 
 </LinearLayout>
