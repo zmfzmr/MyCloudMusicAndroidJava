@@ -12,6 +12,7 @@ import com.ixuea.courses.mymusic.adapter.MeAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.event.CreateSheetClickEvent;
+import com.ixuea.courses.mymusic.domain.event.CreateSheetEvent;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.domain.ui.MeGroup;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
@@ -163,12 +164,26 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
 
     /**
      * 点击了歌单创建按钮事件
+     *
+     * 总路线：item(适配器)-->MeFragment->显示CreateSheetDialogFragment(在回调onCreateSheetClickEvent中)
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCreateSheetClickEvent(CreateSheetClickEvent event) {
         LogUtil.d(TAG, "onCreateSheetClickEvent");
+        //如果在Fragment中显示fragment
+        //要使用getChildFragmentManager方法
+        CreateSheetDialogFragment.show(getChildFragmentManager());
     }
 
+    /**
+     * 创建歌单事件（点击了对话框中的确认按钮 回来的事件回调）
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCreateSheetEvent(CreateSheetEvent event) {
+        LogUtil.d(TAG, "onCreateSheetEvent: " + event.getData());
+    }
     /**
      * 界面销毁时调用
      */

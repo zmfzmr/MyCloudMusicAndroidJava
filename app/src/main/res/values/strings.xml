@@ -154,5 +154,8 @@
     <!--好友-->
     <string name="hint_search_user">昵称，拼音，首字母</string>
     <string name="song_count">%1$d首</string>
+    <string name="hint_enter_sheet_name">请输入歌单名称</string>
+    <string name="create_sheet">创建歌单</string>
+    <string name="confirm">确认</string>
 
 </resources>

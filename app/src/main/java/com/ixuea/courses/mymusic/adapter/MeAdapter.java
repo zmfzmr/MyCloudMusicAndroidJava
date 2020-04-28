@@ -286,6 +286,10 @@ public class MeAdapter extends BaseExpandableListAdapter {
         /**
          * 更多按钮点击
          * 路线：item(适配器)-->MeFragment(在fragment中执行 注意：fragment中记得注册和销毁)
+         *
+         * 之所以要回调到MeFragment那边处理，是因为要在那边MeFragment中 显示CreateSheetDialogFragment
+         *
+         * 所以总路线是：item(适配器)-->MeFragment->显示CreateSheetDialogFragment(这步是在Fragment那边实现)
          */
         @OnClick(R.id.iv_more)
         public void onMoreClick() {
