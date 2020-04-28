@@ -11,10 +11,15 @@ import com.ixuea.courses.mymusic.activity.SheetDetailActivity;
 import com.ixuea.courses.mymusic.adapter.MeAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Sheet;
+import com.ixuea.courses.mymusic.domain.event.CreateSheetClickEvent;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.domain.ui.MeGroup;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.LogUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -40,6 +45,9 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
     @Override
     protected void initDatum() {
         super.initDatum();
+
+        //注册
+        EventBus.getDefault().register(this);
 
         //创建适配器
         adapter = new MeAdapter(getMainActivity());
@@ -71,6 +79,7 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
                     @Override
                     public void onSucceeded(ListResponse<Sheet> data) {
                         //添加数据(这里是收藏歌单，所以MeGroup 参数3：表示不显示右侧按钮)
+                        //这里传入了false，表示不显示右侧按钮
                         datum.add(new MeGroup("收藏的歌单", data.getData(), false));
 
                         //设置数据到适配器
@@ -78,7 +87,7 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
 
                         adapter.setDatum(datum);
 
-                        //展开所有组
+                        //展开所有组(显示完数据后才展开所有的组)
                         expandedAll();
                     }
                 });
@@ -150,5 +159,23 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
         //跳转到详情(这里是携带一个歌单id获取的)
         startActivityExtraId(SheetDetailActivity.class, data.getId());
         return true;//记得返回true
+    }
+
+    /**
+     * 点击了歌单创建按钮事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCreateSheetClickEvent(CreateSheetClickEvent event) {
+        LogUtil.d(TAG, "onCreateSheetClickEvent");
+    }
+
+    /**
+     * 界面销毁时调用
+     */
+    @Override
+    public void onDestroy() {
+        //解除注册
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

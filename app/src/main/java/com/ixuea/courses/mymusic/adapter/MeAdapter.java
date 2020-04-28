@@ -11,14 +11,18 @@ import android.widget.TextView;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.activity.BaseActivity;
 import com.ixuea.courses.mymusic.domain.Sheet;
+import com.ixuea.courses.mymusic.domain.event.CreateSheetClickEvent;
 import com.ixuea.courses.mymusic.domain.ui.MeGroup;
 import com.ixuea.courses.mymusic.util.ImageUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 我的界面适配器
@@ -280,6 +284,15 @@ public class MeAdapter extends BaseExpandableListAdapter {
         ImageView iv_more;
 
         /**
+         * 更多按钮点击
+         * 路线：item(适配器)-->MeFragment(在fragment中执行 注意：fragment中记得注册和销毁)
+         */
+        @OnClick(R.id.iv_more)
+        public void onMoreClick() {
+            EventBus.getDefault().post(new CreateSheetClickEvent());
+        }
+
+        /**
          * 构造方法
          */
         public GroupViewHolder(View view) {
@@ -302,6 +315,13 @@ public class MeAdapter extends BaseExpandableListAdapter {
                 iv_status.setImageResource(R.drawable.ic_arrow_up);
             } else {
                 iv_status.setImageResource(R.drawable.ic_arrow_down);
+            }
+
+            //是否显示更多按钮
+            if (data.isMore()) {
+                iv_more.setVisibility(View.VISIBLE);
+            } else {
+                iv_more.setVisibility(View.GONE);
             }
         }
     }
