@@ -123,13 +123,13 @@ public class Sheet extends BaseMultiItemEntity {
         this.comments_count = comments_count;
     }
 
-//    public int getSongs_count() {
-//        return songs_count;
-//    }
-//
-//    public void setSongs_count(int songs_count) {
-//        this.songs_count = songs_count;
-//    }
+    public int getSongs_count() {
+        return songs_count;
+    }
+
+    public void setSongs_count(int songs_count) {
+        this.songs_count = songs_count;
+    }
 
     public User getUser() {
         return user;
@@ -199,5 +199,16 @@ public class Sheet extends BaseMultiItemEntity {
     public int getSpanSize() {
         //为啥是1，参考BaseMultiItemEntity中
         return 1;
+    }
+
+    /**
+     * 获取音乐数量
+     */
+    public int getSongsCount() {
+        if (getSongs() != null) {
+            return getSongs().size();
+        }
+        //默认返回0
+        return 0;
     }
 }

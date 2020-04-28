@@ -5,14 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.BaseActivity;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.ui.MeGroup;
+import com.ixuea.courses.mymusic.util.ImageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -172,7 +177,9 @@ public class MeAdapter extends BaseExpandableListAdapter {
             //就从View加载一个控件
             //这里其实就是LayoutInflater对象调用inflate 加载布局返回该布局的view对象
             //这里加载的是item_title_me(因为本方法内是获取组view（加载一个标题的布局就行了）)
-            convertView = inflater.inflate(R.layout.item_sheet_me, parent, false);
+//            convertView = inflater.inflate(R.layout.item_sheet_me, parent, false);
+            //这里直接用复用item_topic，这个布局就可以了
+            convertView = inflater.inflate(R.layout.item_topic, parent, false);
 
             //创建一个ViewHolder
             viewHolder = new ChildViewHolder(convertView);//这里记得传递convertView进去
@@ -215,7 +222,7 @@ public class MeAdapter extends BaseExpandableListAdapter {
      * @param groupPosition
      * @return
      */
-    private MeGroup getGroupData(int groupPosition) {
+    public MeGroup getGroupData(int groupPosition) {
         return datum.get(groupPosition);
     }
 
@@ -226,7 +233,7 @@ public class MeAdapter extends BaseExpandableListAdapter {
      * @param childPosition 子元素索引
      * @return
      */
-    private Sheet getChildData(int groupPosition, int childPosition) {
+    public Sheet getChildData(int groupPosition, int childPosition) {
         //List<MeGroup> datum
         //获取组(MeGroup)里面列表，然后在获取子元素
         return datum.get(groupPosition).getDatum().get(childPosition);
@@ -258,6 +265,18 @@ public class MeAdapter extends BaseExpandableListAdapter {
      */
     class GroupViewHolder {
         /**
+         * 标题
+         */
+        @BindView(R.id.tv_title)
+        TextView tv_title;
+
+        /**
+         * 更多按钮
+         */
+        @BindView(R.id.iv_more)
+        ImageView iv_more;
+
+        /**
          * 构造方法
          */
         public GroupViewHolder(View view) {
@@ -272,7 +291,8 @@ public class MeAdapter extends BaseExpandableListAdapter {
          * @param isExpanded
          */
         public void bindData(MeGroup data, boolean isExpanded) {
-
+            //标题
+            tv_title.setText(data.getTitle());
         }
     }
 
@@ -281,6 +301,18 @@ public class MeAdapter extends BaseExpandableListAdapter {
      * 注意：bindData(Sheet sheet) 传入的是歌单对象Sheet
      */
     class ChildViewHolder {
+        /**
+         * 封面
+         */
+        @BindView(R.id.iv_banner)
+        ImageView iv_banner;
+
+        @BindView(R.id.tv_title)
+        TextView tv_title;//标题
+
+        @BindView(R.id.tv_info)
+        TextView tv_info;//跟多信息
+
         public ChildViewHolder(View view) {
             //初始化View注解框架
             ButterKnife.bind(this, view);
@@ -288,11 +320,21 @@ public class MeAdapter extends BaseExpandableListAdapter {
 
         /**
          * 绑定数据
-         *
-         * @param sheet 歌单对象
+         * @param data 歌单对象
          */
-        public void bindData(Sheet sheet) {
+        public void bindData(Sheet data) {
+            //显示封面(这里转换成BaseActivity或者Activity都可以)
+            ImageUtil.show((BaseActivity) context, iv_banner, data.getBanner());
 
+            //标题(歌单的标题就行了)
+            tv_title.setText(data.getTitle());
+
+            //音乐数量(getResources():应该是可加可不加的)
+            //tv_info：这个标题标注的是：更多信息，我们这里写的是歌曲的数量
+//            tv_info.setText(context.getString(R.string.song_count,data.getSongs_count()));
+            //用下面的这个getSongsCount
+            //目前这个是没有歌词的，因为返回的json数据中没有songs列表
+            tv_info.setText(context.getString(R.string.song_count, data.getSongsCount()));
         }
     }
 }

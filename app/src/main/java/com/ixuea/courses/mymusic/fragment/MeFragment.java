@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.SheetDetailActivity;
 import com.ixuea.courses.mymusic.adapter.MeAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Sheet;
@@ -26,7 +27,7 @@ import io.reactivex.Observable;
  * 他可以实现列表展开功能，RecyclerView也可以实现折叠效果，
  * 只是要自己实现，或者使用第三方框架；顶部是通过头部实现的。
  */
-public class MeFragment extends BaseCommonFragment {
+public class MeFragment extends BaseCommonFragment implements ExpandableListView.OnChildClickListener {
 
     private static final String TAG = "MeFragment";
     /**
@@ -82,6 +83,14 @@ public class MeFragment extends BaseCommonFragment {
         });
     }
 
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        //设置子item点击监听器
+        //注意：是有个child的
+        elv.setOnChildClickListener(this);
+    }
+
     /**
      * 构造方法
      * 固定写法
@@ -108,5 +117,25 @@ public class MeFragment extends BaseCommonFragment {
     @Override
     protected View getLayoutView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_me, null);
+    }
+
+    /**
+     * 子元素点击回调
+     *
+     * @param parent
+     * @param v
+     * @param groupPosition
+     * @param childPosition
+     * @param id
+     * @return true:我们处理了事件
+     */
+    @Override
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        //获取点击的数据
+        Sheet data = adapter.getChildData(groupPosition, childPosition);
+
+        //跳转到详情(这里是携带一个歌单id获取的)
+        startActivityExtraId(SheetDetailActivity.class, data.getId());
+        return true;//记得返回true
     }
 }

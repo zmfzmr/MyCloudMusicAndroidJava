@@ -247,6 +247,7 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
         this.data = data;
 
         LogUtil.d(TAG, "next:" + data);
+        //这里最好要判断不为null并且有数据，否则没有歌曲进入页面的话，可能会崩溃
         if (data.getSongs() != null && data.getSongs().size() > 0) {
             //有音乐才设置
             //设置数据
@@ -436,9 +437,15 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
 
         //评论数
         tv_comment_count.setText(String.valueOf(data.getComments_count()));
-
+        //因为data.getSongs()：没有音乐的话，这个获取的对象是为null的，所以需要判断
+//        if (data.getSongs() != null) {//不过这样写判断的话，其他activity中也需要这样判断，
+//        所以我们可以在对象模型上Sheet判断，这样就不用每次都写判断了
         //音乐数
-        tv_count.setText(getResources().getString(R.string.music_count, data.getSongs().size()));
+//            tv_count.setText(getResources().getString(R.string.music_count, data.getSongs().size()));
+//        }
+
+        tv_count.setText(getResources().getString(R.string.music_count, data.getSongsCount()));
+
         //因为有些歌单没有值，会引起空指针异常，所以先用下面这个
 //        tv_count.setText(getResources().getString(R.string.music_count, data.getSongs_count()));
 
