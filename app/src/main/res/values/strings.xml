@@ -157,5 +157,6 @@
     <string name="hint_enter_sheet_name">请输入歌单名称</string>
     <string name="create_sheet">创建歌单</string>
     <string name="confirm">确认</string>
+    <string name="success_create_sheet">歌单创建成功</string>
 
 </resources>

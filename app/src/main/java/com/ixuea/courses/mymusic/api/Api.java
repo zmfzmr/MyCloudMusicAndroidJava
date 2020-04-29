@@ -383,4 +383,15 @@ public class Api {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    /**
+     * @param data
+     * @return
+     */
+    public Observable<DetailResponse<Sheet>> createSheet(Sheet data) {
+        //注意：这列是createSheet（不是createSheets）
+        return service.createSheet(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

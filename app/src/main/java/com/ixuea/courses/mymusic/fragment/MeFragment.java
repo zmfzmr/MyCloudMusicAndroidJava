@@ -13,10 +13,12 @@ import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.event.CreateSheetClickEvent;
 import com.ixuea.courses.mymusic.domain.event.CreateSheetEvent;
+import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.domain.ui.MeGroup;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -55,7 +57,11 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
 
         //设置适配器
         elv.setAdapter(adapter);
+        fetchData();
 
+    }
+
+    private void fetchData() {
         //数据类表
         ArrayList<MeGroup> datum = new ArrayList<>();
 
@@ -183,6 +189,26 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCreateSheetEvent(CreateSheetEvent event) {
         LogUtil.d(TAG, "onCreateSheetEvent: " + event.getData());
+
+        Sheet data = new Sheet();
+
+        //这里不要传用户id
+        //不然这就是一个漏洞
+        //就可以给任何人创建歌单
+        //而是服务端根据token获取用户信息(因为该用户登录成功后，会有一个token值，服务器根据token判断是哪个用户创建的歌单)
+        data.setTitle(event.getData());
+
+        Api.getInstance()
+                .createSheet(data)
+                .subscribe(new HttpObserver<DetailResponse<Sheet>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<Sheet> data) {
+                        ToastUtil.successShortToast(R.string.success_create_sheet);
+
+                        //重写加载数据
+                        fetchData();
+                    }
+                });
     }
     /**
      * 界面销毁时调用

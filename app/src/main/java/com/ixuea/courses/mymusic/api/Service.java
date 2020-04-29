@@ -247,4 +247,19 @@ public interface Service {
      */
     @GET("v1/users/{userId}/collect")
     Observable<ListResponse<Sheet>> collectSheets(@Path("userId") String userId);
+
+    /**
+     * 这里是(用户)创建歌单
+     * （上面的那个是通过用户id，获取创建歌单）
+     * <p>
+     * 当然这里返回的只有一个id（用到的是DetailResponse<Sheet>）
+     * 因为这里看json，外层是一层包裹，里面是一个对象；最好用包裹的对，所以用DetailResponse<Sheet>
+     * {
+     * "data": {
+     * "id": 43
+     * }
+     * }
+     */
+    @POST("v1/sheets")
+    Observable<DetailResponse<Sheet>> createSheet(@Body Sheet data);
 }
