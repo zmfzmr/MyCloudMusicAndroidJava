@@ -88,6 +88,7 @@ public class CreateSheetDialogFragment extends DialogFragment {
         //显示
         //注意:这里的show方法是父类DialogFragment里面的方法
         //参数2：tag ,FragmentManager可以通过tag找到这个fragment
+        //注意：是通过本类对象来调动；因为是在static，前缀要使用对象的引用来调用
         fragment.show(fragmentManager, "CreateSheetDialogFragment");
     }
 

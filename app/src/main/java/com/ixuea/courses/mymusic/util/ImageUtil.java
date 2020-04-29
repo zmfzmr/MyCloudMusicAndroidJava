@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -51,17 +52,18 @@ public class ImageUtil {
      * <p>
      * （在本类中只使用了占位图）
      *
-     * @param activity   Activity
+     * @param context   Context
      * @param view       ImageView
      * @param resourceId 图片资源id
      *
      *                   注意：这里记得加上公共的配置
      */
-    public static void show(Activity activity, ImageView view, @RawRes @DrawableRes @Nullable int resourceId) {
+//    public static void show(Activity activity, ImageView view, @RawRes @DrawableRes @Nullable int resourceId) {
+    public static void show(Context context, ImageView view, @RawRes @DrawableRes @Nullable int resourceId) {
         //获取公共配置
         RequestOptions options = getCommonRequestOptions();
         //显示图片
-        Glide.with(activity)
+        Glide.with(context)
                 .load(resourceId)//这里传入的是资源id
                 .apply(options)
                 .into(view);
@@ -70,11 +72,11 @@ public class ImageUtil {
     /**
      * 绝对路径图片显示
      *
-     * @param activity Activity
+     * @param context context
      * @param view     ImageView
      * @param uri      图片完整地址
      */
-    public static void showFull(Activity activity, ImageView view, String uri) {
+    public static void showFull(Context context, ImageView view, String uri) {
 //        if (StringUtils.isBlank(uri)) {
 //            show(activity,view,R.drawable.placeholder);
 //        } else {
@@ -91,7 +93,7 @@ public class ImageUtil {
         //获取功能配置
         RequestOptions options = getCommonRequestOptions();
         //显示图片
-        Glide.with(activity)
+        Glide.with(context)
                 .load(uri)
                 .apply(options)
                 .into(view);
@@ -100,15 +102,15 @@ public class ImageUtil {
     /**
      * 显示相对路径图片
      *
-     * @param activity Activity
+     * @param context Activity
      * @param view     ImageView
      * @param uri      uri 这里是showAvatar中外界传入过来的data.getAvatar()
      */
-    public static void show(Activity activity, ImageView view, String uri) {
+    public static void show(Context context, ImageView view, String uri) {
         //将图片地址转为绝对路径
         uri = ResourceUtil.resourceUri(uri);//这个转成绝对路径需要经常用，所以放到一个专门的类里面
         //地址已经拼接好，复用绝对路径的方法
-        showFull(activity, view, uri);
+        showFull(context, view, uri);
 
     }
 

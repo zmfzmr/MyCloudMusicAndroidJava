@@ -11,8 +11,8 @@
          :表示点击的时候有水波涟漪效果
     -->
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/item_topic_height"
-        android:layout_height="@dimen/item_topic_height"
+        android:layout_width="@dimen/topic_height"
+        android:layout_height="@dimen/topic_height"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/radius_small"
         app:cardElevation="0dp">

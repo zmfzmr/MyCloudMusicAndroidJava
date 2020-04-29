@@ -25,6 +25,7 @@ import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.CollectSongClickEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.fragment.SelectSheetDialogFragment;
 import com.ixuea.courses.mymusic.fragment.SongMoreDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
@@ -778,6 +779,9 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
                     @Override
                     public void onSucceeded(ListResponse<Sheet> data) {
                         LogUtil.d(TAG, "get create sheets success:" + data.getData().size());
+
+                        //显示选择歌单对话框 (data.getData():歌单Sheet对象的集合 List)
+                        SelectSheetDialogFragment.show(getSupportFragmentManager(), data.getData());
                     }
                 });
     }
