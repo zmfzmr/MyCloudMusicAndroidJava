@@ -89,6 +89,7 @@ public class SongMoreDialogFragment extends BaseBottomSheetDialogFragment {
                 getResources().getString(R.string.singer_name, song.getSinger().getNickname()));
 
         //只有我的歌单才能显示删除音乐
+        //这里已经判断了  当前登录的用户 == 歌单的用户
         if (PreferenceUtil
                 .getInstance(getMainActivity())
                 .getUserId()
@@ -107,6 +108,7 @@ public class SongMoreDialogFragment extends BaseBottomSheetDialogFragment {
 
     /**
      * 构造方法
+     * //这里Bundle包含了：传过来的Sheet和Song对象
      */
     public static SongMoreDialogFragment newInstance(Sheet sheet, Song song) {
         //创建bundle

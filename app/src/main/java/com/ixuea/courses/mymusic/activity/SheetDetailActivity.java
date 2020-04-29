@@ -24,6 +24,7 @@ import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.CollectSongClickEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.fragment.SongMoreDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
@@ -78,6 +79,7 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
     private Button bt_collection;//收藏按钮
     private View ll_play_all_container;//播放全部容器
     private TextView tv_count;//歌曲数
+    private Song song;//音乐对象
 //    private ListManager listManager;//初始化列表管理器
 //    private MusicPlayerManager musicPlayerManager;
 
@@ -754,10 +756,30 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
      * <p>
      * 收藏歌曲到歌单点击回调事件
      * CollectSongClickEvent:这里发送通知的时候在构造方法传入了song
+     *
+     * 路线： item(适配器)回调onMoreClick --> onMoreClick(携带Sheet 和Song对象)跳转到SongMoreDialogFragment
+     *      --> 在fragment中（把从onMoreClick传进的Song对象）回调回到的Activity中
+     *
+     * item适配器那边为啥要回调回来尼?因为我们需要在activity中打开fragment
+     *
+     * 总结：如果当前界面是activity(或fragment)，最终处理还是回到activity（或fragment）处理比较好
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCollectSongClickEvent(CollectSongClickEvent event) {
         LogUtil.d(TAG, "onCollectSongClickEvent:" + event.getData().getTitle());
+
+        //保存音乐(SongMoreDialogFragment传过来的)
+        this.song = event.getData();
+
+        //获取我创建的歌单
+        Api.getInstance()
+                .createSheets(sp.getUserId())
+                .subscribe(new HttpObserver<ListResponse<Sheet>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Sheet> data) {
+                        LogUtil.d(TAG, "get create sheets success:" + data.getData().size());
+                    }
+                });
     }
 
 }
