@@ -394,4 +394,23 @@ public class Api {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    /**
+     * 将歌曲收藏到歌单
+     *
+     * @param sheetId 歌单id
+     * @param songId  单曲id
+     * @return 注意：这里的是Servicen那边的参数不一样了，我们这里Map(也就是HashMap放到方法里面)，参数用一个songId
+     */
+    public Observable<Response<Void>> addSongToSheet(String sheetId, String songId) {
+        //创建一个字典
+        //也可以创建一个对象
+        //在传递数据
+        HashMap<String, String> data = new HashMap<>();
+        //添加歌曲Id
+        data.put("id", songId);
+        return service.addSongToSheet(sheetId, data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

@@ -144,6 +144,8 @@ public interface Service {
      * 记得加上这个@POST
      * <p>
      * Response<Void>：这个表示接收的返回值没有，所以用这个，虽然返回code字段，但是我们并没有定义这个字段
+     *
+     * 这里收藏的时候，之所以没有传递用户id，因为在请求Retrofit 请求头里面已经添加了用户id了(如果用户登录，就保存用户id到持久化)
      */
     @FormUrlEncoded
     @POST("v1/collections")
@@ -262,4 +264,13 @@ public interface Service {
      */
     @POST("v1/sheets")
     Observable<DetailResponse<Sheet>> createSheet(@Body Sheet data);
+
+    /**
+     * 将歌曲收藏到歌单
+     *
+     * @ Body Map<String,String> data:这里会把Map这集合转换成json数据传输的
+     * 当然也可以用一个对象
+     */
+    @POST("v1/sheets/{sheetId}/relations")
+    Observable<Response<Void>> addSongToSheet(@Path("sheetId") String sheetId, @Body Map<String, String> data);
 }

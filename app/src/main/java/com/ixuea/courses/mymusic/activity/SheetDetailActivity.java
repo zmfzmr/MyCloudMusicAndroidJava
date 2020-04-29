@@ -23,6 +23,8 @@ import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.CollectSongClickEvent;
+import com.ixuea.courses.mymusic.domain.event.OnSelectSheetEvent;
+import com.ixuea.courses.mymusic.domain.event.SheetChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.fragment.SelectSheetDialogFragment;
@@ -35,6 +37,7 @@ import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -570,6 +573,10 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
 
                             //显示收藏状态
                             showCollectionStatus();
+
+                            //发布歌单改变了事件
+                            //(因为：在(我的)界面MeFragment或者(发现)界面中 歌单收藏或者取消收藏后，歌单列表要更新状态)
+                            publishSheetChangedEvent();
                         }
                     });
 
@@ -602,6 +609,10 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
                             data.setCollections_count(data.getCollections_count() + 1);
                             //显示收藏状态
                             showCollectionStatus();
+
+                            //发布歌单改变了事件
+                            //(因为：在(我的)界面MeFragment或者(发现)界面中 歌单收藏或者取消收藏后，歌单列表要更新状态)
+                            publishSheetChangedEvent();
 
                         }
                     });
@@ -757,12 +768,12 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
      * <p>
      * 收藏歌曲到歌单点击回调事件
      * CollectSongClickEvent:这里发送通知的时候在构造方法传入了song
-     *
+     * <p>
      * 路线： item(适配器)回调onMoreClick --> onMoreClick(携带Sheet 和Song对象)跳转到SongMoreDialogFragment
-     *      --> 在fragment中（把从onMoreClick传进的Song对象）回调回到的Activity中
-     *
+     * --> 在fragment中（把从onMoreClick传进的Song对象）回调回到的Activity中
+     * <p>
      * item适配器那边为啥要回调回来尼?因为我们需要在activity中打开fragment
-     *
+     * <p>
      * 总结：如果当前界面是activity(或fragment)，最终处理还是回到activity（或fragment）处理比较好
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -784,6 +795,43 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
                         SelectSheetDialogFragment.show(getSupportFragmentManager(), data.getData());
                     }
                 });
+    }
+
+    /**
+     * 选择了歌单事件
+     *
+     * @param event OnSelectSheetEvent
+     *              event.getData():选中的Sheet对象
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectSheetEvent(OnSelectSheetEvent event) {
+        LogUtil.d(TAG, "onSelectSheetEvent: " + event.getData().getTitle());
+        //将歌曲收藏到歌单
+        Api.getInstance()
+                //这个Song对象是SongMoreDialogFragment中点击（收藏到歌单）后回调到当前的Activity中的（onCollectSongClickEvent中保存的）
+                .addSongToSheet(event.getData().getId(), song.getId())
+                .subscribe(new HttpObserver<Response<Void>>() {
+                    @Override
+                    public void onSucceeded(Response<Void> data) {
+                        //提示
+                        ToastUtil.successShortToast(R.string.success_collect_song_to_sheet);
+
+                        //发送通知
+                        //目的是让我的界面
+                        //显示新的音乐数
+                        //如果不需要实时刷新
+                        //就不用发送
+                        //这样性能就更好
+                        publishSheetChangedEvent();
+                    }
+                });
+    }
+
+    /**
+     * 发布歌单改变了事件
+     */
+    private void publishSheetChangedEvent() {
+        EventBus.getDefault().post(new SheetChangedEvent());
     }
 
 }

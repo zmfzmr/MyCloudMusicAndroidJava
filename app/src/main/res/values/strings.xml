@@ -158,5 +158,6 @@
     <string name="create_sheet">创建歌单</string>
     <string name="confirm">确认</string>
     <string name="success_create_sheet">歌单创建成功</string>
+    <string name="success_collect_song_to_sheet">歌曲收藏到歌单成功</string>
 
 </resources>

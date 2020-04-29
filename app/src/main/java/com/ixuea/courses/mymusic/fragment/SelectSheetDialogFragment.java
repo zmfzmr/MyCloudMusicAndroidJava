@@ -5,9 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SheetAdapter;
 import com.ixuea.courses.mymusic.domain.Sheet;
+import com.ixuea.courses.mymusic.domain.event.OnSelectSheetEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -57,6 +61,26 @@ public class SelectSheetDialogFragment extends BaseBottomSheetDialogFragment {
 
         //设置数据(这个数据是：Activity那边网络请求传递过来的)
         adapter.replaceData(datum);
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //item点击事件
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //获取点击的事件
+                Sheet data = (Sheet) adapter.getItem(position);
+
+                //发布事件(MeFragment那边接收它)
+                EventBus.getDefault().post(new OnSelectSheetEvent(data));
+
+                //关闭对话框(因为当前Fragment就是一个dialog，所以可以直接调用dismiss())
+                dismiss();
+            }
+        });
     }
 
     @Override

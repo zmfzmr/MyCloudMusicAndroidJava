@@ -13,6 +13,7 @@ import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.event.CreateSheetClickEvent;
 import com.ixuea.courses.mymusic.domain.event.CreateSheetEvent;
+import com.ixuea.courses.mymusic.domain.event.SheetChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.domain.ui.MeGroup;
@@ -210,6 +211,13 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
                     }
                 });
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSheetChangedEvent(SheetChangedEvent event) {
+        //重新加载数据
+        fetchData();
+    }
+
     /**
      * 界面销毁时调用
      */
