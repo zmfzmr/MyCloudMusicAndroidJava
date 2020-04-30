@@ -10,11 +10,73 @@
     <include layout="@layout/tool_bar" />
 
     <!--内容容器-->
-    <LinearLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/padding_middle"
+        android:layout_marginRight="@dimen/padding_middle"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </LinearLayout>
+        <!--扫描提示
+            android:singleLine="true"
+            android:ellipsize="middle": 从中心省略
+                :使用这个必须要singleLine="true" 一起使用,不能用maxLines = "1"
+        -->
+        <TextView
+            android:id="@+id/tv_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rl_scan_music_container"
+            android:layout_marginBottom="@dimen/padding_large"
+            android:ellipsize="middle"
+            android:gravity="center_horizontal"
+            android:singleLine="true"
+            tools:text="/sdcard/Download/a/b/c/ixuea/ixuea/edu/路径/刀郎-家人.mp3" />
+
+        <!--扫描动画容器-->
+        <RelativeLayout
+            android:id="@+id/rl_scan_music_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+            <!--手机背景-->
+            <ImageView
+                android:id="@+id/iv_scan_music_background"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/scan_local_music" />
+
+            <!--扫描线-->
+            <ImageView
+                android:id="@+id/iv_scan_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/scan_line"
+                android:visibility="gone" />
+
+            <!--放大镜
+                zoom：缩放 （如果图标是放大镜 如果用这个zoom表示）
+            -->
+            <ImageView
+                android:id="@+id/iv_scan_zoom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/scan_music_zoom" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/bt_scan"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_below="@+id/rl_scan_music_container"
+            android:layout_marginTop="@dimen/padding_large"
+            android:background="@drawable/selector_color_primary"
+            android:text="@string/start_scan"
+            android:textColor="@drawable/selector_text_color_primary_reverse" />
+
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
