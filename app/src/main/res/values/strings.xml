@@ -160,5 +160,11 @@
     <string name="success_create_sheet">歌单创建成功</string>
     <string name="success_collect_song_to_sheet">歌曲收藏到歌单成功</string>
     <string name="success_delete_song_in_sheet">从歌单中删除音乐成功</string>
+    <string name="local_music">本地音乐</string>
+    <string name="download_manger">下载管理</string>
+    <string name="play_history">最近播放</string>
+    <string name="my_radio">我的电台</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="sati">Sati空间</string>
 
 </resources>

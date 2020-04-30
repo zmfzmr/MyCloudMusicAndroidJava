@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
+import butterknife.OnClick;
 import io.reactivex.Observable;
 
 /**
@@ -42,9 +42,38 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
     /**
      * 列表控件
      */
-    @BindView(R.id.elv)
+//    @BindView(R.id.elv)//这个先注释了，因为我们isBindView置为了false，下面我们手动绑定view(findViewById找）
     ExpandableListView elv;
     private MeAdapter adapter;
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+
+        //手动找一个控件
+        //因为要添加header
+        elv = findViewById(R.id.elv);
+        //添加头部控件
+        //参数3：表示不自动添加父容器（这里是ExpandableListView父容器(根布局)），我们自己手动添加headerView到父布局里面
+        View headerView = LayoutInflater.from(getMainActivity()).inflate(R.layout.header_me, elv, false);
+
+        elv.addHeaderView(headerView);
+        //手动绑定控件
+        //目的是添加了header后
+        //在绑定
+        //就可以查找到头部布局中的控件(头部成为了ExpandableListView里面的一部分)
+
+        // 里面逻辑是：(ButterKnife.bind(this, getView());)
+        bindView();
+    }
+
+    /**
+     * @return false:表示父类就不调用bindView方法(父类里面的方法)，我们这里手动调用
+     */
+    @Override
+    protected boolean isBindView() {
+        return false;
+    }
 
     @Override
     protected void initDatum() {
@@ -226,5 +255,21 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
         //解除注册
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    /**
+     * 本地音乐点击
+     */
+    @OnClick(R.id.ll_local_music)
+    public void onLocalMusicClick() {
+        LogUtil.d(TAG, "onLocalMusicClick: ");
+    }
+
+    /**
+     * 下载管理
+     */
+    @OnClick(R.id.ll_download_manager)
+    public void onDownloadManagerClick() {
+        LogUtil.d(TAG, "onDownloadManagerClick: ");
     }
 }
