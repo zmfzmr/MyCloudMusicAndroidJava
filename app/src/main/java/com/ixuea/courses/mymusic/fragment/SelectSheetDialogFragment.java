@@ -74,7 +74,7 @@ public class SelectSheetDialogFragment extends BaseBottomSheetDialogFragment {
                 //获取点击的事件
                 Sheet data = (Sheet) adapter.getItem(position);
 
-                //发布事件(MeFragment那边接收它)
+                //发布事件(这里是在SheetDetailActivity接收它)
                 EventBus.getDefault().post(new OnSelectSheetEvent(data));
 
                 //关闭对话框(因为当前Fragment就是一个dialog，所以可以直接调用dismiss())
