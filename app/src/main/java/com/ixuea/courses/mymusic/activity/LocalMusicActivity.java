@@ -1,6 +1,8 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -54,5 +56,34 @@ public class LocalMusicActivity extends BaseTitleActivity {
         startActivity(ScanLocalMusicActivity.class);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_local_music, menu);
+        return true;
+    }
 
+    /**
+     * 菜单点击了
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                //TODO 批量编辑按钮点击了
+                break;
+            case R.id.action_scan_local_music:
+                //扫描本地音乐(跳转到扫描界面就行了)
+                toScanLocalMusic();
+                break;
+            case R.id.action_sort:
+                //TODO 排序
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
