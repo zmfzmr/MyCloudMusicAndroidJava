@@ -229,4 +229,19 @@ public class ORMUtil {
         //关闭数据库
         realm.close();
     }
+
+    /**
+     * 查询本地音乐(查询结果要转成List<Song>（就是每个对象SongLocal对象转换成Song对象返回）)
+     */
+    public List<Song> queryLocalMusic() {
+        //获取数据库实例(这个getInstance 方法里面已经实现了多用户了)
+        Realm realm = getInstance();
+
+        //查询所有本地音乐(注意：本地音乐对象是SongLocal对象)
+        RealmResults<SongLocal> songLocals = realm.where(SongLocal.class)
+                .equalTo("source", SongLocal.SOURCE_LOCAL)
+                .findAll();
+
+        return toSongs(songLocals, realm);
+    }
 }
