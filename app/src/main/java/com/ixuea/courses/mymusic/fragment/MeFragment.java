@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.LocalMusicActivity;
 import com.ixuea.courses.mymusic.activity.SheetDetailActivity;
 import com.ixuea.courses.mymusic.adapter.MeAdapter;
 import com.ixuea.courses.mymusic.api.Api;
@@ -263,6 +264,8 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
     @OnClick(R.id.ll_local_music)
     public void onLocalMusicClick() {
         LogUtil.d(TAG, "onLocalMusicClick: ");
+
+        startActivity(LocalMusicActivity.class);
     }
 
     /**
