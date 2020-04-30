@@ -50,6 +50,8 @@ public class LocalMusicActivity extends BaseTitleActivity {
      */
     private void toScanLocalMusic() {
         LogUtil.d(TAG, "toScanLocalMusic:");
+
+        startActivity(ScanLocalMusicActivity.class);
     }
 
 

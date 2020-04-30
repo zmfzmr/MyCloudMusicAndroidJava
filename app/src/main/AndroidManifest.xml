@@ -25,6 +25,9 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.ScanLocalMusicActivity"
+            android:label="@string/scan_local_music" />
+        <activity
             android:name=".activity.LocalMusicActivity"
             android:label="@string/local_music" />
         <activity
