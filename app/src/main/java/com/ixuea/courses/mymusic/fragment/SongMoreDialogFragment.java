@@ -8,18 +8,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.CollectSongClickEvent;
+import com.ixuea.courses.mymusic.domain.event.SheetChangedEvent;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
 import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.OnClick;
+import retrofit2.Response;
 
 /**
  * 歌曲-更多对话框
@@ -147,5 +152,28 @@ public class SongMoreDialogFragment extends BaseBottomSheetDialogFragment {
 
         //可以使用监听器回调到Activity中，但是我们这里用的EventBus发送通知的这种方式
         EventBus.getDefault().post(new CollectSongClickEvent(song));
+    }
+
+    /**
+     * 从歌单中删除音乐点击
+     */
+    @OnClick(R.id.ll_delete_song_in_sheet)
+    public void OnDeleteSongInSheetClick() {
+        //也可以将逻辑写到这里(因为这个(从歌单删除)按钮只有我创建的歌单才有，所以逻辑可以直接写到这里来)
+        Api.getInstance()
+                .deleteSongInSheet(sheet.getId(), song.getId())
+                .subscribe(new HttpObserver<Response<Void>>() {
+                    @Override
+                    public void onSucceeded(Response<Void> data) {
+                        //提示
+                        ToastUtil.successShortToast(R.string.success_delete_song_in_sheet);
+
+                        //发布事件(可以用之前创建的SheetChangedEvent)
+                        EventBus.getDefault().post(new SheetChangedEvent());
+
+                        //关闭对话框
+                        dismiss();
+                    }
+                });
     }
 }

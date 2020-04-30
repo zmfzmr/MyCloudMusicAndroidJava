@@ -273,4 +273,14 @@ public interface Service {
      */
     @POST("v1/sheets/{sheetId}/relations")
     Observable<Response<Void>> addSongToSheet(@Path("sheetId") String sheetId, @Body Map<String, String> data);
+
+    /**
+     * 从歌单中删除音乐(只能删除歌单里面的音乐，别人的音乐无法删除(就算客户端不做限制也无法删除比人的音乐，
+     * 因为服务端限制了))
+     * <p>
+     * 注意：这里是删除，只需要传入id值就行，并不像post请求那样需要传入@Body(Map 或者对象)
+     * 对于前面的QueryMap，这是GET请求的时候用到的
+     */
+    @DELETE("v1/sheets/{sheetId}/relations/{songId}")
+    Observable<Response<Void>> deleteSongInSheet(@Path("sheetId") String sheetId, @Path("songId") String songId);
 }

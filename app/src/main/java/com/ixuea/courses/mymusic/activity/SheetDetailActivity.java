@@ -41,6 +41,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -231,7 +232,7 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
     }
 
     /**
-     * //请求数据
+     * 请求数据
      */
     private void fetchData() {
         Api.getInstance()
@@ -247,17 +248,24 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
     /**
      * 显示数据
      *
+     * 一般返回的json数据么有songs这组数据，那么我们在客户端定义的模型对象里面的songs对象是为null
+     * 最好前面加个！=null的，这样就如果是null的话，就不会判断后面的data.getSongs了
+     * （否则如果不写的话，获取这个songs对象就是null，那么size也就是没有的）
+     *
      * @param data Sheet数据
      */
     private void next(Sheet data) {
         this.data = data;
 
         LogUtil.d(TAG, "next:" + data);
-        //这里最好要判断不为null并且有数据，否则没有歌曲进入页面的话，可能会崩溃
+        //这里最好要判断不为null并且有数据(最好前面加个！=null的)
         if (data.getSongs() != null && data.getSongs().size() > 0) {
             //有音乐才设置
             //设置数据
             adapter.replaceData(data.getSongs());
+        } else {
+            //没有数据（传入空数据）
+            adapter.replaceData(new ArrayList<>());
         }
 
 //        //显示封面
@@ -825,6 +833,18 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
                         publishSheetChangedEvent();
                     }
                 });
+    }
+
+    /**
+     * 歌单改变了事件(这个是在SongMoreDialogFragment 点击了（从歌单删除）后回调了
+     * 当然这个SheetChangedEvent事件 在收藏和取消收藏后也会回调到这里来
+     * 也可以在SongMoreDialogFragment 那边发送事件的时候换一个事件就可以
+     * （我们这里就不换了）
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSheetChangedEvent(SheetChangedEvent event) {
+        //重新获取数据
+        fetchData();
     }
 
     /**
