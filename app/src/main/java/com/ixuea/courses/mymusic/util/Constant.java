@@ -1,5 +1,7 @@
 package com.ixuea.courses.mymusic.util;
 
+import android.provider.MediaStore;
+
 import com.ixuea.courses.mymusic.BuildConfig;
 
 /**
@@ -211,4 +213,30 @@ public class Constant {
      * 分页参数字段
      */
     public static final String PAGE = "page";
+    /**
+     * 查询条件 selection
+     * Android媒体库本地音乐查询条件
+     * 这里是 查询是音乐
+     * 并且大于1M
+     * 时长大于60秒的文件
+     * <p>
+     * MediaStore.Audio.AudioColumns.IS_MUSIC = "is_music"
+     * <p>
+     * 因为String.format 这种格式中，如果有问号？的话，可能会出问题，所以我们用拼接的方式
+     * <p>
+     * //这个查询条件是注意中间的空格
+     */
+    public static final String MEDIA_AUDIO_SELECTION =
+            MediaStore.Audio.AudioColumns.IS_MUSIC + " != 0 AND " +
+                    MediaStore.Audio.AudioColumns.SIZE + " >= ? AND " +
+                    MediaStore.Audio.AudioColumns.DURATION + " >= ?";
+    /**
+     * 1M (1KB = 1*1024字节  1M = 1kB * 1024)
+     */
+    public static final int MUSIC_FILTER_SIZE = 1 * 1024 * 1024;
+
+    /**
+     * 60s (单位：毫秒)
+     */
+    public static final int MUSIC_FILTER_DURATION = 60 * 1000;
 }

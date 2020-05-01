@@ -256,4 +256,23 @@ public class StorageUtil {
 
         return null;
     }
+
+    /**
+     * 根据id获取audio content uri
+     * <p>
+     * 注意：这里传入的是long类型
+     * <p>
+     * 返回的是uri  如：content://media/external/audio/media/28
+     */
+    public static String getAudioContentUri(long id) {
+        //MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.buildUpon(): 创建一个builder,
+        // 并将原来的参数拷贝到新的builder
+        return MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.buildUpon()
+                //这个id,就是添加到，MediaStore.Audio.Media.EXTERNAL_CONTENT_URI的后面
+                .appendPath(String.valueOf(id))
+                //创建uri
+                .build()
+                //以字符串的类型返回(转为字符串)
+                .toString();
+    }
 }
