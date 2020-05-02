@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -57,6 +58,7 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
     private AsyncTask<Void, String, List<SongLocal>> scanMusicAsyncTask;
     private boolean isScanComplete;//是否扫描完成了
     private boolean hasFoundMusic;//是否有音乐
+    private boolean isScanning;//是否在扫描中
 
 
     @Override
@@ -68,12 +70,46 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
     /**
      * 扫描按钮点击了
      */
+    @SuppressLint("ResourceType")
     @OnClick(R.id.bt_scan)
     public void onScanClick() {
         LogUtil.d(TAG, "onScanClick: ");
+        //如果扫描完成了
+        //点击就是关闭界面
+        //按钮样式在扫描完成后以及更改了(就扫描完成，按钮文字变成了(回到我的音乐))
+        if (isScanComplete) {
+            finish();
+            return;
+        }
 
-        //开始扫描
-        startScan();
+        if (isScanning) {
+            //如果是正在扫描(扫描中)
+
+            //点击停止扫描
+            stopScan();
+            //按钮背景
+            bt_scan.setBackgroundResource(R.drawable.selector_color_primary);
+            //这里比上面多写了getResources().getColor
+            //如果这里单单写：getColorStateList或者getColor（这个方法是API 23以后才会用到，所以前面最好加上getResources().）
+            bt_scan.setTextColor(getResources().getColor(R.drawable.selector_text_color_primary_reverse));
+            //设置按钮文本
+            bt_scan.setText(R.string.start_scan);
+        } else {
+            //没有扫描
+
+            //开始扫描
+            startScan();
+            //按钮背景
+            bt_scan.setBackgroundResource(R.drawable.selector_color_primary_reverse);
+            //按钮文字颜色
+            bt_scan.setTextColor(getResources().getColorStateList(R.drawable.selector_text_color_primary));
+            //设置为停止扫描
+            bt_scan.setText(R.string.stop_scan);
+        }
+        //改变扫描状态
+        //一开始是开始扫描的(也就是isScanning = false)，点击后，就要变成停止扫描文字，这取反走if里面的额
+        isScanning = !isScanning;
+
     }
 
     /**
@@ -200,11 +236,28 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
                     //打印日志
                     //目的是方便调试
                     LogUtil.d(TAG, String.format("$d,$s,$s,$s", id, title, artist, album));
+
+                    //发布进度
+                    publishProgress(path);
+
+                    //这里模拟延迟
+                    SystemClock.sleep(1000);
                 }
 
                 Log.d(TAG, "doInBackground: ");
 
                 return datum;//返回结果
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+                super.onProgressUpdate(values);
+
+                String path = values[0];
+
+                LogUtil.d(TAG, "path :" + path);
+
+                tv_progress.setText(path);
             }
 
             /**
@@ -251,6 +304,10 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
      * 停止扫描
      */
     private void stopScan() {
-
+        if (scanMusicAsyncTask != null) {
+            //终止异步任务
+            scanMusicAsyncTask.cancel(true);
+            scanMusicAsyncTask = null;
+        }
     }
 }

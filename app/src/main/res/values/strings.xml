@@ -174,5 +174,6 @@
 
     <string name="found_music_count">共找到%1$d首音乐</string>
     <string name="to_my_music">回到我的本地音乐</string>
+    <string name="stop_scan">停止扫描</string>
 
 </resources>
