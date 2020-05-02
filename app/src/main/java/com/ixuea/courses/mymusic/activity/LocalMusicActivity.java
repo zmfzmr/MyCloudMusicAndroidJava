@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.MusicPlayerActivity;
@@ -20,6 +21,7 @@ import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 本地音乐界面
@@ -32,6 +34,25 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
      */
     @BindView(R.id.rv)
     RecyclerView rv;
+
+    /**
+     * 按钮容器
+     */
+    @BindView(R.id.ll_button_container)
+    View ll_button_container;
+
+    /**
+     * 选择按钮(全选)
+     */
+    @BindView(R.id.bt_select)
+    Button bt_select;
+
+    /**
+     * 删除按钮
+     */
+    @BindView(R.id.bt_delete)
+    Button bt_delete;
+
     private SongAdapter adapter;
     private ListManager listManager;//列表管理器
 
@@ -173,4 +194,21 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
         //跳转到播放界面
         startActivity(MusicPlayerActivity.class);
     }
+
+    /**
+     * 选择按钮点击事件
+     */
+    @OnClick(R.id.bt_select)
+    public void onSelectAllClick() {
+        LogUtil.d(TAG, "onSelectAllClick");
+    }
+
+    /**
+     * 删除点击
+     */
+    @OnClick(R.id.bt_delete)
+    public void onDeleteClick() {
+        LogUtil.d(TAG, "onDeleteClick");
+    }
+
 }
