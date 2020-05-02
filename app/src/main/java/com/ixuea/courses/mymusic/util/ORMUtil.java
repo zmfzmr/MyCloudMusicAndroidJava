@@ -244,4 +244,40 @@ public class ORMUtil {
 
         return toSongs(songLocals, realm);
     }
+
+    /**
+     * 保存本地音乐
+     * 前面的那个saveAll 是保存网络请求的音乐(把请求回来的音乐转换成本地对象SongLocal，然后保存得到数据库到的)
+     * <p>
+     * 这里的，因为是本地对象了(SongLocal)，所以可以直接保存就行了
+     *
+     * @param data
+     */
+    public void saveSongLocal(SongLocal data) {
+        //获取数据库框架实例
+        Realm realm = getInstance();
+
+        try {
+            //开始事务
+            //有些框架不用到这个事务的时候回帮我默认处理，但是对于我们这个realm框架，就必须要处理它它这个事务(也就是开始事务和提交事务)
+            realm.beginTransaction();
+
+            //会根据SongLocal对象里面的id来判断，如果有数据就更新；
+            realm.copyToRealmOrUpdate(data);
+            //提交事务
+            realm.commitTransaction();
+
+            LogUtil.d(TAG, "SongLocal:" + data.getTitle());
+
+        } catch (Exception e) {
+            //错误
+            e.printStackTrace();
+
+            //回滚事务(也即是取消事务 （前面的那个是提交事务）)
+            realm.cancelTransaction();
+        } finally {
+            //释放realm
+            realm.close();
+        }
+    }
 }

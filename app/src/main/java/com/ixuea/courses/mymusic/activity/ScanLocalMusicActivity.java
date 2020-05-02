@@ -236,6 +236,33 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
                     //打印日志
                     //目的是方便调试
                     LogUtil.d(TAG, String.format("$d,$s,$s,$s", id, title, artist, album));
+                    //创建本地音乐对象，保存查询到的数据
+                    SongLocal data = new SongLocal();
+                    //我们的id是long类型，需要转换成String类型
+                    data.setId(String.valueOf(id));
+                    //保存标题（前的那个displayName可能就是多了.mp3的后缀）
+                    data.setTitle(title);
+                    //歌手名称(艺术家)
+                    data.setSinger_nickname(artist);
+
+                    //由于我们项目没有实现专辑
+                    //所以这些字段也就不保存了
+
+                    //时长
+                    //也可以不保存
+                    //因为我们是在播放的时候获取
+                    data.setDuration(duration);
+                    //兼容Android Q以下版本 (前面的path路径不能直接播放音乐，这个uri是可以的)
+                    data.setUri(uri);
+
+                    //设置音乐来源(这里是从本地查找出来，这里添加个标志，标明是从本地来的)
+                    data.setSource(SongLocal.SOURCE_LOCAL);
+
+                    //保存到集合
+                    datum.add(data);
+
+                    //保存到数据库
+                    orm.saveSongLocal(data);
 
                     //发布进度
                     publishProgress(path);
