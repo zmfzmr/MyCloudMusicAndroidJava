@@ -5,10 +5,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.SongAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 
 /**
  * 本地音乐界面
@@ -16,6 +21,12 @@ import java.util.List;
 public class LocalMusicActivity extends BaseTitleActivity {
 
     private static final String TAG = "LocalMusicActivity";
+    /**
+     * 列表控件
+     */
+    @BindView(R.id.rv)
+    RecyclerView rv;
+    private SongAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +35,28 @@ public class LocalMusicActivity extends BaseTitleActivity {
     }
 
     @Override
+    protected void initView() {
+        super.initView();
+        //设置尺寸固定
+        rv.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
+        rv.setLayoutManager(layoutManager);
+    }
+
+    @Override
     protected void initDatum() {
         super.initDatum();
+        //复用歌单详情里面的单曲适配器
+        //不过这样写有个问题（就是前面的位置tv_position，会从0开始）
+        //复用的适配器SongAdapter（在歌单详情那边是有header的）
+        //如果想处理这个问题的，需要获取RecyclerView的header判断处理
+        //还有右边的更多按钮 并没有实现，我们这里就不处理了
+        adapter = new SongAdapter(R.layout.item_sheet_detail);
+        rv.setAdapter(adapter);
+
+//        adapter.addHeaderView(LayoutInflater.from(getMainActivity()).inflate(R.layout.item_song,null,false));
+//        adapter.addHeaderView(LayoutInflater.from(getMainActivity()).inflate(R.layout.item_song,null,false));
+//        adapter.getHeaderLayout().getChildCount();//获取头布局的数量
 
         fetchData();
     }
@@ -38,7 +69,8 @@ public class LocalMusicActivity extends BaseTitleActivity {
         if (datum.size() > 0) {
             //有本地音乐
 
-            //TODO 设置到适配器
+            //设置到适配器
+            adapter.replaceData(datum);
         } else {
             //没有本地音乐
 
