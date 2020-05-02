@@ -169,7 +169,7 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
         id = extraId();
 
         //创建适配器
-        adapter = new SongAdapter(R.layout.item_sheet_detail);
+        adapter = new SongAdapter(R.layout.item_song_detail);
 
         //添加头部（注意：在设置适配器前添加头部布局）
         adapter.addHeaderView(createHeaderView());

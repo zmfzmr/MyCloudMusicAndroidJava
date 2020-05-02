@@ -62,6 +62,17 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
         //设置点击事件
         ib_more.setOnClickListener(view -> songListener.onMoreClick(data));
 
+        //处理编辑状态
+        if (editing) {
+            //位置隐藏 勾选框显示
+            helper.setVisible(R.id.tv_position, false);
+            helper.setVisible(R.id.iv_check, true);
+        } else {
+            //否则取反
+            helper.setVisible(R.id.tv_position, true);
+            helper.setVisible(R.id.iv_check, false);
+        }
+
     }
 
     /**
@@ -108,6 +119,9 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
      */
     public void setEditing(boolean editing) {
         this.editing = editing;
+
+        //设置进来要通知适配器刷新状态(通知数据改变了)
+        notifyDataSetChanged();
     }
 
     /**

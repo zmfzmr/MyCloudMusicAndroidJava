@@ -84,7 +84,7 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
         //复用的适配器SongAdapter（在歌单详情那边是有header的）
         //如果想处理这个问题的，需要获取RecyclerView的header判断处理
         //还有右边的更多按钮 并没有实现，我们这里就不处理了
-        adapter = new SongAdapter(R.layout.item_sheet_detail);
+        adapter = new SongAdapter(R.layout.item_song_detail);
         rv.setAdapter(adapter);
 
 //        adapter.addHeaderView(LayoutInflater.from(getMainActivity()).inflate(R.layout.item_song,null,false));

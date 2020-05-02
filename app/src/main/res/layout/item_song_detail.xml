@@ -1,48 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical">
     <!--设置个白色 ，不然在不同的手机上颜色是不一样的-->
     <!--内容-->
     <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!--位置-->
-        <TextView
-            android:id="@+id/tv_position"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
             android:layout_width="@dimen/item_song_height"
-            android:layout_height="@dimen/item_song_height"
-            android:gravity="center"
-            android:textColor="@color/text"
-            tools:text="12" />
+            android:layout_height="@dimen/item_song_height">
+            <!--位置-->
+            <TextView
+                android:id="@+id/tv_position"
+                android:layout_width="@dimen/item_song_height"
+                android:layout_height="@dimen/item_song_height"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textColor="@color/text"
+                tools:text="12" />
+            <!--选中状态图片  默认是隐藏的-->
+            <ImageView
+                android:id="@+id/iv_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_checkbox"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
         <!--音乐信息容器-->
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <!--标题-->
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text"
-                android:text="这是歌曲名称" />
+                android:text="这是歌曲名称"
+                android:textColor="@color/text" />
             <!--信息-->
             <TextView
                 android:id="@+id/tv_info"
-                android:layout_marginTop="@dimen/padding_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_small"
+                android:layout_marginTop="@dimen/padding_small"
+                android:text="这是歌手信息"
                 android:textColor="@color/light_grey"
-                android:text="这是歌手信息" />
+                android:textSize="@dimen/text_small" />
 
         </LinearLayout>
         <!--更多按钮 这里用了ImageButton
