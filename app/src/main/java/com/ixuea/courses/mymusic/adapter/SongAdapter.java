@@ -19,6 +19,7 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
     private int selectedIndex = -1;
 
     private SongListener songListener;//监听器
+    private boolean editing;//是否正在编辑(也就是点击(批量编辑)按钮，这里会变成true)
 
     /**
      * 构造方法
@@ -93,6 +94,20 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
      */
     public void setSongListener(SongListener songListener) {
         this.songListener = songListener;
+    }
+
+    /**
+     * 是否正在批量编辑
+     */
+    public boolean isEditing() {
+        return editing;
+    }
+
+    /**
+     * 设置批量编辑状态
+     */
+    public void setEditing(boolean editing) {
+        this.editing = editing;
     }
 
     /**

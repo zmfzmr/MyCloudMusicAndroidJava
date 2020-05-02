@@ -15,6 +15,7 @@ import com.ixuea.courses.mymusic.fragment.SortDialogFragment;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import java.util.List;
 
@@ -55,6 +56,7 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
 
     private SongAdapter adapter;
     private ListManager listManager;//列表管理器
+    private MenuItem editMenuItem;//编辑菜单
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +132,8 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_local_music, menu);
+        //查找编辑菜单
+        editMenuItem = menu.findItem(R.id.action_edit);
         return true;
     }
 
@@ -143,7 +147,8 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
-                //TODO 批量编辑按钮点击了
+                //批量编辑按钮点击了
+                onEditClick();
                 break;
             case R.id.action_scan_local_music:
                 //扫描本地音乐(跳转到扫描界面就行了)
@@ -157,6 +162,59 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 批量编辑按钮 点击了
+     */
+    private void onEditClick() {
+        //判断是否有数据(有本地音乐才去编辑)
+        if (adapter.getItemCount() == 0) {
+            ToastUtil.successShortToast("没有本地音乐!");
+            return;
+        }
+
+        if (adapter.isEditing()) {
+            //在编辑模式下
+
+            //退出编辑模式
+            exitEditMode();
+        } else {
+            //没有进入编辑模式
+
+            //进入编辑模式
+
+            //设置编辑按钮标题
+            editMenuItem.setTitle(R.string.cancel_edit);
+            //显示编辑容器（全选和删除按钮）
+            ll_button_container.setVisibility(View.VISIBLE);
+            //适配器进入编辑状态
+            adapter.setEditing(true);
+        }
+    }
+
+    /**
+     * 退出编辑
+     */
+    private void exitEditMode() {
+        //退出编辑（取消编辑）恢复原来的文字 （批量编辑）
+        editMenuItem.setTitle(R.string.batch_edit);
+        //编辑容器设置隐藏
+        ll_button_container.setVisibility(View.GONE);
+        //重置编辑按钮状态
+        defaultButtonStatus();//设置成一个方法，后面用到
+        //退出编辑设置编辑状态为false
+        adapter.setEditing(false);
+    }
+
+    /**
+     * 重置编辑按钮状态
+     */
+    private void defaultButtonStatus() {
+        //设置全选文字
+        bt_select.setText(R.string.select_all);
+        //禁用删除按钮
+        bt_delete.setEnabled(false);
     }
 
     /**
