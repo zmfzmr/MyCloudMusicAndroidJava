@@ -20,6 +20,7 @@ public class PreferenceUtil {
     private static final String KEY_GLOBAL_LYRIC_TEXT_COLOR = "KEY_GLOBAL_LYRIC_TEXT_COLOR";//全局歌词颜色 key
     private static final String KEY_GLOBAL_LYRIC_LOCK = "KEY_GLOBAL_LYRIC_LOCK";//全局歌词锁定 key
     private static final String KEY_GLOBAL_LYRIC_VIEW_Y = "KEY_GLOBAL_LYRIC_VIEW_Y";//获取全局Y坐标 key
+    private static final String KEY_LOCAL_MUSIC_SORT = "KEY_LOCAL_MUSIC_SORT";//本地音乐排序 key
     private static PreferenceUtil instance;
     private final Context context;//上下文
     private final SharedPreferences preference;
@@ -209,6 +210,20 @@ public class PreferenceUtil {
      */
     public void setGlobalLyricViewY(int data) {
         putInt(KEY_GLOBAL_LYRIC_VIEW_Y, data);
+    }
+
+    /**
+     * 本地音乐排序
+     */
+    public int getLocalMusicSortIndex() {
+        return getInt(KEY_LOCAL_MUSIC_SORT, 0);
+    }
+
+    /**
+     * 设置本地音乐排序
+     */
+    public void setLocalMusicSortIndex(int data) {
+        putInt(KEY_LOCAL_MUSIC_SORT, data);
     }
 
     //辅助方法 （就是添加 删除等之类的）

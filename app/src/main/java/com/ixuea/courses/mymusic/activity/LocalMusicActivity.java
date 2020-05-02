@@ -142,10 +142,13 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
      * 显示排序对话框
      */
     private void showSortDialog() {
-        SortDialogFragment.show(getSupportFragmentManager(), (dialog, which) -> {
+        SortDialogFragment.show(getSupportFragmentManager(), sp.getLocalMusicSortIndex(), (dialog, which) -> {
             LogUtil.d(TAG, "onClick: " + which);
             //关闭对话框
             dialog.dismiss();
+
+            //保存排序索引
+            sp.setLocalMusicSortIndex(which);
         });
     }
 
