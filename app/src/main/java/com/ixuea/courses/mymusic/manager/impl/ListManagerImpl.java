@@ -184,9 +184,23 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
         //保存数据
         this.data = data;
-        //播放音乐
-        //这里是从SheetDetailActivity中，通过play(position)传递过来的Song
-        musicPlayerManager.play(ResourceUtil.resourceUri(data.getUri()), data);
+
+        if (data.isLocal()) {
+            //是不会本地的，这对象里面的source会等于SongLocal.LOCAL
+            //data.isLocal() return source == SongLocal.SOURCE_LOCAL;
+
+            //这个本地的uri从哪里设置进来的呢?()
+            // 路线：ScanLocalMusicActivity-扫描设置uri到SongLocal并保存到本地数据库
+            // -->LocalMusicActivity查找数据(转换成List<Song>)到适配器adapter--点击item传入data到ListManagerImpl中
+            musicPlayerManager.play(data.getUri(), data);
+
+        } else {
+            //不是本地（从其他或者网络中来的额）
+
+            //播放音乐
+            //这里是从SheetDetailActivity中，通过play(position)传递过来的Song
+            musicPlayerManager.play(ResourceUtil.resourceUri(data.getUri()), data);
+        }
 
         //设置最后播放音乐的Id(保存歌曲的id 到持久化)
         sp.setLastPlaySongId(data.getId());

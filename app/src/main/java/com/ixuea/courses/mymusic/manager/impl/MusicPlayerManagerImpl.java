@@ -2,6 +2,7 @@ package com.ixuea.courses.mymusic.manager.impl;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -130,8 +131,20 @@ public class MusicPlayerManagerImpl
             //是否播放器
             player.reset();
 
-            //设置数据源
-            player.setDataSource(uri);//可能找不到这个uri，会发生异常，所以捕获异常
+            if (uri.startsWith("content://")) {
+                //内容提供者格式(说明uri是本地到的路径)
+
+                //本地音乐
+                //uri示例：content://media/external/audio/media/23
+                //注意：这里多了一个上下文参数，还有，需要调用Uri.parse解析本地uri路径(这里返回的是一个uri对象)
+                player.setDataSource(context, Uri.parse(uri));
+
+            } else {
+                //uri是网络地址
+
+                //设置数据源
+                player.setDataSource(uri);//可能找不到这个uri，会发生异常，所以捕获异常
+            }
 
             //同步准备
             //真实项目中可能会使用异步
@@ -149,8 +162,10 @@ public class MusicPlayerManagerImpl
             startPublishProgress();
 
             //如果是本地音乐
-            //就去获取歌词
+            // 就去获取歌词
             if (data.isLocal()) {
+                //因为服务器那边没有实现本地歌词的实现，所以这里要记得返回，否则是本地的话，无法获取到歌词
+                //有可以报空异常
                 return;
             }
             //每点击下一首歌曲 这里的Song歌曲对象都要变成List集合中的下一个对象，所以这里的都是null

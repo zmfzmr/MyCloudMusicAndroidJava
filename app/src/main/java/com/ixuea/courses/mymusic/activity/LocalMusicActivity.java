@@ -3,10 +3,15 @@ package com.ixuea.courses.mymusic.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ixuea.courses.mymusic.MusicPlayerActivity;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SongAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.manager.ListManager;
+import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
 import java.util.List;
@@ -18,7 +23,7 @@ import butterknife.BindView;
 /**
  * 本地音乐界面
  */
-public class LocalMusicActivity extends BaseTitleActivity {
+public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAdapter.OnItemClickListener {
 
     private static final String TAG = "LocalMusicActivity";
     /**
@@ -27,6 +32,7 @@ public class LocalMusicActivity extends BaseTitleActivity {
     @BindView(R.id.rv)
     RecyclerView rv;
     private SongAdapter adapter;
+    private ListManager listManager;//列表管理器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,9 @@ public class LocalMusicActivity extends BaseTitleActivity {
     @Override
     protected void initDatum() {
         super.initDatum();
+        //初始化播放列表管理器
+        listManager = MusicPlayerService.getListManager(getApplicationContext());
+
         //复用歌单详情里面的单曲适配器
         //不过这样写有个问题（就是前面的位置tv_position，会从0开始）
         //复用的适配器SongAdapter（在歌单详情那边是有header的）
@@ -77,6 +86,14 @@ public class LocalMusicActivity extends BaseTitleActivity {
             //跳转到扫描本地音乐界面
             toScanLocalMusic();
         }
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //添加item点击事件
+        adapter.setOnItemClickListener(this);
     }
 
     /**
@@ -117,5 +134,24 @@ public class LocalMusicActivity extends BaseTitleActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * item点击回调
+     *
+     * @param adapter
+     * @param view
+     * @param position
+     */
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        //获取当前点击音乐
+        Song data = (Song) adapter.getItem(position);
+        //adapter.getData():获取到的是List<Song> 因为前面从本地数据查询回来会转换成List<Song>
+        listManager.setDatum(adapter.getData());
+        //播放当前音乐
+        listManager.play(data);
+        //跳转到播放界面
+        startActivity(MusicPlayerActivity.class);
     }
 }
