@@ -73,7 +73,7 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
 
     private void fetchData() {
         //查询本地音乐
-        List<Song> datum = orm.queryLocalMusic();
+        List<Song> datum = orm.queryLocalMusic(sp.getLocalMusicSortIndex());
         //这里可以不用datum!=null判断，因为这个queryLocalMusic查询后，就算数据为null，也会返回一个空集合对象
         //所datum不会为null
         if (datum.size() > 0) {
@@ -149,6 +149,9 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
 
             //保存排序索引
             sp.setLocalMusicSortIndex(which);
+
+            //点击重新下数据
+            fetchData();
         });
     }
 

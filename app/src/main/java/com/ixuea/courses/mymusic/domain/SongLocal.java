@@ -33,6 +33,13 @@ public class SongLocal extends RealmObject {
      * 本地音乐
      */
     public static final int SOURCE_LOCAL = 1;
+    /**
+     * 音乐排序key
+     * 音乐id，音乐名称，歌手名
+     * <p>
+     * 如果传入的索引为0，那就是id排序；传入1的话就是title排序，3的话就是歌手名排序（因为第三个是专辑，我们这里没有专辑，所以用歌手名）
+     */
+    public static final String[] SORT_KEYS = new String[]{"id", "title", "singer_nickname"};
 
     /**
      * 歌曲Id

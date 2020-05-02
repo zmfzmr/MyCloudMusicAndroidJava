@@ -232,15 +232,19 @@ public class ORMUtil {
 
     /**
      * 查询本地音乐(查询结果要转成List<Song>（就是每个对象SongLocal对象转换成Song对象返回）)
+     * @param sortIndex
      */
-    public List<Song> queryLocalMusic() {
+    public List<Song> queryLocalMusic(int sortIndex) {
         //获取数据库实例(这个getInstance 方法里面已经实现了多用户了)
         Realm realm = getInstance();
 
         //查询所有本地音乐(注意：本地音乐对象是SongLocal对象)
         RealmResults<SongLocal> songLocals = realm.where(SongLocal.class)
                 .equalTo("source", SongLocal.SOURCE_LOCAL)
-                .findAll();
+                .findAll()
+                //因为排序只有本地音乐对象才有，所以排序的key组放到SongLocal中
+                //这里第二个参数是排序规则对象，这里不传默认是正序排序
+                .sort(SongLocal.SORT_KEYS[sortIndex]);
 
         return toSongs(songLocals, realm);
     }
