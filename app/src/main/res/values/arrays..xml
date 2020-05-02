@@ -7,4 +7,11 @@
         <item>复制评论</item>
         <item>举报评论</item>
     </string-array>
+
+    <!-- 歌曲排序-->
+    <string-array name="dialog_song_sort">
+        <item>默认</item>
+        <item>歌曲名</item>
+        <item>专辑名</item>
+    </string-array>
 </resources>

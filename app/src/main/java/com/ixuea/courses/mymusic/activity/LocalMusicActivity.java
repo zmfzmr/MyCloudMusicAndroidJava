@@ -10,6 +10,7 @@ import com.ixuea.courses.mymusic.MusicPlayerActivity;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SongAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.fragment.SortDialogFragment;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -128,12 +129,24 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
                 toScanLocalMusic();
                 break;
             case R.id.action_sort:
-                //TODO 排序
+                //排序
+                showSortDialog();
                 break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 显示排序对话框
+     */
+    private void showSortDialog() {
+        SortDialogFragment.show(getSupportFragmentManager(), (dialog, which) -> {
+            LogUtil.d(TAG, "onClick: " + which);
+            //关闭对话框
+            dialog.dismiss();
+        });
     }
 
     /**
