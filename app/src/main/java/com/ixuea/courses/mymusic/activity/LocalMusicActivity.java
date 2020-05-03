@@ -201,7 +201,7 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
         editMenuItem.setTitle(R.string.batch_edit);
         //编辑容器设置隐藏
         ll_button_container.setVisibility(View.GONE);
-        //重置编辑按钮状态
+        //重置编辑按钮状态(因为ll_button_container容器已经隐藏了 ，所以这个设不设置都无所谓的啦)
         defaultButtonStatus();//设置成一个方法，后面用到
         //退出编辑设置编辑状态为false
         adapter.setEditing(false);
@@ -237,20 +237,38 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
     /**
      * item点击回调
      *
-     * @param adapter
+     * @param baseQuickAdapter
      * @param view
      * @param position
      */
     @Override
-    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        //获取当前点击音乐
-        Song data = (Song) adapter.getItem(position);
-        //adapter.getData():获取到的是List<Song> 因为前面从本地数据查询回来会转换成List<Song>
-        listManager.setDatum(adapter.getData());
-        //播放当前音乐
-        listManager.play(data);
-        //跳转到播放界面
-        startActivity(MusicPlayerActivity.class);
+    public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
+
+        if (adapter.isEditing()) {
+
+            //        if (adapter.isSelected(position)) {
+//            //是选中的  设置为不选中状态
+//
+//            adapter.setSelected(position,false);
+//        } else {
+//            adapter.setSelected(position,true);
+//        }
+            //简写 取反
+            adapter.setSelected(position, !adapter.isSelect(position));
+
+        } else {
+            //不是编辑状态下，点击可以播放音乐
+
+            //获取当前点击音乐
+            Song data = (Song) adapter.getItem(position);
+            //adapter.getData():获取到的是List<Song> 因为前面从本地数据查询回来会转换成List<Song>
+            listManager.setDatum(adapter.getData());
+            //播放当前音乐
+            listManager.play(data);
+            //跳转到播放界面
+            startActivity(MusicPlayerActivity.class);
+        }
+
     }
 
     /**

@@ -7,6 +7,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
 
+import java.util.Collection;
+
 import androidx.annotation.NonNull;
 
 /**
@@ -20,6 +22,14 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
 
     private SongListener songListener;//监听器
     private boolean editing;//是否正在编辑(也就是点击(批量编辑)按钮，这里会变成true)
+
+    /**
+     * 1表示选中
+     * 0表示没选中
+     * <p>
+     * 目前这个用在本地音乐那里
+     */
+    private int[] selectIndexes;
 
     /**
      * 构造方法
@@ -67,12 +77,33 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
             //位置隐藏 勾选框显示
             helper.setVisible(R.id.tv_position, false);
             helper.setVisible(R.id.iv_check, true);
+            //isSelect:是本类里面的那个方法
+            if (isSelect(helper.getAdapterPosition())) {
+                //编辑状态下
+
+                //是选中状态
+                helper.setImageResource(R.id.iv_check, R.drawable.ic_checkbox_selected);
+            } else {
+                //不是选中状态
+                helper.setImageResource(R.id.iv_check, R.drawable.ic_checkbox);
+            }
+
         } else {
             //否则取反
             helper.setVisible(R.id.tv_position, true);
             helper.setVisible(R.id.iv_check, false);
         }
 
+    }
+
+    @Override
+    public void replaceData(@NonNull Collection<? extends Song> data) {
+        super.replaceData(data);
+        //创建一个和数据长度一样的数组
+        //这里可以优化
+        //因为就目前来说
+        //在歌单详情不需要多选
+        selectIndexes = new int[data.size()];
     }
 
     /**
@@ -119,9 +150,33 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
      */
     public void setEditing(boolean editing) {
         this.editing = editing;
+        //这里是没有点击批量点击(或取消编辑) 都恢复没有选中的状态
+        for (int i = 0; i < selectIndexes.length; i++) {
+            //这里置为0，然后下面调用notifyDataSetChanged，刷新所有item
+            //走convert方法 ，把打钩的换成 变成  没有打钩的图标
+            selectIndexes[i] = 0;
+        }
 
         //设置进来要通知适配器刷新状态(通知数据改变了)
         notifyDataSetChanged();
+    }
+
+    /**
+     * 设置选中状态
+     */
+    public void setSelected(int position, boolean isSelected) {
+        selectIndexes[position] = isSelected ? 1 : 0;
+        notifyItemChanged(position);//记得调用这个
+    }
+
+    /**
+     * 是否是选中状态
+     *
+     * @param position
+     * @return
+     */
+    public boolean isSelect(int position) {
+        return selectIndexes[position] == 1;
     }
 
     /**
