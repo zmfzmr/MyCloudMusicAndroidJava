@@ -254,7 +254,10 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
 //            adapter.setSelected(position,true);
 //        }
             //简写 取反
-            adapter.setSelected(position, !adapter.isSelect(position));
+            adapter.setSelected(position, !adapter.isSelected(position));
+
+            //显示按钮状态(编辑状态下,点击item后下面 2个按钮(全选 和删除)状态)
+            showButtonStatus();
 
         } else {
             //不是编辑状态下，点击可以播放音乐
@@ -268,7 +271,14 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
             //跳转到播放界面
             startActivity(MusicPlayerActivity.class);
         }
+    }
 
+    /**
+     * 是否有选中
+     */
+    private boolean isSelected() {
+        //这个有选中的这个集合就 大于0
+        return adapter.getSelectIndexes().size() > 0;
     }
 
     /**
@@ -277,6 +287,36 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
     @OnClick(R.id.bt_select)
     public void onSelectAllClick() {
         LogUtil.d(TAG, "onSelectAllClick");
+        //注意：这类不能写到for循环里面
+        //因为：有一个选中的，第一for循环第一次把整个选中的状态置为false(也就是SongAdapter里面的selectIndexes传入的0)
+        //那么第二次这个isSelected()就为false（就会设置item变为选中状态true），
+        // 结果为：第一个item设置false，第二次item设置为true
+        //这和我们的相反想矛盾（我们需要有一个item为选中状态， 一点击所有的都变成为选中状态(置为false)）
+        boolean selected = isSelected();
+        //遍历（长度为item 的个数）
+        //如果发现有选中，那么就遍历把全部的都设置为为选中状态
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            if (selected) {
+                //这里的i是从0开始到最后 item的个数 -1 ；参数2：设置为未选中
+                adapter.setSelected(i, false);
+            } else {
+                adapter.setSelected(i, true);
+            }
+        }
+        //刷新按钮状态
+        showButtonStatus();
+    }
+
+    /**
+     * 刷新按钮状态
+     */
+    private void showButtonStatus() {
+        if (isSelected()) {
+            bt_select.setText(R.string.cancel_select_all);
+        } else {
+            //里面 设置全选文字 和 禁用删除按钮
+            defaultButtonStatus();
+        }
     }
 
     /**

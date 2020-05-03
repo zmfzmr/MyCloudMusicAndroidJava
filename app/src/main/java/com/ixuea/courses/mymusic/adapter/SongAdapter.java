@@ -7,7 +7,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 
@@ -77,8 +79,8 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
             //位置隐藏 勾选框显示
             helper.setVisible(R.id.tv_position, false);
             helper.setVisible(R.id.iv_check, true);
-            //isSelect:是本类里面的那个方法
-            if (isSelect(helper.getAdapterPosition())) {
+            //isSelected:是本类里面的那个方法
+            if (isSelected(helper.getAdapterPosition())) {
                 //编辑状态下
 
                 //是选中状态
@@ -175,8 +177,24 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
      * @param position
      * @return
      */
-    public boolean isSelect(int position) {
+    public boolean isSelected(int position) {
         return selectIndexes[position] == 1;
+    }
+
+    /**
+     * 获取选中的索引(这里是获取选中的索引数组)
+     */
+    public List<Integer> getSelectIndexes() {
+        List<Integer> indexes = new ArrayList<>();
+
+        for (int i = 0; i < selectIndexes.length; i++) {
+            if (selectIndexes[i] == 1) {
+                //是选中的
+                indexes.add(selectIndexes[i]);
+            }
+        }
+        //返回选中索引数组
+        return indexes;
     }
 
     /**
