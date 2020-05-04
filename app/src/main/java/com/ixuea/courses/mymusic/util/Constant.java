@@ -239,4 +239,9 @@ public class Constant {
      * 60s (单位：毫秒)
      */
     public static final int MUSIC_FILTER_DURATION = 60 * 1000;
+
+    /**
+     * 扫描本地音乐放大镜圆周半径
+     */
+    public static final double DEFAULT_RADIUS = 30;
 }

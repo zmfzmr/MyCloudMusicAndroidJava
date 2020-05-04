@@ -1,5 +1,6 @@
 package com.ixuea.courses.mymusic.activity;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -67,6 +69,7 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
     private boolean hasFoundMusic;//是否有音乐
     private boolean isScanning;//是否在扫描中
     private TranslateAnimation lineAnimation;//位移动画
+    private ValueAnimator zoomValueAnimator;
 
 
     @Override
@@ -145,7 +148,7 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
         );
 
         lineAnimation.setInterpolator(new DecelerateInterpolator());
-        //时间为2秒
+        //时间为2秒(因为这里设置了重复模式，所以说如果没有在stopScan中取消这个动画，那么这个位移动画是一直重复的)
         lineAnimation.setDuration(2000);
         //重复次数
         //-1：无线重复
@@ -189,6 +192,54 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
         //开始动画
         iv_scan_line.startAnimation(lineAnimation);
 
+        //放大镜搜索效果
+
+        //其实下面动画的效果就是
+        //让放大镜中心在一个圆周上做运动
+
+        //属性动画(可以理解为0到360度，注意：是float类型)
+        zoomValueAnimator = ValueAnimator.ofFloat(0.0f, 360.0f);
+        //设置插值器(默认好像就是线性差值器，可以不用设置)
+        zoomValueAnimator.setInterpolator(new LinearInterpolator());
+        //动画时间(如果设置3000 会转的非常快，所以这里设置30000 也就是30秒)
+        zoomValueAnimator.setDuration(30000);
+        //无限重复
+        zoomValueAnimator.setRepeatCount(-1);
+        //重复模式
+        //重新开始(ValueAnimator.RESTART:表示：开始时顺时针，结束后也是顺时针转动)
+        zoomValueAnimator.setRepeatMode(ValueAnimator.RESTART);
+        //动画监听器
+        zoomValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                //获取角度
+                float angle = (float) animation.getAnimatedValue();
+                LogUtil.d(TAG, "角度：" + angle);
+                //由于系统需要的是x,y
+                //所以通过三角函数计算出x,y
+
+                //余弦值
+                //注意：一个是cos 另一个是sin
+                //这个计算的结果始终是0到1，我们希望它移动的圆大一点，所以乘以一个半径
+                float translateX = (float) (Constant.DEFAULT_RADIUS * Math.cos(angle));
+                //正弦值
+                float translateY = (float) (Constant.DEFAULT_RADIUS * Math.sin(angle));
+                //设置偏移位置
+
+                //现在是顺时针
+                //如果颠倒x,y
+                //就变成逆时针了
+                //如果y先是正数就是顺时针
+                iv_scan_zoom.setTranslationX(translateX);
+                iv_scan_zoom.setTranslationY(translateY);
+
+            }
+        });
+//        //注意：属性动画，不是这样开始，这样写是错误的
+//        iv_scan_zoom.startAnimation(zoomValueAnimator);
+        //正确写法：
+        //开始动画
+        zoomValueAnimator.start();
 
         //扫描音乐(之所以在这类再定义一个方法，因为在这前面还需要扫描动画)
         startScanMusic();
@@ -419,6 +470,12 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
         if (lineAnimation != null) {
             lineAnimation.cancel();
             lineAnimation = null;
+        }
+
+        iv_scan_zoom.clearAnimation();
+        if (zoomValueAnimator != null) {
+            zoomValueAnimator.cancel();
+            zoomValueAnimator = null;
         }
     }
 
