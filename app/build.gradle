@@ -723,6 +723,10 @@ dependencies {
     //emoji控件
     implementation 'androidx.emoji:emoji-bundled:1.0.0'
 
+    //下载框架
+    //https://github.com/ixuea/AndroidDownloader
+    implementation 'com.ixuea:AndroidDownloader:2.0.6'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

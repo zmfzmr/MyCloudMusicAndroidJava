@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.os.Build;
 
 import com.facebook.stetho.Stetho;
+import com.ixuea.android.downloader.DownloadService;
+import com.ixuea.android.downloader.callback.DownloadManager;
+import com.ixuea.android.downloader.config.Config;
 import com.ixuea.courses.mymusic.activity.LoginOrRegisterActivity;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
@@ -43,6 +46,7 @@ public class AppContext extends Application {
      * 上下文
      */
     private static AppContext context;
+    private DownloadManager downloadManager;//下载管理器实例
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -208,5 +212,35 @@ public class AppContext extends Application {
     private void onLogout() {
         //销毁数据库管理器
         ORMUtil.destroy();
+        //销毁下载管理器
+        if (downloadManager != null) {
+            //销毁下载框架实例
+            //因为不同的用户使用不同的实例
+            //(用户退出后，这个管理器就销毁了，下次进来的时候重新创建)
+            downloadManager.destroy();
+        }
+    }
+
+    /**
+     * 获取下载管理器
+     *
+     * @return DownloadManager对象
+     * 注意：DownloadManager 和 Config 都是aixuea 包里面的
+     */
+    public DownloadManager getDownload() {
+        if (downloadManager == null) {
+            //获取偏好设置工具栏
+            PreferenceUtil sp = PreferenceUtil.getInstance(context);
+            //创建下载框架配置
+            //aixuea 里面的包类
+            Config config = new Config();
+            //数据库名称添加了用户id
+            //所以不同的用户数据是隔离的
+            config.setDatabaseName(String.format("$s_download_info.db", sp.getUserId()));
+            //获取下载管理器
+            downloadManager = DownloadService.getDownloadManager(context, config);
+        }
+        //返回下载管理器实例
+        return downloadManager;
     }
 }
