@@ -17,6 +17,8 @@ import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -195,6 +197,8 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
 
     /**
      * 退出编辑
+     *
+     * 这里 点击(取消编辑)和(删除)按钮的时候用到
      */
     private void exitEditMode() {
         //退出编辑（取消编辑）恢复原来的文字 （批量编辑）
@@ -202,13 +206,16 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
         //编辑容器设置隐藏
         ll_button_container.setVisibility(View.GONE);
         //重置编辑按钮状态(因为ll_button_container容器已经隐藏了 ，所以这个设不设置都无所谓的啦)
+        //这个还是最好设置下，虽说隐藏了，但是还是回复下默认的按钮状态
         defaultButtonStatus();//设置成一个方法，后面用到
         //退出编辑设置编辑状态为false
         adapter.setEditing(false);
     }
 
     /**
-     * 重置编辑按钮状态
+     * 重置编辑按钮状态(默认是：全选文字 和 删除按钮禁用)
+     *
+     * 这里(取消编辑)和showButtonStatus中没有选中的时候调用
      */
     private void defaultButtonStatus() {
         //设置全选文字
@@ -277,7 +284,7 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
      * 是否有选中
      */
     private boolean isSelected() {
-        //这个有选中的这个集合就 大于0
+        //这个有选中的这个索引集合就 大于0
         return adapter.getSelectIndexes().size() > 0;
     }
 
@@ -308,11 +315,18 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
     }
 
     /**
-     * 刷新按钮状态
+     * 刷新按钮状态(全选和删除按钮 状态)
+     *
+     * 这里(点击item)和点击(全选) 调用
+     * 总结：
+     * 1.item有无选中后，下方 全选和删除按钮的 状态
+     * 2.点击全选后(全选和删除 状态) (这个1是一样的，点击全选后都是item被点击了，归为一个类)
      */
     private void showButtonStatus() {
         if (isSelected()) {
             bt_select.setText(R.string.cancel_select_all);
+            //注意：记得设置可用
+            bt_delete.setEnabled(true);
         } else {
             //里面 设置全选文字 和 禁用删除按钮
             defaultButtonStatus();
@@ -321,10 +335,52 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
 
     /**
      * 删除点击
+     *
+     * 思路：获取选中状态的索引数组-->遍历数组获取对应item(Song对象)，添加id到deleteIndexes
+     * -->删除的时候遍历迭代器删除适配器里面的数组(并把数据库的都删除)(数据库中删除是根据id找到这条数据后删除数据)
+     *
+     * 注意：这里是用迭代器删除的数据(不能用for循环)，
+     *      不能在fori，foreach循环中删除数据；对应fori循环，删除数据，会导致位置不正确，
+     *      foreach删除会直接抛出异常，要使用迭代器删除
+     *
+     *
+     * 并调用 adapter.notifyDataSetChanged()更新数据
+     *
+     *      记得最后调用： exitEditMode(); 退出编辑模式
      */
     @OnClick(R.id.bt_delete)
     public void onDeleteClick() {
         LogUtil.d(TAG, "onDeleteClick");
+
+        //获取选中的索引
+        List<Integer> selectIndexes = adapter.getSelectIndexes();
+
+        //保存要删除对象的id(Song对象里面id类型为String类型)
+        List<String> deleteIndexes = new ArrayList<>();
+        //遍历选中索引-->遍历获取Song对象，并保存Song id到deleteIndexs
+        Song data;
+        for (int index : selectIndexes) {
+            data = adapter.getItem(index);
+            deleteIndexes.add(data.getId());
+        }
+        //适配器里面的单曲集合
+        List<Song> datum = adapter.getData();
+
+        Iterator<Song> iterator = datum.iterator();
+
+        while (iterator.hasNext()) {
+            Song song = iterator.next();
+            if (deleteIndexes.contains(song.getId())) {
+                //表示删除集合里面的这个对象
+                iterator.remove();
+                //从数据库中删除
+                orm.deleteSongLocalById(song.getId());
+            }
+        }
+        //通知数据改变了
+        adapter.notifyDataSetChanged();
+        //退出编辑模式
+        exitEditMode();
     }
 
 }

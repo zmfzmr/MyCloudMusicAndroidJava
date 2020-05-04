@@ -190,7 +190,10 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
         for (int i = 0; i < selectIndexes.length; i++) {
             if (selectIndexes[i] == 1) {
                 //是选中的
-                indexes.add(selectIndexes[i]);
+//                indexes.add(selectIndexes[i]);
+
+                //注意：这里添加的是i(因为selectIndexes数组和数据元素是同等大小，所以这里的i就是item数据的索引)
+                indexes.add(i);
             }
         }
         //返回选中索引数组

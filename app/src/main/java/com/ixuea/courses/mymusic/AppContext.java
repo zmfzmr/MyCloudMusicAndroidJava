@@ -3,17 +3,23 @@ package com.ixuea.courses.mymusic;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Build;
 
 import com.facebook.stetho.Stetho;
 import com.ixuea.courses.mymusic.activity.LoginOrRegisterActivity;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
+import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 import com.mob.MobSDK;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
 
 import androidx.emoji.bundled.BundledEmojiCompatConfig;
 import androidx.emoji.text.EmojiCompat;
@@ -24,6 +30,8 @@ import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import es.dmoral.toasty.Toasty;
 import io.realm.Realm;
+
+import static android.os.Build.VERSION.SDK_INT;
 
 /**
  * 全局Application
@@ -70,6 +78,39 @@ public class AppContext extends Application {
         //初始化emoji(表情符号)
         BundledEmojiCompatConfig config = new BundledEmojiCompatConfig(this);
         EmojiCompat.init(config);
+
+        //这里我们是在调试状态下(发送广播，更新内容到媒体库)
+        if (LogUtil.isDebug) {
+            //这个表示扫描文件下的所有内容到媒体库
+            updateMedia(context, "/sdcard/Download/");
+//            updateMedia(context,"/sdcard/Download/冷漠-笑着说分手.mp3");
+//            updateMedia(context,"/sdcard/Download/刀郎-家人.mp3");
+//            updateMedia(context,"/sdcard/Download/刘若英-后来.mp3");
+//            updateMedia(context,"/sdcard/Download/庞龙-人生第一次.mp3");
+        }
+    }
+
+    /**
+     * 这个主要是根据路径更新媒体库的路径(也就是扫描这个路径的文件到我们的媒体库)
+     *
+     * @param context
+     * @param path
+     */
+    public static void updateMedia(final Context context, String path) {
+
+        if (SDK_INT >= Build.VERSION_CODES.KITKAT) {//当大于等于Android 4.4时
+            MediaScannerConnection.scanFile(context, new String[]{path}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                @Override
+                public void onScanCompleted(String path, Uri uri) {
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    mediaScanIntent.setData(uri);
+                    context.sendBroadcast(mediaScanIntent);
+                }
+            });
+
+        } else {//Andrtoid4.4以下版本
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.fromFile((new File(path).getParentFile()))));
+        }
     }
 
     /**

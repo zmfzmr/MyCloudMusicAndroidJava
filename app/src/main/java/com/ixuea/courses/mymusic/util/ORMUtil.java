@@ -284,4 +284,29 @@ public class ORMUtil {
             realm.close();
         }
     }
+
+    /**
+     * 根据id删除本地音乐
+     *
+     * @param id
+     */
+    public void deleteSongLocalById(String id) {
+        Realm realm = getInstance();
+        //没找到该框架通过Id删除数据
+        //所有要先查询到要删除的数据
+        //然后在删除
+        SongLocal songLocal = realm.where(SongLocal.class)
+                .equalTo("id", id)
+                //注意这里是findFirst，而不是findAll(),因为要找的是单个数据
+                .findFirst();
+
+        //在事务中删除(这里没有之前的开始事务和提交事务，一直一步搞定)
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                //删除查询的数据
+                songLocal.deleteFromRealm();
+            }
+        });
+    }
 }
