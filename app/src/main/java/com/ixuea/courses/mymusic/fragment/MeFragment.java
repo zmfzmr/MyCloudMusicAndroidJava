@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.DownloadActivity;
 import com.ixuea.courses.mymusic.activity.LocalMusicActivity;
 import com.ixuea.courses.mymusic.activity.SheetDetailActivity;
 import com.ixuea.courses.mymusic.adapter.MeAdapter;
@@ -33,7 +34,7 @@ import io.reactivex.Observable;
 
 /**
  * 首页-我的界面
- *
+ * <p>
  * 他可以实现列表展开功能，RecyclerView也可以实现折叠效果，
  * 只是要自己实现，或者使用第三方框架；顶部是通过头部实现的。
  */
@@ -274,5 +275,7 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
     @OnClick(R.id.ll_download_manager)
     public void onDownloadManagerClick() {
         LogUtil.d(TAG, "onDownloadManagerClick: ");
+        //跳转到 下载管理 界面
+        startActivity(DownloadActivity.class);
     }
 }
