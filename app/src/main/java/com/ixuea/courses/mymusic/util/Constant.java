@@ -241,7 +241,7 @@ public class Constant {
     public static final int MUSIC_FILTER_DURATION = 60 * 1000;
 
     /**
-     * 扫描本地音乐放大镜圆周半径
+     * 扫描本地音乐放大镜圆周半径(可以理解为dp值或者px值，目前还不清楚)
      */
     public static final double DEFAULT_RADIUS = 30;
 }

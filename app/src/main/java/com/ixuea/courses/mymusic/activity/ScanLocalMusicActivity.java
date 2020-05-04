@@ -210,6 +210,18 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
         zoomValueAnimator.setRepeatMode(ValueAnimator.RESTART);
         //动画监听器
         zoomValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            /*
+                就是根据半径r（这里是30），角度a（使用动画，从0~360变换），然后计算出x，y坐标，
+                根据上面的定理，可以得出如下计算过程：
+                假设，r为1，角度为10度：
+                cosA=x（邻边）/r（斜边，半径）
+                x=cosA * r
+                x=cos10*1 (假设r = 1)
+                x=cos10；除1可以省略
+                x=0.9
+
+                r(半径) = 1，是0.9
+             */
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 //获取角度
@@ -471,7 +483,7 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
             lineAnimation.cancel();
             lineAnimation = null;
         }
-
+        //清除放大镜属性动画
         iv_scan_zoom.clearAnimation();
         if (zoomValueAnimator != null) {
             zoomValueAnimator.cancel();
