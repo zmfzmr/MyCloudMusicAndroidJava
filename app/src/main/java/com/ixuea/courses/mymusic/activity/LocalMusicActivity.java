@@ -11,11 +11,16 @@ import com.ixuea.courses.mymusic.MusicPlayerActivity;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SongAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.event.ScanMusicCompleteEvent;
 import com.ixuea.courses.mymusic.fragment.SortDialogFragment;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -78,6 +83,9 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
     @Override
     protected void initDatum() {
         super.initDatum();
+        //注册发布订阅框架
+        EventBus.getDefault().register(this);
+
         //初始化播放列表管理器
         listManager = MusicPlayerService.getListManager(getApplicationContext());
 
@@ -383,4 +391,19 @@ public class LocalMusicActivity extends BaseTitleActivity implements BaseQuickAd
         exitEditMode();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onScanMusicComplete(ScanMusicCompleteEvent event) {
+        //扫描音乐完成，重新加载数据
+        fetchData();
+    }
+
+    /**
+     * 界面销毁了
+     */
+    @Override
+    protected void onDestroy() {
+        //解除发布订阅框架
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }

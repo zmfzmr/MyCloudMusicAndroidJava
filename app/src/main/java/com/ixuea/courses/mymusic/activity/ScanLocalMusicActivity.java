@@ -18,9 +18,12 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.SongLocal;
+import com.ixuea.courses.mymusic.domain.event.ScanMusicCompleteEvent;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.StorageUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -417,5 +420,18 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
             lineAnimation.cancel();
             lineAnimation = null;
         }
+    }
+
+    /**
+     * 界面销毁了
+     * 在界面终止时，发送通知，好处是，不用再返回按钮，扫描按钮下都处理，因为他们最终都会执行界面销毁方法。
+     */
+    @Override
+    protected void onDestroy() {
+        if (hasFoundMusic) {
+            //如果扫描完成了，发布一条事件通知
+            EventBus.getDefault().post(new ScanMusicCompleteEvent());
+        }
+        super.onDestroy();
     }
 }
