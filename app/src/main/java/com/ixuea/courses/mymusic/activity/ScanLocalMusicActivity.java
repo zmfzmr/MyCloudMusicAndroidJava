@@ -8,6 +8,10 @@ import android.os.SystemClock;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,6 +63,7 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
     private boolean isScanComplete;//是否扫描完成了
     private boolean hasFoundMusic;//是否有音乐
     private boolean isScanning;//是否在扫描中
+    private TranslateAnimation lineAnimation;//位移动画
 
 
     @Override
@@ -116,6 +121,71 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
      * 开始扫描
      */
     private void startScan() {
+        //扫描线
+        //不使用属性动画
+        //是因为属性动画要获取坐标
+
+        //创建一个位移动画
+        //RELATIVE_TO_PARENT：表示位置是相对父类的
+        //0：就表示现在的位置
+        //1：就表示在父类的另一边
+        //例如：y开始位置为0
+        //结束位置为1
+        //就表示从父容器顶部移动到父容器底部
+
+        //其实这个动画是它的影子在动，实际没有动
+        lineAnimation = new TranslateAnimation(
+                TranslateAnimation.RELATIVE_TO_PARENT, 0f,
+                TranslateAnimation.RELATIVE_TO_PARENT, 0f,
+                TranslateAnimation.RELATIVE_TO_PARENT, 0f,
+                TranslateAnimation.RELATIVE_TO_PARENT, 0.7f
+        );
+
+        lineAnimation.setInterpolator(new DecelerateInterpolator());
+        //时间为2秒
+        lineAnimation.setDuration(2000);
+        //重复次数
+        //-1：无线重复
+        lineAnimation.setRepeatCount(-1);
+        //重复模式
+        //REVERSE：表示从开始位置到结束位置
+        //然后从结束位置到开始位置
+        lineAnimation.setRepeatMode(Animation.REVERSE);
+        //动画监听器
+        lineAnimation.setAnimationListener(new Animation.AnimationListener() {
+            /**
+             * 动画开始
+             */
+            @Override
+            public void onAnimationStart(Animation animation) {
+                //开始执行动画
+                //要显示控件
+                //动画开始显示这条线
+                iv_scan_line.setVisibility(View.VISIBLE);
+            }
+
+            /**
+             * 动画结束
+             */
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                //动画完毕后
+                //隐藏该控件
+                //动画结束隐藏这条线
+                iv_scan_line.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        //清除原来动画
+        //需要多次使用这动画，可能有缓存，需要清除原来的动画
+        iv_scan_line.clearAnimation();
+        //开始动画
+        iv_scan_line.startAnimation(lineAnimation);
+
 
         //扫描音乐(之所以在这类再定义一个方法，因为在这前面还需要扫描动画)
         startScanMusic();
@@ -331,10 +401,21 @@ public class ScanLocalMusicActivity extends BaseTitleActivity {
      * 停止扫描
      */
     private void stopScan() {
+        //停止异步移除
         if (scanMusicAsyncTask != null) {
             //终止异步任务
             scanMusicAsyncTask.cancel(true);
             scanMusicAsyncTask = null;
+        }
+
+        //隐藏线
+        iv_scan_line.setVisibility(View.GONE);
+        //清除缓存的动画
+        iv_scan_line.clearAnimation();
+        //取消扫描线动画
+        if (lineAnimation != null) {
+            lineAnimation.cancel();
+            lineAnimation = null;
         }
     }
 }
