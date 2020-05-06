@@ -22,6 +22,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ixuea.android.downloader.callback.DownloadManager;
+import com.ixuea.android.downloader.domain.DownloadInfo;
 import com.ixuea.courses.mymusic.activity.BaseTitleActivity;
 import com.ixuea.courses.mymusic.activity.SelectLyricActivity;
 import com.ixuea.courses.mymusic.adapter.LyricAdapter;
@@ -36,12 +38,14 @@ import com.ixuea.courses.mymusic.domain.lyric.Line;
 import com.ixuea.courses.mymusic.domain.lyric.Lyric;
 import com.ixuea.courses.mymusic.domain.lyric.LyricUtil;
 import com.ixuea.courses.mymusic.fragment.PlayListDialogFragment;
+import com.ixuea.courses.mymusic.listener.DownloadListener;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.manager.MusicPlayerManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.DensityUtil;
+import com.ixuea.courses.mymusic.util.FileUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.SwitchDrawableUtil;
@@ -54,6 +58,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -185,6 +190,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
     private TimerTask lyricTimerTask;//隐藏歌词拖拽效果任务
     private Timer lyricTime;//隐藏歌词拖拽效果定时器
     private Line scrollSelectedLyricLine;//当前滚动位置的歌词行
+    private DownloadManager downloader;//下载器(下载管理器)
+    private DownloadInfo downloadInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +245,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //初始化播放管理器
         musicPlayerManager = MusicPlayerService.getMusicPlayerManager(getApplicationContext());
+
+        //初始化下载管理器
+        downloader = AppContext.getInstance().getDownloadManager();
 
         //创建黑胶唱片列表适配器
         recordAdapter = new MusicPlayerAdapter(getMainActivity(), getSupportFragmentManager());
@@ -734,6 +744,105 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
                     }
                 });
 
+        //下载状态
+
+        //根据id查询是否有下载任务
+        //data:当前播放的音乐
+        downloadInfo = downloader.getDownloadById(data.getId());
+
+        if (downloadInfo != null) {
+            //有下载任务
+
+            //设置下载回调
+            setDownloadCallback();
+        }
+
+        //不管有没有下载任务
+        //都要刷新当前界面
+        //因为要显示是否下载
+        refresh();
+    }
+
+    /**
+     * 设置下载回调
+     * <p>
+     * 如果在activity中 Download引用的一个对象，那么这个activity对象是不能被销毁的
+     * 而我这里用弱引用，我这个this保存到DownloadListener里面了，那么我这个activity界面是可以被销毁的
+     * 对于我们这个下载来说，我下载那边还进行一个下载，就算这边界面释放，那还是可以的(还是可以下载的)
+     * 也就是这边界面销毁，那边的下载还在进行中
+     * (downloadInfo)
+     * <p>
+     * <p>
+     * 可以理解我 下载那边下载成功了，或者失败了
+     * 都会调用监听器里的onRefresh方法(这个方法里面又调用Activity里面的refresh方法刷新下载按钮的状态)
+     */
+    private void setDownloadCallback() {
+        //使用弱引用
+        //目的是防止内存泄漏
+        //因为对于监听器来说
+        //界面对象销毁了
+        //也没多大影响
+
+        //自定义的 DownloadListener extends AbsDownloadListener
+        //里面的重写方法都调用了onRefresh,我们设置了onRefresh为抽象方法，我们这类只需重写这一个方法就够了
+        //注意：这里的SoftReference 不用泛型 （因为默认是Object 加了泛型相当于没加）
+        downloadInfo.setDownloadListener(new DownloadListener(new SoftReference(this)) {
+            @Override
+            public void onRefresh() {
+                //getUserTag: 这个就是传入的new SoftReference(this)
+                //getUserTag().get():就是new SoftReference(this) 这里面泛型传入的对象(当然这里没有放行)，
+                // 那么就指的是this(也就是本类Activity对象)
+                if (getUserTag() != null && getUserTag().get() != null) {
+                    //获取保存的对象
+                    MusicPlayerActivity viewHolder = (MusicPlayerActivity) getUserTag().get();
+                    //调用显示数据的方法
+                    viewHolder.refresh();
+                }
+            }
+        });
+    }
+
+    /**
+     * 刷新下载状态
+     */
+    private void refresh() {
+        if (downloadInfo != null) {
+            //有下载任务
+            switch (downloadInfo.getStatus()) {
+                case DownloadInfo.STATUS_COMPLETED:
+                    //下载完成(设置下载完成的图标)
+                    ib_download.setImageResource(R.drawable.ic_downloaded);
+                    break;
+                default:
+                    //其他状态
+                    //都显示未下载
+                    //当然也可以监听下载进度
+                    normalDownloadStatusUI();
+                    break;
+            }
+
+            //这里不需要知道更详细的下载状态
+            //所以就没有判断
+            //会在下载管理里面判断
+            //打印下载进度
+
+            //进度大小和文件总大小
+            String start = FileUtil.formatFileSize(downloadInfo.getProgress());
+            String size = FileUtil.formatFileSize(downloadInfo.getSize());
+
+        } else {
+            //没有下载任务
+            normalDownloadStatusUI();
+        }
+
+    }
+
+    /**
+     * 未下载状态(正常状态或者默认状态)
+     */
+    private void normalDownloadStatusUI() {
+        //设置正常状态的图标(未下载的图标)
+        ib_download.setImageResource(R.drawable.ic_download);
     }
 
     /**

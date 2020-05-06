@@ -227,7 +227,7 @@ public class AppContext extends Application {
      * @return DownloadManager对象
      * 注意：DownloadManager 和 Config 都是aixuea 包里面的
      */
-    public DownloadManager getDownload() {
+    public DownloadManager getDownloadManager() {
         if (downloadManager == null) {
             //获取偏好设置工具栏
             PreferenceUtil sp = PreferenceUtil.getInstance(context);
