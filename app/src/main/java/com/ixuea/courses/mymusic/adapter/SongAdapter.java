@@ -4,6 +4,9 @@ import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.ixuea.android.downloader.callback.DownloadManager;
+import com.ixuea.android.downloader.domain.DownloadInfo;
+import com.ixuea.courses.mymusic.AppContext;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
 
@@ -32,6 +35,8 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
      * 目前这个用在本地音乐那里
      */
     private int[] selectIndexes;
+    private final DownloadManager downloader;//下载管理器
+    private DownloadInfo downloadInfo;//下载任务
 
     /**
      * 构造方法
@@ -40,6 +45,8 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
      */
     public SongAdapter(int layoutResId) {
         super(layoutResId);
+        //下载管理器
+        downloader = AppContext.getInstance().getDownloadManager();
     }
 
     /**
@@ -94,6 +101,25 @@ public class SongAdapter extends BaseQuickAdapter<Song, BaseViewHolder> {
             //否则取反
             helper.setVisible(R.id.tv_position, true);
             helper.setVisible(R.id.iv_check, false);
+        }
+
+        //这个SongAdapter 在SheetDetailActivity中用到了，在onResume方法调用scrollPositionAsync选中当前播放的音乐
+        //所以自然的会调用到 adapter.setSelectedIndex方法，刷新当前item，所以这个下载图标自然的就会刷新出来了
+
+        //如果downloader(下载器)里面的那个任务 有这个歌曲的id值，说明这首歌曲在下载任务中
+        downloadInfo = downloader.getDownloadById(data.getId());
+
+        if (downloadInfo != null && downloadInfo.getStatus() == DownloadInfo.STATUS_COMPLETED) {
+            //下载完成了
+
+            //显示下载完成了图标
+            helper.setGone(R.id.iv_download, true);
+        } else {
+            //没有下载
+            //没有下载完成
+
+            //隐藏下载完成图标
+            helper.setGone(R.id.iv_download, false);
         }
 
     }

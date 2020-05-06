@@ -50,15 +50,33 @@
                 android:layout_height="wrap_content"
                 android:text="这是歌曲名称"
                 android:textColor="@color/text" />
-            <!--信息-->
-            <TextView
-                android:id="@+id/tv_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+
+            <LinearLayout
                 android:layout_marginTop="@dimen/padding_small"
-                android:text="这是歌手信息"
-                android:textColor="@color/light_grey"
-                android:textSize="@dimen/text_small" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!--下载完成图标  默认是隐藏的-->
+                <ImageView
+                    android:id="@+id/iv_download"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_song_downloaded"
+                    android:layout_marginRight="@dimen/padding_small" />
+
+                <!--信息-->
+                <TextView
+                    android:id="@+id/tv_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="这是歌手信息"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/text_small" />
+
+            </LinearLayout>
 
         </LinearLayout>
         <!--更多按钮 这里用了ImageButton
