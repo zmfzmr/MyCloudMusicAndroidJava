@@ -226,6 +226,9 @@ public class AppContext extends Application {
      *
      * @return DownloadManager对象
      * 注意：DownloadManager 和 Config 都是aixuea 包里面的
+     *
+     * 因为这里是在AppContext中(Appcontext对象应用结束后销毁)
+     * 所以这里的 DownloadManager对象(保存到成员里面，可以不用静态修饰)
      */
     public DownloadManager getDownloadManager() {
         if (downloadManager == null) {

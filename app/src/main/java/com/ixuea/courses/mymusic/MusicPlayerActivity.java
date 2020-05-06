@@ -48,6 +48,7 @@ import com.ixuea.courses.mymusic.util.DensityUtil;
 import com.ixuea.courses.mymusic.util.FileUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
+import com.ixuea.courses.mymusic.util.StorageUtil;
 import com.ixuea.courses.mymusic.util.SwitchDrawableUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
@@ -748,6 +749,11 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         //根据id查询是否有下载任务
         //data:当前播放的音乐
+
+        //(这里第一次进来，肯定是没有下载任务的，那么downloadInfo就是为null的)
+        //等ib_download这个按钮点击了，就会有下载任务了，那么就是download != null,
+        // 那么关闭页面，第二次进来的时候就会调用setDownloadCallback回调方法，（发现按钮状态变为了已下载状态）
+
         downloadInfo = downloader.getDownloadById(data.getId());
 
         if (downloadInfo != null) {
@@ -830,6 +836,8 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
             String start = FileUtil.formatFileSize(downloadInfo.getProgress());
             String size = FileUtil.formatFileSize(downloadInfo.getSize());
 
+            LogUtil.d(TAG, "refresh: " + start + "  " + size);
+
         } else {
             //没有下载任务
             normalDownloadStatusUI();
@@ -875,10 +883,79 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
     /**
      * 下载按钮点击
+     *
+     * //这个毫秒，因为是在本地使用，所以并没有涉及到时区
+     *
+     *  如果超过了最大下载量，就会进行等待，这是在我们框架内部实现的
+     *
+     *  这个下载框架不关心你是音乐还是视频 (只有给我地址和保存路径，我就能帮你下载)
      */
     @OnClick(R.id.ib_download)
     public void onDownLoadClick() {
         LogUtil.d(TAG, "onDownLoadClick:");
+
+        if (downloadInfo != null) {
+            //有下载任务
+
+            //判断下载状态
+            if (downloadInfo.getStatus() == DownloadInfo.STATUS_COMPLETED) {
+                ToastUtil.successShortToast("该歌曲已经下载了");
+            } else {
+                //其他状态
+                //可能是下载中，等待中
+                //下载失败 (其他的一些可能性，我们这里就不判断了，统一用这个提示)
+                ToastUtil.successShortToast("该歌曲已经在下载列表中");
+            }
+
+        } else {
+            //没有下载任务，调用方法去创建 并开始下载
+            createDownload();
+        }
+    }
+
+    private void createDownload() {
+        //获取当前播放歌词
+        Song data = listManager.getData();
+        //获取歌曲网络路径(转为为绝对地址)
+        String uriString = ResourceUtil.resourceUri(data.getUri());
+
+        //计算保存的路径
+        //路径中添加用户Id是实现多用户
+        //当然这里很明显的问题是
+        //如果多用户都下载一首音乐
+        //会导致一首音乐会下载多次
+
+        //获取外部路径(这里是获取外部存储Download下载的路径 )
+        String path = StorageUtil.getExternalPath(getMainActivity(), sp.getUserId(),
+                data.getTitle(), StorageUtil.MP3).getAbsolutePath();
+
+        LogUtil.d(TAG, "createDownload:" + path);
+
+        //创建下载任务
+        downloadInfo = new DownloadInfo.Builder()
+                //设置id(根据歌曲的这个id来下载)
+                .setId(data.getId())
+                //设置下载地址
+                .setUrl(uriString)
+                //设置保存路径
+                .setPath(path)
+                .build();
+        //设置创建时间
+        //用于显示下载中
+        //下载完成列表排序
+        //默认按时间
+        downloadInfo.setCreateAt(System.currentTimeMillis());
+
+        //设置显示回调(下载开始 过程 结束的状态都会调用回调方法-->调动本类activity对象的refresh刷新下载按钮状态)
+        setDownloadCallback();
+
+        //保存业务数据(下载任务那边需要显示下载歌曲的标题，保存到数据库中，直接获取就行了)
+        orm.saveSong(data);
+
+        //开始下载(添加任务到下载管理器中 下载音乐)
+        downloader.download(downloadInfo);
+
+        ToastUtil.successShortToast("下载任务添加成功!");
     }
 
     /**

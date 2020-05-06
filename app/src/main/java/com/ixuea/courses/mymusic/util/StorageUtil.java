@@ -25,6 +25,7 @@ import static android.os.Build.VERSION_CODES.Q;
  */
 public class StorageUtil {
     public static final String JPG = "jpg";//jpg图片
+    public static final String MP3 = "mp3";//mp3 后缀
     /**
      * MediaStore，ContentProviders内容提供者data列
      * 这个值不能更改（因为列名就是这个，根据这个查询）
