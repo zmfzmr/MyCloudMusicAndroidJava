@@ -83,6 +83,8 @@
 
     <!--好友-->
     <dimen name="index_title_width">80dp</dimen>
+    <!--下载-->
+    <dimen name="tab_layout_height">45dp</dimen>
 
 
 </resources>

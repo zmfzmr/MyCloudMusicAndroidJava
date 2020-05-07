@@ -6,6 +6,7 @@ import com.ixuea.courses.mymusic.fragment.DownloadedFragment;
 import com.ixuea.courses.mymusic.fragment.DownloadingFragment;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -17,6 +18,8 @@ import androidx.fragment.app.FragmentManager;
  * Integer：我们传入的是占位数据
  */
 public class DownloadAdapter extends BaseFragmentPagerAdapter<Integer> {
+    //顶部的指示器 标题文字
+    private static final String[] titles = {"已下载", "下载中"};
 
     public DownloadAdapter(Context context, @NonNull FragmentManager fm) {
         super(context, fm);
@@ -35,5 +38,17 @@ public class DownloadAdapter extends BaseFragmentPagerAdapter<Integer> {
         }
         //因为我们这里就是2个界面，这种写法是可以的(因为position 不是0 就是1)
         return DownloadingFragment.newInstance();
+    }
+
+    /**
+     * 获取ViewPager 顶部 指示器的那个标题文字
+     *
+     * @param position
+     * @return
+     */
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return titles[position];
     }
 }
