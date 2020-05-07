@@ -3,6 +3,9 @@ package com.ixuea.courses.mymusic.manager.impl;
 import android.content.Context;
 import android.media.MediaPlayer;
 
+import com.ixuea.android.downloader.callback.DownloadManager;
+import com.ixuea.android.downloader.domain.DownloadInfo;
+import com.ixuea.courses.mymusic.AppContext;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.event.OnPlayEvent;
 import com.ixuea.courses.mymusic.listener.MusicPlayerListener;
@@ -34,6 +37,7 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
     private static final String TAG = "ListManagerImpl";
     private static ListManagerImpl instance;//实例对象
     private final Context context;//上下文
+    private final DownloadManager downloader;//下载器
     /**
      * 列表
      * LinkedList:增删高效
@@ -75,6 +79,8 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
 
         //初始化偏好设置工具类
         sp = PreferenceUtil.getInstance(this.context);
+        //创建下载器
+        downloader = AppContext.getInstance().getDownloadManager();
 
         //初始化播放列表
         initPlayList();
@@ -195,17 +201,36 @@ public class ListManagerImpl implements ListManager, MusicPlayerListener {
             musicPlayerManager.play(data.getUri(), data);
 
         } else {
-            //不是本地（从其他或者网络中来的额）
+            //不是本地的(包含：下载的和在线音乐播放)
 
-            //播放音乐
-            //这里是从SheetDetailActivity中，通过play(position)传递过来的Song
-            musicPlayerManager.play(ResourceUtil.resourceUri(data.getUri()), data);
+            //判断是否有下载对象(通过Song id 查找是否有下载对象，如果有就)
+            //可以理解为，通过id查找到的这个下载任务 是有的并且状态是完成的，那么这首歌曲就下载过的
+            //简写：每首歌对应一个下载任务DownloadInfo
+            DownloadInfo downloadInfo = downloader.getDownloadById(data.getId());
+            if (downloadInfo != null && downloadInfo.getStatus() == DownloadInfo.STATUS_COMPLETED) {
+                //下载完成了
+
+                //播放本地音乐(就是播放下载的音乐)
+                musicPlayerManager.play(downloadInfo.getPath(), data);
+                //downloadInfo.getPath() 就是我们保存到这个路径下/storage/emulated/0/Android/data/com.ixuea.courses.mymusic/files/Download/MyCloudMusic/152/mp3/忘不了的温柔.mp3
+                //后面的  MyCloudMusic/152/mp3/忘不了的温柔.mp3 使我们自己创建的格式
+                LogUtil.d(TAG, "play offline:" + downloadInfo.getPath() + "," + data.getUri());
+            } else {
+                //播放在线音乐
+                //不是本地（从其他或者网络中来的额）
+
+                //获取该歌曲的绝对路径
+                String path = ResourceUtil.resourceUri(data.getUri());
+                //播放音乐
+                //这里是从SheetDetailActivity中，通过play(position)传递过来的Song
+                musicPlayerManager.play(path, data);
+
+                LogUtil.d(TAG, "play online:" + path);
+            }
         }
 
         //设置最后播放音乐的Id(保存歌曲的id 到持久化)
         sp.setLastPlaySongId(data.getId());
-
-
     }
 
     @Override
