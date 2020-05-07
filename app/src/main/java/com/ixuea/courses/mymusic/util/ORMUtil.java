@@ -309,4 +309,19 @@ public class ORMUtil {
             }
         });
     }
+
+    /**
+     * 根据id查询音乐对象
+     */
+    public Song querySongById(String id) {
+        //获取数据库实例
+        Realm realm = getInstance();
+
+        //查询
+        SongLocal songLocal = realm.where(SongLocal.class)
+                .equalTo("id", id)
+                .findFirst();//根据id查找，肯定是只有一个
+        //转换成Song对象
+        return songLocal.toSong();
+    }
 }

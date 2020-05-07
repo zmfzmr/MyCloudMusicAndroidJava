@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 /**
- * 下载界面适配器
+ * 下载界面适配器(ViewPager适配器)
  * <p>
  * BaseFragmentPagerAdapter:我们自己定义继承FragmentStatePagerAdapter： BaseFragmentPagerAdapter<T> extends FragmentStatePagerAdapter
  * <p>
