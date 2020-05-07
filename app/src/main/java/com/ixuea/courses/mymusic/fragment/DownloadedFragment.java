@@ -5,12 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.android.downloader.callback.DownloadManager;
 import com.ixuea.android.downloader.domain.DownloadInfo;
 import com.ixuea.courses.mymusic.AppContext;
+import com.ixuea.courses.mymusic.MusicPlayerActivity;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.DownloadedAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.manager.ListManager;
+import com.ixuea.courses.mymusic.service.MusicPlayerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +27,7 @@ import butterknife.BindView;
 /**
  * 下载完成界面
  */
-public class DownloadedFragment extends BaseCommonFragment {
+public class DownloadedFragment extends BaseCommonFragment implements BaseQuickAdapter.OnItemClickListener {
     /**
      * 列表控件
      */
@@ -31,6 +35,7 @@ public class DownloadedFragment extends BaseCommonFragment {
     RecyclerView rv;
     private DownloadedAdapter adapter;
     private DownloadManager downloader;
+    private ListManager listManager;//列表管理器
 
     @Override
     protected void initViews() {
@@ -49,6 +54,9 @@ public class DownloadedFragment extends BaseCommonFragment {
     protected void initDatum() {
         super.initDatum();
 
+        //初始化列表管理器
+        listManager = MusicPlayerService.getListManager(getMainActivity());
+
         //初始化下载管理器
         downloader = AppContext.getInstance().getDownloadManager();
 
@@ -61,6 +69,12 @@ public class DownloadedFragment extends BaseCommonFragment {
         fetchData();
     }
 
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        //设置点击监听器
+        adapter.setOnItemClickListener(this);
+    }
 
     private void fetchData() {
         //思路：List<DownloadInfo>保存了下载音乐的id->遍历->根据id从数据库中找到保存到list集合datum中，
@@ -100,5 +114,21 @@ public class DownloadedFragment extends BaseCommonFragment {
         DownloadedFragment fragment = new DownloadedFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    /**
+     * item点击事件
+     */
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        //设置播放列表(把下载的歌曲放到播放列表(添加之后，之前列表的数据被清空了))
+        //这个适配器里面的数据 在本类的fetchData方法中，就已经添加数据进来了
+        listManager.setDatum(adapter.getData());
+        //获取当前点击的音乐
+        Song data = (Song) adapter.getItem(position);
+        //播放点击的已下载音乐
+        listManager.play(data);
+        //跳转到音乐播放界面
+        startActivity(MusicPlayerActivity.class);
     }
 }
