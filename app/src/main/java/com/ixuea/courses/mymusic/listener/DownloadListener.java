@@ -55,6 +55,8 @@ public abstract class DownloadListener extends AbsDownloadListener {
         onRefresh();
     }
 
-
+    /**
+     * 刷新状态 我们自己定义的抽象方法，子类实现(前面的重写方法里面都调用了这个onRefresh() 方法)
+     */
     public abstract void onRefresh();
 }
