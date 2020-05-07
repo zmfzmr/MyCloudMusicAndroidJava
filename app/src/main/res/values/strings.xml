@@ -180,5 +180,8 @@
     <string name="cancel_select_all">取消全选</string>
     <string name="delete">删除</string>
     <string name="cancel_edit">取消编辑</string>
+    <string name="tips">提示</string>
+    <string name="cancel">取消</string>
+    <string name="confirm_message">是否确认?</string>
 
 </resources>
