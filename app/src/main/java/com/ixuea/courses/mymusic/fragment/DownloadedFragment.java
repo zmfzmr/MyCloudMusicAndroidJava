@@ -61,7 +61,8 @@ public class DownloadedFragment extends BaseCommonFragment implements BaseQuickA
         downloader = AppContext.getInstance().getDownloadManager();
 
         //创建适配器
-        adapter = new DownloadedAdapter(R.layout.item_downloaded);
+        //注意：这里是在fragment中打开fragment 必须要用getChildFragmentManager
+        adapter = new DownloadedAdapter(R.layout.item_downloaded, getChildFragmentManager(), downloader);
 
         //设置适配器
         rv.setAdapter(adapter);

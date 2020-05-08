@@ -239,7 +239,8 @@ public class AppContext extends Application {
             Config config = new Config();
             //数据库名称添加了用户id
             //所以不同的用户数据是隔离的
-            config.setDatabaseName(String.format("$s_download_info.db", sp.getUserId()));
+            //注意：这个一开始并没有实现多用户(因为在SplashActivity中就间接调用这个方法，可以调试看看)
+            config.setDatabaseName(String.format("%s_download_info.db", sp.getUserId()));
             //获取下载管理器
             downloadManager = DownloadService.getDownloadManager(context, config);
         }
