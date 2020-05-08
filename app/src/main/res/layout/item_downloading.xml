@@ -42,6 +42,7 @@
                  maxHeight minHeight 最大和最小高度 记得添加这2个就行(记得添加就行，有什么可以不用管)
             -->
             <ProgressBar
+                android:id="@+id/pb"
                 android:visibility="gone"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="0dp"
