@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <!--标题容器-->
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/item_song_height"
+        android:layout_marginLeft="@dimen/padding_middle"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!--标题-->
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text"
+            tools:text="标题" />
+        <!--下载进度容器-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_small"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!--下载信息-->
+            <TextView
+                android:id="@+id/tv_info"
+                android:textSize="@dimen/text_small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/click_download" />
+
+            <!--进度条
+                 maxHeight minHeight 最大和最小高度 记得添加这2个就行(记得添加就行，有什么可以不用管)
+            -->
+            <ProgressBar
+                android:visibility="gone"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/music_seek_bar_height"
+                android:layout_weight="1"
+                android:max="100"
+                android:maxHeight="@dimen/music_seek_bar_height"
+                android:minHeight="@dimen/music_seek_bar_height"
+                android:progress="50"
+                android:progressDrawable="@drawable/shape_seek_bar" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--标题按钮-->
+    <ImageButton
+        android:id="@+id/ib_delete"
+        android:background="@null"
+        android:src="@drawable/ic_music_delete"
+        android:layout_width="@dimen/item_song_height"
+        android:layout_height="@dimen/item_song_height" />
+
+</LinearLayout>

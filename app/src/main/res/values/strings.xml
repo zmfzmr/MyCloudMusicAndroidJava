@@ -184,4 +184,8 @@
     <string name="cancel">取消</string>
     <string name="confirm_message">是否确认?</string>
 
+    <!--下载-->
+    <string name="click_download">已暂停，点击继续下载</string>
+    <string name="download_failed">下载失败，点击重试</string>
+
 </resources>
