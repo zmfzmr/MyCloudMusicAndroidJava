@@ -3,9 +3,15 @@ package com.ixuea.courses.mymusic.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.LogUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,6 +19,11 @@ import org.apache.commons.lang3.StringUtils;
  * 用户详情界面
  */
 public class UserDetailActivity extends BaseTitleActivity {
+
+    private static final String TAG = "UserDetailActivity";
+    private String id;//传递的id(用户的id)
+    private String nickname;//用户昵称
+
     /**
      * 根据昵称显示用户详情(这里主要传递昵称 到本类)
      *
@@ -61,5 +72,50 @@ public class UserDetailActivity extends BaseTitleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
+    }
+
+    /**
+     * 这里是在评论列表那边点击进来的
+     * 点击头像传递用户id：           http://dev-my-cloud-music-api-rails.ixuea.com/v1/users/152
+     * 点击@爱学啊,传入昵称，如爱学啊：http://dev-my-cloud-music-api-rails.ixuea.com/v1/users/-1?nickname=爱学啊
+     */
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+        //获取用户id  (注意： 这里用的是字符串类型的)
+        id = extraId();
+        //判断id是否为空
+        if (TextUtils.isEmpty(id)) {
+            //如果为空就给他设置一个默认值
+            //这是和服务端协商好的
+            id = "-1";
+        }
+        //获取昵称
+        nickname = extraString(Constant.NICKNAME);
+
+        fetchData();
+    }
+
+    /**
+     * 获取数据
+     */
+    private void fetchData() {
+        Api.getInstance()
+                .userDetail(id, nickname)
+                .subscribe(new HttpObserver<DetailResponse<User>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<User> data) {
+                        next(data.getData());
+                    }
+                });
+    }
+
+    /**
+     * 显示数据
+     *
+     * @param data User
+     */
+    private void next(User data) {
+        LogUtil.d(TAG, "next:" + data.toString());
     }
 }

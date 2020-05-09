@@ -4,6 +4,8 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * 用户模型
  */
@@ -213,6 +215,30 @@ public class User extends BaseModel {
 
     public void setFirst(String first) {
         this.first = first;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("nickname", nickname)
+                .append("avatar", avatar)
+                .append("phone", phone)
+                .append("email", email)
+                .append("qq_id", qq_id)
+                .append("weibo_id", weibo_id)
+                .append("code", code)
+                .append("password", password)
+                .append("description", description)
+                .append("area", area)
+                .append("areaCode", areaCode)
+                .append("province", province)
+                .append("provinceCode", provinceCode)
+                .append("city", city)
+                .append("cityCode", cityCode)
+                .append("pinyin", pinyin)
+                .append("pinyinFirst", pinyinFirst)
+                .append("first", first)
+                .toString();
     }
 
     //辅助方法
