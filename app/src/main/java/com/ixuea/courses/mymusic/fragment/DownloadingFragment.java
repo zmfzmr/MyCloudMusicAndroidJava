@@ -9,7 +9,9 @@ import com.ixuea.android.downloader.callback.DownloadManager;
 import com.ixuea.android.downloader.domain.DownloadInfo;
 import com.ixuea.courses.mymusic.AppContext;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.BaseRecyclerViewAdapter;
 import com.ixuea.courses.mymusic.adapter.DownloadingAdapter;
+import com.ixuea.courses.mymusic.listener.OnItemClickListener;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ import butterknife.BindView;
 /**
  * 下载中界面
  */
-public class DownloadingFragment extends BaseCommonFragment {
+public class DownloadingFragment extends BaseCommonFragment implements OnItemClickListener {
     /**
      * 列表控件
      */
@@ -62,6 +64,13 @@ public class DownloadingFragment extends BaseCommonFragment {
         fetchData();
     }
 
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        //设置item点击事件
+        adapter.setOnItemClickListener(this);
+    }
+
     /**
      * 获取数据
      */
@@ -92,5 +101,32 @@ public class DownloadingFragment extends BaseCommonFragment {
         DownloadingFragment fragment = new DownloadingFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    /**
+     * item 点击回调方法
+     *
+     * @param holder   点击的ViewHolder
+     * @param position 点击的位置
+     */
+    @Override
+    public void onItemClick(BaseRecyclerViewAdapter.ViewHolder holder, int position) {
+        //获取点击的数据
+        DownloadInfo data = adapter.getData(position);
+
+        //判断状态，处理相应的状态事件
+        switch (data.getStatus()) {
+            case DownloadInfo.STATUS_NONE:
+            case DownloadInfo.STATUS_PAUSED:
+            case DownloadInfo.STATUS_ERROR:
+                //没有下载 暂停 错误
+                //点击：都是继续下载
+                downloader.resume(data);
+                break;
+            default:
+                //暂停下载
+                downloader.pause(data);
+                break;
+        }
     }
 }
