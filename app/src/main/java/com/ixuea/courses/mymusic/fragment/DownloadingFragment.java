@@ -91,6 +91,37 @@ public class DownloadingFragment extends BaseCommonFragment implements OnItemCli
 
         //设置到适配器(数据是：List<DownloadInfo>)
         adapter.setDatum(downloads);
+
+        //显示按钮状态
+        showButtonStatus();
+    }
+
+    /**
+     * 显示按钮状态
+     */
+    private void showButtonStatus() {
+        if (isDownloading()) {
+            bt_download.setText(R.string.pause_all);
+        } else {
+            //全部开始
+            bt_download.setText(R.string.download_all);
+        }
+    }
+
+    /**
+     * 是否是下载中 状态
+     */
+    private boolean isDownloading() {
+        List<DownloadInfo> datum = adapter.getDatum();
+        //遍历所有下载任务
+        for (DownloadInfo downloadInfo : datum) {
+            if (downloadInfo.getStatus() == DownloadInfo.STATUS_DOWNLOADING) {
+                //只有有一个任务是下载中，那么就返回true，然后在showButtonStatus中 改为全部暂停
+                return true;
+            }
+        }
+        //默认返回false
+        return false;
     }
 
     /**
@@ -138,6 +169,9 @@ public class DownloadingFragment extends BaseCommonFragment implements OnItemCli
                 downloader.pause(data);
                 break;
         }
+
+        //点击item也要改变(全部开始 按钮状态)
+        showButtonStatus();
     }
 
     /**

@@ -10,14 +10,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <!--下载按钮  默认是： 全部暂停 -->
+        <!--下载按钮  默认是： 全部开始 -->
         <Button
             android:id="@+id/bt_download"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableLeft="@drawable/ic_music_settings"
-            android:text="@string/pause_all" />
+            android:text="@string/download_all" />
 
         <!--删除按钮-->
         <Button

@@ -190,7 +190,7 @@
     <string name="download_progress">%1$s/%2$s</string>
     <string name="wait_download">等待下载</string>
     <string name="pause_all">全部暂停</string>
-    <string name="download_all">全部下载</string>
+    <string name="download_all">全部开始</string>
     <string name="delete_all">全部删除</string>
 
 </resources>
