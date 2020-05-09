@@ -192,5 +192,6 @@
     <string name="pause_all">全部暂停</string>
     <string name="download_all">全部开始</string>
     <string name="delete_all">全部删除</string>
+    <string name="error_not_download">没有下载任务</string>
 
 </resources>

@@ -14,6 +14,7 @@ import com.ixuea.courses.mymusic.adapter.BaseRecyclerViewAdapter;
 import com.ixuea.courses.mymusic.adapter.DownloadingAdapter;
 import com.ixuea.courses.mymusic.listener.OnItemClickListener;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import java.util.List;
 
@@ -87,6 +88,8 @@ public class DownloadingFragment extends BaseCommonFragment implements OnItemCli
     private void fetchData() {
         //查询所欲除下载完成的任务(下载中任务)
         //（如果杀死应用了，这个下载框架，每秒保存一次下载任务，杀死后，重启应用，那还是可以查询的到）
+        //虽然这里是从downloader下载器获取下载中任务给适配器，
+        // 注意：这里的是给了一个引用给适配器，实际指向的对象和下载器中的任务都是同一个对象的
         List<DownloadInfo> downloads = downloader.findAllDownloading();
 
         //设置到适配器(数据是：List<DownloadInfo>)
@@ -180,6 +183,45 @@ public class DownloadingFragment extends BaseCommonFragment implements OnItemCli
     @OnClick(R.id.bt_download)
     public void onDownloadClick() {
         LogUtil.d(TAG, "onDownloadClick");
+
+        //无数据
+        //可以按照需求来处理
+        //原版是没有下载任务不能进入到该界面
+        //我们这里就显示一个提示就行了
+        if (adapter.getItemCount() == 0) {
+            ToastUtil.errorShortToast(R.string.error_not_download);
+            return;
+        }
+
+        if (isDownloading()) {
+            //有下载任务
+
+            //点击暂停下载
+            pauseALl();
+        } else {
+            resumeAll();
+        }
+
+        //显示按钮状态(全部开始按钮 状态)
+        showButtonStatus();
+    }
+
+    /**
+     * 继续所有下载
+     */
+    private void resumeAll() {
+        downloader.resumeAll();
+        //这个不调用也是可以，因为执行downloader.resumeAll()后，
+        // 在DownloadingAdapter中的data.setDownloadListener中 调用holder.refresh方法刷新item内容的状态
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 暂停所有 下载
+     */
+    private void pauseALl() {
+        downloader.pauseAll();
+        adapter.notifyDataSetChanged();
     }
 
     /**
