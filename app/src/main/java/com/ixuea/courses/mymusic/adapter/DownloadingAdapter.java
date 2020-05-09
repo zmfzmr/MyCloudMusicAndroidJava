@@ -219,11 +219,16 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
                 default:
                     //下载完成
                     //未下载
-                    //从适配器中移除下载任务(我们这里不需要从下载管理器中移除，前面的点击删除下载中任务，才需要)
-                    removeData(getAdapterPosition());
+
+                    int position = getAdapterPosition();
+                    if (position >= 0) {
+                        //因为这个fragment下载任务删除了，这里再删除，没有数据，索引为 -1
+
+                        //从适配器中移除下载任务(我们这里不需要从下载管理器中移除，前面的点击删除下载中任务，才需要)
+                        removeData(getAdapterPosition());
+                    }
                     //发布下载数据改变了通知
                     publishDownloadStatusChangeEvent(isDownloadManagerNotify);
-
                     break;
             }
         }

@@ -230,5 +230,19 @@ public class DownloadingFragment extends BaseCommonFragment implements OnItemCli
     @OnClick(R.id.bt_delete)
     public void onDeleteClick() {
         LogUtil.d(TAG, "onDeleteClick");
+
+        if (adapter.getItemCount() == 0) {
+            ToastUtil.errorShortToast(R.string.error_not_download);
+            return;
+        }
+
+        //adapter.getDatum(): 这里获取的引用
+        //在下载器中根据引用删除下载任务
+        for (DownloadInfo downloadInfo : adapter.getDatum()) {
+            downloader.resume(downloadInfo);
+        }
+
+        //清除适配器数据(也就是清除引用)
+        adapter.clearData();
     }
 }
