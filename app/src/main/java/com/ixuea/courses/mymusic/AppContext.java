@@ -218,6 +218,7 @@ public class AppContext extends Application {
             //因为不同的用户使用不同的实例
             //(用户退出后，这个管理器就销毁了，下次进来的时候重新创建)
             downloadManager.destroy();
+            downloadManager = null;//注意:销毁后还要置为null
         }
     }
 
