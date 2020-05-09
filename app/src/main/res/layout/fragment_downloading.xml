@@ -3,10 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <!--按钮容器-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!--下载按钮  默认是： 全部暂停 -->
+        <Button
+            android:id="@+id/bt_download"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_music_settings"
+            android:text="@string/pause_all" />
+
+        <!--删除按钮-->
+        <Button
+            android:id="@+id/bt_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_music_delete"
+            android:text="@string/delete_all" />
+
+
+    </LinearLayout>
+
+    <!-- 分割线-->
+    <include layout="@layout/divider_small" />
+
     <!-- 列表控件-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 </LinearLayout>

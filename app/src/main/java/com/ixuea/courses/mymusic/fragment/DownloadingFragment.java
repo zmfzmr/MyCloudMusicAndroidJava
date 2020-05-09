@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.ixuea.android.downloader.callback.DownloadManager;
 import com.ixuea.android.downloader.domain.DownloadInfo;
@@ -12,6 +13,7 @@ import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.BaseRecyclerViewAdapter;
 import com.ixuea.courses.mymusic.adapter.DownloadingAdapter;
 import com.ixuea.courses.mymusic.listener.OnItemClickListener;
+import com.ixuea.courses.mymusic.util.LogUtil;
 
 import java.util.List;
 
@@ -19,11 +21,19 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 下载中界面
  */
 public class DownloadingFragment extends BaseCommonFragment implements OnItemClickListener {
+    private static final String TAG = "DownloadingFragment";
+    /**
+     * 下载按钮(默认是全部暂停 点击后判断有下载任务就是 全部下载)
+     */
+    @BindView(R.id.bt_download)
+    Button bt_download;
+
     /**
      * 列表控件
      */
@@ -128,5 +138,21 @@ public class DownloadingFragment extends BaseCommonFragment implements OnItemCli
                 downloader.pause(data);
                 break;
         }
+    }
+
+    /**
+     * 下载按钮点击
+     */
+    @OnClick(R.id.bt_download)
+    public void onDownloadClick() {
+        LogUtil.d(TAG, "onDownloadClick");
+    }
+
+    /**
+     * 删除按钮点击
+     */
+    @OnClick(R.id.bt_delete)
+    public void onDeleteClick() {
+        LogUtil.d(TAG, "onDeleteClick");
     }
 }
