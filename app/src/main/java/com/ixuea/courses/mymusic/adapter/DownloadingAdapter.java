@@ -7,9 +7,11 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ixuea.android.downloader.callback.DownloadManager;
 import com.ixuea.android.downloader.domain.DownloadInfo;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.fragment.ConfirmDialogFragment;
 import com.ixuea.courses.mymusic.listener.DownloadListener;
 import com.ixuea.courses.mymusic.util.FileUtil;
 import com.ixuea.courses.mymusic.util.ORMUtil;
@@ -17,6 +19,7 @@ import com.ixuea.courses.mymusic.util.ORMUtil;
 import java.lang.ref.SoftReference;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 
 /**
@@ -27,15 +30,19 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
 
 
     private final ORMUtil orm;//数据库工具类
+    private final FragmentManager fragmentManager;//fragment管理器
+    private final DownloadManager downloader;//下载器
 
     /**
      * 构造方法
      *
      * @param context
      */
-    public DownloadingAdapter(Context context, ORMUtil orm) {
+    public DownloadingAdapter(Context context, ORMUtil orm, FragmentManager fragmentManager, DownloadManager downloader) {
         super(context);
         this.orm = orm;
+        this.fragmentManager = fragmentManager;
+        this.downloader = downloader;
     }
 
     /**
@@ -136,6 +143,22 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
 
             //第一次显示数据(防止 没有下载，是不会调用上面的DownloadListener onRefresh方法)
             refresh();
+
+            //删除按钮点击事件
+            ib_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //弹出确认对话框
+                    ConfirmDialogFragment.show(fragmentManager, (dialog, which) -> {
+                        //下载框架中删除  data： DownloadInfo对象
+                        downloader.remove(data);
+
+                        //从适配器中删除  getAdapterPosition：RecyclerView里面的
+                        //removeData: 是我们自己定义的方法(父类BaseRecyclerViewAdapter中定义的)
+                        removeData(getAdapterPosition());
+                    });
+                }
+            });
 
         }
 

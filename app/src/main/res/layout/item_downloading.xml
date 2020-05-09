@@ -58,7 +58,7 @@
 
     </LinearLayout>
 
-    <!--标题按钮-->
+    <!--删除按钮-->
     <ImageButton
         android:id="@+id/ib_delete"
         android:background="@null"

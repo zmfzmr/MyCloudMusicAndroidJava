@@ -56,7 +56,7 @@ public class DownloadingFragment extends BaseCommonFragment implements OnItemCli
         super.initDatum();
 
         //创建适配器
-        adapter = new DownloadingAdapter(getMainActivity(), orm);
+        adapter = new DownloadingAdapter(getMainActivity(), orm, getChildFragmentManager(), downloader);
 
         //设置适配器
         rv.setAdapter(adapter);
