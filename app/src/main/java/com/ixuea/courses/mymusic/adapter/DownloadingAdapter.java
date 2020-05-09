@@ -11,10 +11,13 @@ import com.ixuea.android.downloader.callback.DownloadManager;
 import com.ixuea.android.downloader.domain.DownloadInfo;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.event.DownloadChangeEvent;
 import com.ixuea.courses.mymusic.fragment.ConfirmDialogFragment;
 import com.ixuea.courses.mymusic.listener.DownloadListener;
 import com.ixuea.courses.mymusic.util.FileUtil;
 import com.ixuea.courses.mymusic.util.ORMUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.SoftReference;
 
@@ -135,14 +138,16 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
                         //表示从软应用 中获取到这个对象(ViewHolder: 就是：下载ViewHolder)
                         ViewHolder holder = (ViewHolder) getUserTag().get();
 
-                        //调用显示数据方法
-                        holder.refresh();
+                        //调用显示数据方法 (因为DownloadListener 的很多方法都调用onRefresh，可能会调用多次onRefresh
+                        // 但是refresh判断了下载的状态，只有(未下载)和(下载完成)的时候才会发送通知)
+                        holder.refresh(true);
                     }
                 }
             });
 
             //第一次显示数据(防止 没有下载，是不会调用上面的DownloadListener onRefresh方法)
-            refresh();
+            //这里第一次传入false(可能还没有下载任务传入进来)
+            refresh(false);
 
             //删除按钮点击事件
             ib_delete.setOnClickListener(new View.OnClickListener() {
@@ -164,8 +169,9 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
 
         /**
          * 显示下载信息的
+         * @param isDownloadManagerNotify true 表示发送事件改变了通知
          */
-        private void refresh() {
+        private void refresh(boolean isDownloadManagerNotify) {
             //data: DownloadInfo
             switch (data.getStatus()) {
                 case DownloadInfo.STATUS_PAUSED:
@@ -201,9 +207,9 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
 
                     }
                     break;
-                case DownloadInfo.STATUS_COMPLETED:
-                    //下载完成
-                    break;
+//                case DownloadInfo.STATUS_COMPLETED:
+//                    //下载完成
+//                    break;
                 case DownloadInfo.STATUS_WAIT:
                     //等待中
                     tv_info.setText(R.string.wait_download);
@@ -211,8 +217,25 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
                     break;
 
                 default:
+                    //下载完成
                     //未下载
+                    //从适配器中移除下载任务(我们这里不需要从下载管理器中移除，前面的点击删除下载中任务，才需要)
+                    removeData(getAdapterPosition());
+                    //发布下载数据改变了通知
+                    publishDownloadStatusChangeEvent(isDownloadManagerNotify);
+
                     break;
+            }
+        }
+
+        /**
+         * 发送下载数据改变了通知
+         *
+         * @param isDownloadManagerNotify 下载数据改变了通知
+         */
+        private void publishDownloadStatusChangeEvent(boolean isDownloadManagerNotify) {
+            if (isDownloadManagerNotify) {
+                EventBus.getDefault().post(new DownloadChangeEvent());
             }
         }
     }

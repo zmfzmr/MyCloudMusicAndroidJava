@@ -13,8 +13,13 @@ import com.ixuea.courses.mymusic.MusicPlayerActivity;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.DownloadedAdapter;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.event.DownloadChangeEvent;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +58,9 @@ public class DownloadedFragment extends BaseCommonFragment implements BaseQuickA
     @Override
     protected void initDatum() {
         super.initDatum();
+
+        //注册发布订阅框架
+        EventBus.getDefault().register(this);
 
         //初始化列表管理器
         listManager = MusicPlayerService.getListManager(getMainActivity());
@@ -131,5 +139,27 @@ public class DownloadedFragment extends BaseCommonFragment implements BaseQuickA
         listManager.play(data);
         //跳转到音乐播放界面
         startActivity(MusicPlayerActivity.class);
+    }
+
+    /**
+     * 下载任务改变了
+     * 例如：删除了(应该这里是写错了，在 DownloadingAdapter中 ib_delete 点击删除了，移除了下载器和适配器中的任务)
+     * 下载完成了()
+     * <p>
+     * 在DownloadingAdapter那边：
+     * 因为DownloadListener 的很多方法都调用onRefresh，可能会调用多次onRefresh,
+     * 但是refresh判断了下载的状态，只有(未下载)和(下载完成)的时候才会发送通知)
+     *
+     * @param event DownloadChangeEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDownloadChangedEvent(DownloadChangeEvent event) {
+        fetchData();
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }
