@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.util.Constant;
 
 /**
  * 用户详情-关于界面
@@ -21,10 +22,13 @@ public class UserDetailAboutFragment extends BaseCommonFragment {
 
     /**
      * 创建方法
+     * @param userId
      */
-    public static UserDetailAboutFragment newInstance() {
+    public static UserDetailAboutFragment newInstance(String userId) {
 
         Bundle args = new Bundle();
+        //传递用户id
+        args.putString(Constant.ID, userId);
 
         UserDetailAboutFragment fragment = new UserDetailAboutFragment();
         fragment.setArguments(args);

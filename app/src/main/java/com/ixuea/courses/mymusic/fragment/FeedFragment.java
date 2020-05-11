@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.util.Constant;
 
 /**
  * 首页-我的好友界面
@@ -13,14 +14,23 @@ import com.ixuea.courses.mymusic.R;
 public class FeedFragment extends BaseCommonFragment {
 
     /**
+     * 这个是主界面的那个MainAdapter的时候用到
+     */
+    public static FeedFragment newInstance() {
+        return FeedFragment.newInstance(null);//这样的好处是，外面不需要传入参数null了
+    }
+
+    /**
      * 构造方法
      * 固定写法
      *
      * @return FriendFragment本身
      */
-    public static FeedFragment newInstance() {
+    public static FeedFragment newInstance(String userId) {
 
         Bundle args = new Bundle();
+        //传递用户id
+        args.putString(Constant.ID, userId);
 
         FeedFragment fragment = new FeedFragment();
         fragment.setArguments(args);
