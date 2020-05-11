@@ -194,4 +194,9 @@
     <string name="delete_all">全部删除</string>
     <string name="error_not_download">没有下载任务</string>
 
+    <!--用户详情-->
+    <string name="music">音乐</string>
+    <string name="feed">动态</string>
+    <string name="about_ta">关于TA</string>
+
 </resources>

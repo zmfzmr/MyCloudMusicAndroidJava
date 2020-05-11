@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.UserDetailAdapter;
 import com.ixuea.courses.mymusic.api.Api;
@@ -28,6 +29,11 @@ import butterknife.BindView;
 public class UserDetailActivity extends BaseTitleActivity {
 
     private static final String TAG = "UserDetailActivity";
+    /**
+     * 指示器 （也可是实现底部导航的效果，原理是一样的， 一个是顶部导航，一个是底部导航）
+     */
+    @BindView(R.id.tl)
+    TabLayout tl;
     /**
      * 左右滚动控件
      */
@@ -159,5 +165,8 @@ public class UserDetailActivity extends BaseTitleActivity {
 
         //设置数据
         adapter.setDatum(datum);
+
+        //将TabLayout和ViewPager绑定
+        tl.setupWithViewPager(vp);
     }
 }
