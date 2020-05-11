@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.SettingActivity;
+import com.ixuea.courses.mymusic.activity.UserDetailActivity;
 import com.ixuea.courses.mymusic.activity.WebViewActivity;
 import com.ixuea.courses.mymusic.adapter.MainAdapter;
 import com.ixuea.courses.mymusic.api.Api;
@@ -386,6 +387,10 @@ public class MainActivity extends BaseMusicPlayerActivity {
     @OnClick(R.id.ll_user)
     public void onUserClick() {
         LogUtil.d(TAG, "onUserClick:");
+        //这里是用父类到的startActivityExtraId方法(当然也可以用UserDetailActivity里面的startWithId方法)
+        startActivityExtraId(UserDetailActivity.class, sp.getUserId());
+        ///关闭抽屉
+        cloneDrawer();
     }
 
     /**

@@ -6,12 +6,98 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
+import com.ixuea.courses.mymusic.domain.Sheet;
+import com.ixuea.courses.mymusic.domain.Title;
+import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.LogUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 
 /**
  * 用户详情-歌单界面
  */
 public class UserDetailSheetFragment extends BaseCommonFragment {
+    private static final String TAG = "UserDetailSheetFragment";
+    /**
+     * 列表控件
+     */
+    @BindView(R.id.rv)
+    RecyclerView rv;
+    private String userId;//用于id
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+
+        //初始化固定
+        rv.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
+        rv.setLayoutManager(layoutManager);
+
+        DividerItemDecoration decoration = new DividerItemDecoration(getMainActivity(), DividerItemDecoration.VERTICAL);
+        rv.addItemDecoration(decoration);
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+        //获取用户id
+        userId = extraId();
+
+        fetchData();
+    }
+
+    private void fetchData() {
+        //创建数据列表 (多类型数据用的是 BaseMultiItemEntity )
+        List<BaseMultiItemEntity> datum = new ArrayList<>();
+
+        //添加标题 (注意：这里传入的是一个对象Title，不能单独的 文本内容)
+        datum.add(new Title("创建的歌单"));
+
+        //创建的歌单
+        Api.getInstance()
+                //userId: 用户id  用户点击头像或者@爱学啊 传递进来的用户id(就是点击那个用户，那个用户的id就传入了进来)
+                //注意：这里不能传入sp里面的id，我们这里是点击那个用户，就传入哪个用户的id
+                .createSheets(userId)
+                .subscribe(new HttpObserver<ListResponse<Sheet>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Sheet> data) {
+                        LogUtil.d(TAG, "create sheets: " + data.getData().size());
+                        //添加集合数据
+                        datum.addAll(data.getData());
+
+                        //请求收藏的歌单
+                        Api.getInstance()
+                                .collectSheets(userId)
+                                .subscribe(new HttpObserver<ListResponse<Sheet>>() {
+                                    @Override
+                                    public void onSucceeded(ListResponse<Sheet> data) {
+                                        //添加标题
+                                        datum.add(new Title("收藏的歌单"));
+
+                                        //添加集合数据
+                                        datum.addAll(data.getData());
+
+                                        LogUtil.d(TAG, "collect sheets: " + datum.size());
+
+                                        //TODO 设置数据到适配器
+                                    }
+                                });
+                    }
+                });
+    }
+
     /**
      * 返回显示的布局
      */

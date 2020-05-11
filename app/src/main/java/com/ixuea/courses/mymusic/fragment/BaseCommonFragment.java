@@ -99,6 +99,25 @@ public abstract class BaseCommonFragment extends BaseFragment {
     }
 
     /**
+     * 获取字符串类型Id(这个Id是字符串类型的)
+     *
+     * @return String
+     */
+    protected String extraId() {
+        return extraString(Constant.ID);
+    }
+
+    /**
+     * 获取字符串
+     *
+     * @param key Key
+     * @return
+     */
+    protected String extraString(String key) {
+        return getArguments().getString(key);
+    }
+
+    /**
      * 获取Data对象
      */
     protected Serializable extraData() {
