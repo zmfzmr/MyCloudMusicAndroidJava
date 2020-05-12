@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.UserDetailSheetAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
 import com.ixuea.courses.mymusic.domain.Sheet;
@@ -34,6 +35,7 @@ public class UserDetailSheetFragment extends BaseCommonFragment {
     @BindView(R.id.rv)
     RecyclerView rv;
     private String userId;//用于id
+    private UserDetailSheetAdapter adapter;
 
     @Override
     protected void initViews() {
@@ -54,6 +56,11 @@ public class UserDetailSheetFragment extends BaseCommonFragment {
         super.initDatum();
         //获取用户id
         userId = extraId();
+
+        //创建适配器
+        adapter = new UserDetailSheetAdapter();
+        //设置适配器
+        rv.setAdapter(adapter);
 
         fetchData();
     }
@@ -91,7 +98,9 @@ public class UserDetailSheetFragment extends BaseCommonFragment {
 
                                         LogUtil.d(TAG, "collect sheets: " + datum.size());
 
-                                        //TODO 设置数据到适配器
+                                        // 设置数据到适配器
+                                        adapter.replaceData(datum);
+
                                     }
                                 });
                     }
