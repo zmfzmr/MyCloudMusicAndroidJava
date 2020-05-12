@@ -10,11 +10,77 @@
 
     <!--内容布局-->
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <!--指示器
+
+        <!--头部容器-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <!--头像控件-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="@dimen/avatar_width"
+                android:layout_height="@dimen/avatar_width"
+                tools:src="@drawable/placeholder" />
+
+            <!--昵称
+                android:textStyle="bold" : 加粗
+            -->
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_large"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                tools:text="昵称" />
+
+            <!-- 信息-->
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_middle"
+                android:textColor="@color/white"
+                tools:text="@string/user_friend_info" />
+
+            <!--按钮容器-->
+            <LinearLayout
+                android:layout_marginTop="@dimen/padding_middle"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <!--关注按钮-->
+                <Button
+                    android:id="@+id/bt_follow"
+                    android:text="@string/follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/button_height_small"
+                    android:background="@drawable/shape_border_color_primary"
+                    android:textColor="@color/colorPrimary" />
+
+                <!--发送消息-->
+                <Button
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:id="@+id/bt_send_message"
+                    android:text="@string/send_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/button_height_small"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/shape_border_color_primary" />
+
+            </LinearLayout>
+
+
+            <!--指示器
             tabIndicatorFullWidth：false表示和文字宽度一样宽  注意：是false 如果不设置，好像是平分了
 
             这个TabLayout 是系统自带的
@@ -23,16 +89,19 @@
              app:tabIndicatorHeight="2dp"
             app:tabIndicatorColor="@color/white"  指示器 (线)  高度 和颜色
             -->
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tl"
-            android:background="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_layout_height"
-            app:tabTextColor="@color/tab_normal"
-            app:tabSelectedTextColor="@color/white"
-            app:tabIndicatorHeight="2dp"
-            app:tabIndicatorColor="@color/white"
-            app:tabIndicatorFullWidth="false" />
+            <com.google.android.material.tabs.TabLayout
+                android:layout_marginTop="@dimen/padding_middle"
+                android:id="@+id/tl"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tab_layout_height"
+                android:background="@color/colorPrimary"
+                app:tabIndicatorColor="@color/white"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorHeight="2dp"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextColor="@color/tab_normal" />
+
+        </LinearLayout>
 
         <!--左右滚动控件-->
         <androidx.viewpager.widget.ViewPager
