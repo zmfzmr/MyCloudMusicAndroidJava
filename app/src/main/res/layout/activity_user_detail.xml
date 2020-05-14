@@ -80,6 +80,7 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <!--头像控件-->
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_avatar"
                 android:layout_width="@dimen/avatar_width"
@@ -87,7 +88,7 @@
                 tools:src="@drawable/placeholder" />
 
             <!--昵称
-                android:textStyle="bold" : 加粗
+               android:textStyle="bold" : 加粗
             -->
             <TextView
                 android:id="@+id/tv_nickname"
@@ -115,8 +116,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <!--关注按钮-->
+                <!--关注按钮
+                    这里按钮也设置隐藏，防止 用户请求网络数据还没有请求回来，这个按钮就显示
+                -->
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/bt_follow"
                     android:text="@string/follow"
                     android:layout_width="wrap_content"
@@ -126,6 +130,7 @@
 
                 <!--发送消息-->
                 <Button
+                    android:visibility="gone"
                     android:layout_marginLeft="@dimen/padding_small"
                     android:id="@+id/bt_send_message"
                     android:text="@string/send_message"

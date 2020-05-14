@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
@@ -13,6 +17,7 @@ import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +34,36 @@ import butterknife.BindView;
 public class UserDetailActivity extends BaseTitleActivity {
 
     private static final String TAG = "UserDetailActivity";
+    /**
+     * 头像
+     */
+    @BindView(R.id.iv_avatar)
+    ImageView iv_avatar;
+
+    /**
+     * 昵称
+     */
+    @BindView(R.id.tv_nickname)
+    TextView tv_nickname;
+
+    /**
+     * 信息
+     */
+    @BindView(R.id.tv_info)
+    TextView tv_info;
+
+    /**
+     * 关注按钮
+     */
+    @BindView(R.id.bt_follow)
+    Button bt_follow;
+
+    /**
+     * 发送消息按钮(默认是隐藏的)
+     */
+    @BindView(R.id.bt_send_message)
+    Button bt_send_message;
+
     /**
      * 指示器 （也可是实现底部导航的效果，原理是一样的， 一个是顶部导航，一个是底部导航）
      */
@@ -152,6 +187,54 @@ public class UserDetailActivity extends BaseTitleActivity {
         // 还是@爱学啊 昵称，昵称获取到的id是-1，不是真正的用户id)
         //统一进行网络请求后，请求到的是DetailResponse<User> 对象，获取到的才是用户真正id
         initUI();
+
+        //显示头像
+        //如果要背景根据头像改变
+        //就和歌单详情实现一样
+        //所以这里就不在重复讲解了
+        ImageUtil.show(getMainActivity(), iv_avatar, data.getAvatar());
+
+        //昵称
+        tv_nickname.setText(data.getNickname());
+        //参数2：关注的人 3：我的粉丝(关注我的人)
+        String info = getResources().getString(R.string.user_friend_info,
+                data.getFollowings_count(),
+                data.getFollowersCount());
+
+        tv_info.setText(info);
+
+        //显示关注状态
+        showFollowStatus();
+    }
+
+    /**
+     * 显示关注状态
+     */
+    private void showFollowStatus() {
+        if (data.getId().equals(sp.getUserId())) {
+            //自己
+
+            //隐藏关注按钮，发送消息按钮
+            bt_follow.setVisibility(View.GONE);
+            bt_send_message.setVisibility(View.GONE);
+        } else {
+            //别人的用户详情 (不管有没有关注，这个关注按钮都要显示) 因为默认隐藏了
+            bt_follow.setVisibility(View.VISIBLE);
+
+            //判断用户是否关注
+            if (data.isFollowing()) {
+                //已经关注了
+                bt_follow.setText(R.string.cancel_follow);
+                //显示发送消息按钮(因为xml布局里面已经设置了文字，所以直接显示就行)
+                bt_send_message.setVisibility(View.VISIBLE);
+            } else {
+                //没有关注
+                bt_follow.setText(R.string.follow);
+                //隐藏发送消息按钮
+                bt_send_message.setVisibility(View.GONE);
+            }
+        }
+
     }
 
     /**

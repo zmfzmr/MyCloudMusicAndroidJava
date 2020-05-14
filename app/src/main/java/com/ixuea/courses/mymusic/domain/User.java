@@ -56,6 +56,26 @@ public class User extends BaseModel {
     @SerializedName("city_code")
     private String cityCode;//市编码
 
+    /**
+     * 我的关注的人 (好友)
+     */
+    private long followings_count;
+
+    /**
+     * 关注我的人 (粉丝)
+     */
+    @SerializedName("followers_count")
+    private long followersCount;
+
+    /**
+     * 是否关注
+     * 1:关注
+     * 在用户详情才会返回
+     * <p>
+     * 注意：这个是Integer类型
+     */
+    private Integer following;
+
     //本地过滤字段
     /**
      * 拼音 比如：aixuea
@@ -217,6 +237,30 @@ public class User extends BaseModel {
         this.first = first;
     }
 
+    public long getFollowings_count() {
+        return followings_count;
+    }
+
+    public void setFollowings_count(long followings_count) {
+        this.followings_count = followings_count;
+    }
+
+    public long getFollowersCount() {
+        return followersCount;
+    }
+
+    public void setFollowersCount(long followersCount) {
+        this.followersCount = followersCount;
+    }
+
+    public Integer getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Integer following) {
+        this.following = following;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -257,6 +301,16 @@ public class User extends BaseModel {
         }
         return description;
     }
+
+    /**
+     * 是否关注了
+     * <p>
+     * following: 这个值是跟服务端协商好的
+     */
+    public boolean isFollowing() {
+        return following != null;
+    }
+
     //end辅助方法
 
 }
