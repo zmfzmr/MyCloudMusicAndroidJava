@@ -76,6 +76,23 @@ public class User extends BaseModel {
      */
     private Integer following;
 
+    /**
+     * 性别
+     * 0：保密，10：男，20：女
+     * 可以定义为枚举
+     * 但枚举性能没有int高
+     * 但int没有一些编译验证
+     * Android中有替代方式
+     * 这里用不到就不讲解了
+     */
+    private int gender;
+
+    /**
+     * 生日
+     * 格式为：yyyy-MM-dd
+     */
+    private String birthday;
+
     //本地过滤字段
     /**
      * 拼音 比如：aixuea
@@ -261,6 +278,22 @@ public class User extends BaseModel {
         this.following = following;
     }
 
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -286,6 +319,21 @@ public class User extends BaseModel {
     }
 
     //辅助方法
+
+    /**
+     * 格式化的性别(其实就是根据User对象里面的gender值，返回"男" "女" "保密")
+     */
+    public String getGenderFormat() {
+        switch (gender) {
+            case 10:
+                return "男";
+            case 20:
+                return "女";
+            default:
+                //0
+                return "保密";
+        }
+    }
 
     /**
      * 格式化的描述
