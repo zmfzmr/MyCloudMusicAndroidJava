@@ -1,12 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<?xml version="1.0" encoding="utf-8"?><!--
+    普通的ScrollView 控件 是没有这个嵌套滚动的，所以我们这里用嵌套ScrollView： NestedScrollView
+    注意： 只有一个直接子布局
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+    <!-- 内容容器-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/padding_large"
+        android:orientation="vertical">
+        <!--标题-->
+        <TextView
+            android:textColor="@color/text"
+            android:textSize="@dimen/text_large"
+            android:textStyle="bold"
+            android:text="@string/person_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:text="这是关于界面"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <!--昵称-->
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_marginTop="@dimen/padding_middle"
+            tools:text="@string/nickname_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-</LinearLayout>
+        <!--性别-->
+        <TextView
+            android:id="@+id/tv_gender"
+            android:layout_marginTop="@dimen/padding_middle"
+            tools:text="@string/gender_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--生日-->
+        <TextView
+            android:id="@+id/tv_birthday"
+            android:layout_marginTop="@dimen/padding_middle"
+            tools:text="@string/birthday_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--地区-->
+        <TextView
+            android:id="@+id/tv_area"
+            android:layout_marginTop="@dimen/padding_middle"
+            tools:text="@string/area_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--标题-->
+        <TextView
+            android:layout_marginTop="@dimen/padding_large"
+            android:textColor="@color/text"
+            android:textSize="@dimen/text_large"
+            android:textStyle="bold"
+            android:text="@string/more_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--个人描述-->
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_marginTop="@dimen/padding_middle"
+            tools:text="@string/description_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

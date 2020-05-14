@@ -202,5 +202,12 @@
     <string name="follow">关注用户</string>
     <string name="cancel_follow">取消关注</string>
     <string name="send_message">发送消息</string>
+    <string name="person_info">个人信息</string>
+    <string name="nickname_value">昵称：%1$s</string>
+    <string name="gender_value">性别：%1$s</string>
+    <string name="birthday_value">生日：%1$s</string>
+    <string name="area_value">地区：%1$s</string>
+    <string name="more_info">更多信息</string>
+    <string name="description_value">个人描述：%1$s</string>
 
 </resources>
