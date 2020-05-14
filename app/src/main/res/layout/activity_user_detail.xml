@@ -5,23 +5,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.UserDetailActivity">
-    <!--标题控件-->
-    <include layout="@layout/tool_bar" />
+    <!--AppBarLayout
+        用来实现一些特殊的Toolbar效果
+        例如：折叠标题
+        悬浮效果
+        详细的在《详解Material Design》(http://www.ixuea.com/courses/9)课程中讲解了
+        这里只讲解用到的效果
+        也就是悬浮效果-->
 
-    <!--内容布局-->
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:background="@color/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:paddingBottom="@dimen/padding_middle"
+        app:elevation="0dp">
+
+
+        <!--用户信息容器
+        scroll：跟着列表滚动
+        这里的列表必须是支持嵌套滚动的列表 (我们这里在ViewPager 中fragment中放的是RecyclerView)
+
+        常用支持嵌套滚动的控件：
+        RecyclerView
+        NestedScrollView
+
+        像ListView控件目前不支持
+        一般有Nested前缀表示支持
+
+        什么是嵌套滚动：
+        他是一个名词
+        简单来说就是列表的滚动事件
+        会被CoordinatorLayout控件接收到
+        然后CoordinatorLayout可以控制控件如何动作
+        是通过layout_scrollFlags属性实现了
+        (列表滚动 - > CoordinatorLayout控件接收 -> 通过设置属性，控制里面的控件如何滚动)
+
+        该属性取值比较多
+        这里只讲解用到的知识
+        如果要深入学习
+        可以学习我们的《详解Material Design》(http://www.ixuea.com/courses/9)课程-->
 
         <!--头部容器-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_scrollFlags="scroll">
+
+            <!-- Toolbar控件
+           PupupOverlay:翻译：折叠覆盖
+
+           注意：上面
+                 style="@style/AppTheme.AppBarOverlay" 错误的
+                 (AppBarLayout正确写法是：theme="@style/AppTheme.AppBarOverlay" 注意是：theme)
+
+                 app:popupTheme="@style/AppTheme.PopupOverlay"
+                 (这个是toolbar的正确写法 app命名的)
+
+          app:titleTextColor:标题字体颜色 app命名
+
+          这里把  app:titleTextColor="@color/white"去掉（这个只能更改单个，不能更改返回箭头的颜色）
+          所以把AppBarLayout的style变为android:theme，全称是：android:theme="@style/AppTheme.AppBarOverlay"
+
+            android:background="?attr/colorPrimary" ：这个可以删除，因为最外层设置了颜色
+            可以设置个透明色
+            -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                android:background="@color/transparent"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <!--头像控件-->
             <de.hdodenhof.circleimageview.CircleImageView
@@ -53,6 +109,7 @@
 
             <!--按钮容器-->
             <LinearLayout
+                android:layout_marginBottom="@dimen/padding_middle"
                 android:layout_marginTop="@dimen/padding_middle"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -80,28 +137,43 @@
             </LinearLayout>
 
 
-            <!--指示器
-            tabIndicatorFullWidth：false表示和文字宽度一样宽  注意：是false 如果不设置，好像是平分了
-
-            这个TabLayout 是系统自带的
-            注意：是TabLayout  不是TableLayout
-
-             app:tabIndicatorHeight="2dp"
-            app:tabIndicatorColor="@color/white"  指示器 (线)  高度 和颜色
-            -->
-            <com.google.android.material.tabs.TabLayout
-                android:layout_marginTop="@dimen/padding_middle"
-                android:id="@+id/tl"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/tab_layout_height"
-                android:background="@color/colorPrimary"
-                app:tabIndicatorColor="@color/white"
-                app:tabIndicatorFullWidth="false"
-                app:tabIndicatorHeight="2dp"
-                app:tabSelectedTextColor="@color/white"
-                app:tabTextColor="@color/tab_normal" />
-
         </LinearLayout>
+
+        <!--指示器
+           tabIndicatorFullWidth：false表示和文字宽度一样宽  注意：是false 如果不设置，好像是平分了
+
+           这个TabLayout 是系统自带的
+           注意：是TabLayout  不是TableLayout
+
+            app:tabIndicatorHeight="2dp"
+           app:tabIndicatorColor="@color/white"  指示器 (线)  高度 和颜色
+
+           注意：这个TabLayout 放到AppBarLayout 里面来，而不是上面的LinearLayout中
+                因为这个指示器要悬浮的，而上面的那个头部头部容器需要滚动隐藏的， 所以这2个分开单独设置
+
+                app:layout_scrollFlags="scroll|exitUntilCollapsed" : 滚动并悬浮
+                android:minHeight="@dimen/tab_layout_height": 表示悬浮多高(45dp)  最小高度控制的
+           -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_layout_height"
+            app:tabIndicatorColor="@color/white"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/tab_normal"
+            android:minHeight="@dimen/tab_layout_height"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!--内容布局-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!--左右滚动控件-->
         <androidx.viewpager.widget.ViewPager

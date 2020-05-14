@@ -95,6 +95,14 @@ public class UserDetailActivity extends BaseTitleActivity {
         setContentView(R.layout.activity_user_detail);
     }
 
+    @Override
+    protected void initView() {
+        super.initView();
+
+        //设置缓存数
+        vp.setOffscreenPageLimit(3);
+    }
+
     /**
      * 这里是在评论列表那边点击进来的
      * 点击头像传递用户id：           http://dev-my-cloud-music-api-rails.ixuea.com/v1/users/152
