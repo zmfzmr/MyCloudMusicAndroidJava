@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.SheetDetailActivity;
 import com.ixuea.courses.mymusic.adapter.UserDetailSheetAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
@@ -63,6 +65,28 @@ public class UserDetailSheetFragment extends BaseCommonFragment {
         rv.setAdapter(adapter);
 
         fetchData();
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //设置item点击事件
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //获取当前点击的数据
+                Object data = adapter.getItem(position);
+
+                if (data instanceof Sheet) {
+                    //转为歌单
+                    Sheet sheet = (Sheet) data;
+
+                    //跳转界面(携带歌单id 跳转) (歌单详情那边 根据这个id 获取到 网络数据)
+                    startActivityExtraId(SheetDetailActivity.class, sheet.getId());
+                }
+            }
+        });
     }
 
     private void fetchData() {
