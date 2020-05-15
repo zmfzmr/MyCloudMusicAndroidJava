@@ -6,11 +6,37 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.Video;
+import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.LogUtil;
 
 /**
  * 首页-视频界面
  */
 public class VideoFragment extends BaseCommonFragment {
+
+    private static final String TAG = "VideoFragment";
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        Api.getInstance()
+                .videos()
+                .subscribe(new HttpObserver<ListResponse<Video>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Video> data) {
+                        if (data.getData() != null && data.getData().size() > 0) {
+                            LogUtil.d(TAG, "get videos :" + data.getData().size());
+                        } else {
+                            //没有数据
+                        }
+
+                    }
+                });
+    }
 
     /**
      * 构造方法

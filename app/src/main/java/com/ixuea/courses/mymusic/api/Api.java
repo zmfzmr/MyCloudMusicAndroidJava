@@ -11,6 +11,7 @@ import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Topic;
 import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.Video;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
@@ -442,6 +443,15 @@ public class Api {
      */
     public Observable<Response<Void>> deleteSongInSheet(String sheetId, String songId) {
         return service.deleteSongInSheet(sheetId, songId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 视频列表
+     */
+    public Observable<ListResponse<Video>> videos() {
+        return service.videos()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

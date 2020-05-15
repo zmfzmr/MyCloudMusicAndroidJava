@@ -24,6 +24,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
+        <!-- 这里label 是个空字符串，会跳转后显示用户的信息-->
+        <activity
+            android:name=".activity.Chat2Activity"
+            android:label="" />
         <activity
             android:name=".activity.DownloadActivity"
             android:label="@string/activity_download" />

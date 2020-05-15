@@ -8,6 +8,7 @@ import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Topic;
 import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.Video;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
@@ -304,4 +305,10 @@ public interface Service {
      */
     @DELETE("v1/sheets/{sheetId}/relations/{songId}")
     Observable<Response<Void>> deleteSongInSheet(@Path("sheetId") String sheetId, @Path("songId") String songId);
+
+    /**
+     * 视频列表
+     */
+    @GET("v1/videos")
+    Observable<ListResponse<Video>> videos();
 }

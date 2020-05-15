@@ -306,4 +306,14 @@ public class UserDetailActivity extends BaseTitleActivity {
                     });
         }
     }
+
+    /**
+     * 发送消息按钮点击
+     */
+    @OnClick(R.id.bt_send_message)
+    public void onSendMessage() {
+        //data.getId(): 用户id
+        Chat2Activity.start(getMainActivity(), data.getId());
+    }
+
 }
