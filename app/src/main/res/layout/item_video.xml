@@ -1,12 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <!--封面容器-->
+    <RelativeLayout
+        android:layout_margin="@dimen/padding_middle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_video_height">
 
+        <!--封面-->
+        <ImageView
+            android:id="@+id/iv_banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder" />
+
+        <!--封面行的容器-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/padding_middle">
+
+            <!--视频分类
+                 真实项目中点击它
+                 相当于获取该类别的视频
+                 我们这里后端没有视频分类
+                 所以我们在客户端
+                 只是实现这个按钮界面-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/button_height_small"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/shape_button_11ff"
+                android:text="创意视频"
+                android:textColor="@color/white" />
+
+            <!--播放次数容器-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!--图标-->
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_clicks_count" />
+
+                <!--点击数-->
+                <TextView
+                    android:id="@+id/tv_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_small"
+                    android:text="1228"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <!--时长-->
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:drawableLeft="@drawable/ic_video_time"
+                android:drawablePadding="@dimen/padding_small"
+                android:text="12:28"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <!--标题-->
     <TextView
-        android:text="这是视频列表"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_marginRight="@dimen/padding_middle"
+        android:layout_marginLeft="@dimen/padding_middle"
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_middle"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="@dimen/line_space"
+        android:maxLines="2"
+        android:text="这是标题这是标题这是标这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题题这是标题这是标题这是标题这是标题这是标题"
+        android:textColor="@color/text" />
+
+    <!--分割线-->
+    <include layout="@layout/divider_small" />
+
+    <!--用户容器-->
+    <LinearLayout
+        android:layout_margin="@dimen/padding_middle"
+        android:layout_marginBottom="@dimen/padding_middle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_middle"
+        android:gravity="center_vertical">
+
+        <!--头像-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="@dimen/avatar_width_meddle"
+            android:layout_height="@dimen/avatar_width_meddle"
+            android:src="@drawable/placeholder" />
+
+        <!--昵称-->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_weight="1"
+            android:text="这是昵称"
+            android:textColor="@color/light_grey" />
+
+        <!--点赞容器-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <!--图标-->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_comment_like" />
+
+            <!--点赞数-->
+            <TextView
+                android:id="@+id/tv_likes_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
+                android:text="1228"
+                android:textColor="@color/light_grey" />
+
+        </LinearLayout>
+
+        <!--评论数 (图标和文字合在一起)-->
+        <TextView
+            android:id="@+id/tv_comment_count"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:drawablePadding="@dimen/padding_small"
+            android:drawableTop="@drawable/ic_comment_count_small"
+            android:text="1228"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!--更多-->
+        <ImageView
+            android:layout_marginLeft="@dimen/padding_small"
+            android:src="@drawable/ic_more_grey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!--分割线-->
+    <include layout="@layout/divider_meddle" />
 
 </LinearLayout>
