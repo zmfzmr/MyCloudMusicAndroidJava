@@ -312,6 +312,11 @@ public class User extends BaseModel {
                 .append("provinceCode", provinceCode)
                 .append("city", city)
                 .append("cityCode", cityCode)
+                .append("followings_count", followings_count)
+                .append("followersCount", followersCount)
+                .append("following", following)
+                .append("gender", gender)
+                .append("birthday", birthday)
                 .append("pinyin", pinyin)
                 .append("pinyinFirst", pinyinFirst)
                 .append("first", first)
@@ -353,7 +358,7 @@ public class User extends BaseModel {
     /**
      * 是否关注了
      * <p>
-     * following: 这个值是跟服务端协商好的
+     * following: 这个值是跟服务端协商好的(关注后，服务端会返回一个自动"following": 1)
      */
     public boolean isFollowing() {
         return following != null;

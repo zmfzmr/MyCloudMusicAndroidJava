@@ -202,6 +202,26 @@ public class Api {
     }
 
     /**
+     * 关注用户
+     */
+    public Observable<DetailResponse<BaseModel>> follow(String userId) {
+        return service.follow(userId)
+                .subscribeOn(Schedulers.io())
+                //其实就是HttpObserver中 onFailed onSubscribe onNext 回调方法的执行，在哪个线程执行
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 取消关注用户
+     */
+    public Observable<DetailResponse<BaseModel>> deleteFollow(String userId) {
+        return service.deleteFollow(userId)
+                .subscribeOn(Schedulers.io())
+                //其实就是HttpObserver中 onFailed onSubscribe onNext 回调方法的执行，在哪个线程执行
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 注册
      *
      * @param data User

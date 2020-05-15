@@ -115,6 +115,27 @@ public interface Service {
     Observable<DetailResponse<User>> userDetail(@Path("id") String id, @QueryMap Map<String, String> data);
 
     /**
+     * 关注用户
+     * <p>
+     * 因为关注成功后 返回了一个code 我们并不需要接收，所以可以用
+     * <p>
+     * 注意：这里用的是表单形式(这个接口通知支持2个 表单和body 都是可以的)
+     *
+     * @ Field("id") String userId    后面的userId 可以随便命名，但是前面的id必须是写id(key是id)
+     */
+    @FormUrlEncoded
+    @POST("v1/friends")
+    Observable<DetailResponse<BaseModel>> follow(@Field("id") String userId);
+
+    /**
+     * 取消关注用户
+     * <p>
+     * 注意：这类用的是 @DELETE @Path
+     */
+    @DELETE("v1/friends/{userId}")
+    Observable<DetailResponse<BaseModel>> deleteFollow(@Path("userId") String userId);
+
+    /**
      * 单曲（单曲集合）
      */
     @GET("v1/songs")

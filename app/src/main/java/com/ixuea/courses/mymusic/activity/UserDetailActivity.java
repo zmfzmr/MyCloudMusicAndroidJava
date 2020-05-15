@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.UserDetailAdapter;
 import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 用户详情界面(点击用户头像或者 点击 @爱学啊 传递进来的)
@@ -209,6 +211,7 @@ public class UserDetailActivity extends BaseTitleActivity {
 
     /**
      * 显示关注状态
+     *    一进来 进行网络请求时候 和 点击关注按钮时候用到
      */
     private void showFollowStatus() {
         if (data.getId().equals(sp.getUserId())) {
@@ -259,5 +262,48 @@ public class UserDetailActivity extends BaseTitleActivity {
 
         //将TabLayout和ViewPager绑定
         tl.setupWithViewPager(vp);
+    }
+
+    /**
+     * 关注按钮点击
+     */
+    @OnClick(R.id.bt_follow)
+    public void onFollowClick() {
+        if (data.isFollowing()) {
+            //已经关注了
+
+            //取消关注
+            Api.getInstance()
+                    //取消关注(就是取消关注的哪个人，这个传入的是用户的id)
+                    .deleteFollow(data.getId())
+                    .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                        @Override
+                        public void onSucceeded(DetailResponse<BaseModel> d) {
+                            //取消关注成功
+                            data.setFollowing(null);
+
+                            //刷新关注状态
+                            //(这里我们直接本地按钮的状态即可，因为调用网络请求接口后，服务器那边已经取消用户关注了)
+                            showFollowStatus();
+                        }
+                    });
+
+        } else {
+            //没有关注
+
+            //关注
+            Api.getInstance()
+                    .follow(data.getId())
+                    .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                        @Override
+                        public void onSucceeded(DetailResponse<BaseModel> d) {
+                            //关注成功(只要有一个值，说明是关注过的)
+                            data.setFollowing(1);
+
+                            //刷新关注状态
+                            showFollowStatus();
+                        }
+                    });
+        }
     }
 }
