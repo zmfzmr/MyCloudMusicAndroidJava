@@ -1,10 +1,15 @@
 package com.ixuea.courses.mymusic.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.ixuea.courses.mymusic.R;
 
@@ -194,5 +199,44 @@ public class ImageUtil {
         return options;
     }
 
+    /**
+     * 显示小的（10dp）圆角相对路径图片
+     *
+     * @param activity Activity
+     * @param view
+     * @param name
+     */
+    public static void showSmallRadius(Activity activity, ImageView view, String name) {
+        showFullSmallRadius(activity, view, ResourceUtil.resourceUri(name));
+    }
 
+    /**
+     * 显示小的（10dp）圆角绝对路径图片
+     *
+     * @param activity
+     * @param view
+     * @param name     这个是url地址
+     */
+    public static void showFullSmallRadius(Activity activity, ImageView view, String name) {
+        //获取通用的配置
+        RequestOptions options = getCommonRequestOptions();
+
+        //创建两个变换
+        //一个是从中心裁剪
+        //另一个是圆角
+        //注意：泛型是：Bitmap  参数2：是一个RoundedCorners  Rounded ：圆心的  Corners： 角
+        //               DensityUtil.dip2px(activity, 10): 10dp 转成px
+
+        //Glide：裁剪后，图片就是裁剪后的样子； CircleImage依赖控件：控件是圆形的，但是图片不是裁剪后
+        MultiTransformation<Bitmap> multiTransformation = new MultiTransformation<>(
+                new CenterCrop(),
+                new RoundedCorners(DensityUtil.dip2px(activity, 10))
+        );
+
+        Glide.with(activity)
+                .load(name)
+                //应用变换
+                .apply(options.bitmapTransform(multiTransformation))
+                .into(view);
+    }
 }

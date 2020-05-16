@@ -1,5 +1,7 @@
 package com.ixuea.courses.mymusic.adapter;
 
+import android.app.Activity;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ixuea.courses.mymusic.R;
@@ -21,7 +23,8 @@ public class VideoAdapter extends BaseQuickAdapter<Video, BaseViewHolder> {
     @Override
     protected void convert(@NonNull BaseViewHolder helper, Video data) {
         //封面
-        ImageUtil.show(mContext, helper.getView(R.id.iv_banner), data.getBanner());
+//        ImageUtil.show(mContext, helper.getView(R.id.iv_banner), data.getBanner());
+        ImageUtil.showSmallRadius((Activity) mContext, helper.getView(R.id.iv_banner), data.getBanner());
 
         //点击数(视频播放次数)
         helper.setText(R.id.tv_count, String.valueOf(data.getClicks_count()));
