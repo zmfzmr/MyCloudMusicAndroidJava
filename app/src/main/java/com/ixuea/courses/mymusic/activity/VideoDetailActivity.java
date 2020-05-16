@@ -1,5 +1,6 @@
 package com.ixuea.courses.mymusic.activity;
 
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
+import com.ixuea.courses.mymusic.util.TimeUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -24,7 +26,7 @@ import butterknife.OnClick;
 /**
  * 视频详情
  */
-public class VideoDetailActivity extends BaseTitleActivity {
+public class VideoDetailActivity extends BaseTitleActivity implements MediaPlayer.OnPreparedListener {
 
     private static final String TAG = "VideoDetailActivity";
     /**
@@ -109,6 +111,13 @@ public class VideoDetailActivity extends BaseTitleActivity {
                         next(data.getData());
                     }
                 });
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        //设置准备播放监听器
+        vv.setOnPreparedListener(this);
     }
 
     /**
@@ -199,5 +208,19 @@ public class VideoDetailActivity extends BaseTitleActivity {
         vv.stopPlayback();
 
         super.onDestroy();
+    }
+
+    /**
+     * 播放准备完毕了
+     */
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        //获取视频时长
+        int duration = mp.getDuration();
+
+        //设置到进度条
+        sb.setMax(duration);
+        //设置到结束文本控件  duration:获取到的是毫秒，我们这里用formatMinuteSecond方法
+        tv_end.setText(TimeUtil.formatMinuteSecond(duration));
     }
 }
