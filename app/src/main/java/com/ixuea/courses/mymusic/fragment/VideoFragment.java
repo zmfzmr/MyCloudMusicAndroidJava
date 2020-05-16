@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.VideoDetailActivity;
 import com.ixuea.courses.mymusic.adapter.VideoAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Video;
@@ -68,6 +70,20 @@ public class VideoFragment extends BaseCommonFragment {
 
                     }
                 });
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Video data = (Video) adapter.getItem(position);
+
+                //跳转到视频详情(携带id (Video对象的id))
+                startActivityExtraId(VideoDetailActivity.class, data.getId());
+            }
+        });
     }
 
     /**
