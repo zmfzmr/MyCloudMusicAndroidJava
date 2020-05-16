@@ -456,4 +456,13 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 视频详情
+     */
+    public Observable<DetailResponse<Video>> videoDetail(String id) {
+        return service.videoDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

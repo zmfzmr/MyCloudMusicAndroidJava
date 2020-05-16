@@ -311,4 +311,10 @@ public interface Service {
      */
     @GET("v1/videos")
     Observable<ListResponse<Video>> videos();
+
+    /**
+     * 视频详情
+     */
+    @GET("v1/videos/{id}")
+    Observable<DetailResponse<Video>> videoDetail(@Path("id") String id);
 }

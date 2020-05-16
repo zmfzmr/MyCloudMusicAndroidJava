@@ -1,5 +1,7 @@
 package com.ixuea.courses.mymusic.domain;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * 视频模型
  */
@@ -111,5 +113,18 @@ public class Video extends BaseModel {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("title", title)
+                .append("uri", uri)
+                .append("banner", banner)
+                .append("duration", duration)
+                .append("clicks_count", clicks_count)
+                .append("comments_count", comments_count)
+                .append("user", user)
+                .toString();
     }
 }

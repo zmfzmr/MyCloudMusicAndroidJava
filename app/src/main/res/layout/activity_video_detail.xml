@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.VideoDetailActivity">
 
-
     <!--内容容器
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         这里就不需要设置这个属性，因为我们要标题控件放在LinearLayout下面
@@ -14,8 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:orientation="vertical">
 
         <!--播放器容器
             这个视频高度，其实我们在代码动态计算了宽度
@@ -26,7 +24,7 @@
             android:layout_height="@dimen/video_container_height"
             android:background="@color/black">
 
-            <!--视频播放器-->
+            <!--视频播放器  注意：这个控件默认背景就是灰色的-->
             <VideoView
                 android:id="@+id/vv"
                 android:layout_width="match_parent"
@@ -40,12 +38,14 @@
             <!--
                 因为这里默认主色调是：colorPrimary
                 需要这里添加了 android:background="@color/transparent"  透明-->
+
             <RelativeLayout
                 android:id="@+id/video_touch_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/abl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
@@ -77,6 +77,7 @@
 
             <!--播放控制播放器-->
             <LinearLayout
+                android:id="@+id/control_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -153,7 +154,7 @@
 
         </RelativeLayout>
 
-        <!--列表控件  LRecyclerView 使用第三方的目的是 要添加heade，这个控件添加header更方便r-->
+        <!--列表控件  LRecyclerView 使用第三方的目的是 要添加header，这个控件添加header更方便r-->
         <com.github.jdsjlzx.recyclerview.LRecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
