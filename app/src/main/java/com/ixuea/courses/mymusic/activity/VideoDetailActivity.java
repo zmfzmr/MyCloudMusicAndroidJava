@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusic.activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -91,6 +92,9 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
     private String id;//视频id
 
+    private Video data;//当前视频对象
+    CountDownTimer countDownTimer;//进度倒计时任务
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +128,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
      * 显示数据
      */
     private void next(Video data) {
+        this.data = data;
         //直接写data，其实就是调用toString方法
         LogUtil.d(TAG, "next:" + data);
 
@@ -180,6 +185,9 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
             ib_play.setVisibility(View.VISIBLE);
             //播放控制容器
             control_container.setVisibility(View.VISIBLE);
+
+            //显示播放进度
+            startShowProgress();
         }
     }
 
@@ -193,6 +201,17 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         ib_play.setVisibility(View.GONE);
         //播放控制容器
         control_container.setVisibility(View.GONE);
+
+        //停止进度显示
+        stopShowProgress();
+    }
+
+    /**
+     * 停止进度显示
+     */
+    private void stopShowProgress() {
+        //调用取消定时器的方法就行了
+        cancelTask();
     }
 
     /**
@@ -247,6 +266,62 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
     }
 
     /**
+     * 开始显示进度
+     * <p>
+     * 1.倒计时完成 2.点击隐藏容器  2个 都会调用hideController(这个是上面的onTouchContainerClick 执行的)
+     */
+    private void startShowProgress() {
+        //取消原来的定时器
+        cancelTask();
+
+        //倒计时的总时间，间隔
+        countDownTimer = new CountDownTimer(5000, 100) {
+            /**
+             * 每次间隔调用(每秒调用一次)
+             */
+            @Override
+            public void onTick(long millisUntilFinished) {
+                //显示进度 vv.getCurrentPosition(): 可以获取当前的播放进度
+                showProgress(vv.getCurrentPosition());
+            }
+
+            /**
+             * 倒计时完成了
+             */
+            @Override
+            public void onFinish() {
+                //隐藏播放控制器
+                hideController();
+            }
+        };
+
+        //启动倒计时
+        countDownTimer.start();
+
+    }
+
+    /**
+     * 显示播放进度
+     */
+    private void showProgress(int progress) {
+        //开始位置
+        tv_start.setText(TimeUtil.formatMinuteSecond(progress));
+
+        //进度条
+        sb.setProgress(progress);
+    }
+
+    /**
+     * 取消原来的定时器
+     */
+    private void cancelTask() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+    }
+
+    /**
      * 播放准备完毕了
      */
     @Override
@@ -258,5 +333,8 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         sb.setMax(duration);
         //设置到结束文本控件  duration:获取到的是毫秒，我们这里用formatMinuteSecond方法
         tv_end.setText(TimeUtil.formatMinuteSecond(duration));
+
+        //显示播放进度
+        startShowProgress();
     }
 }
