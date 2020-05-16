@@ -1,6 +1,5 @@
 package com.ixuea.courses.mymusic.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -17,23 +16,23 @@ import androidx.annotation.RawRes;
  * 图片相关工具类
  */
 public class ImageUtil {
-    public static void showAvatar(Activity activity, ImageView view, String uri) {
+    public static void showAvatar(Context context, ImageView view, String uri) {
         if (TextUtils.isEmpty(uri)) {
             //没有头像
 
             //显示默认头像
 //            iv_avatar.setImageResource(R.drawable.placeholder);
-//            show(activity, view, R.drawable.placeholder);
-            showCircle(activity, view, R.drawable.placeholder);
+//            show(context, view, R.drawable.placeholder);
+            showCircle(context, view, R.drawable.placeholder);
 
         } else {
             //有头像 是否以http 开头
             if (uri.startsWith("http")) {
-//                showFull(activity, view, uri);
-                showCircleFull(activity, view, uri);//（绝对路径）显示圆形头像
+//                showFull(context, view, uri);
+                showCircleFull(context, view, uri);//（绝对路径）显示圆形头像
             } else {
                 //相对路径
-                showCircle(activity, view, uri);
+                showCircle(context, view, uri);
 
                 //将图片地址转为绝对地址
                 //data.getAvatar():相对路径，需要前面的前缀拼接起来，
@@ -117,31 +116,31 @@ public class ImageUtil {
     /**
      * 显示圆形相对路径图片
      *
-     * @param activity Activity
+     * @param context Activity
      * @param view     ImageView
      * @param uri      Uri 统一资源定位符
      */
-    public static void showCircle(Activity activity, ImageView view, String uri) {
+    public static void showCircle(Context context, ImageView view, String uri) {
         //将相对资源路径转为绝对路径
         uri = ResourceUtil.resourceUri(uri);
 
         //显示图片
-        showCircleFull(activity, view, uri);
+        showCircleFull(context, view, uri);
     }
 
     /**
      * 显示圆形 绝对路径图片
      *
-     * @param activity Activity
+     * @param context Activity
      * @param view     ImageView
      * @param uri      String
      */
-    public static void showCircleFull(Activity activity, ImageView view, String uri) {
+    public static void showCircleFull(Context context, ImageView view, String uri) {
         //获取圆形通用的配置
         RequestOptions options = getCircleCommonRequestOptions();
 
         //显示图片
-        Glide.with(activity)
+        Glide.with(context)
                 .load(uri)
                 .apply(options)
                 .into(view);
@@ -150,15 +149,15 @@ public class ImageUtil {
     /**
      * 显示圆形资源目录图片
      *
-     * @param activity   Activity
+     * @param context   Activity
      * @param view       ImageView
      * @param resourceId 资源id
      */
-    public static void showCircle(Activity activity, ImageView view, @RawRes @DrawableRes @Nullable int resourceId) {
+    public static void showCircle(Context context, ImageView view, @RawRes @DrawableRes @Nullable int resourceId) {
         //获取圆形通用的配置
         RequestOptions options = getCommonRequestOptions();
         //显示图片
-        Glide.with(activity)
+        Glide.with(context)
                 .load(resourceId)
                 .apply(options)
                 .into(view);
