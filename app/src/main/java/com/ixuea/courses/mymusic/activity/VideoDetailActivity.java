@@ -160,6 +160,42 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
     }
 
     /**
+     * 视频播放容器点击事件
+     * video_touch_container: video上的触摸层
+     */
+    @OnClick(R.id.video_touch_container)
+    public void onTouchContainerClick() {
+        if (control_container.getVisibility() == View.VISIBLE) {
+            //显示了
+
+            //隐藏  翻译：Controller 控制者
+            hideController();
+        } else {
+            //没有显示
+
+            //显示
+            //标题
+            abl.setVisibility(View.VISIBLE);
+            //播放按钮
+            ib_play.setVisibility(View.VISIBLE);
+            //播放控制容器
+            control_container.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 隐藏播放控制器
+     */
+    private void hideController() {
+        //标题
+        abl.setVisibility(View.GONE);
+        //播放按钮
+        ib_play.setVisibility(View.GONE);
+        //播放控制容器
+        control_container.setVisibility(View.GONE);
+    }
+
+    /**
      * 继续播放(继续播放是 是一个暂停的图标)
      */
     private void resume() {
