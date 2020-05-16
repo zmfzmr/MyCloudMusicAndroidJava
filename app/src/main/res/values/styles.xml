@@ -21,6 +21,15 @@
 
     </style>
 
+    <!--状态栏黑色
+        由于小于21版本，是无法更改状态栏颜色，所以他里面没有任何代码。
+        没有代码为啥要定义呢，因为编译的时候可能找不到这个属性，所以需要定义
+        防止在低版本上报错
+    -->
+    <style name="AppTheme.NoActionBar.StatusBarBlack">
+
+    </style>
+
     <!--  AppBarLayout样式
         这个AppBarLayout样式显示的是暗一点的颜色，那么里面的文字就会显示亮一点的颜色
      -->

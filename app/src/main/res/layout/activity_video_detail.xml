@@ -1,10 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.VideoDetailActivity">
-    <!--标题控件-->
-    <include layout="@layout/tool_bar" />
+
+
+    <!--内容容器
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        这里就不需要设置这个属性，因为我们要标题控件放在LinearLayout下面
+    -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!--播放器容器
+            这个视频高度，其实我们在代码动态计算了宽度
+            （如果不动态计算，会有黑边的效果，其实我们的视频是按照比例来的）
+        -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/video_container_height"
+            android:background="@color/black">
+
+            <!--视频播放器-->
+            <VideoView
+                android:id="@+id/vv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!--触摸层   为啥不能直接给VideoView添加点击事件，可能是有可以设置，有些不行
+                因为是RelativeLayout，所以点击下面的RelativeLayout 会弹出播放 暂停 那些控件
+                RelativeLayout覆盖在VideoView上面
+            -->
+
+            <!--
+                因为这里默认主色调是：colorPrimary
+                需要这里添加了 android:background="@color/transparent"  透明-->
+            <RelativeLayout
+                android:id="@+id/video_touch_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:theme="@style/AppTheme.AppBarOverlay"
+                app:elevation="0dp">
+
+                <!-- Toolbar控件
+                    PupupOverlay:翻译：折叠覆盖
+
+                    注意：上面
+                          style="@style/AppTheme.AppBarOverlay" 错误的
+                          (AppBarLayout正确写法是：theme="@style/AppTheme.AppBarOverlay" 注意是：theme)
+
+                          app:popupTheme="@style/AppTheme.PopupOverlay"
+                          (这个是toolbar的正确写法 app命名的)
+
+                   app:titleTextColor:标题字体颜色 app命名
+
+                   这里把  app:titleTextColor="@color/white"去掉（这个只能更改单个，不能更改返回箭头的颜色）
+                   所以把AppBarLayout的style变为android:theme，全称是：android:theme="@style/AppTheme.AppBarOverlay"
+                -->
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <!--播放控制播放器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/padding_middle"
+                android:layout_marginRight="@dimen/padding_middle"
+                android:layout_marginBottom="@dimen/padding_middle"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!--开始时间-->
+                <TextView
+                    android:id="@+id/tv_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="@color/white" />
+
+                <!--进度拖拽控件
+                    minHeight maxHeight
+                -->
+
+                <SeekBar
+                    android:id="@+id/sb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:maxHeight="@dimen/music_seek_bar_height"
+                    android:minHeight="@dimen/music_seek_bar_height"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/shape_seek_bar" />
+
+                <!--结束时间-->
+                <TextView
+                    android:id="@+id/tv_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="@color/white" />
+                <!--全屏时间 24dp
+                   可以看到24dp 高度有点小，这个图标有点大，所以我们用centerInside这个属性完全显示出来图片
+                -->
+                <ImageButton
+                    android:id="@+id/ib_screen"
+                    android:layout_width="@dimen/icon_height"
+                    android:layout_height="@dimen/icon_height"
+                    android:layout_marginLeft="@dimen/padding_middle"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_full_screen" />
+
+            </LinearLayout>
+
+            <!--播放按钮  40dp 也是用了 centerInside -->
+            <ImageButton
+                android:id="@+id/ib_play"
+                android:layout_width="@dimen/button_height"
+                android:layout_height="@dimen/button_height"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_video_pause" />
+
+            <!--播放信息-->
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="50dp"
+                android:text="这是提示信息"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+        <!--列表控件  LRecyclerView 使用第三方的目的是 要添加heade，这个控件添加header更方便r-->
+        <com.github.jdsjlzx.recyclerview.LRecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!--发布评论输入框-->
+        <include layout="@layout/input_comment" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

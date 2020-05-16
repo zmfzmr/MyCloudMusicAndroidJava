@@ -10,4 +10,11 @@
        根布局和要显示到状态栏的内容都要设置fitsSystemWindows="true"-->
         <item name="android:statusBarColor">@color/transparent</item>
     </style>
+
+    <!--状态栏黑色
+        状态栏：要写这个android:statusBarColor
+    -->
+    <style name="AppTheme.NoActionBar.StatusBarBlack">
+        <item name="android:statusBarColor">@color/black</item>
+    </style>
 </resources>
