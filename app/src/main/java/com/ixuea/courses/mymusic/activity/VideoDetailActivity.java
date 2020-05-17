@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -19,6 +21,7 @@ import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
+import com.ixuea.courses.mymusic.util.ScreenUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 
 import butterknife.BindView;
@@ -30,6 +33,13 @@ import butterknife.OnClick;
 public class VideoDetailActivity extends BaseTitleActivity implements MediaPlayer.OnPreparedListener {
 
     private static final String TAG = "VideoDetailActivity";
+
+    /**
+     * 视频容器
+     */
+    @BindView(R.id.video_container)
+    RelativeLayout video_container;
+
     /**
      * 播放器
      */
@@ -94,6 +104,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
     private Video data;//当前视频对象
     CountDownTimer countDownTimer;//进度倒计时任务
+    private int videoContainerHeight;//视频容器的高度
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -323,9 +334,35 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
     /**
      * 播放准备完毕了
+     *
+     * 动态计算高度：是因为在真实项目中，有些视频宽高可能不一样，而我们现在的视频容器高度固定为210DP，
+     *              如果视频不是现在这个比例，那么上下可能会有黑边
+     * 这个动态计算高度解决了 黑边的问题(如果视频本身就有黑边的话，是解决不了了)
      */
     @Override
     public void onPrepared(MediaPlayer mp) {
+        //重新计算视频的高
+        //这样没有黑边
+        //目的是有更好的体验
+
+        //获取视频宽度
+        int videoWidth = mp.getVideoWidth();
+
+        //获取视频高度
+        int videoHeight = mp.getVideoHeight();
+
+        //获取屏幕的宽度
+        int screenWidth = ScreenUtil.getScreenWidth(getMainActivity());
+
+        //注意: 这里除以：可能会有浮点数，所以
+        double scale = screenWidth * 1.0 / videoWidth;
+
+        //计算出视频容器的高度
+        videoContainerHeight = (int) (videoHeight * scale);
+
+        //更新播放容器高度
+        updatePlayContainerLayout();
+
         //获取视频时长
         int duration = mp.getDuration();
 
@@ -336,5 +373,16 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
         //显示播放进度
         startShowProgress();
+    }
+
+    /**
+     * 更新播放容器高度(更新布局)
+     */
+    private void updatePlayContainerLayout() {
+        //获取视频容器布局参数
+        //注意： video_container 是RelativeLayout布局， 必须要是它的外层布局才可以的
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) video_container.getLayoutParams();
+        //设置视频容器高度
+        layoutParams.height = videoContainerHeight;
     }
 }

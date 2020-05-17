@@ -20,6 +20,7 @@
             （如果不动态计算，会有黑边的效果，其实我们的视频是按照比例来的）
         -->
         <RelativeLayout
+            android:id="@+id/video_container"
             android:layout_width="match_parent"
             android:layout_height="@dimen/video_container_height"
             android:background="@color/black">
