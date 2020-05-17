@@ -24,40 +24,65 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
+        <!--
+            android:screenOrientation="portrait" 禁用自动转屏
+        -->
+        <!--unspecified：不指定方向
+            就会自动旋转
+            或者说根据系统来
+
+            发生了改变，不重新创建界面(也就是不销毁界面)
+            android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection"
+            -->
         <activity
             android:name=".activity.VideoDetailActivity"
             android:label=""
+            android:screenOrientation="unspecified"
+            android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection"
             android:theme="@style/AppTheme.NoActionBar.StatusBarBlack" />
         <!-- 这里label 是个空字符串，会跳转后显示用户的信息 -->
         <activity
             android:name=".activity.Chat2Activity"
-            android:label="" />
+            android:label=""
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.DownloadActivity"
-            android:label="@string/activity_download" />
+            android:label="@string/activity_download"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ScanLocalMusicActivity"
-            android:label="@string/scan_local_music" />
+            android:label="@string/scan_local_music"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LocalMusicActivity"
-            android:label="@string/local_music" />
+            android:label="@string/local_music"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SelectFriendActivity"
-            android:label="@string/activity_select_friend" />
+            android:label="@string/activity_select_friend"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SelectTopicActivity"
-            android:label="@string/activity_select_topic" />
+            android:label="@string/activity_select_topic"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.TopicDetailActivity"
-            android:label="@string/activity_topic_detail" />
+            android:label="@string/activity_topic_detail"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ShareLyricImageActivity"
-            android:label="@string/activity_share_lyric_image" />
+            android:label="@string/activity_share_lyric_image"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SelectLyricActivity"
-            android:label="@string/activity_select_lyric" />
-        <activity android:name=".activity.ImagePreviewActivity" />
-        <activity android:name=".MusicPlayerActivity" />
+            android:label="@string/activity_select_lyric"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ImagePreviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MusicPlayerActivity"
+            android:screenOrientation="portrait" />
         <!--
          播放音乐的服务
              android:priotity = "1000" 其实这优先级没多大作用
@@ -71,30 +96,47 @@
 
         <activity
             android:name=".activity.SimplePlayerActivity"
-            android:label="@string/activity_simple_player" />
+            android:label="@string/activity_simple_player"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.UserDetailActivity"
-            android:label="@string/activity_user_detail" />
+            android:label="@string/activity_user_detail"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CommentActivity"
-            android:label="@string/activity_comment" />
+            android:label="@string/activity_comment"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SheetDetailActivity"
-            android:label="@string/activity_sheet_detail" />
+            android:label="@string/activity_sheet_detail"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SettingActivity"
-            android:label="@string/setting" />
-        <activity android:name=".activity.WebViewActivity" />
-        <activity android:name=".activity.AdActivity" />
+            android:label="@string/setting"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AdActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ForgetPasswordActivity"
-            android:label="@string/activity_forget_password" />
+            android:label="@string/activity_forget_password"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.RegisterActivity"
-            android:label="@string/register" />
-        <activity android:name=".activity.LoginOrRegisterActivity" />
-        <activity android:name=".activity.GuideActivity" />
-        <activity android:name=".activity.SplashActivity">
+            android:label="@string/register"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginOrRegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.GuideActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -117,10 +159,12 @@
             android:name=".MainActivity"
             android:label=""
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.StatusBarTransparent" /> <!-- android:label="@string/login" 这个是标题栏的那个标题 -->
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/login" />
+            android:label="@string/login"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
