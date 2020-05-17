@@ -30,7 +30,7 @@ import butterknife.OnClick;
 /**
  * 视频详情
  */
-public class VideoDetailActivity extends BaseTitleActivity implements MediaPlayer.OnPreparedListener {
+public class VideoDetailActivity extends BaseTitleActivity implements MediaPlayer.OnPreparedListener, SeekBar.OnSeekBarChangeListener {
 
     private static final String TAG = "VideoDetailActivity";
 
@@ -68,7 +68,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
      * 进度条
      */
     @BindView(R.id.sb)
-    SeekBar sb;
+    SeekBar sb_progress;
 
     /**
      * 结束时间
@@ -133,6 +133,9 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         super.initListeners();
         //设置准备播放监听器
         vv.setOnPreparedListener(this);
+
+        //设置进度条监听器
+        sb_progress.setOnSeekBarChangeListener(this);
     }
 
     /**
@@ -319,7 +322,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         tv_start.setText(TimeUtil.formatMinuteSecond(progress));
 
         //进度条
-        sb.setProgress(progress);
+        sb_progress.setProgress(progress);
     }
 
     /**
@@ -367,7 +370,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         int duration = mp.getDuration();
 
         //设置到进度条
-        sb.setMax(duration);
+        sb_progress.setMax(duration);
         //设置到结束文本控件  duration:获取到的是毫秒，我们这里用formatMinuteSecond方法
         tv_end.setText(TimeUtil.formatMinuteSecond(duration));
 
@@ -385,4 +388,46 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         //设置视频容器高度
         layoutParams.height = videoContainerHeight;
     }
+
+    //进度条相关回调
+
+    /**
+     * 进度条改变了
+     */
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        //fromUser: 表示是否拖拽SeekBar
+        if (fromUser) {
+            //让视频调转到指定位置播放(也就是跳转到进度条的位置播放)
+            vv.seekTo(seekBar.getProgress());
+            if (!isPlaying()) {
+                //如果暂停了
+
+                //就继续播放
+                resume();
+                LogUtil.d(TAG, "onProgressChanged:" + seekBar.getProgress());
+            }
+        }
+    }
+
+    /**
+     * 开始拖拽
+     *
+     * @param seekBar
+     */
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    /**
+     * 结束拖拽
+     *
+     * @param seekBar
+     */
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+    //end 进度条相关回调
 }
