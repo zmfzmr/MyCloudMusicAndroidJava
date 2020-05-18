@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -503,6 +504,10 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
      * unspecified：不指定方向
      * 就会自动旋转
      * 或者说根据系统来
+     *
+     * 因为前面的 onConfigurationChanged 里面updatePlayContainerLayout设置了竖屏和横屏的布局改变
+     * （和在清单文件中设置了属性）， 所以我们这里设置个方向就行了，只要屏幕发生了改变，
+     *   就会回调 onConfigurationChanged方法进行布局的更新
      */
     private void changeOrientation() {
         if (isFullScreen()) {
@@ -510,13 +515,17 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
             //设置竖屏 （设置竖屏后，相当锁定为竖屏了，所以我们SCREEN_ORIENTATION_UNSPECIFIED，相当于不锁定）
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            //注释理由跟下面到的一样
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         } else {
             //是竖屏
 
             //设置为全屏(横屏)  注意是 SCREEN_ORIENTATION_LANDSCAPE这个  并没有full
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            //这里设置全屏后，可以先不要设置解锁屏幕 ，
+            //否则onBackPressed->getRequestedOrientation 获取方向的值就会发生改变
+            //后面会思考如何解决这个bug
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
     }
 
@@ -529,5 +538,42 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
      */
     private boolean isFullScreen() {
         return getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+    }
+
+    /**
+     * 点击物理返回键调用
+     */
+    @Override
+    public void onBackPressed() {
+        //如果是全屏
+        //点击返回的时候
+        //只是退出全屏
+        if (isFullScreen()) {
+            //是全屏
+
+            //直接改变屏幕方向就行，不销毁
+            changeOrientation();
+        } else {
+            //如果不是全屏，点击返回，调用父类方法(也就是直接销毁了Activity)
+            super.onBackPressed();
+        }
+    }
+
+    /**
+     * 菜单点击了回调
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //Toolbar返回按钮点击
+                //这个直接调用 物理返回键的方法就行了，原理都在那里
+
+                //直接调用实体键返回按钮方法
+                onBackPressed();
+                return true;//记得返回true，否则还是会调用这么的父类方法
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
