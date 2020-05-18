@@ -1,10 +1,14 @@
 package com.ixuea.courses.mymusic.activity;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,6 +28,7 @@ import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.ScreenUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 
+import androidx.annotation.NonNull;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -385,8 +390,41 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         //获取视频容器布局参数
         //注意： video_container 是RelativeLayout布局， 必须要是它的外层布局才可以的
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) video_container.getLayoutParams();
-        //设置视频容器高度
-        layoutParams.height = videoContainerHeight;
+        //获取当前屏幕方向(获取资源，获取配置，然后获取方向)
+        int orientation = getResources().getConfiguration().orientation;
+
+        //android.content.res : 包里面的Configuration
+        //注意：这类是配置Configuration类 里面的常量ORIENTATION_PORTRAIT(竖屏标志)
+        // ActivityInfo.SCREEN_ORIENTATION_PORTRAIT = 1
+        // Configuration.ORIENTATION_PORTRAIT=1  所以说这2个写其中的一个都是可以的
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            //竖屏
+
+            //取消全屏(需要获取窗口对象，因为全屏是跟窗口相关的)
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+            //设置视频容器高度
+            layoutParams.height = videoContainerHeight;
+
+            //竖屏图标是 全屏图标
+            ib_screen.setImageResource(R.drawable.ic_full_screen);
+        } else {
+            //横屏(全屏)
+
+            //隐藏状态栏
+            //注意：这里是2个参数的
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+            //视频容器高度和父容器一样  ViewGroup.LayoutParams.MATCH_PARENT = -1(就是跟父容器一样)
+            //而上面的videoContainerHeight 是一个具体的数值
+            //layoutParams对应的布局RelativeLayout，它的父容器是外层的LinearLayout
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            //更改全屏按钮图标
+            //全屏 的话 图标 是缩小值竖屏的图标
+            ib_screen.setImageResource(R.drawable.ic_normal_screen);
+        }
     }
 
     //进度条相关回调
@@ -430,4 +468,66 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
     }
     //end 进度条相关回调
+
+    /**
+     * 虽然说这个方法是，配置改变回调方法，但由于我们配置了屏幕相关属性，所以说屏幕发生了改变，也会回调。
+     * <p>
+     * 配置发生了改变调用
+     * 具体是什么配置
+     * 取决于清单文件中
+     * configChanges属性配置
+     * (例如：android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection")
+     *
+     * @param newConfig
+     */
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        //更新播放器布局
+        updatePlayContainerLayout();
+    }
+
+    /**
+     * 屏幕切换按钮点击了
+     */
+    @OnClick(R.id.ib_screen)
+    public void onchangeFullScreenClick() {
+        //更改屏幕方向
+        changeOrientation();
+    }
+
+    /**
+     * 更改屏幕方向
+     * <p>
+     * unspecified：不指定方向
+     * 就会自动旋转
+     * 或者说根据系统来
+     */
+    private void changeOrientation() {
+        if (isFullScreen()) {
+            //是全屏
+
+            //设置竖屏 （设置竖屏后，相当锁定为竖屏了，所以我们SCREEN_ORIENTATION_UNSPECIFIED，相当于不锁定）
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        } else {
+            //是竖屏
+
+            //设置为全屏(横屏)  注意是 SCREEN_ORIENTATION_LANDSCAPE这个  并没有full
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }
+    }
+
+    /**
+     * 是否是全屏(第二种方式)
+     * <p>
+     * 前面的第一种方法判断全屏
+     * int orientation = getResources().getConfiguration().orientation;
+     * if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+     */
+    private boolean isFullScreen() {
+        return getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+    }
 }
