@@ -158,6 +158,9 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         //大家在学习的时候一定要搞明白
         adapterWrapper = new LRecyclerViewAdapter(adapter);
 
+        //添加头部布局(注意：这里用的是包裹适配器)
+        adapterWrapper.addHeaderView(createHeaderView());
+
         //设置适配器(设置包裹类的适配器)
         rv.setAdapter(adapterWrapper);
 
@@ -175,6 +178,16 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
                         next(data.getData());
                     }
                 });
+    }
+
+    /**
+     * 创建头部布局
+     */
+    private View createHeaderView() {
+        //把xml加载为view
+        //注意: 第2个参数的写法 需要转换类型
+        View view = getLayoutInflater().inflate(R.layout.header_video_detail, (ViewGroup) rv.getParent(), false);
+        return view;
     }
 
     @Override
