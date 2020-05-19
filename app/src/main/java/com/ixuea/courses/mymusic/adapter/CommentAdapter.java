@@ -1,6 +1,5 @@
 package com.ixuea.courses.mymusic.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -58,8 +57,8 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Object, BaseRecycler
             //创建标题ViewHolder
             return new CommentAdapter.TitleViewHolder(getInflater().inflate(R.layout.item_title_small, parent, false));
         }
-        //创建评论ViewHolder
-        return new CommentViewHolder(getInflater().inflate(R.layout.item_comment, parent, false));
+        //创建评论ViewHolder  修改后： 后面多了个commentAdapterListener 监听器
+        return new CommentViewHolder(getInflater().inflate(R.layout.item_comment, parent, false), commentAdapterListener);
     }
 
     /**
@@ -108,7 +107,7 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Object, BaseRecycler
     /**
      * 评论ViewHolder
      */
-    public class CommentViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
+    public static class CommentViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
         //item布局中用到的是CircleImageView 继承ImageView ；我们这里没有用到CircleImageView里面的方法，
         // 所以没有什么影响
         @BindView(R.id.iv_avatar)
@@ -140,6 +139,12 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Object, BaseRecycler
         private Comment data;//item评论对象
 
         /**
+         * 评论适配器监听器
+         */
+        private final CommentAdapterListener commentAdapterListener;
+        private Context context;//上下文
+
+        /**
          * 头像点击了
          */
         @OnClick(R.id.iv_avatar)
@@ -149,8 +154,14 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Object, BaseRecycler
             }
         }
 
-        public CommentViewHolder(@NonNull View itemView) {
+        public CommentViewHolder(@NonNull View itemView, CommentAdapterListener commentAdapterListener) {
             super(itemView);
+            this.commentAdapterListener = commentAdapterListener;
+
+            //获取上下文
+            //主要是CommentViewHolder的父类 ButterKnife.bind(this, itemView);
+            //ButterKnife绑定了布局，在本类对象或只能怪通过ButterKnife找到的这个控件，所以可以获取它的上下文
+            context = iv_avatar.getContext();
         }
 
         /**
@@ -162,7 +173,8 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Object, BaseRecycler
             this.data = (Comment) d;//进行转换
             //显示头像(里面需要传入Activity，向下转型)
             //因为是CircleImageView 圆形头像, 所以用showAvatar
-            ImageUtil.showAvatar((Activity) context, iv_avatar, data.getUser().getAvatar());
+
+            ImageUtil.showAvatar(context, iv_avatar, data.getUser().getAvatar());
 
             //昵称
             tv_nickname.setText(data.getUser().getNickname());
@@ -241,55 +253,57 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Object, BaseRecycler
                 }
             });
         }
-    }
 
-    /**
-     * 设置文本通用配置
-     *
-     * @param tv TextView
-     */
-    private void setCommon(TextView tv) {
-        //设置后才可以点击（MovementMethod：翻译：移动方法 ），这里传入的是：LinkMovementMethod：链接移动方法
-        tv.setMovementMethod(LinkMovementMethod.getInstance());
+        /**
+         * 设置文本通用配置
+         *
+         * @param tv TextView
+         */
+        private void setCommon(TextView tv) {
+            //设置后才可以点击（MovementMethod：翻译：移动方法 ），这里传入的是：LinkMovementMethod：链接移动方法
+            tv.setMovementMethod(LinkMovementMethod.getInstance());
 
-        //因为这里设置了点击，所以不能用上面的那种方法来设置高亮颜色，使用下面的这种
-        tv.setLinkTextColor(context.getResources().getColor(R.color.text_highlight));
-    }
+            //因为这里设置了点击，所以不能用上面的那种方法来设置高亮颜色，使用下面的这种
+            tv.setLinkTextColor(tv.getContext().getResources().getColor(R.color.text_highlight));
+        }
 
-    /**
-     * * 处理文本点击事件
-     * * 这部分可以用监听器回调到Activity中处理
-     * <p>
-     * 这个方法放在CommentAdapter外面
-     *
-     * @param content
-     */
-    private SpannableString processContent(String content) {
-        SpannableString result = StringUtil.processContent(context, content, new OnTagClickListener() {
-            @Override
-            public void onTagClick(String data, MatchResult matchResult) {
+        /**
+         * * 处理文本点击事件
+         * * 这部分可以用监听器回调到Activity中处理
+         * <p>
+         * 这个方法放在CommentAdapter外面
+         *
+         * @param content
+         */
+        private SpannableString processContent(String content) {
+            SpannableString result = StringUtil.processContent(context, content, new OnTagClickListener() {
+                @Override
+                public void onTagClick(String data, MatchResult matchResult) {
+                    String clickText = StringUtil.removePlaceHolderString(data);
+                    LogUtil.d(TAG, "processContent mention click:" + clickText);
+
+                    //跳转到用户详情
+                    //参数1：上下文 2：点击的文本（没有@）
+                    UserDetailActivity.startWithNickname(context, clickText);
+                }
+            }, (data, matchResult) -> {
                 String clickText = StringUtil.removePlaceHolderString(data);
-                LogUtil.d(TAG, "processContent mention click:" + clickText);
+                LogUtil.d(TAG, "processContent hash tag click:" + clickText);
 
-                //跳转到用户详情
-                //参数1：上下文 2：点击的文本（没有@）
-                UserDetailActivity.startWithNickname(context, clickText);
-            }
-        }, (data, matchResult) -> {
-            String clickText = StringUtil.removePlaceHolderString(data);
-            LogUtil.d(TAG, "processContent hash tag click:" + clickText);
-
-            //跳转到话题详情
-            TopicDetailActivity.startWithTitle(context, clickText);
-        });
-        //SpannableString结果(富文本：里面包含 @12和#123#和其他没有高亮的文本)
-        return result;
+                //跳转到话题详情
+                TopicDetailActivity.startWithTitle(context, clickText);
+            });
+            //SpannableString结果(富文本：里面包含 @12和#123#和其他没有高亮的文本)
+            return result;
+        }
     }
 
     /**
      * 标题ViewHolder
+     *
+     * new CommentAdapter.TitleViewHolder  CommentAdapter: 外层类， 能用点的方式 ，所以内部类，这里是静态的
      */
-    public class TitleViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
+    public static class TitleViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
         @BindView(R.id.tv_title)
         TextView tv_title;//标题
 
@@ -303,5 +317,6 @@ public class CommentAdapter extends BaseRecyclerViewAdapter<Object, BaseRecycler
             //设置标题
             tv_title.setText((String) data);
         }
+
     }
 }

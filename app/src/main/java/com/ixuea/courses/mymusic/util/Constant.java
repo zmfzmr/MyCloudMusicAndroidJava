@@ -103,6 +103,12 @@ public class Constant {
     public static final int TYPE_COMMENT = 4;
 
     /**
+     * 视频
+     */
+    public static final int TYPE_VIDEO = 5;
+
+
+    /**
      * 播放进度通知
      */
     public static final int MESSAGE_PROGRESS = 0;

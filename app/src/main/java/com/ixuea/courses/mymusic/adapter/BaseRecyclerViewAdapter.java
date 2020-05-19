@@ -164,8 +164,10 @@ public abstract class BaseRecyclerViewAdapter<D, VH extends BaseRecyclerViewAdap
     /**
      * 通用ViewHolder(注意：是抽象的，不能直接使用)
      * 主要是添加实现一些公共的逻辑
+     *
+     * 这里是abstract static 抽象静态类
      */
-    public abstract class ViewHolder<D> extends RecyclerView.ViewHolder {
+    public abstract static class ViewHolder<D> extends RecyclerView.ViewHolder {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             //可以在这里加入ButterKnife这样的框架

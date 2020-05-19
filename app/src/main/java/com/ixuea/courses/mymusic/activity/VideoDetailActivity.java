@@ -18,18 +18,28 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.google.android.material.appbar.AppBarLayout;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.VideoDetailAdapter;
 import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.Video;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.ScreenUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -111,6 +121,8 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
     private Video data;//当前视频对象
     CountDownTimer countDownTimer;//进度倒计时任务
     private int videoContainerHeight;//视频容器的高度
+    private VideoDetailAdapter adapter;
+    private LRecyclerViewAdapter adapterWrapper;//适配器包裹类
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +131,41 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
     }
 
     @Override
+    protected void initView() {
+        super.initView();
+
+        rv.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
+        rv.setLayoutManager(layoutManager);
+
+        DividerItemDecoration decoration = new DividerItemDecoration(getMainActivity(), DividerItemDecoration.VERTICAL);
+        rv.addItemDecoration(decoration);
+    }
+
+    @Override
     protected void initDatum() {
         super.initDatum();
         //获取id
         id = extraId();
+
+        //创建适配器
+        adapter = new VideoDetailAdapter(getMainActivity());
+        //创建包裹适配器
+        //这里实现头部是通过
+        //LRecyclerView框架实现的
+        //而发现界面的头部是通过BaseRecyclerViewAdapterHelper框架实现的
+        //大家在学习的时候一定要搞明白
+        adapterWrapper = new LRecyclerViewAdapter(adapter);
+
+        //设置适配器(设置包裹类的适配器)
+        rv.setAdapter(adapterWrapper);
+
+        //禁用下拉刷新
+        rv.setPullRefreshEnabled(false);
+        //禁用上拉加载更多
+        rv.setLoadMoreEnabled(false);
+
 
         Api.getInstance()
                 .videoDetail(id)
@@ -163,6 +206,47 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
         //标题(setTitle: 是Activity里面的方法，设置标题栏标题)
         setTitle(data.getTitle());
+
+
+        //请求相关视频数据
+        List<Object> datum = new ArrayList<>();
+
+        datum.add("相关推荐");
+
+        //请求相关视频数据
+        //因为服务端没有实现相关视频
+        //所以就请求视频列表
+        Api.getInstance()
+                .videos()
+                .subscribe(new HttpObserver<ListResponse<Video>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Video> data) {
+                        //添加数据视频
+                        datum.addAll(data.getData());
+                        //添加标题
+                        datum.add("精彩评论");
+
+                        //请求精彩评论
+                        //由于服务端没有实现与视频相关的评论
+                        //所以这里直接请求评论列表
+                        Api.getInstance()
+                                .comments(new HashMap<>())
+                                .subscribe(new HttpObserver<ListResponse<Comment>>() {
+                                    @Override
+                                    public void onSucceeded(ListResponse<Comment> data) {
+                                        //添加到列表
+                                        datum.addAll(data.getData());
+                                        LogUtil.d(TAG, "comment:" + datum.size());
+
+                                        //设置到适配器  注意：这里设置数据是设置到adapter，不是adapterWrapper
+                                        adapter.setDatum(datum);
+                                    }
+                                });
+                    }
+                });
+
+
+
     }
 
     /**
