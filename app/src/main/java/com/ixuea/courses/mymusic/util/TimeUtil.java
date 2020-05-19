@@ -160,8 +160,25 @@ public class TimeUtil {
      * @param dateTime DateTime:是添加的依赖joda.time 里面的
      * @return
      */
-    private static String yyyyMMddHHmm(DateTime dateTime) {
+    public static String yyyyMMddHHmm(DateTime dateTime) {
         return dateTime.toString("yyyy-MM-dd-HH:mm");//转成2020-04-18-15:32这种形式
+    }
+
+    /**
+     * 将DateTime(ISO8601字符串格式)转为yyyy-MM-dd HH:mm (不过这个传入的是字符串)
+     *
+     * @param date
+     * @return
+     */
+    public static String yyyyMMddHHmm(String date) {
+
+        //将字符串置为DataTime DateTime:是添加的依赖joda.time 里面的
+        //ISO8601这种表示方法: 例如： 2200-04-10T00:28:49.000Z
+        //将 2200-04-10T00:28:49.000Z这种格式的字符串 用DateTime（joda.time依赖库）对象来解析
+        DateTime dateTime = new DateTime(date);//传入进行一个解析
+
+        //调用上面的yyyyMMddHHmm(传入DateTime)
+        return yyyyMMddHHmm(dateTime);//转成2020-04-18-15:32这种形式
     }
 
     //辅助方法

@@ -122,8 +122,9 @@
             android:layout_width="@dimen/avatar_width_meddle"
             android:layout_height="@dimen/avatar_width_meddle" />
 
-        <!--头像-->
+        <!--昵称-->
         <TextView
+            android:id="@+id/tv_nickname"
             android:layout_marginLeft="@dimen/padding_small"
             android:textColor="@color/text"
             android:text="这是昵称"

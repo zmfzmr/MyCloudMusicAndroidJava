@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -28,10 +29,12 @@ import com.ixuea.courses.mymusic.domain.Video;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.ScreenUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
+import com.zhy.view.flowlayout.FlowLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,6 +126,12 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
     private int videoContainerHeight;//视频容器的高度
     private VideoDetailAdapter adapter;
     private LRecyclerViewAdapter adapterWrapper;//适配器包裹类
+    private TextView tv_title;//标题
+    private TextView tv_create_at;
+    private TextView tv_count;//播放次数
+    private FlowLayout fl;//标签流
+    private ImageView iv_avatar;//头像
+    private TextView tv_nickname;//昵称
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,11 +191,31 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
     /**
      * 创建头部布局
+     *
+     * 注意：头布局 查找到的控件，放到成员变量里面来，然后在外面设置数据
      */
     private View createHeaderView() {
         //把xml加载为view
         //注意: 第2个参数的写法 需要转换类型
         View view = getLayoutInflater().inflate(R.layout.header_video_detail, (ViewGroup) rv.getParent(), false);
+
+        //标题
+        tv_title = view.findViewById(R.id.tv_title);
+
+        //发布时间
+        tv_create_at = view.findViewById(R.id.tv_create_at);
+        //播放量（播放次数）
+        tv_count = view.findViewById(R.id.tv_count);
+
+        //标签流
+        fl = view.findViewById(R.id.fl);
+
+        //头像
+        iv_avatar = view.findViewById(R.id.iv_avatar);
+
+        //昵称
+        tv_nickname = view.findViewById(R.id.tv_nickname);
+
         return view;
     }
 
@@ -218,7 +247,24 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         vv.start();
 
         //标题(setTitle: 是Activity里面的方法，设置标题栏标题)
-        setTitle(data.getTitle());
+        setTitle(data.getTitle());//Toolbar 标题
+        tv_title.setText(data.getTitle());//头布局标题
+
+        //发布时间 (转换成年月日 时分 这种格式)
+        String createAt = TimeUtil.yyyyMMddHHmm(data.getCreated_at());
+        tv_create_at.setText(getResources()
+                .getString(R.string.video_create_at, createAt));
+
+        //播放次数
+        String clicksCount = getResources()
+                .getString(R.string.video_clicks_count, data.getClicks_count());
+        tv_count.setText(clicksCount);
+
+        //头像
+        ImageUtil.showAvatar(getMainActivity(), iv_avatar, data.getUser().getAvatar());
+
+        //昵称
+        tv_nickname.setText(data.getUser().getNickname());
 
 
         //请求相关视频数据
