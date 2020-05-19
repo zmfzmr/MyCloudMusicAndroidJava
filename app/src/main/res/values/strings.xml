@@ -210,5 +210,7 @@
     <string name="more_info">更多信息</string>
     <string name="description_value">个人描述：%1$s</string>
     <string name="video_info">%1$s, by %2$s</string>
+    <string name="video_create_at">发布：%1$s</string>
+    <string name="video_clicks_count">播放:%1$d</string>
 
 </resources>
