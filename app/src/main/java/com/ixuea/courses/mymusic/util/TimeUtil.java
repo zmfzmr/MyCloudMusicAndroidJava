@@ -21,8 +21,10 @@ public class TimeUtil {
     /**
      * 将(毫秒)格式化为分:秒 例如： 150:11
      * @param data 毫秒
+     *
+     *             ms2ms: ms: 毫秒  后面的ms：分 秒
      */
-    public static String formatMinuteSecond(int data) {
+    public static String ms2ms(int data) {
         if (data == 0) {
             return "00:00";
         }
@@ -39,15 +41,17 @@ public class TimeUtil {
 //        return String.format("%02d:%02d", minute, second);
 
         //重构，删除的那部分重新调用下面的方法
-        return formatMinuteSecond2(data);
+        return s2ms(data);
     }
 
     /**
      * 将(秒)格式化为分:秒 例如： 150:11
      *
      * @param data 秒
+     *
+     *             s2ms ： 秒 转成毫秒（说是毫秒，其实也是 150:11 这种格式）
      */
-    public static String formatMinuteSecond2(int data) {
+    public static String s2ms(int data) {
         if (data == 0) {
             return "00:00";
         }

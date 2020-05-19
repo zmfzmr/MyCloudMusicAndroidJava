@@ -31,7 +31,7 @@ public class VideoAdapter extends BaseQuickAdapter<Video, BaseViewHolder> {
 
         //视频时长 data.getDuration(): 这类的时长是秒  ，注意调用formatMinuteSecond2这个方法
         helper.setText(R.id.tv_time,
-                TimeUtil.formatMinuteSecond2((int) data.getDuration()));
+                TimeUtil.s2ms((int) data.getDuration()));
 
         //标题
         helper.setText(R.id.tv_title, data.getTitle());

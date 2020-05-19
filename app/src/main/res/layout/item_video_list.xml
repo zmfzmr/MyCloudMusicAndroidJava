@@ -1,12 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_middle"
+    android:gravity="center_vertical">
+    <!--封面容器
+        注意： 这个CardView（卡片形式） 和CircleImage（只是圆显示）的区别
 
-    <TextView
-        android:text="这是相关布局"
+         android:foreground="?android:attr/selectableItemBackground"
+         :表示点击的时候有水波涟漪效果
+    -->
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/radius_button_small"
+        app:cardElevation="0dp">
+
+        <!--封面-->
+        <ImageView
+            android:id="@+id/iv_banner"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder"
+            android:layout_width="140dp"
+            android:layout_height="80dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <!--标题容器-->
+    <LinearLayout
+        android:layout_marginLeft="@dimen/padding_middle"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <!--标题-->
+        <TextView
+            android:id="@+id/tv_title"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@color/text"
+            android:text="这是视频名称,这是视频名称这是视频名称这是视频名称"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--标题-->
+        <TextView
+            android:layout_marginTop="@dimen/padding_middle"
+            android:id="@+id/tv_info"
+            android:text="@string/video_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -382,7 +382,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
                     }
 
                     //显示当前歌词开始时间
-                    tv_lyric_time.setText(TimeUtil.formatMinuteSecond((int) scrollSelectedLyricLine.getStartTime()));
+                    tv_lyric_time.setText(TimeUtil.ms2ms((int) scrollSelectedLyricLine.getStartTime()));
 
                 }
 
@@ -1064,7 +1064,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         long progress = listManager.getData().getProgress();
 
         //格式化进度
-        tv_start.setText(TimeUtil.formatMinuteSecond((int) progress));
+        tv_start.setText(TimeUtil.ms2ms((int) progress));
 
         //设置到进度条
         sb_progress.setProgress((int) progress);
@@ -1188,7 +1188,7 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
         //获取音乐时长
         long duration = listManager.getData().getDuration();
         //格式化
-        tv_end.setText(TimeUtil.formatMinuteSecond((int) duration));
+        tv_end.setText(TimeUtil.ms2ms((int) duration));
         //设置到进度条（设置到进度条最大值）
         sb_progress.setMax((int) duration);
     }

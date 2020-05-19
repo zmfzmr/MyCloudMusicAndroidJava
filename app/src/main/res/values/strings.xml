@@ -209,5 +209,6 @@
     <string name="area_value">地区：%1$s</string>
     <string name="more_info">更多信息</string>
     <string name="description_value">个人描述：%1$s</string>
+    <string name="video_info">%1$s, by %2$s</string>
 
 </resources>

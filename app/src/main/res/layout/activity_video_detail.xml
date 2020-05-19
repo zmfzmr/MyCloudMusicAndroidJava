@@ -11,6 +11,7 @@
         这里就不需要设置这个属性，因为我们要标题控件放在LinearLayout下面
     -->
     <LinearLayout
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">

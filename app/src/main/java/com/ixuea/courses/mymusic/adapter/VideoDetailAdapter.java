@@ -3,11 +3,16 @@ package com.ixuea.courses.mymusic.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Video;
+import com.ixuea.courses.mymusic.util.ImageUtil;
+import com.ixuea.courses.mymusic.util.TimeUtil;
 
 import androidx.annotation.NonNull;
+import butterknife.BindView;
 
 import static com.ixuea.courses.mymusic.util.Constant.TYPE_COMMENT;
 import static com.ixuea.courses.mymusic.util.Constant.TYPE_TITLE;
@@ -98,7 +103,25 @@ public class VideoDetailAdapter extends BaseRecyclerViewAdapter<Object, BaseRecy
      * <p>
      * private: 我们目前没有在其他地方用到
      */
-    private class VideoViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
+    public class VideoViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
+        /**
+         * 封面
+         */
+        @BindView(R.id.iv_banner)
+        ImageView iv_banner;
+
+        /**
+         * 标题
+         */
+        @BindView(R.id.tv_title)
+        TextView tv_title;
+
+        /**
+         * 信息
+         */
+        @BindView(R.id.tv_info)
+        TextView tv_info;
+
         public VideoViewHolder(@NonNull View itemView) {
             super(itemView);
         }
@@ -106,11 +129,25 @@ public class VideoDetailAdapter extends BaseRecyclerViewAdapter<Object, BaseRecy
         /**
          * 绑定数据
          *
-         * @param data D 是 类class ViewHolder<D> 中的D数据
+         * @param d  D 是 类class ViewHolder<D> 中的D数据
          */
         @Override
-        public void bindData(Object data) {
-            super.bindData(data);
+        public void bindData(Object d) {
+            super.bindData(d);
+
+            Video data = (Video) d;
+
+            //封面 (context父类的 外界通过VideoDetailAdapter构造方法传递进来的)
+            ImageUtil.show(context, iv_banner, data.getBanner());
+
+            //标题
+            tv_title.setText(data.getTitle());
+            //注意: 这里是data.getDuration() 是毫秒，调用的是formatMinuteSecond2
+            String timeString = TimeUtil.s2ms((int) data.getDuration());
+            String info = context.getResources().getString(R.string.video_info,
+                    timeString,
+                    data.getUser().getNickname());
+            tv_info.setText(info);
         }
     }
 

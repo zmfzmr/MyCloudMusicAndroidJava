@@ -409,7 +409,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
      */
     private void showProgress(int progress) {
         //开始位置
-        tv_start.setText(TimeUtil.formatMinuteSecond(progress));
+        tv_start.setText(TimeUtil.ms2ms(progress));
 
         //进度条
         sb_progress.setProgress(progress);
@@ -462,7 +462,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         //设置到进度条
         sb_progress.setMax(duration);
         //设置到结束文本控件  duration:获取到的是毫秒，我们这里用formatMinuteSecond方法
-        tv_end.setText(TimeUtil.formatMinuteSecond(duration));
+        tv_end.setText(TimeUtil.ms2ms(duration));
 
         //显示播放进度
         startShowProgress();
