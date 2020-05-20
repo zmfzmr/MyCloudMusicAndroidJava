@@ -42,10 +42,12 @@
     </LinearLayout>
 
     <!--标签流  我们依赖里面添加的
-        app:max_select="-1" 这里还要设置成 -1
+        app:max_select="-1" 这里还要设置成 -1 ： 表示禁用选择功能(标签流 支持多选，我们这里禁用了选择功能)
+        如果有需要可以去官方地址看下
     -->
     <com.zhy.view.flowlayout.TagFlowLayout
         android:id="@+id/fl"
+        android:layout_marginTop="@dimen/padding_middle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:max_select="-1" />

@@ -35,6 +35,8 @@ import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.ScreenUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,7 +131,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
     private TextView tv_title;//标题
     private TextView tv_create_at;
     private TextView tv_count;//播放次数
-    private FlowLayout fl;//标签流
+    private TagFlowLayout fl;//标签流
     private ImageView iv_avatar;//头像
     private TextView tv_nickname;//昵称
 
@@ -137,6 +139,35 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_detail);
+    }
+
+    /**
+     * 界面显示了
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //开启屏幕常亮
+        //真实项目中
+        //可能会做的更完善
+        //例如：只有正在播放才常亮 (系统自带的VideoView 会在播放的时候设置 不息屏)
+        //而我们设置的是在Activity中，只要这个界面显示，那么就不息屏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    /**
+     * 界面暂停了
+     * <p>
+     * 为啥不写在onDestroy中，因为在Activity 跳转到另一个界面的时候，并没有调用onDestroy方法(导致没有销毁，还是常亮)
+     * 所以在onPause 中调用
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //清除，只需要一个参数就可以了
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
@@ -265,6 +296,65 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
         //昵称
         tv_nickname.setText(data.getUser().getNickname());
+
+        //显示视频标签
+        //由于服务端没有实现视频标签功能
+        //所以这里就写死几个标签
+        //目的是讲解如果使用流式标签布局
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("爱学啊");
+        tags.add("测试");
+        tags.add("测试标签1");
+        tags.add("标签1");
+        tags.add("测试标签1标签1");
+        tags.add("标签1");
+
+        //TagAdapter 构造方法里面要传入数据集合tags   类型是String类型
+        fl.setAdapter(new TagAdapter<String>(tags) {
+            /**
+             * @param parent
+             * @param position
+             * @param data     集合中的单个数据
+             * @return
+             */
+            @Override
+            public View getView(FlowLayout parent, int position, String data) {
+                //将xml加载为view
+//                View view = View.inflate(getMainActivity(), R.layout.item_tag, null);
+//                //找标题控件
+//                TextView tv_title = view.findViewById(R.id.tv_title);
+//                //设置值  集合中的单个数据
+//                tv_title.setText(data);
+
+                //方式2
+                //因为加载回来的就是一个TextView，所以直接转换就可以了
+                TextView view = (TextView) View.inflate(getMainActivity(), R.layout.item_tag, null);
+                //设置值
+                view.setText(data);
+
+                //返回view
+                return view;
+            }
+        });
+
+        //设置标签
+        fl.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            /**
+             * tag 点击回调
+             *
+             * @param view
+             * @param position
+             * @param parent
+             * @return
+             */
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                //获取点击的标签文本(tags集合数据的 单个对象)
+                String tag = tags.get(position);
+                LogUtil.d(TAG, "onTagClick: " + tag);
+                return true;//true 表示我们处理了这个事件
+            }
+        });
 
 
         //请求相关视频数据

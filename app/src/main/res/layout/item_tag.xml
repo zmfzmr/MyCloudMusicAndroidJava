@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="这是测试标签"
+    android:textColor="@color/light_grey"
+    android:textSize="@dimen/text_small"
+    android:background="@drawable/shape_light_grey"
+    android:paddingLeft="@dimen/padding_middle"
+    android:paddingRight="@dimen/padding_middle"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp" /><!-- 注意：这类宽高 都是包裹内容-->
