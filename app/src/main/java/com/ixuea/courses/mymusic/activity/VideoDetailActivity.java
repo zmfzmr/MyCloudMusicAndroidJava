@@ -51,7 +51,7 @@ import butterknife.OnClick;
 /**
  * 视频详情
  */
-public class VideoDetailActivity extends BaseTitleActivity implements MediaPlayer.OnPreparedListener, SeekBar.OnSeekBarChangeListener {
+public class VideoDetailActivity extends BaseTitleActivity implements MediaPlayer.OnPreparedListener, SeekBar.OnSeekBarChangeListener, MediaPlayer.OnBufferingUpdateListener {
 
     private static final String TAG = "VideoDetailActivity";
 
@@ -134,6 +134,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
     private TagFlowLayout fl;//标签流
     private ImageView iv_avatar;//头像
     private TextView tv_nickname;//昵称
+    private int duration;//视频总时长
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,7 +223,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
     /**
      * 创建头部布局
-     *
+     * <p>
      * 注意：头布局 查找到的控件，放到成员变量里面来，然后在外面设置数据
      */
     private View createHeaderView() {
@@ -395,7 +396,6 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
                 });
 
 
-
     }
 
     /**
@@ -561,7 +561,24 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         tv_start.setText(TimeUtil.ms2ms(progress));
 
         //进度条
-        sb_progress.setProgress(progress);
+        //计算进度百分比
+        //因为第二个进度也用max
+        //而我们这里第二个进度是百分比
+        //max默认为100  （也就是说统一用百分比，前面的那个setMax 注释掉了）
+        int percent = progress * 100 / duration;
+        sb_progress.setProgress(percent);
+
+        /*
+            progress:458
+            百分比：1-->progress * 100: 45800-->duration-->38430
+
+            progress:4639
+            百分比：12-->progress * 100: 463900-->duration-->38430
+
+            总之记住： 百分比  =  进度 * 100 / 时长   就行了
+         */
+        LogUtil.d(TAG, "progress:" + progress);
+        LogUtil.d(TAG, "百分比：" + percent + "-->progress * 100: " + progress * 100 + "-->duration-->" + duration);
     }
 
     /**
@@ -576,9 +593,9 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
     /**
      * 播放准备完毕了
-     *
+     * <p>
      * 动态计算高度：是因为在真实项目中，有些视频宽高可能不一样，而我们现在的视频容器高度固定为210DP，
-     *              如果视频不是现在这个比例，那么上下可能会有黑边
+     * 如果视频不是现在这个比例，那么上下可能会有黑边
      * 这个动态计算高度解决了 黑边的问题(如果视频本身就有黑边的话，是解决不了了)
      */
     @Override
@@ -606,15 +623,22 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         updatePlayContainerLayout();
 
         //获取视频时长
-        int duration = mp.getDuration();
+        duration = mp.getDuration();
 
         //设置到进度条
-        sb_progress.setMax(duration);
+        //这里我们注释了，因为我们默认的是Max就是100 ，我们设置0~100的百分比 默认就会把进度和缓存进度给展示出来了
+//        sb_progress.setMax(duration);
+
+
         //设置到结束文本控件  duration:获取到的是毫秒，我们这里用formatMinuteSecond方法
         tv_end.setText(TimeUtil.ms2ms(duration));
 
         //显示播放进度
         startShowProgress();
+
+        //设置缓冲进度监听器
+        //注意：MediaPlayer  是方法参数里面的mp    buttering 缓冲
+        mp.setOnBufferingUpdateListener(this);
     }
 
     /**
@@ -737,10 +761,10 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
      * unspecified：不指定方向
      * 就会自动旋转
      * 或者说根据系统来
-     *
+     * <p>
      * 因为前面的 onConfigurationChanged 里面updatePlayContainerLayout设置了竖屏和横屏的布局改变
      * （和在清单文件中设置了属性）， 所以我们这里设置个方向就行了，只要屏幕发生了改变，
-     *   就会回调 onConfigurationChanged方法进行布局的更新
+     * 就会回调 onConfigurationChanged方法进行布局的更新
      */
     private void changeOrientation() {
         if (isFullScreen()) {
@@ -808,5 +832,19 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 缓冲进度更新了
+     *
+     * @param mp
+     * @param percent 缓冲百分比
+     */
+    @Override
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        LogUtil.d(TAG, "onBufferingUpdate: " + percent);
+
+        //设置第二个进度
+        sb_progress.setSecondaryProgress(percent);
     }
 }
