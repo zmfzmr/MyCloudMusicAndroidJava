@@ -51,7 +51,7 @@ import butterknife.OnClick;
 /**
  * 视频详情
  */
-public class VideoDetailActivity extends BaseTitleActivity implements MediaPlayer.OnPreparedListener, SeekBar.OnSeekBarChangeListener, MediaPlayer.OnBufferingUpdateListener {
+public class VideoDetailActivity extends BaseTitleActivity implements MediaPlayer.OnPreparedListener, SeekBar.OnSeekBarChangeListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnErrorListener {
 
     private static final String TAG = "VideoDetailActivity";
 
@@ -256,6 +256,9 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         super.initListeners();
         //设置准备播放监听器
         vv.setOnPreparedListener(this);
+
+        //设置错误监听器(当然给MediaPlayer设置也是一样的)
+        vv.setOnErrorListener(this);
 
         //设置进度条监听器
         sb_progress.setOnSeekBarChangeListener(this);
@@ -560,25 +563,28 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         //开始位置
         tv_start.setText(TimeUtil.ms2ms(progress));
 
-        //进度条
-        //计算进度百分比
-        //因为第二个进度也用max
-        //而我们这里第二个进度是百分比
-        //max默认为100  （也就是说统一用百分比，前面的那个setMax 注释掉了）
-        int percent = progress * 100 / duration;
-        sb_progress.setProgress(percent);
+        //也有可能这时长为0，可能
+        if (duration > 0) {
+            //进度条
+            //计算进度百分比
+            //因为第二个进度也用max
+            //而我们这里第二个进度是百分比
+            //max默认为100  （也就是说统一用百分比，前面的那个setMax 注释掉了）
+            int percent = progress * 100 / duration;
+            sb_progress.setProgress(percent);
 
-        /*
-            progress:458
-            百分比：1-->progress * 100: 45800-->duration-->38430
+            /*
+                progress:458
+                百分比：1-->progress * 100: 45800-->duration-->38430
 
-            progress:4639
-            百分比：12-->progress * 100: 463900-->duration-->38430
+                progress:4639
+                百分比：12-->progress * 100: 463900-->duration-->38430
 
-            总之记住： 百分比  =  进度 * 100 / 时长   就行了
-         */
-        LogUtil.d(TAG, "progress:" + progress);
-        LogUtil.d(TAG, "百分比：" + percent + "-->progress * 100: " + progress * 100 + "-->duration-->" + duration);
+                总之记住： 百分比  =  进度 * 100 / 时长   就行了
+             */
+            LogUtil.d(TAG, "progress:" + progress);
+            LogUtil.d(TAG, "百分比：" + percent + "-->progress * 100: " + progress * 100 + "-->duration-->" + duration);
+        }
     }
 
     /**
@@ -846,5 +852,47 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
         //设置第二个进度
         sb_progress.setSecondaryProgress(percent);
+    }
+
+    /**
+     * 播放失败了
+     *
+     * @param mp    MediaPlayer
+     * @param what  错误类型
+     * @param extra 错误扩展信息
+     * @return true:表示处理了错误
+     * <p>
+     * 怎么测试?
+     * 在vv.setVideoURI中打一个断点，进入到这段的时候，把网关了（跳出飞行模式）
+     * 然后，放开断点，这时候VideoView加载的uri 网址 没有网会导致连接超时，自然会回调onError方法
+     */
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        LogUtil.d(TAG, "onError:" + what + "," + extra);
+
+        switch (extra) {
+            case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
+                //超时了
+                showMessage(R.string.play_failed_time_out);
+                break;
+            default:
+                //注意：这里是播放失败，上面的是播放超时
+                showMessage(R.string.play_failed);
+                break;
+        }
+        //显示播放状态（也就是把播放按钮 变成 播放的图标  （因为出错了，显示播放图标））
+        showPlayStatus();
+
+        return true;
+    }
+
+    /**
+     * 显示提示
+     *
+     * @param resourceId 资源id
+     */
+    private void showMessage(int resourceId) {
+        tv_info.setVisibility(View.VISIBLE);
+        tv_info.setText(resourceId);//设置错误提示信息
     }
 }

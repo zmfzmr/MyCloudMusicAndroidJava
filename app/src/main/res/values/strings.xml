@@ -212,5 +212,7 @@
     <string name="video_info">%1$s, by %2$s</string>
     <string name="video_create_at">发布：%1$s</string>
     <string name="video_clicks_count">播放:%1$d</string>
+    <string name="play_failed_time_out">播放超时，请稍后再试!</string>
+    <string name="play_failed">播放失败，请稍后再试!</string>
 
 </resources>
