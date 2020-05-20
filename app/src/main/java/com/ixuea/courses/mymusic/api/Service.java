@@ -3,6 +3,7 @@ package com.ixuea.courses.mymusic.api;
 import com.ixuea.courses.mymusic.domain.Ad;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Comment;
+import com.ixuea.courses.mymusic.domain.Feed;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -317,4 +318,11 @@ public interface Service {
      */
     @GET("v1/videos/{id}")
     Observable<DetailResponse<Video>> videoDetail(@Path("id") String id);
+
+    /**
+     * 动态列表
+     * QueryMap 后面可能需要添加参数查询，所以用这个
+     */
+    @GET("v1/feeds")
+    Observable<ListResponse<Feed>> feeds(@QueryMap Map<String, String> data);
 }

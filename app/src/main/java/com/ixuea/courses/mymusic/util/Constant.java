@@ -219,6 +219,12 @@ public class Constant {
      * 分页参数字段
      */
     public static final String PAGE = "page";
+
+    /**
+     * 用户id（和服务器协商好的 比如user_id = 2   中的key）
+     */
+    public static final String USER_ID = "user_id ";
+
     /**
      * 查询条件 selection
      * Android媒体库本地音乐查询条件

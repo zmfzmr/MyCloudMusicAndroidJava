@@ -6,6 +6,7 @@ import com.ixuea.courses.mymusic.AppContext;
 import com.ixuea.courses.mymusic.domain.Ad;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Comment;
+import com.ixuea.courses.mymusic.domain.Feed;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -463,6 +464,30 @@ public class Api {
         return service.videoDetail(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 动态列表
+     * 传UserId数据就是该用户的
+     * 不传就是全部
+     *
+     * @param userId 用户id
+     */
+    public Observable<ListResponse<Feed>> feeds(String userId) {
+        //创建查询参数
+        HashMap<String, String> datum = new HashMap<>();
+        if (StringUtils.isNotBlank(userId)) {
+            //不为空的时候才添加用户id
+            //StringUtils 是commons.lang3 包中的
+
+            //添加用户id
+            datum.put(Constant.USER_ID, userId);
+        }
+        return service.feeds(datum)
+                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+                //好像用这个也行
+                .subscribeOn(AndroidSchedulers.mainThread());
     }
 
 }
