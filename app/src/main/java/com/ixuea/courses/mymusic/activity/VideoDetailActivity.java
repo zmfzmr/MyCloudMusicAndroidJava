@@ -51,7 +51,7 @@ import butterknife.OnClick;
 /**
  * 视频详情
  */
-public class VideoDetailActivity extends BaseTitleActivity implements MediaPlayer.OnPreparedListener, SeekBar.OnSeekBarChangeListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnErrorListener {
+public class VideoDetailActivity extends BaseTitleActivity implements MediaPlayer.OnPreparedListener, SeekBar.OnSeekBarChangeListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
 
     private static final String TAG = "VideoDetailActivity";
 
@@ -135,6 +135,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
     private ImageView iv_avatar;//头像
     private TextView tv_nickname;//昵称
     private int duration;//视频总时长
+    private boolean isCompletetion;//是否播放完毕了
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,6 +260,9 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
         //设置错误监听器(当然给MediaPlayer设置也是一样的)
         vv.setOnErrorListener(this);
+
+        //设置播放完毕了监听器
+        vv.setOnCompletionListener(this);
 
         //设置进度条监听器
         sb_progress.setOnSeekBarChangeListener(this);
@@ -439,8 +443,13 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
             abl.setVisibility(View.VISIBLE);
             //播放按钮
             ib_play.setVisibility(View.VISIBLE);
-            //播放控制容器
-            control_container.setVisibility(View.VISIBLE);
+
+            if (!isCompletetion) {
+                //没有播放完毕才显示
+
+                //播放控制容器
+                control_container.setVisibility(View.VISIBLE);
+            }
 
             //显示播放进度
             startShowProgress();
@@ -478,6 +487,12 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
         //显示暂停状态
         showPauseStatus();
+
+        //清除播放完毕了（就是播放完毕了，点击播放按钮，这个isCompletetion开始是为false，只要播放完毕才是true）
+        isCompletetion = false;
+
+        //隐藏提示信息
+        tv_info.setVisibility(View.GONE);
     }
 
     /**
@@ -695,19 +710,45 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
     /**
      * 进度条改变了
+     *
+     * 为什么拖拽到第10秒 其他等时间， 总是差那么几秒，并不是我们拖拽的不精确
+     * 是我们视频里面有个关键帧的作用，也就是视频只能拖拽到关键帧的位置，并不是我拖拽到第10秒，绝对就是第10秒
+     * 也有可能少2秒
      */
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         //fromUser: 表示是否拖拽SeekBar
         if (fromUser) {
             //让视频调转到指定位置播放(也就是跳转到进度条的位置播放)
-            vv.seekTo(seekBar.getProgress());
+            /*
+              比如进度是 0~100
+
+                getProgress = 30
+
+                因为我们缓冲的时候缓冲了百分比，所以这里需要换算下，
+                这个进度30（总的进度是100）主要换算成时长才可以显示出来
+
+                那么 30/100 * duration
+
+                比如duration = 1000
+                那么就是： 30/100 * 1000 =  300
+                解析： 30占100 的 0.3  0.3*100  就是这个进度总的时长
+
+                但是如果直接先除的话，没有小数了，所以把duration放到前面来
+                30 * duration / 100  结果还是一样的
+
+             */
+            //progress 方法参数里面的
+            progress = seekBar.getProgress() * duration / 100;
+            vv.seekTo(progress);
+//            vv.seekTo(seekBar.getProgress());
             if (!isPlaying()) {
                 //如果暂停了
 
                 //就继续播放
                 resume();
-                LogUtil.d(TAG, "onProgressChanged:" + seekBar.getProgress());
+//                LogUtil.d(TAG, "onProgressChanged:"" + seekBar.getProgress());
+                LogUtil.d(TAG, "onProgressChanged:" + progress);
             }
         }
     }
@@ -888,11 +929,31 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
     /**
      * 显示提示
+     * (错误和播放完毕 都会调用这个方法)
      *
      * @param resourceId 资源id
      */
     private void showMessage(int resourceId) {
         tv_info.setVisibility(View.VISIBLE);
         tv_info.setText(resourceId);//设置错误提示信息
+    }
+
+    /**
+     * 播放完毕
+     */
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        //设置播放完毕了
+        isCompletetion = true;
+
+        //显示提示
+        showMessage(R.string.play_completetion);
+
+        //显示播放状态(显示播放图标)
+        showPlayStatus();
+
+        //显示播放按钮(1.因为前面的 点击触摸层显示后，会调用startShowProgress 开始倒计时，接收会隐藏这个播放按钮
+        //            2. 或者页面已经来就会调用startShowProgress 开始倒计时隐藏播放按钮)
+        ib_play.setVisibility(View.VISIBLE);
     }
 }
