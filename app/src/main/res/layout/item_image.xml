@@ -7,6 +7,7 @@
 
     <!--封面容器-->
     <androidx.cardview.widget.CardView
+        android:layout_margin="@dimen/padding_small"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:foreground="?android:attr/selectableItemBackground"

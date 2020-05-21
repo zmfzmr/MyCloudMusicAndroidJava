@@ -13,6 +13,7 @@ import com.ixuea.courses.mymusic.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -71,11 +72,40 @@ public class FeedAdapter extends BaseQuickAdapter<Feed, BaseViewHolder> {
             //禁用嵌套滚动（不希望内容多了后，里面的内容滚动(禁用内容滚动)）
             //注意：传入的是false
             rv.setNestedScrollingEnabled(false);
+            //动态计算显示列数
+            int spanCount = 1;
+
+            if (data.getImages().size() > 4) {
+                //大于4张图片
+
+                //显示3列
+                spanCount = 3;
+            } else if (data.getImages().size() > 1) {
+                //大于1张
+
+                //显示2列
+                spanCount = 2;
+            }
+
+            //设置布局管理器(注意：这里的上下文用的 是父类的mContext)
+//            GridLayoutManager layoutManager = new GridLayoutManager(mContext, 3);
+            //不管分几列，都会把item布局平分的
+            GridLayoutManager layoutManager = new GridLayoutManager(mContext, spanCount);
+            rv.setLayoutManager(layoutManager);
+
+            //设置适配器
+            ImageAdapter adapter = new ImageAdapter(R.layout.item_image);
+            rv.setAdapter(adapter);
+            //设置数据
+            adapter.replaceData(data.getImages());
         } else {
             //没有图片
 
             //隐藏控件
             rv.setVisibility(View.GONE);
+
+            //清除适配器(清除适配器或者清除数据都是一样的，最好清除适配器)
+            rv.setAdapter(null);
         }
 
     }
