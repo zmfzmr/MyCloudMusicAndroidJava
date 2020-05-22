@@ -12,6 +12,7 @@ import com.ixuea.courses.mymusic.activity.PublishFeedActivity;
 import com.ixuea.courses.mymusic.adapter.FeedAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Feed;
+import com.ixuea.courses.mymusic.domain.event.OnFeedChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.FeedListener;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
@@ -19,6 +20,10 @@ import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.wanglu.photoviewerlibrary.PhotoViewer;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +65,9 @@ public class FeedFragment extends BaseCommonFragment implements FeedListener {
     @Override
     protected void initDatum() {
         super.initDatum();
+        //注册发布订阅框架
+        EventBus.getDefault().register(this);
+
         //获取用户id(这个用户id 目前只有从用户详情那边 过来才有值)
         userId = extraId();
         //设置适配器
@@ -171,5 +179,25 @@ public class FeedFragment extends BaseCommonFragment implements FeedListener {
         LogUtil.d(TAG, "onPublishFeedClick");
 
         startActivity(PublishFeedActivity.class);
+    }
+
+    /**
+     * 动态改了了事件 回调
+     * <p>
+     * 因为我们在PublishFeedActivity 那边中发布了动态，所以在本页面重新调用下全球 动态的方法，就会刷新出数据
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFeedChangedEvent(OnFeedChangedEvent event) {
+        fetchData();
+    }
+
+    /**
+     * 界面销毁时
+     */
+    @Override
+    public void onDestroy() {
+        //解除注册
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

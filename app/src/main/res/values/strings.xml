@@ -218,9 +218,10 @@
     <string name="play_failed">播放失败，请稍后再试!</string>
     <string name="play_completetion">播放完毕，点击重新播放!</string>
     <string name="publish">发布</string>
-    <string name="feed_hint">请输入你想说的</string>
+    <string name="hint_feed">请输入你想说的</string>
     <string name="current_position">当前位置: %1$s-%2$s</string>
     <string name="hint_current_position">当前位置: </string>
     <string name="hint_count">0/140</string>
+    <string name="error_content_length">内容不能超过140字符.</string>
 
 </resources>

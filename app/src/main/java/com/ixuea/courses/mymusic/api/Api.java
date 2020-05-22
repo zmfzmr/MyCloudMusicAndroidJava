@@ -490,4 +490,15 @@ public class Api {
 //                .subscribeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 发布动态
+     * <p>
+     * Feed: 这个对象，就是动态fragment页面中配置的模型对象
+     */
+    public Observable<DetailResponse<BaseModel>> createFeed(Feed data) {
+        return service.createFeed(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

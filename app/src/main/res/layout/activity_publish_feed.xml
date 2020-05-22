@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/publish_message_edit_text_height"
             android:gravity="left|top"
-            android:hint="@string/feed_hint"
+            android:hint="@string/hint_feed"
             android:lineSpacingMultiplier="@dimen/line_space"
             android:maxLength="140" />
 

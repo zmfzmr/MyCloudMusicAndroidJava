@@ -325,4 +325,12 @@ public interface Service {
      */
     @GET("v1/feeds")
     Observable<ListResponse<Feed>> feeds(@QueryMap Map<String, String> data);
+
+    /**
+     * 发布动态
+     * <p>
+     * 为啥要传递个Feed 对象 因为是POST请求, 把对象转换成json传递
+     */
+    @POST("v1/feeds")
+    Observable<DetailResponse<BaseModel>> createFeed(@Body Feed data);
 }
