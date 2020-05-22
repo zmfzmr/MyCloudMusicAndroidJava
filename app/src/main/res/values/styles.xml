@@ -1,10 +1,11 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!--通用主题-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--比如悬浮按钮 或者多选框选中后的颜色等  都是由这个颜色决定的-->
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     <!--去除ActionBar-->

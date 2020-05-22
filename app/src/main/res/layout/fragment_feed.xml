@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</LinearLayout>
+    <!--浮动按钮
+       可以就把它当做一个普通按钮使用
+       src:指定按钮里面显示的图片
+       他的背景颜色是样式中colorAccent属性设置的值-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/activity_margin" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

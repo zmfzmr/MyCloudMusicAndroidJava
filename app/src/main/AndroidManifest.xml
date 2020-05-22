@@ -13,9 +13,7 @@
         SYSTEM_OVERLAY_WINDOW: 翻译：系统覆盖窗口
     -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
-
-    <!--控制屏幕息屏-->
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" /> <!-- 控制屏幕息屏 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -27,23 +25,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activity.PublishFeedActivity"
+            android:label="@string/activity_publish_feed" />
+        <!--             android:screenOrientation="portrait" 禁用自动转屏 -->
         <!--
-            android:screenOrientation="portrait" 禁用自动转屏
-        -->
-        <!--unspecified：不指定方向
+            unspecified：不指定方向
             就会自动旋转
             或者说根据系统来
 
             发生了改变，不重新创建界面(也就是不销毁界面)
             android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection"
-            -->
+        -->
         <activity
             android:name=".activity.VideoDetailActivity"
+            android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection"
             android:label=""
             android:screenOrientation="unspecified"
-            android:configChanges="orientation|keyboard|locale|screenSize|layoutDirection"
-            android:theme="@style/AppTheme.NoActionBar.StatusBarBlack" />
-        <!-- 这里label 是个空字符串，会跳转后显示用户的信息 -->
+            android:theme="@style/AppTheme.NoActionBar.StatusBarBlack" /> <!-- 这里label 是个空字符串，会跳转后显示用户的信息 -->
         <activity
             android:name=".activity.Chat2Activity"
             android:label=""

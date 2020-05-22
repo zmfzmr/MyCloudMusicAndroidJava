@@ -13,6 +13,7 @@
     <string name="activity_select_topic">选择话题</string>
     <string name="activity_select_friend">选择好友</string>
     <string name="activity_download">下载管理</string>
+    <string name="activity_publish_feed">发动态</string>
 
     <!--版本文本-->
     <string name="copyright">Copyright © 2019 Ixuea. All Rights Reserved</string>
@@ -209,11 +210,13 @@
     <string name="area_value">地区：%1$s</string>
     <string name="more_info">更多信息</string>
     <string name="description_value">个人描述：%1$s</string>
+    <!--视频-->
     <string name="video_info">%1$s, by %2$s</string>
     <string name="video_create_at">发布：%1$s</string>
     <string name="video_clicks_count">播放:%1$d</string>
     <string name="play_failed_time_out">播放超时，请稍后再试!</string>
     <string name="play_failed">播放失败，请稍后再试!</string>
     <string name="play_completetion">播放完毕，点击重新播放!</string>
+    <string name="publish">发布</string>
 
 </resources>

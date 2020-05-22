@@ -485,9 +485,9 @@ public class Api {
         }
         return service.feeds(datum)
                 .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread());
-                //好像用这个也行
-                .subscribeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread());
+        //注意：主线程不能用这个subscribeOn，否则可能会崩溃
+//                .subscribeOn(AndroidSchedulers.mainThread());
     }
 
 }

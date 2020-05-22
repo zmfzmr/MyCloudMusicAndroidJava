@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.google.common.collect.Lists;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.activity.PublishFeedActivity;
 import com.ixuea.courses.mymusic.adapter.FeedAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Feed;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 首页-我的好友界面
@@ -38,7 +40,6 @@ public class FeedFragment extends BaseCommonFragment implements FeedListener {
      */
     @BindView(R.id.rv)
     RecyclerView rv;
-
 
     private String userId;//用户id
     private FeedAdapter adapter;
@@ -160,5 +161,15 @@ public class FeedFragment extends BaseCommonFragment implements FeedListener {
                 })
                 //启动界面
                 .start(this);
+    }
+
+    /**
+     * 发布动态按钮回调
+     */
+    @OnClick(R.id.fab)
+    public void onPublishFeedClick() {
+        LogUtil.d(TAG, "onPublishFeedClick");
+
+        startActivity(PublishFeedActivity.class);
     }
 }
