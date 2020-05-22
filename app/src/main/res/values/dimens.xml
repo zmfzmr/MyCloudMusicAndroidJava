@@ -88,6 +88,8 @@
     <!--视频-->
     <dimen name="item_video_height">200dp</dimen>
     <dimen name="video_container_height">210dp</dimen>
+    <!--动态-->
+    <dimen name="publish_message_edit_text_height">150dp</dimen>
 
 
 </resources>
