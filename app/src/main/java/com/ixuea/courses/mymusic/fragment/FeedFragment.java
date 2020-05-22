@@ -5,14 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.google.common.collect.Lists;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.FeedAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Feed;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.listener.FeedListener;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ResourceUtil;
+import com.wanglu.photoviewerlibrary.PhotoViewer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +30,7 @@ import butterknife.BindView;
 /**
  * 首页-我的好友界面
  */
-public class FeedFragment extends BaseCommonFragment {
+public class FeedFragment extends BaseCommonFragment implements FeedListener {
 
     private static final String TAG = "FeedFragment";
     /**
@@ -54,7 +62,7 @@ public class FeedFragment extends BaseCommonFragment {
         //获取用户id(这个用户id 目前只有从用户详情那边 过来才有值)
         userId = extraId();
         //设置适配器
-        adapter = new FeedAdapter(R.layout.item_feed);
+        adapter = new FeedAdapter(R.layout.item_feed, this);
         rv.setAdapter(adapter);
 
         fetchData();
@@ -107,5 +115,50 @@ public class FeedFragment extends BaseCommonFragment {
     @Override
     protected View getLayoutView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_feed, null);
+    }
+
+    /**
+     * 动态图片点击了
+     *
+     * @param rv
+     * @param images
+     * @param index
+     */
+    @Override
+    public void onImageClick(RecyclerView rv, List<String> images, int index) {
+        LogUtil.d(TAG, "onImageClick:" + "," + images.size() + "," + index);
+
+        //将List转为ArrayList
+        //因为图片框架需要的是ArrayList
+        //最好就是一步转换为ArrayList
+        //避免浪费更多的资源
+        ArrayList<String> imagesUri = Lists.newArrayList(images);
+
+        //PhotoViewer框架是Kotlin写的
+        //静态的方法要通过INSTANCE字段使用
+        //注意：是这个PhotoViewer  不是PhotoView
+        PhotoViewer.INSTANCE
+                //设置图片数据
+                .setData(imagesUri)
+                //设置当前位置
+                //设置当前点击的是哪个
+                .setCurrentPage(index)
+
+                //设置图片控件容器 (这个容器 是RecyclerView)
+                //他需要容器的目的是
+                //显示缩放动画
+                .setImgContainer(rv)
+
+                //意思说: 它不帮我们显示图片，需要我们自己取设置
+                //uri: imagesUri 集合里面的 uri字符串
+                .setShowImageViewInterface((imageView, uri) -> {
+                    //使用Glide显示图片
+                    Glide.with(getMainActivity())
+                            // 注意：这个uri是相对路径 需要转换成绝对路径
+                            .load(ResourceUtil.resourceUri(uri))
+                            .into(imageView);
+                })
+                //启动界面
+                .start(this);
     }
 }

@@ -732,6 +732,10 @@ dependencies {
     //https://github.com/hongyangAndroid/FlowLayout
     implementation 'com.hyman:flowlayout-lib:1.1.2'
 
+    //类似微信图片预览框架
+    //https://github.com/wanglu1209/PhotoViewer
+    implementation 'com.github.wanglu1209:PhotoViewer:0.50'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

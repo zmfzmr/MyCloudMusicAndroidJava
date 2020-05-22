@@ -5,12 +5,20 @@ import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.Feed;
+import com.ixuea.courses.mymusic.domain.Resource;
+import com.ixuea.courses.mymusic.listener.FeedListener;
 import com.ixuea.courses.mymusic.util.ImageUtil;
+import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.nullness.compatqual.NullableDecl;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,10 +29,15 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class FeedAdapter extends BaseQuickAdapter<Feed, BaseViewHolder> {
     /**
+     * 动态监听器
+     */
+    private final FeedListener feedListener;
+    /**
      * 构造方法
      */
-    public FeedAdapter(int layoutResId) {
+    public FeedAdapter(int layoutResId, FeedListener feedListener) {
         super(layoutResId);
+        this.feedListener = feedListener;
     }
 
     /**
@@ -95,6 +108,48 @@ public class FeedAdapter extends BaseQuickAdapter<Feed, BaseViewHolder> {
 
             //设置适配器
             ImageAdapter adapter = new ImageAdapter(R.layout.item_image);
+            //设置item点击事件
+            adapter.setOnItemClickListener(new OnItemClickListener() {
+                /**
+                 * 图片点击回调
+                 */
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    LogUtil.d(TAG, "onItemClick: " + position);
+
+                    //获取图片路径
+                    //Java中有stream变换方法
+                    //但是24及以上版本才能使用
+                    //List<String> imageUris=data.getImages().stream().map
+
+                    //使用Google的Guava变换方法
+                    //(当然也可以使用RxJava来实现，我们使用的是Guava)
+                    //其实这个方法相当于把data.getImages() 遍历把里面的每一个图片uri(字符串类型)，
+                    // 添加到到这个集合List<String>里面
+                    //注意：data.getImages()：里面单个对象是Resource(包裹这一个字符串Uri)
+                    //这个Lists 是Guava 里面的package com.google.common.collect;
+
+                    //参数1：需要的转换的集合
+                    // 2.Function(1.转换的集合里面的 单个对象 2.把单个对象里面包裹的类型(String类型) 转换成String类型)
+                    //原本Resource里面包裹了String类型，只是把外层Resource去掉了
+                    List<String> imageUris = Lists.transform(data.getImages(), new Function<Resource, String>() {
+                        /**
+                         * 对每一个元素执行变换
+                         * @param input
+                         * @return
+                         */
+                        @NullableDecl
+                        @Override
+                        public String apply(@NullableDecl Resource input) {
+                            //返回url
+                            return input.getUri();
+                        }
+                    });
+                    //回调监听器
+                    feedListener.onImageClick(rv, imageUris, position);
+                }
+            });
+
             rv.setAdapter(adapter);
             //设置数据
             adapter.replaceData(data.getImages());
