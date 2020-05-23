@@ -1,6 +1,8 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -25,7 +27,7 @@ import butterknife.OnClick;
 /**
  * 发布动态界面
  */
-public class PublishFeedActivity extends BaseTitleActivity {
+public class PublishFeedActivity extends BaseTitleActivity implements TextWatcher {
 
     private static final String TAG = "PublishFeedActivity";
 
@@ -52,6 +54,14 @@ public class PublishFeedActivity extends BaseTitleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_feed);
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //添加输入框监听器
+        et_content.addTextChangedListener(this);
     }
 
     @Override
@@ -137,4 +147,46 @@ public class PublishFeedActivity extends BaseTitleActivity {
     public void onSelectImageClick() {
         LogUtil.d(TAG, "onSelectImageClick");
     }
+
+
+    //输入框监听器
+
+    /**
+     * 文本改变前
+     *
+     * @param s
+     * @param start
+     * @param count
+     * @param after
+     */
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    /**
+     * 文本改变了
+     *
+     * @param s
+     * @param start
+     * @param before
+     * @param count
+     */
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    /**
+     * 文本改变后
+     *
+     * @param s
+     */
+    @Override
+    public void afterTextChanged(Editable s) {
+        String info = getResources().getString(R.string.feed_count, s.toString().length());
+        tv_count.setText(info);
+
+    }
+    //end 输入框监听器
 }
