@@ -736,6 +736,10 @@ dependencies {
     //https://github.com/wanglu1209/PhotoViewer
     implementation 'com.github.wanglu1209:PhotoViewer:0.50'
 
+    //图片选择
+    //https://github.com/LuckSiege/PictureSelector
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.9'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

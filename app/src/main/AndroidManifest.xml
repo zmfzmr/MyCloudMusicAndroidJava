@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ixuea.courses.mymusic">
     <!-- 这里用老师的的应用，改包名 和applicationId ,否则第三方登录不上去（原来的后面加old） -->
     <!-- 网络权限 -->
@@ -15,7 +16,20 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" /> <!-- 控制屏幕息屏 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!--相机-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--
+        图片的图片选择框架（打开后，本身界面是一个activity），会有一个theme，
+        而我们应用的application 里面也有一个 theme，  这2个本身有冲突(也就是合并错误)
+        我们并没有指明
 
+        tools.... 那个就是针对编译的   把这段代码加到application里面后，就可以正常编译了
+
+        加上以后的操作是 什么呢，
+        就是把原来项目中的activity，这个便签拷贝到这里来（也就是）
+        但是这个主题就用原来的  (可能说的不是很清楚，加上下面的这段代码就行了)
+        tools:replace ="android:theme'
+    -->
     <application
         android:name=".AppContext"
         android:allowBackup="true"
@@ -24,7 +38,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:replace="theme">
         <activity
             android:name=".activity.PublishFeedActivity"
             android:label="@string/activity_publish_feed" />

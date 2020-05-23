@@ -47,7 +47,7 @@ task clean(type: Delete) {
 //而不是在java文件中引用
 ext {
     compileSdkVersion = 29
-    minSdkVersion = 16
+    minSdkVersion = 17
     targetSkVersion = 29
     versionCode = 1
     versionName = "1.0"
