@@ -239,4 +239,23 @@ public class ImageUtil {
                 .apply(options.bitmapTransform(multiTransformation))
                 .into(view);
     }
+
+    /**
+     * 显示本地图片(也没啥复杂的，只是把本地的路径加载到图片控件上而已)
+     *
+     * @param context
+     * @param view
+     * @param data
+     */
+    public static void showLocalImage(Context context, ImageView view, String data) {
+        //获取通用配置
+        RequestOptions options = getCommonRequestOptions();
+
+        //使用Glide显示图片
+        Glide.with(context)
+                .load(data)
+                .apply(options)
+                .into(view);
+
+    }
 }

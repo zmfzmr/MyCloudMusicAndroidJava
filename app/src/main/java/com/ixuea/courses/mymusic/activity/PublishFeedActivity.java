@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.ImageSelectAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Feed;
@@ -29,6 +30,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -44,6 +47,11 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
      */
     @BindView(R.id.et_content)
     EditText et_content;
+    /**
+     * 图片列表控件
+     */
+    @BindView(R.id.rv)
+    RecyclerView rv;
 
     /**
      * 当前位置
@@ -57,6 +65,7 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
     @BindView(R.id.tv_count)
     TextView tv_count;
     private String content;//输入的内容
+    private ImageSelectAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +74,42 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
     }
 
     @Override
+    protected void initView() {
+        super.initView();
+
+        //尺寸固定
+        rv.setHasFixedSize(true);
+
+        //禁止嵌套滚动
+        rv.setNestedScrollingEnabled(false);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getMainActivity(), 4);
+        rv.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        //也可以是在用户选择了图片之后初始化这个适配器（这样性能更好一点），否则用户永远不选择图片，有点耗费性能
+        //那样的处理逻辑多点，我们这里直接在initDatum处理了
+
+        //创建适配器
+        adapter = new ImageSelectAdapter(R.layout.item_image_select);
+        rv.setAdapter(adapter);
+    }
+
+    @Override
     protected void initListeners() {
         super.initListeners();
 
         //添加输入框监听器
         et_content.addTextChangedListener(this);
+
+        //点击点击事件   注意： 这里是：有个child 的
+        adapter.setOnItemChildClickListener((adapter, view, position) -> {
+            adapter.remove(position);
+        });
     }
 
     @Override
@@ -265,15 +305,25 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
                     //选择了媒体回调
 
                     //获取选择的资源  data:  方法参数里面的Intent
-                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    List<LocalMedia> datum = PictureSelector.obtainMultipleResult(data);
                     // 例如 LocalMedia 里面返回三种path
                     // 1.media.getPath(); 为原图path
                     // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
-                    LogUtil.d(TAG, "onActivityResult medias:" + selectList.size());
+                    LogUtil.d(TAG, "onActivityResult medias:" + datum.size());
+
+                    //设置数据
+                    setData(datum);
                     break;
             }
         }
+    }
+
+    /**
+     * 设置数据
+     */
+    private void setData(List<LocalMedia> datum) {
+        adapter.replaceData(datum);
     }
 }
