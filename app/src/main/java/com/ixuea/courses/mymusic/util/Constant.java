@@ -256,4 +256,22 @@ public class Constant {
      * 扫描本地音乐放大镜圆周半径(可以理解为dp值或者px值，目前还不清楚)
      */
     public static final double DEFAULT_RADIUS = 30;
+
+    /**
+     * 阿里云OSS Bucket
+     * <p>
+     * //AK 和SK 权限是非常大的，可以访问阿里云的全局资源
+     * （但是这里老师 做了限定，只能访问bucket(简单理解为阿里云上一个文件夹，并不能真正的理解为文件夹)）
+     */
+    public static final String ALIYUN_OSS_BUCKET_NAME = "dev-courses-misuc";
+
+    /**
+     * 阿里云OSS AK
+     */
+    public static final String ALIYUN_OSS_AK = "LTAIvvrRFHYlwoEj";
+
+    /**
+     * 阿里云OSS SK
+     */
+    public static final String ALIYUN_OSS_SK = "xDpTSeBM0PqDUWtlVPQfTfMb97CbPD";
 }

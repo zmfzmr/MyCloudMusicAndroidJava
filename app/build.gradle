@@ -740,6 +740,13 @@ dependencies {
     //https://github.com/LuckSiege/PictureSelector
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.9'
 
+    //阿里云oss
+
+    //如何查看最新版本可以在《详解OkHttp》课程中找到
+    //官方文档：https://help.aliyun.com/document_detail/32043.html
+    //sdk地址：https://github.com/aliyun/aliyun-oss-android-sdk
+    implementation 'com.aliyun.dpa:oss-android-sdk:2.9.2'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
