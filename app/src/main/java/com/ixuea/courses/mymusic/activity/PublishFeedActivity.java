@@ -6,9 +6,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.common.collect.Lists;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.ImageSelectAdapter;
 import com.ixuea.courses.mymusic.api.Api;
@@ -27,6 +30,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -97,6 +101,9 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
         //创建适配器
         adapter = new ImageSelectAdapter(R.layout.item_image_select);
         rv.setAdapter(adapter);
+
+        //设置数据(一开始设置个空数据, 所以就显示各+号图片(走 方法setData里面的 if方法))
+        setData(new ArrayList<>());
     }
 
     @Override
@@ -106,9 +113,28 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
         //添加输入框监听器
         et_content.addTextChangedListener(this);
 
+        //设置item点击事件
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            Object data = adapter.getItem(position);
+            if (data instanceof Integer) {
+                //选择图片
+                selectImage();
+            }
+        });
+
         //点击点击事件   注意： 这里是：有个child 的
-        adapter.setOnItemChildClickListener((adapter, view, position) -> {
-            adapter.remove(position);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
+                baseQuickAdapter.remove(position);
+
+                //下面是点击删除按钮后，保留后面的 + 号图片
+                //这个目前先这样实现，可能会有点问题(先注释)
+//                int resourceId = R.drawable.ic_add_grey;
+//                if (adapter.getItemCount() < 9 && !adapter.getData().contains(resourceId)) {
+//                    adapter.addData(resourceId);
+//                }
+            }
         });
     }
 
@@ -313,17 +339,21 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
                     LogUtil.d(TAG, "onActivityResult medias:" + datum.size());
 
-                    //设置数据
-                    setData(datum);
+                    //设置数据  这里需要用Guava 转换成ArrayList(因为要显示多种类型，用这个)
+                    setData(Lists.newArrayList(datum));
                     break;
             }
         }
     }
 
     /**
-     * 设置数据
+     * 设置数据  注意：这里是Object类型
      */
-    private void setData(List<LocalMedia> datum) {
+    private void setData(List<Object> datum) {
+        if (datum.size() != 9) {
+            //添加选择图片按钮
+            datum.add(R.drawable.ic_add_grey);
+        }
         adapter.replaceData(datum);
     }
 }

@@ -245,7 +245,7 @@ public class ImageUtil {
      *
      * @param context
      * @param view
-     * @param data
+     * @param data  本地图片路径
      */
     public static void showLocalImage(Context context, ImageView view, String data) {
         //获取通用配置
@@ -257,5 +257,23 @@ public class ImageUtil {
                 .apply(options)
                 .into(view);
 
+    }
+
+    /**
+     * 显示资源图片
+     *
+     * @param context
+     * @param view
+     * @param resourceId 图片资源id
+     */
+    public static void showLocalImage(Context context, ImageView view, int resourceId) {
+        //获取通用配置
+        RequestOptions options = getCommonRequestOptions();
+
+        //显示图片
+        Glide.with(context)
+                .load(resourceId)
+                .apply(options)
+                .into(view);
     }
 }
