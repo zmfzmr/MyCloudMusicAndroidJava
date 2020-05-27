@@ -224,5 +224,6 @@
     <string name="hint_count">0/140</string>
     <string name="error_content_length">内容不能超过140字符.</string>
     <string name="feed_count">%1$d/140</string>
+    <string name="error_upload_image">上传图片失败，请稍后再试!</string>
 
 </resources>

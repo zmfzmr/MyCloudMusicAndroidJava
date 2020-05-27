@@ -13,6 +13,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Resource {
     private String uri;//相对地址 如  "uri": "assets/4.jpg"
 
+    /**
+     * 防止json解析的时候用到这个无参的
+     */
+    public Resource() {
+    }
+
+    public Resource(String uri) {
+        this.uri = uri;
+    }
+
     public String getUri() {
         return uri;
     }

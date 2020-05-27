@@ -268,10 +268,10 @@ public class Constant {
     /**
      * 阿里云OSS AK
      */
-    public static final String ALIYUN_OSS_AK = "LTAIvvrRFHYlwoEj";
+    public static final String ALIYUN_OSS_AK = "LTAI4Fr1njmWpE4E5uGrMtqk";
 
     /**
      * 阿里云OSS SK
      */
-    public static final String ALIYUN_OSS_SK = "xDpTSeBM0PqDUWtlVPQfTfMb97CbPD";
+    public static final String ALIYUN_OSS_SK = "XLCBiAGLN1ad1DWUE3ExAux9lxmRue";
 }

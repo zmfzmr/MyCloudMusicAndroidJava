@@ -1,6 +1,7 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +11,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.common.collect.Lists;
 import com.ixuea.courses.mymusic.R;
@@ -17,11 +21,16 @@ import com.ixuea.courses.mymusic.adapter.ImageSelectAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Feed;
+import com.ixuea.courses.mymusic.domain.Resource;
 import com.ixuea.courses.mymusic.domain.event.OnFeedChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.LoadingUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.OSSUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
+import com.ixuea.courses.mymusic.util.UUIDUtil;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -185,7 +194,186 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
 //            return;
 //        }
 
-        saveFeed();
+        //获取选中的图片
+        List<LocalMedia> selectedImage = getSelectedImage();
+        if (selectedImage.size() > 0) {
+            //有图片
+
+            //先上传图片  upload 上传
+            uploadImages(selectedImage);
+        } else {
+            //没有图片
+
+            //直接发布动态
+            saveFeed();
+        }
+    }
+
+    /**
+     * 上传图片
+     *
+     * @param datum
+     */
+    private void uploadImages(List<LocalMedia> datum) {
+
+
+        //上传图片异步任务 异步任务并不只有AsyncTask
+        //这里参数1 就是execute(datum) 传入的datum(当然这里可以写Void 因为我们 uploadImages本方法中已经传入进来了)
+        // 参数2：进度，暂时用不到，先写出来 3：返回的结果类型
+        new AsyncTask<List<LocalMedia>, Integer, List<Resource>>() {
+
+            /**
+             * 异步任务指定前调用
+             * 主线程中调用
+             */
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                LoadingUtil.showLoading(getMainActivity(), "上传图片中...");
+            }
+
+            /**
+             * 在子线程中执行
+             * @param params
+             * @return
+             */
+            @Override
+            protected List<Resource> doInBackground(List<LocalMedia>... params) {
+                //可能上传失败，所try catch 包裹
+                try {
+                    //获取oss客户端 （注： 由于我们上传的是阿里云，用是阿里云的SDK；
+                    // 我们用的Retrofit也可以上传图片到自己的服务器，我们这里用不到，也不讲解它）
+                    OSSClient oss = OSSUtil.getInstance(getMainActivity());
+
+                    List<LocalMedia> images = params[0];//取出数据(excute() 传入的数据)
+
+                    //创建结果数组
+                    ArrayList<Resource> results = new ArrayList<>();
+
+                    //循环每一张图片
+                    LocalMedia localMedia = null;
+                    for (int i = 0; i < images.size(); i++) {
+                        localMedia = images.get(i);
+
+                        //发布进度 publishProgress:这个方法是AsyncTask 的
+                        //i 表示正在上传第几张图片
+                        publishProgress(i);
+
+                        //上传
+                        //OSS如果没有特殊需求建议不要分目录
+                        //如果一定要分不要让目陆名前面连续
+                        //例如时间戳倒过来（因为如果不倒过来的话，会导致前面的目录名字是一样的）
+                        //不然连续请求达到一定量级会有性能影响
+                        //https://help.aliyun.com/document_detail/64945.html
+
+                        //阿里云的这个服务，如果资源达到一定量级后，或进行分布式存储(会根据目录放到不同的目录里面)
+                        //如果目录名一样会导致大部分的资源会放到同一块里面，会导致 所有的流量都在请求的时候，这个性能会降低
+                        //上面的官方文档里面有
+                        //我们这里没有进行分目录，直接把所有文件放在根目录里面
+
+                        //oss 中如果名称一样是被替换掉，要保证名字不能一样(相等于个相对路径)
+                        String destFileName = UUIDUtil.getUUID() + ".jpg";
+
+                        //upload images:ad87b627524049c7a47c07340270a107.jpg
+                        // localMedia.getCompressPath() 选中图片的压缩路径: /storage/emulated/0/Android/data/com.ixuea.courses.mymusic/files/Pictures/1590572407708.jpeg
+                        LogUtil.d(TAG, "upload images:" + destFileName + "localMedia.getCompressPath(): " + localMedia.getCompressPath());
+
+                        //创建上传文件请求
+                        //上传其他文件也是这样的
+                        //他不关心文件具体内容
+                        //参数1：bucket
+                        // 2：文件图片相对路径(可以这里理解) http://dev-courses-misuc.ixuea.com/ ad87b627524049c7a47c07340270a107.jpg  后面的那串图片名字
+                        //    也就是上传到阿里云服务器上面的相对路径  注: 不是本地相对路径
+                        PutObjectRequest request = new PutObjectRequest(Constant.ALIYUN_OSS_BUCKET_NAME,
+                                //比如adagaddfa.jpg
+                                destFileName,
+                                //LocalMedia 里面的压缩路径(选中图片后返回的路径(可以理解为本地路径))
+                                localMedia.getCompressPath());
+
+                        //上传  注意：这类是result 结果 前面的是添加请求对象
+                        PutObjectResult putObjectResult = oss.putObject(request);
+
+                        //如果上传成功
+                        //将文件名添加到集合
+                        //这里没有很好的处理错误
+
+                        //destFileName  比如adagaddfa.jpg 是个相对路径uri
+                        results.add(new Resource(destFileName));
+                    }
+
+                    //返回文件名称(集合里面包含了 每个相对路径uri)
+                    return results;
+                } catch (Exception e) {
+                    //出错了
+                    e.printStackTrace();
+                }
+                //默认是返回空的
+                return null;
+            }
+
+            /**
+             * 进度回调
+             * 主线程中执行
+             */
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+                //取出进度
+                Integer index = values[0] + 1;
+                LogUtil.d(TAG, "upload images onProgressUpdate: " + index);
+
+                //显示提示
+                LoadingUtil.showLoading(getMainActivity(), "正在上传第" + index + "张图片.");
+            }
+
+            /**
+             * 异步任务执行完成了
+             */
+            @Override
+            protected void onPostExecute(List<Resource> results) {
+                super.onPostExecute(results);
+
+                //隐藏提示框
+                LoadingUtil.hideLoading();
+
+                //http://dev-courses-misuc.ixuea.com/ ad87b627524049c7a47c07340270a107.jpg
+                //http://dev-courses-misuc.ixuea.com/资源路径OSSUtil里面有
+                LogUtil.d(TAG, "onPostExecute:" + results);
+                //datum ： 本方法uploadImages传入进来的List<LocalMedia>
+                if (datum != null && results.size() == datum.size()) {
+                    //不等于空 并且大小(上传图片的大小) 和 选中图片的大小一样
+                    //说明图片上传成功
+
+                    //TODO 保存动态
+                    //保存动态的时候保存这个地址到服务端(List<Resource>保存到服务端 Resource有一个uri地址(相对路径))
+                    //也就是说：我们服务端只是保存这个地址，并不保存图片(图片由阿里云服务器保存)
+                } else {
+                    //上传图片失败
+                    //真实项目中
+                    //可以实现重试
+                    //同时重试的时候
+                    //只上传失败的图片
+                    ToastUtil.errorShortToast(R.string.error_upload_image);
+                }
+            }
+        }
+                .execute(datum);
+    }
+
+    /**
+     * 获取选中的图片
+     */
+    private List<LocalMedia> getSelectedImage() {
+        //因为选中返回的本地图片对象放到适配器里面，取出来里面的数据集合
+        List<Object> data = adapter.getData();
+        List<LocalMedia> datum = new ArrayList<>();
+        //遍历添加到集合
+        for (Object o : data) {
+            if (o instanceof LocalMedia) {
+                datum.add((LocalMedia) o);
+            }
+        }
+        return datum;//返回 List<LocalMedia> 集合
     }
 
     /**
