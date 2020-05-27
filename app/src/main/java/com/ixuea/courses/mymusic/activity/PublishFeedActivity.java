@@ -204,8 +204,8 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
         } else {
             //没有图片
 
-            //直接发布动态
-            saveFeed();
+            //直接发布动态(没有图片的时候，直接传递个null就行了)
+            saveFeed(null);
         }
     }
 
@@ -344,9 +344,11 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
                     //不等于空 并且大小(上传图片的大小) 和 选中图片的大小一样
                     //说明图片上传成功
 
-                    //TODO 保存动态
+                    // 保存动态
                     //保存动态的时候保存这个地址到服务端(List<Resource>保存到服务端 Resource有一个uri地址(相对路径))
                     //也就是说：我们服务端只是保存这个地址，并不保存图片(图片由阿里云服务器保存)
+
+                    saveFeed(results);
                 } else {
                     //上传图片失败
                     //真实项目中
@@ -378,14 +380,19 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
 
     /**
      * 保存动态
+     * @param images
      */
-    private void saveFeed() {
+    private void saveFeed(List<Resource> images) {
         Feed feed = new Feed();
 
         //设置内容
         //因为Feed里面有个content(String类型) 我们直接把内容传递到这个字符串里面
         //网络请求的时候以转换成json传递
         feed.setContent(content);
+
+        //动态的这个Feed模型，里面本来就有这个List<Resource>,直接传递就行了
+        //这个Feed 模型 转换成json传递给我们的服务器(这样服务器就保存了我们的List<Resource>(也就是服务器保存了里面uri))
+        feed.setImages(images);
 
         //调用接口保存
         Api.getInstance()
