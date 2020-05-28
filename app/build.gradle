@@ -747,6 +747,10 @@ dependencies {
     //sdk地址：https://github.com/aliyun/aliyun-oss-android-sdk
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.2'
 
+    //高德地图定位(我们这里只是实现定位，所以下载这个定位依赖就可以了)
+    //https://lbs.amap.com/api/android-location-sdk/guide/create-project/android-studio-create-project
+    implementation 'com.amap.api:location:4.7.2'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

@@ -179,7 +179,9 @@ public class SplashActivity extends BaseCommonActivity {
     @NeedsPermission({
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
     })
     void onPermissionGranted() {
         LogUtil.d(TAG, "onPermissionGranted");
@@ -192,14 +194,17 @@ public class SplashActivity extends BaseCommonActivity {
 
     /**
      * 显示权限授权对话框
-     * 目的是提示用户
+     * 目的是提示用户   Manifest.permission.ACCESS_COARSE_LOCATION,
+     *             Manifest.permission.ACCESS_FINE_LOCATION
      *
      * @param request
      */
     @OnShowRationale({
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
     })
     //PermissionRequest:参数中要写这个，统一写法
     void showRequestPermission(PermissionRequest request) {
@@ -226,6 +231,8 @@ public class SplashActivity extends BaseCommonActivity {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
     })
     void showDenied() {
         LogUtil.d(TAG, "showDenied");
@@ -244,6 +251,8 @@ public class SplashActivity extends BaseCommonActivity {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
     })
     void showNeverAsk() {
         LogUtil.d(TAG, "showNeverAsk");
