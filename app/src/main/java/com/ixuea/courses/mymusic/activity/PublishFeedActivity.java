@@ -14,6 +14,10 @@ import android.widget.TextView;
 import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.common.collect.Lists;
 import com.ixuea.courses.mymusic.R;
@@ -79,6 +83,7 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
     TextView tv_count;
     private String content;//输入的内容
     private ImageSelectAdapter adapter;
+    private AMapLocationClient locationClient;//定位客户端
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +118,76 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
 
         //设置数据(一开始设置个空数据, 所以就显示各+号图片(走 方法setData里面的 if方法))
         setData(new ArrayList<>());
+
+        //在真机测试
+        //当然也可以在有模拟定位的模拟器上测试
+        //只是比较麻烦
+        //所以我们在真机测试
+
+        //初始化定位客户端   注： 这里最好填应用的上下文
+        locationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        locationClient.setLocationListener(new AMapLocationListener() {
+            /**
+             * 定位改变后，会调用这个方法(也就是定位成功或者失败后，都会回调这个方法)
+             *
+             * @param amapLocation
+             */
+            @Override
+            public void onLocationChanged(AMapLocation amapLocation) {
+                if (amapLocation != null && amapLocation.getErrorCode() == 0) {
+                    //可在其中解析amapLocation获取相应内容
+
+                    //定位成功后
+                    //停止定位
+                    //因为我们这里只用一次
+                    locationClient.stopLocation();
+
+                    //省
+                    String province = amapLocation.getProvince();//省
+
+                    //市
+                    String city = amapLocation.getCity();
+
+                    //显示当前位置
+                    String position = getResources().getString(R.string.current_position, province, city);
+                    tv_position.setText(position);
+
+
+                } else {
+                    //走到这里，amapLocation(也就是定位对象可能为null)，所以判断下
+                    if (amapLocation != null) {
+                        //定位失败时，
+                        // 可通过ErrCode（错误码）信息来确定失败的原因，
+                        // errInfo是错误信息，
+                        // 详见错误码表。
+                        LogUtil.d(TAG, "location Error, ErrCode:"
+                                + amapLocation.getErrorCode() + ", errInfo:"
+                                + amapLocation.getErrorInfo());
+                    } else {
+                        //未知错误
+                    }
+                }
+            }
+        });
+
+        //初始化AMapLocationClientOption对象
+        AMapLocationClientOption option = new AMapLocationClientOption();
+
+        //获取一次定位结果： true ：表示一次定位  后面如果用户跑到另外一个地方的话，可能需要多次处理
+        //该方法默认为false。
+        option.setOnceLocation(true);
+
+        //获取最近3s内精度最高的一次定位结果：
+        //反之不会
+        //默认为false： false 就是获取最后一次的结果
+
+        //设置定位参数（跟rv.setAdapter() 一样的道理）
+        locationClient.setLocationOption(option);
+
+        //开始定位
+        locationClient.startLocation();
+
     }
 
     @Override
@@ -550,5 +625,14 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
             datum.add(R.drawable.ic_add_grey);
         }
         adapter.replaceData(datum);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //销毁定位客户端
+        //同时销毁本地定位服务。
+        //因为这个定位是 访问一些硬件资源，不销毁的话，会耗性能
+        locationClient.onDestroy();
     }
 }
