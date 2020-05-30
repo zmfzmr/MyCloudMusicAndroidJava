@@ -359,6 +359,7 @@ public class UserDetailActivity extends BaseTitleActivity {
             case R.id.action_edit:
                 //编辑按钮点击了
                 LogUtil.d(TAG, "edit click");
+                startActivity(ProfileActivity.class);
                 break;
         }
         return super.onOptionsItemSelected(item);
