@@ -85,6 +85,11 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
     private ImageSelectAdapter adapter;
     private AMapLocationClient locationClient;//定位客户端
 
+    /**
+     * 动态
+     */
+    private Feed feed = new Feed();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,14 +148,26 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
                     //因为我们这里只用一次
                     locationClient.stopLocation();
 
+                    //经度
+                    feed.setLongitude(amapLocation.getLongitude());
+
+                    //纬度
+                    feed.setLatitude(amapLocation.getLatitude());
+
                     //省
-                    String province = amapLocation.getProvince();//省
+//                    String province = amapLocation.getProvince();
+                    //放到模型对象里面，因为发送请求的时候，这个Feed对象里面要有这个参数
+                    feed.setProvince(amapLocation.getProvince());
 
                     //市
-                    String city = amapLocation.getCity();
+//                    String city = amapLocation.getCity();
+                    feed.setCity(amapLocation.getCity());
 
                     //显示当前位置
-                    String position = getResources().getString(R.string.current_position, province, city);
+//                    String position = getResources().getString(R.string.current_position, province, city);
+                    String position = getResources().getString(R.string.current_position,
+                            feed.getProvince(),
+                            feed.getCity());
                     tv_position.setText(position);
 
 
@@ -458,7 +475,8 @@ public class PublishFeedActivity extends BaseTitleActivity implements TextWatche
      * @param images
      */
     private void saveFeed(List<Resource> images) {
-        Feed feed = new Feed();
+        //注释：直接用成员变量里面那个就行
+//        Feed feed = new Feed();
 
         //设置内容
         //因为Feed里面有个content(String类型) 我们直接把内容传递到这个字符串里面
