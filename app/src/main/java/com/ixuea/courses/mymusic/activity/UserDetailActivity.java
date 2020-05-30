@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -81,6 +83,7 @@ public class UserDetailActivity extends BaseTitleActivity {
     private String nickname;//用户昵称
     private User data;//当前用户对象
     private UserDetailAdapter adapter;
+    private MenuItem editMenuItem;//编辑资料按钮
 
     /**
      * 根据昵称显示用户详情(这里主要传递昵称 到本类)
@@ -207,6 +210,10 @@ public class UserDetailActivity extends BaseTitleActivity {
 
         //显示关注状态
         showFollowStatus();
+
+        //显示编辑用户信息按钮状态
+        // (请求回来的User对象id 等于 登录账号的用户id，表示是我自己的用户详情，就显示编辑按钮)
+        editMenuItem.setVisible(data.getId().equals(sp.getUserId()));
     }
 
     /**
@@ -316,4 +323,44 @@ public class UserDetailActivity extends BaseTitleActivity {
         Chat2Activity.start(getMainActivity(), data.getId());
     }
 
+    /**
+     * 返回菜单
+     *
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit, menu);
+        return true;
+    }
+
+    /**
+     * 准备显示按钮
+     *
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        editMenuItem = menu.findItem(R.id.action_edit);
+
+        //隐藏  一开始让按钮隐藏
+        editMenuItem.setVisible(false);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    /**
+     * 菜单点击了回调
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                //编辑按钮点击了
+                LogUtil.d(TAG, "edit click");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
