@@ -4,6 +4,7 @@
     <dimen name="activity_margin">16dp</dimen>
     <!--文本字体大小-->
     <dimen name="text_small">12sp</dimen>
+    <dimen name="text_middle">14sp</dimen>
     <dimen name="text_large">18sp</dimen>
 
     <!--小 中 大 间隙-->
@@ -90,6 +91,10 @@
     <dimen name="video_container_height">210dp</dimen>
     <!--动态-->
     <dimen name="publish_message_edit_text_height">150dp</dimen>
+    <!--我的资料-->
+    <dimen name="profile_avatar_width">70dp</dimen>
+    <dimen name="avatar_width_meddle3">60dp</dimen>
+    <dimen name="profile_item_height">50dp</dimen>
 
 
 </resources>

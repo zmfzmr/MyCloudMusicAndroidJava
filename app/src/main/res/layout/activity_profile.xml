@@ -7,14 +7,346 @@
     tools:context=".activity.ProfileActivity">
     <!--标题栏-->
     <include layout="@layout/tool_bar" />
-    <!--内容容器-->
-    <LinearLayout
+    <!--滚动容器-->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <!--内容容器-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <!--分割线-->
+            <include layout="@layout/divider_meddle" />
+
+            <!--头像容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_avatar_width"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <!--标题-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/avatar"
+                    android:textColor="@color/text" />
+
+                <!--头像-->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="@dimen/avatar_width_meddle3"
+                    android:layout_height="@dimen/avatar_width_meddle3"
+                    android:src="@drawable/placeholder" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--昵称容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:gravity="center_vertical">
+
+                <!--标题-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/nickname"
+                    android:textColor="@color/text" />
+
+                <!--输入框   android手机中的字体 差不多就是14sp -->
+                <EditText
+                    android:id="@+id/et_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:maxLength="12"
+                    android:maxLines="1"
+                    android:text="这是昵称"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/text_middle" />
+
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--性别容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:gravity="center_vertical">
+                <!--标题-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/gender"
+                    android:textColor="@color/text" />
+
+                <!--文本-->
+                <TextView
+                    android:id="@+id/tv_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="保密"
+                    android:textColor="@color/light_grey" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_meddle" />
+
+            <!--生日容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:gravity="center_vertical">
+                <!--标题-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/birthday"
+                    android:textColor="@color/text" />
+
+                <!--文本-->
+                <TextView
+                    android:id="@+id/tv_birthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="保密"
+                    android:textColor="@color/light_grey" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--地区容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:gravity="center_vertical">
+                <!--标题-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/area"
+                    android:textColor="@color/text" />
+
+                <!--文本-->
+                <TextView
+                    android:id="@+id/tv_area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_grey" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--个人介绍容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <!--标题-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/description"
+                    android:textColor="@color/text" />
+
+            </LinearLayout>
+
+            <!--介绍输入框  注意： 这类的EditText 是位于上面的LinearLayout 外面的-->
+            <EditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:background="@null"
+                android:gravity="left|top"
+                android:hint="@string/hint_description"
+                android:lineSpacingMultiplier="@dimen/line_space"
+                android:maxLength="140"
+                android:textColor="@color/text"
+                android:textSize="@dimen/text_middle" />
+
+            <!--分割线-->
+            <include layout="@layout/divider_meddle" />
+
+            <!--手机号容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:gravity="center_vertical">
+                <!--标题-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/phone"
+                    android:textColor="@color/text" />
+
+                <!--文本-->
+                <TextView
+                    android:id="@+id/tv_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_grey" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--邮箱容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:gravity="center_vertical">
+                <!--标题-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/email"
+                    android:textColor="@color/text" />
+
+                <!--文本-->
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_grey" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_meddle" />
+
+            <!--第三方账号容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <!--标题-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/third_account"
+                    android:textColor="@color/text" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--qq容器 50dp -->
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height">
+                <!--图标  30dp -->
+                <ImageView
+                    android:src="@drawable/selector_login_qq"
+                    android:layout_width="@dimen/button_height_small"
+                    android:layout_height="@dimen/button_height_small" />
+                <!--标题 -->
+                <TextView
+                    android:layout_marginLeft="@dimen/padding_middle"
+                    android:textColor="@color/text"
+                    android:text="@string/qq"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <!--按钮  宽高为：100dp  30dp-->
+                <Button
+                    android:id="@+id/bt_qq"
+                    android:background="@drawable/shape_border_color_primary"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/bind"
+                    android:layout_width="@dimen/button_width"
+                    android:layout_height="@dimen/button_height_small" />
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--微博容器 50dp -->
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_marginRight="@dimen/padding_large"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_item_height">
+                <!--图标  30dp -->
+                <ImageView
+                    android:src="@drawable/selector_login_weibo"
+                    android:layout_width="@dimen/button_height_small"
+                    android:layout_height="@dimen/button_height_small" />
+                <!--标题 -->
+                <TextView
+                    android:layout_marginLeft="@dimen/padding_middle"
+                    android:textColor="@color/text"
+                    android:text="@string/weibo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <!--按钮  宽高为：100dp  30dp-->
+                <Button
+                    android:id="@+id/bt_weibo"
+                    android:background="@drawable/shape_border_color_primary"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/bind"
+                    android:layout_width="@dimen/button_width"
+                    android:layout_height="@dimen/button_height_small" />
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_meddle" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

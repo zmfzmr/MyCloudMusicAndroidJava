@@ -229,5 +229,19 @@
     <string name="edit">编辑</string>
     <string name="my_profile">我的资料</string>
     <string name="save">保存</string>
+    <string name="avatar">头像</string>
+    <string name="nickname">昵称</string>
+    <string name="gender">性别</string>
+    <string name="birthday">生日</string>
+    <string name="area">地区</string>
+    <string name="description">个人介绍</string>
+    <string name="hint_description">请想大家介绍下自己吧!</string>
+    <string name="phone">手机号</string>
+    <string name="email">邮箱</string>
+    <string name="third_account">第三方账号</string>
+    <string name="qq">QQ</string>
+    <string name="bind">绑定</string>
+    <string name="unbind">解绑</string>
+    <string name="weibo">微博</string>
 
 </resources>
