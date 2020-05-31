@@ -25,6 +25,7 @@
 
             <!--头像容器-->
             <LinearLayout
+                android:id="@+id/avatar_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/profile_avatar_width"
                 android:layout_marginLeft="@dimen/padding_large"
@@ -87,6 +88,7 @@
 
             <!--性别容器-->
             <LinearLayout
+                android:id="@+id/gender_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/profile_item_height"
                 android:layout_marginLeft="@dimen/padding_large"
@@ -115,6 +117,7 @@
 
             <!--生日容器-->
             <LinearLayout
+                android:id="@+id/birthday_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/profile_item_height"
                 android:layout_marginLeft="@dimen/padding_large"
@@ -143,6 +146,7 @@
 
             <!--地区容器-->
             <LinearLayout
+                android:id="@+id/area_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/profile_item_height"
                 android:layout_marginLeft="@dimen/padding_large"
