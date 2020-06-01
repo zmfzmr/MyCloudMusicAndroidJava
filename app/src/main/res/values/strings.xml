@@ -208,6 +208,7 @@
     <string name="gender_value">性别：%1$s</string>
     <string name="birthday_value">生日：%1$s</string>
     <string name="area_value">地区：%1$s</string>
+    <string name="area_value2">%1$s-%2$s-%3$s</string>
     <string name="more_info">更多信息</string>
     <string name="description_value">个人描述：%1$s</string>
     <!--视频-->

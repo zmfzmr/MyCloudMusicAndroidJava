@@ -9,7 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -80,11 +87,139 @@ public class ProfileActivity extends BaseTitleActivity {
      */
     @BindView(R.id.bt_weibo)
     Button bt_weibo;
+    private User data;//用户对象
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        Api.getInstance()
+                .userDetail(sp.getUserId())
+                .subscribe(new HttpObserver<DetailResponse<User>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<User> data) {
+                        next(data.getData());
+                    }
+                });
+    }
+
+    /**
+     * 网络请求下一步
+     */
+    private void next(User data) {
+        this.data = data;
+
+        //头像
+        ImageUtil.showAvatar(getMainActivity(), iv_avatar, data.getAvatar());
+
+        //昵称
+        et_nickname.setText(data.getNickname());
+
+        //性别
+        showGender();
+
+        //生日
+        showBirthday();
+
+        //地区
+        showArea();
+
+        //描述
+        if (StringUtils.isNotBlank(data.getDescription())) {
+            //注意：这里我们不用getDescriptionFormat，直接用getDescription就行了
+            //（因为没有个人描述，直接显示空值就好了,因为这个是EditText 可以编辑的）
+            et_description.setText(data.getDescriptionFormat());
+        }
+
+        //手机号
+        tv_phone.setText(data.getPhone());
+
+        //邮箱
+        tv_email.setText(data.getEmail());
+
+        //qq绑定状态
+        if (StringUtils.isNotBlank(data.getQq_id())) {
+            //qqId 也就是qq登录后的id
+            //绑定了
+            showUnbindButtonStatus(bt_qq);
+
+        } else {
+            //没有绑定
+
+            //显示绑定状态
+            showBindButtonStatus(bt_qq);
+        }
+
+
+        //微博绑定状态  微博登录后的id 这个值是加密，就算拿到也是无法登录
+        if (StringUtils.isNotBlank(data.getWeibo_id())) {
+            //绑定了
+
+            //显示解绑状态
+            showUnbindButtonStatus(bt_weibo);
+        } else {
+            //没有绑定
+
+            //显示绑定状态
+            showBindButtonStatus(bt_weibo);
+        }
+    }
+
+    /**
+     * 显示绑定状态
+     */
+    private void showBindButtonStatus(Button button) {
+        button.setText(R.string.bind);
+        button.setTextColor(getResources().getColor(R.color.colorPrimary));
+        button.setBackgroundResource(R.drawable.shape_border_color_primary);
+    }
+
+    /**
+     * 显示解绑状态
+     */
+    private void showUnbindButtonStatus(Button button) {
+        button.setText(R.string.unbind);
+        button.setTextColor(getResources().getColor(R.color.light_grey));
+        button.setBackgroundResource(R.drawable.shape_light_grey);
+    }
+
+    /**
+     * 显示地区
+     */
+    private void showArea() {
+        //地区也不一定有，所以需要判断
+        if (StringUtils.isNotBlank(data.getProvince())) {
+            //省-市-区
+            String area = getResources().getString(R.string.area_value2,
+                    data.getProvince(),
+                    data.getCity(),
+                    data.getArea());
+            tv_area.setText(area);
+        }
+    }
+
+    /**
+     * 显示生日
+     */
+    private void showBirthday() {
+        //生日 并一定有，所以需要判断下
+        if (StringUtils.isNotBlank(data.getBirthday())) {
+            tv_birthday.setText(data.getBirthday());
+        }
+    }
+
+    /**
+     * 显示性别
+     */
+    private void showGender() {
+        tv_gender.setText(data.getGenderFormat());
+
     }
 
     /**
