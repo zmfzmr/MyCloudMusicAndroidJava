@@ -35,6 +35,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -250,7 +251,44 @@ public class MainActivity extends BaseMusicPlayerActivity {
         //当然可以在用户要显示侧滑的时候
         //才获取用户信息
         //这样可以减少请求
-        fetchData();
+
+        //获取用户信息
+        fetchUserData();
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //添加侧滑监听器
+        //注意： 这里跟前面的那个是不一样的（前面的是：dl.addDrawerListener(toggle)
+        // 前的监听器是ActionBarDrawerToggle ，而这里的是DrawerLayout.DrawerListener）
+        dl.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            /**
+             * 侧滑打开了
+             */
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                LogUtil.d(TAG, "onDrawerOpened");
+                //侧滑打开了，这样可以节省资源
+                fetchUserData();
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     /**
@@ -321,7 +359,7 @@ public class MainActivity extends BaseMusicPlayerActivity {
      * 请求数据
      * sp.getUserId():因为登录成功后保存了用户的id，所以通过地址和id连接起来可以访问改用户的详细信息
      */
-    private void fetchData() {
+    private void fetchUserData() {
         Api.getInstance().userDetail(sp.getUserId())
                 .subscribe(new HttpObserver<DetailResponse<User>>() {
                     @Override

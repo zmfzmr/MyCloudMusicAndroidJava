@@ -17,6 +17,7 @@ import com.ixuea.courses.mymusic.adapter.UserDetailAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.event.OnUserChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
@@ -24,6 +25,9 @@ import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,6 +155,8 @@ public class UserDetailActivity extends BaseTitleActivity {
     @Override
     protected void initDatum() {
         super.initDatum();
+        //注册
+        EventBus.getDefault().register(this);
         //获取用户id  (注意： 这里用的是字符串类型的)
         id = extraId();
         //判断id是否为空
@@ -363,5 +369,22 @@ public class UserDetailActivity extends BaseTitleActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 用户信息更改了
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserChangedEvent(OnUserChangedEvent event) {
+        fetchData();
+    }
+
+    /**
+     * 界面销毁时注册
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

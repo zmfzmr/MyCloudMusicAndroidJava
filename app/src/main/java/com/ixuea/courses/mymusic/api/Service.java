@@ -23,6 +23,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
@@ -115,6 +116,13 @@ public interface Service {
      */
     @GET("v1/users/{id}")
     Observable<DetailResponse<User>> userDetail(@Path("id") String id, @QueryMap Map<String, String> data);
+
+    /**
+     * 更新用户
+     * 注意：更新用户数据 是用的是@PATCh请求
+     */
+    @PATCH("v1/users/{id}")
+    Observable<DetailResponse<BaseModel>> updateUser(@Path("id") String id, @Body User data);
 
     /**
      * 关注用户

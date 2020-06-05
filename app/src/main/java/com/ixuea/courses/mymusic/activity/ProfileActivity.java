@@ -16,7 +16,9 @@ import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.event.OnUserChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
@@ -31,6 +33,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -404,7 +407,7 @@ public class ProfileActivity extends BaseTitleActivity {
     }
 
     /**
-     * 上传头像
+     * 上传头像(上传头像是耗时操作，在子线程中执行)
      */
     @SuppressLint("StaticFieldLeak")
     private void uploadAvatar(String path) {
@@ -458,6 +461,11 @@ public class ProfileActivity extends BaseTitleActivity {
                     //更新用户资料
                     updateUserInfo();
                 } else {
+                    //原因：上传图片没有成功，avatarFileName(图片相对路径还是原来的值)，
+                    // 点击右上角的保存按钮会把整个图片名称保存到用户的信息里面了
+                    //这里最好置为null
+                    avatarFileName = null;
+
                     //头像上传失败
                     //真实项目中
                     //可以实现重试
@@ -471,8 +479,37 @@ public class ProfileActivity extends BaseTitleActivity {
 
     /**
      * 更新用户资料
+     *
+     * data:initDatum请求用户详情回来的User对象，把这对象更改下数据，重新发送给服务器就行了(PATCH请求)
      */
     private void updateUserInfo() {
         LogUtil.d(TAG, "updateUserInfo:" + avatarFileName);
+
+        if (StringUtils.isNotBlank(avatarFileName)) {
+            //设置头像 avatarFileName: 阿里云上面的相对路径  如 ： 145622.jpg
+            //我们服务器保存的是 阿里云的图片相对路径
+            data.setAvatar(avatarFileName);
+        }
+
+        //调用更新用户接口
+        Api.getInstance()
+                .updateUser(data)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        //更新成功
+                        //不提示任何信息
+
+                        //关闭当前界面
+                        //当然也可以不关闭
+                        //真实项目中根据业务需求调整就行了
+
+                        //发送通知
+                        EventBus.getDefault().post(new OnUserChangedEvent());
+
+                        //关闭界面
+                        finish();
+                    }
+                });
     }
 }

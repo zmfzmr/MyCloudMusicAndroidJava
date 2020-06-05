@@ -501,4 +501,14 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 注意：这里方法的参数里面没有Service 那边的用户id，只有一个User对象
+     * 因为用户id，可以直接冲这个User对象上获取
+     */
+    public Observable<DetailResponse<BaseModel>> updateUser(User data) {
+        return service.updateUser(data.getId(), data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }
