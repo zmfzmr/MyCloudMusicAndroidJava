@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.OSSUtil;
+import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 import com.ixuea.courses.mymusic.util.UUIDUtil;
 import com.luck.picture.lib.PictureSelector;
@@ -109,6 +111,8 @@ public class ProfileActivity extends BaseTitleActivity {
     Button bt_weibo;
     private User data;//用户对象
     private String avatarFileName;//图片文件名称(就是图片相对路径(阿里云里面的相对路径 如： dgaddad.jpg))
+    private String nickname;
+    private String description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,6 +283,30 @@ public class ProfileActivity extends BaseTitleActivity {
      */
     private void onSaveClick() {
         LogUtil.d(TAG, "onSaveClick");
+        //这里就不判断用户是否更改了资料
+        //只要点击保存就更新
+        //因为要判断比较麻烦
+
+        //获取昵称
+        nickname = et_nickname.getText().toString().trim();
+
+        //判断是否输入昵称
+        if (TextUtils.isEmpty(nickname)) {
+            //提示： 请输入手机号/邮箱
+            ToastUtil.errorShortToast(R.string.enter_username);
+            return;
+        }
+
+        //昵称格式判断(记得取非)
+        if (!StringUtil.isNickName(nickname)) {
+            ToastUtil.errorShortToast(R.string.error_nickname_format);
+        }
+
+        //获取描述
+        description = et_description.getText().toString().trim();
+
+        //更新资料
+        updateUserInfo();
     }
 
     /**
@@ -490,6 +518,16 @@ public class ProfileActivity extends BaseTitleActivity {
             //我们服务器保存的是 阿里云的图片相对路径
             data.setAvatar(avatarFileName);
         }
+
+        //昵称是不能为空到的，服务器判断了，为啥客户端也要判断呢
+        //主要是为了防止你这个接口被非法判断了
+        if (StringUtils.isNotBlank(nickname)) {
+            //设置昵称
+            data.setNickname(nickname);
+        }
+        //设置描述(这个描述可以不用判断不为空添加，因为为空的的话，我们在客户端的User对象里面的getDescriptionFormat 做了处理
+        // 获取这个描述的时候，为空的话，会直接返回方法里面的内容)
+        data.setDescription(description);
 
         //调用更新用户接口
         Api.getInstance()
