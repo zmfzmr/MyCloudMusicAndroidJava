@@ -21,6 +21,7 @@ import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.event.OnUserChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.fragment.GenderDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
@@ -311,7 +312,7 @@ public class ProfileActivity extends BaseTitleActivity {
 
     /**
      * 头像容器点击
-     *
+     * <p>
      * PictureSelector 前面发动态时用的 那个图片选择框架
      */
     @OnClick(R.id.avatar_container)
@@ -367,10 +368,41 @@ public class ProfileActivity extends BaseTitleActivity {
 
     /**
      * 性别 点击
+     *
+     * 当用户点击有上角保存的时候，这里的设置到User里面的性别，也通过网络请求带过去了
      */
     @OnClick(R.id.gender_container)
     public void onGenderClick() {
         LogUtil.d(TAG, "onGenderClick");
+
+        GenderDialogFragment
+                //参数2： 默认选中哪个
+                //因为服务器返回的数据getGender等于0 10 20
+                // 0/10: 第0个(保密)  10/10： 第1个(男)  20/10: 第2个(女)
+                //那第二次点击呢? 因为第第一次点击的时候把设置的0或10或20设置到data(User)中
+                //所以第二次点击弹出来的是获取的gender:data.getGender() 是第一次设置的那个int值
+                .show(getSupportFragmentManager(), data.getGender() / 10, (dialog, which) -> {
+                    //关闭对话框
+                    dialog.dismiss();
+
+                    //转换性别格式
+                    switch (which) {
+                        case 1:
+                            //男
+                            data.setGender(User.MALE);
+                            break;
+                        case 2:
+                            //女
+                            data.setGender(User.FEMALE);
+                            break;
+                        default:
+                            //保密(也就是不知道性别)
+                            data.setGender(User.UNKNOWN);
+                            break;
+                    }
+                    //显示性别
+                    showGender();
+                });
     }
 
     /**
@@ -507,7 +539,7 @@ public class ProfileActivity extends BaseTitleActivity {
 
     /**
      * 更新用户资料
-     *
+     * <p>
      * data:initDatum请求用户详情回来的User对象，把这对象更改下数据，重新发送给服务器就行了(PATCH请求)
      */
     private void updateUserInfo() {

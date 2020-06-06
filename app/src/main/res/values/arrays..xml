@@ -14,4 +14,11 @@
         <item>歌曲名</item>
         <item>专辑名</item>
     </string-array>
+
+    <!-- 性别选项-->
+    <string-array name="dialog_gender">
+        <item>保密</item>
+        <item>男</item>
+        <item>女</item>
+    </string-array>
 </resources>

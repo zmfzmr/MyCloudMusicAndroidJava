@@ -10,6 +10,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * 用户模型
  */
 public class User extends BaseModel {
+    /**
+     * 性别这里服务器返回的是这个int字段(10(男) 20(保密) 0(保密))，需要配合下面的getGenderFormat方法返回男或者女
+     * 当然这2个也可以放到常量类中
+     */
+    public static final int UNKNOWN = 0;//
+    public static final int MALE = 10;
+    public static final int FEMALE = 20;
     private String nickname;//昵称
     private String avatar;//头像 (其实这里存储的是头像的相对路径（正常注册的）和绝对路径（QQ登录的，有个完整的地址）)
     private String phone;//手机号
