@@ -21,6 +21,7 @@ import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.event.OnUserChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.fragment.DateDialogFragment;
 import com.ixuea.courses.mymusic.fragment.GenderDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
@@ -411,6 +412,13 @@ public class ProfileActivity extends BaseTitleActivity {
     @OnClick(R.id.birthday_container)
     public void onBirthdayClick() {
         LogUtil.d(TAG, "onBirthdayClick");
+
+        DateDialogFragment.show(getSupportFragmentManager(), date -> {
+            //设置数据
+            data.setBirthday(date);
+            //显示数据
+            showBirthday();
+        });
     }
 
     /**
