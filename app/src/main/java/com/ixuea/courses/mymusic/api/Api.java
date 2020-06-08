@@ -172,6 +172,26 @@ public class Api {
     }
 
     /**
+     * 绑定第三方账号
+     *
+     * @param account  第三方的openId
+     * @param platform 比如传入10：表示绑定qq   20：表示绑定微信
+     */
+    public Observable<DetailResponse<BaseModel>> bindAccount(String account, int platform) {
+        //这里HashMap不写泛型（表示Object），因为我们这里添加2个类型的数据
+        //防止以后要加多个字段，所以用Map也方便
+        HashMap params = new HashMap();
+
+        params.put("account", account);
+        params.put("platform", platform);
+
+        return service.bindAccount(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
+    /**
      * 用户详情
      *
      * @param id 传入的第几个歌曲Id
@@ -502,6 +522,8 @@ public class Api {
     }
 
     /**
+     * 更新用户
+     *
      * 注意：这里方法的参数里面没有Service 那边的用户id，只有一个User对象
      * 因为用户id，可以直接冲这个User对象上获取
      */

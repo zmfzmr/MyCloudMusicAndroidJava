@@ -25,6 +25,7 @@ import com.ixuea.courses.mymusic.fragment.DateDialogFragment;
 import com.ixuea.courses.mymusic.fragment.GenderDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.HandlerUtil;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.OSSUtil;
@@ -41,11 +42,20 @@ import com.luck.picture.lib.entity.LocalMedia;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.PlatformDb;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.tencent.qq.QQ;
+
+import static com.ixuea.courses.mymusic.util.Constant.PLATFORM_QQ;
+import static com.ixuea.courses.mymusic.util.Constant.PLATFORM_WEIBO;
 
 /**
  * 编辑我的资料界面
@@ -117,6 +127,8 @@ public class ProfileActivity extends BaseTitleActivity {
     private String avatarFileName;//图片文件名称(就是图片相对路径(阿里云里面的相对路径 如： dgaddad.jpg))
     private String nickname;
     private String description;
+    private String account;//第三方登录id
+    private int style;//第三方登录类型
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +140,10 @@ public class ProfileActivity extends BaseTitleActivity {
     protected void initDatum() {
         super.initDatum();
 
+        fetchData();
+    }
+
+    private void fetchData() {
         Api.getInstance()
                 .userDetail(sp.getUserId())
                 .subscribe(new HttpObserver<DetailResponse<User>>() {
@@ -446,6 +462,111 @@ public class ProfileActivity extends BaseTitleActivity {
     @OnClick(R.id.bt_qq)
     public void onQQClick() {
         LogUtil.d(TAG, "onQQClick");
+
+        //绑定方法 QQ: 是shareSdk里面的
+        otherLogin(QQ.NAME);
+    }
+
+    /**
+     * 通用第三方登录 （和登录那边差不多的）
+     *
+     * @param name
+     */
+    private void otherLogin(String name) {
+
+        //初始化具体的平台 Platform：翻译：平台  这里表示获取QQ这个平台的Platform对象
+        Platform platform = ShareSDK.getPlatform(name);
+
+        //设置false表示使用SSO(单点登录)授权方式
+        platform.SSOSetting(false);
+
+        //回调信息
+        //可以在这里获取基本的授权返回的信息
+        platform.setPlatformActionListener(new PlatformActionListener() {
+            /**
+             * 登录成功了
+             *
+             * @param platform Platform
+             * @param i        i
+             * @param hashMap  HashMap
+             */
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                //登录成功了
+
+                //就可以获取到昵称，头像，OpenId
+                //该方法回调不是在主线程
+
+                //从数据库获取信息
+                //也可以通过user参数获取
+                PlatformDb db = platform.getDb();//从平台那边获取到数据库，数据库返回信息
+
+                //我们并不需要昵称 头像 所以注释
+//                data = new User();
+//                data.setNickname(db.getUserName());
+//                data.setAvatar(db.getUserIcon());//db.getUserIcon():获取用户头像
+//                account = db.getUserId();//db.getUserId() 平台用户的id
+                //这里随便搞个测试数据，因为还没有登录QQ还没有返回QQ 的id
+                account = "agdaadd123132";
+                if (QQ.NAME.equals(name)) {
+                    //QQ登录  style 等于10(QQ) 或 40(微博)
+                    style = PLATFORM_QQ;
+                } else {
+                    style = PLATFORM_WEIBO;
+                }
+
+//                data.setQq_id("zmf1");//只要这个qq_id(OpenId不一样)，只要不一样就能注册成功
+
+//                //跳转到注册界面（直接调用按钮点击事件方法）
+//                toRegister();
+
+                //继续登录
+                continueLogin();
+//                LogUtil.d(TAG, "other login success:" + nickname + ", " + avatar + ", " + openId + ", " + HandlerUtil.isMainThread());
+
+            }
+
+            /**
+             * 登录失败了
+             */
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+                LogUtil.d(TAG, "other login error:" + throwable.getLocalizedMessage() + "," + HandlerUtil.isMainThread());
+            }
+
+            /**
+             * 取消登录了
+             */
+            @Override
+            public void onCancel(Platform platform, int i) {
+                LogUtil.d(TAG, "other login cancel:" + i + "," + HandlerUtil.isMainThread());
+            }
+        });
+
+        //authorize与showUser单独调用一个即可
+        //授权并获取用户信息
+        platform.showUser(null);
+    }
+
+    /**
+     * 继续登录(QQ登录那边是继续登录，而这里是绑定)
+     */
+    private void continueLogin() {
+        //account: 第三方登录id
+        // style: style 等于20(QQ) 或 40(微博) （20或40都是和服务端约定好的）
+        LogUtil.d(TAG, "continueLogin:" + account + "," + style);
+
+        Api.getInstance()
+                .bindAccount(account, style)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        ToastUtil.successShortToast(R.string.success_bind);
+
+                        //获取数据
+                        fetchData();
+                    }
+                });
     }
 
     /**

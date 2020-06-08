@@ -274,4 +274,14 @@ public class Constant {
      * 阿里云OSS SK
      */
     public static final String ALIYUN_OSS_SK = "XLCBiAGLN1ad1DWUE3ExAux9lxmRue";
+
+    /**
+     * QQ第三方登录
+     */
+    public static final int PLATFORM_QQ = 20;//这个值是和服务端协商好，不能随便更改
+    /**
+     * 微博第三方登录
+     */
+    public static final int PLATFORM_WEIBO = 40;//这个值是和服务端协商好，不能随便更改
+
 }

@@ -125,6 +125,17 @@ public interface Service {
     Observable<DetailResponse<BaseModel>> updateUser(@Path("id") String id, @Body User data);
 
     /**
+     * 绑定第三方账号
+     * <p>
+     * 这里之所以用Map 是因为方便(map里面添加多个数据)
+     * 如果要是用对象，还要找有没有重用的对象;没有就要创建对象的类，并把字段添加到类上
+     * <p>
+     * 用map的第二个解析：防止以后要加多个字段，所以用Map也方便
+     */
+    @POST("v1/users/bind")
+    Observable<DetailResponse<BaseModel>> bindAccount(@Body Map<String, String> data);
+
+    /**
      * 关注用户
      * <p>
      * 因为关注成功后 返回了一个code 我们并不需要接收，所以可以用
