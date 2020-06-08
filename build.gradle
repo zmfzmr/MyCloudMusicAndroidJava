@@ -48,7 +48,11 @@ task clean(type: Delete) {
 ext {
     compileSdkVersion = 29
     minSdkVersion = 17
-    targetSkVersion = 29
+    targetSdkVersion = 29
+
+    //编译工具版本
+    buildToolsVersion = "29.0.2"
+
     versionCode = 1
     versionName = "1.0"
 

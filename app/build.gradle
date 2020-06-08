@@ -13,7 +13,7 @@ android {
         //这里用老师的的应用，改包名 和applicationId ,否则第三方登录不上去（原来的后面加old）
         applicationId "com.ixuea.courses.mymusic"
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -764,4 +764,6 @@ dependencies {
     //android测试依赖
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    //表示app中依赖RegionSelector依赖库
+    implementation project(path: ':RegionSelector')
 }

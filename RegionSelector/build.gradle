@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+
+android {
+    //编译版本
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    //编译工具版本
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        //最小版本
+        minSdkVersion rootProject.ext.minSdkVersion
+
+        //目标版本
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //添加appcompat
+    implementation('androidx.appcompat:appcompat:1.1.0')
+
+    //material design依赖
+    //AppBarLayout在这里面
+    implementation 'com.google.android.material:material:1.0.0'
+
+    //封装了RecyclerView
+    //提供更高层次的接口
+    //https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
+
+    implementation 'junit:junit:4.12'
+}
