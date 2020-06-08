@@ -31,6 +31,8 @@ import com.ixuea.courses.mymusic.util.OSSUtil;
 import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 import com.ixuea.courses.mymusic.util.UUIDUtil;
+import com.ixuea.regionselector.Region;
+import com.ixuea.regionselector.RegionSelector;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -427,6 +429,11 @@ public class ProfileActivity extends BaseTitleActivity {
     @OnClick(R.id.area_container)
     public void onAreaClick() {
         LogUtil.d(TAG, "onAreaClick");
+
+        //这个初始化方法，内部会去加载数据库,如果觉得第一次显示慢的话，可以放到AppContext里面初始化
+        RegionSelector.init(this)
+                //启动方法,传入this，表示在当前界面启动(和Activity的启动方法StartActivity(intent)是同一个道理)
+                .start(this);
     }
 
     //手机号 和邮箱 这里不能直接更改，这个是需要在其他地方验证一下，不能在这个地方直接编辑
@@ -462,15 +469,61 @@ public class ProfileActivity extends BaseTitleActivity {
         if (resultCode == RESULT_OK) {
             //请求成功了
 
-            //获取选中的图片 data: Intent 对象
-            List<LocalMedia> results = PictureSelector.obtainMultipleResult(data);
+            switch (requestCode) {
+                //注意这里PictureConfig,不是PictureSelector
+                case PictureConfig.CHOOSE_REQUEST:
+                    //图片选择
 
-            //获取第一个图片(因为既然能回到这个onActivityResult这个方法，
-            // 说明是选中的了图片的，所以不用判断集合的size是否大于0啦)
-            LocalMedia localMedia = results.get(0);
+                    //获取选中的图片 data: Intent 对象
+                    List<LocalMedia> results = PictureSelector.obtainMultipleResult(data);
 
-            //上传头像
-            uploadAvatar(localMedia.getCompressPath());
+                    //获取第一个图片(因为既然能回到这个onActivityResult这个方法，
+                    // 说明是选中的了图片的，所以不用判断集合的size是否大于0啦)
+                    LocalMedia localMedia = results.get(0);
+
+                    //上传头像
+                    uploadAvatar(localMedia.getCompressPath());
+                    break;
+                case RegionSelector.REQUEST_REGION:
+                    //城市选择
+                    //这里的Id和iOS那边城市选择框架的Id不一样
+                    //这里我们没有用到所以没多大影响
+                    //真实项目中要保持一致
+
+                    //省  data: Intent 这个Intent携带了信息，所以通过这个Intent获取
+                    //Region 是导入ModuleRegionselector包中的类
+                    Region province = RegionSelector.getProvince(data);
+                    //市
+                    Region city = RegionSelector.getCity(data);
+                    //区
+                    Region area = RegionSelector.getArea(data);
+
+                    //设置数据
+                    //省   注意： data User对象
+                    this.data.setProvince(province.getName());
+                    //看上面解析，这个id和ios那边的id不一样，真实项目最好一致
+                    this.data.setProvinceCode(String.valueOf(province.getId()));
+
+                    //市
+                    this.data.setCity(city.getName());
+                    this.data.setCityCode(String.valueOf(city.getId()));
+
+                    //区
+                    this.data.setArea(area.getName());
+                    //真实项目中，最好存成int 这样查询起来更方便
+                    this.data.setAreaCode(String.valueOf(area.getId()));
+
+                    //注意：上面的城市代码id，要设置，直接传递给服务器
+
+                    //显示地区
+                    showArea();
+
+                    break;
+                default:
+                    break;
+            }
+
+
         }
     }
 
