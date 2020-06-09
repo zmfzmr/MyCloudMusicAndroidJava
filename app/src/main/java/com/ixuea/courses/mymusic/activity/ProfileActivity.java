@@ -21,6 +21,7 @@ import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.event.OnUserChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.fragment.ConfirmDialogFragment;
 import com.ixuea.courses.mymusic.fragment.DateDialogFragment;
 import com.ixuea.courses.mymusic.fragment.GenderDialogFragment;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
@@ -463,8 +464,57 @@ public class ProfileActivity extends BaseTitleActivity {
     public void onQQClick() {
         LogUtil.d(TAG, "onQQClick");
 
-        //绑定方法 QQ: 是shareSdk里面的
-        otherLogin(QQ.NAME);
+        //因为前面一节，也就是没有if判断，直接走otherLogin(QQ.NAME) 的时候(发送请求)已经绑定用户的Qq id
+        //所以这个data.getQq_id()是有值的；否则没有走otherLogin(QQ.NAME)，那就是没有值
+        if (StringUtils.isNotBlank(data.getQq_id())) {
+            //已经绑定了
+
+            //弹出解绑对话框
+            //因为我们本质是想留住用户
+            //防止用户误操作
+
+            //PLATFORM_QQ = 20
+            showUnbindDialog(PLATFORM_QQ);
+        } else {
+            //没有绑定
+
+            //绑定
+            //绑定方法 QQ: 是shareSdk里面的
+            otherLogin(QQ.NAME);
+        }
+    }
+
+    /**
+     * 显示解绑对话框
+     *
+     * @param platform
+     */
+    private void showUnbindDialog(int platform) {
+        //使用我们前面创建的对话框
+        ConfirmDialogFragment.show(getSupportFragmentManager(),
+                R.string.confirm_unbind,
+                (dialog, which) ->
+                        unbindAccount(platform)
+        );
+    }
+
+    /**
+     * 解绑第三方账号
+     *
+     * @param platform 其实这里的是20(QQ) 40(微博)  这个是和服务端协商好的
+     */
+    private void unbindAccount(int platform) {
+        Api.getInstance()
+                .unbindAccount(platform)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        //提示
+                        ToastUtil.successShortToast(R.string.success_unbind);
+                        //重新获取数据
+                        fetchData();
+                    }
+                });
     }
 
     /**

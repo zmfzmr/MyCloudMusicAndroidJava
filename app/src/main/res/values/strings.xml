@@ -246,5 +246,7 @@
     <string name="weibo">微博</string>
     <string name="select_gender">请选择性别</string>
     <string name="success_bind">绑定成功</string>
+    <string name="confirm_unbind">你确定解绑吗?</string>
+    <string name="success_unbind">解绑成功</string>
 
 </resources>

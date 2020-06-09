@@ -136,6 +136,15 @@ public interface Service {
     Observable<DetailResponse<BaseModel>> bindAccount(@Body Map<String, String> data);
 
     /**
+     * 解绑第三方账号
+     * 解绑(其实也就是删除，所以用DELETE)
+     *
+     * @param platform 其实这里的是20(QQ) 40(微博)  这个是和服务端协商好的
+     */
+    @DELETE("v1/users/{platform}/unbind")
+    Observable<DetailResponse<BaseModel>> unbindAccount(@Path("platform") int platform);
+
+    /**
      * 关注用户
      * <p>
      * 因为关注成功后 返回了一个code 我们并不需要接收，所以可以用

@@ -192,6 +192,15 @@ public class Api {
     }
 
     /**
+     * 解绑第三方账号  platform : 其实这里的是20(QQ) 40(微博)  这个是和服务端协商好的
+     */
+    public Observable<DetailResponse<BaseModel>> unbindAccount(int platform) {
+        return service.unbindAccount(platform)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 用户详情
      *
      * @param id 传入的第几个歌曲Id
