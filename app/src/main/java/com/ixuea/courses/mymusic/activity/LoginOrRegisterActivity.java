@@ -292,6 +292,12 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
      * @param event LoginSuccessEvent 也就是监听的事件（这里是一个空类，没有实现）
      *              <p>
      *              onLoginSuccessEvent：习惯在前面加个on 表示当事件发生时
+     *
+     * 因为我们实现了ActivityManager和ActivityLifeCycle 一起使用(实现了对所有界面Activity的监听)
+     *              所以可以在另外一个地方(登录成功后),在调用下activityManager.clear();就可以移除前面的界面
+     *
+     *              如果这里的下面的代码要移除的话，就必须要把上面的 注册EventBus和取消EventBus 代码移除
+     *              否则会报错
      */
     @Subscribe(threadMode = ThreadMode.MAIN)//线程模式 是在主线程（主线更新UI）
     public void onLoginSuccessEvent(LoginSuccessEvent event) {

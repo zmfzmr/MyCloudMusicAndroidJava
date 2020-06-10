@@ -16,6 +16,7 @@ import com.ixuea.android.downloader.config.Config;
 import com.ixuea.courses.mymusic.activity.LoginOrRegisterActivity;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
+import com.ixuea.courses.mymusic.manager.impl.ActivityManager;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
@@ -50,6 +51,7 @@ public class AppContext extends Application implements Application.ActivityLifec
      */
     private static AppContext context;
     private DownloadManager downloadManager;//下载管理器实例
+    private ActivityManager activityManager;//界面管理器
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -95,6 +97,9 @@ public class AppContext extends Application implements Application.ActivityLifec
 //            updateMedia(context,"/sdcard/Download/刘若英-后来.mp3");
 //            updateMedia(context,"/sdcard/Download/庞龙-人生第一次.mp3");
         }
+
+        //初始化Activity管理器
+        activityManager = ActivityManager.getInstance();
 
         //注册界面声明周期监听
         //什么是ActivityLifecycle
@@ -172,6 +177,14 @@ public class AppContext extends Application implements Application.ActivityLifec
      * 清除信息后，跳转到 登录注册界面
      */
     public void logout() {
+        //清除所有界面
+        //因为我们应用是只有登录了
+        //才能进入
+        //所以用户退出了
+        //所有界面都应该关闭
+        activityManager.clear();
+
+
         //清楚登录相关信息
         //这里在PreferenceUtil偏好设置里面又定义了一个方法（在这里面清除）
         PreferenceUtil.getInstance(getApplicationContext()).logout();
@@ -267,7 +280,7 @@ public class AppContext extends Application implements Application.ActivityLifec
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         LogUtil.d(TAG, "onActivityCreated:" + activity);
-
+        activityManager.add(activity);
     }
 
     /**
@@ -330,6 +343,8 @@ public class AppContext extends Application implements Application.ActivityLifec
     @Override
     public void onActivityDestroyed(Activity activity) {
         LogUtil.d(TAG, "onActivityDestroyed:" + activity);
+        //移除
+        activityManager.remove(activity);
 
     }
     //end Activity声明周期回调
