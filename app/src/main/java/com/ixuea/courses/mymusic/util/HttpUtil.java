@@ -2,6 +2,7 @@ package com.ixuea.courses.mymusic.util;
 
 import android.text.TextUtils;
 
+import com.ixuea.courses.mymusic.AppContext;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 
@@ -79,6 +80,13 @@ public class HttpUtil {
     private static void handleHttpError(int code) {
         if (code == 401) {
             ToastUtil.errorShortToast(R.string.error_network_not_auth);
+
+            //登录信息过期调用logout()跳转到登录界面
+            //不过这样写有个问题，比如在歌单详情SheetDetailActivity中点击收藏(在这之前先用Postman登录下本账号)，
+            //如果登录信息过期，那么就会跳转到登录界面；但是你会发现,点击返回还是回到歌单详情界面
+            //这不符合我们的逻辑，因为在登录界面，返回的话，是返回到桌面的(只有登录才会跳转到主页面)
+            //也就是说：跳转到登录界面，歌单详情和主界面没有关闭； 那么这个问题后面再实现
+            AppContext.getInstance().logout();
         } else if (code == 403) {
             ToastUtil.errorShortToast(R.string.error_network_not_permission);
         } else if (code == 404) {
