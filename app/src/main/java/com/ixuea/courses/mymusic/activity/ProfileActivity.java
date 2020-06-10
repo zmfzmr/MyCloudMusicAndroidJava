@@ -53,6 +53,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 
 import static com.ixuea.courses.mymusic.util.Constant.PLATFORM_QQ;
@@ -518,7 +519,7 @@ public class ProfileActivity extends BaseTitleActivity {
     }
 
     /**
-     * 通用第三方登录 （和登录那边差不多的）
+     * 通用第三方登录 （和登录那边差不多的,可以考虑重构）
      *
      * @param name
      */
@@ -555,9 +556,9 @@ public class ProfileActivity extends BaseTitleActivity {
 //                data = new User();
 //                data.setNickname(db.getUserName());
 //                data.setAvatar(db.getUserIcon());//db.getUserIcon():获取用户头像
-//                account = db.getUserId();//db.getUserId() 平台用户的id
+                account = db.getUserId();//db.getUserId() 平台用户的id
                 //这里随便搞个测试数据，因为还没有登录QQ还没有返回QQ 的id
-                account = "agdaadd123132";
+//                account = "agdaadd123132";
                 if (QQ.NAME.equals(name)) {
                     //QQ登录  style 等于10(QQ) 或 40(微博)
                     style = PLATFORM_QQ;
@@ -625,6 +626,20 @@ public class ProfileActivity extends BaseTitleActivity {
     @OnClick(R.id.bt_weibo)
     public void onWeiboClick() {
         LogUtil.d(TAG, "onWeiboClick");
+
+        if (StringUtils.isNotBlank(data.getWeibo_id())) {
+            //已经绑定了
+
+            //弹出解绑对话框
+            //因为我们本质是想留住用户
+            //防止用户误操作
+            showUnbindDialog(PLATFORM_WEIBO);
+        } else {
+            //没有绑定
+
+            //绑定
+            otherLogin(SinaWeibo.NAME);
+        }
     }
 
     /**
