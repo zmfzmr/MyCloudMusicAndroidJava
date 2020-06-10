@@ -438,10 +438,20 @@ public class MainActivity extends BaseMusicPlayerActivity {
     @OnClick(R.id.ll_friend)
     public void onFriendClick() {
         LogUtil.d(TAG, "onFriendClick:");
-        UserActivity.start(getMainActivity(), sp.getUserId());
+        UserActivity.start(getMainActivity(), sp.getUserId(), UserActivity.FRIEND);
         //关闭抽屉
         cloneDrawer();
     }
+
+    /**
+     * 粉丝点击
+     */
+    @OnClick(R.id.ll_fans)
+    public void onFansClick() {
+        UserActivity.start(getMainActivity(), sp.getUserId(), UserActivity.FANS);
+        cloneDrawer();
+    }
+
     /**
      * 设置点击了
      */

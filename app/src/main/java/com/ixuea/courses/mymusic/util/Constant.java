@@ -51,6 +51,11 @@ public class Constant {
     public static final String SONG = "SONG";
 
     /**
+     * int值 id
+     */
+    public static String INT = "int";
+
+    /**
      * 手机号正则表达式
      * 移动：134 135 136 137 138 139 147 150 151 152 157 158 159 178 182 183 184 187 188 198
      * 联通：130 131 132 145 155 156 166 171 175 176 185 186
@@ -283,5 +288,4 @@ public class Constant {
      * 微博第三方登录
      */
     public static final int PLATFORM_WEIBO = 40;//这个值是和服务端协商好，不能随便更改
-
 }
