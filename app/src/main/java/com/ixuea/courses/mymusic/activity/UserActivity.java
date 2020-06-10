@@ -3,6 +3,8 @@ package com.ixuea.courses.mymusic.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.UserAdapter;
@@ -130,5 +132,56 @@ public class UserActivity extends BaseTitleActivity {
         intent.putExtra(Constant.ID, userId);
         intent.putExtra(Constant.INT, style);
         activity.startActivity(intent);
+    }
+
+    /**
+     * 准备显示按钮了
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        //查找添加好友按钮
+        MenuItem addMenuItem = menu.findItem(R.id.action_add);
+        //我的好友界面显示，否则粉丝界面：隐藏
+
+        //设置是否显示
+        //因为当前界面在不请求网络前
+        //就知道是否显示按钮
+        //所以这里就能直接设置是否显示按钮
+        addMenuItem.setVisible(isFriend());
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    /**
+     * 返回菜单
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add, menu);
+        return true;
+    }
+
+    /**
+     * 菜单点击事件
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_add) {
+            //添加按钮
+            onAddClick();
+            return true;//记得发挥true，表示处理了点击事件
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 添加按钮点击了
+     * <p>
+     * 这里具体的功能就不实现了，我们会在搜索那边实现
+     */
+    private void onAddClick() {
+        LogUtil.d(TAG, "onAddClick");
     }
 }

@@ -248,5 +248,6 @@
     <string name="success_bind">绑定成功</string>
     <string name="confirm_unbind">你确定解绑吗?</string>
     <string name="success_unbind">解绑成功</string>
+    <string name="add">添加</string>
 
 </resources>
