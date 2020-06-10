@@ -40,6 +40,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="theme">
         <activity
+            android:name=".activity.UserActivity"
+            android:label="@string/my_friend" />
+        <activity
             android:name=".activity.ProfileActivity"
             android:label="@string/my_profile" />
         <activity

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.SettingActivity;
+import com.ixuea.courses.mymusic.activity.UserActivity;
 import com.ixuea.courses.mymusic.activity.UserDetailActivity;
 import com.ixuea.courses.mymusic.activity.WebViewActivity;
 import com.ixuea.courses.mymusic.adapter.MainAdapter;
@@ -432,12 +433,21 @@ public class MainActivity extends BaseMusicPlayerActivity {
     }
 
     /**
+     * 好友点击
+     */
+    @OnClick(R.id.ll_friend)
+    public void onFriendClick() {
+        LogUtil.d(TAG, "onFriendClick:");
+        UserActivity.start(getMainActivity(), sp.getUserId());
+        //关闭抽屉
+        cloneDrawer();
+    }
+    /**
      * 设置点击了
      */
     @OnClick(R.id.ll_setting)
     public void onSettingClick() {
         startActivity(SettingActivity.class);
-
         cloneDrawer();
     }
 
