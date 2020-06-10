@@ -143,8 +143,8 @@ public class FriendAdapter extends BaseRecyclerViewAdapter<Object, BaseRecyclerV
      */
     public class UserViewHolder extends BaseRecyclerViewAdapter.ViewHolder {
 
-        @BindView(R.id.iv_banner)
-        ImageView iv_banner;//头像
+        @BindView(R.id.iv_avatar)
+        ImageView iv_avatar;//头像
 
         @BindView(R.id.tv_title)
         TextView tv_title;//昵称
@@ -166,7 +166,7 @@ public class FriendAdapter extends BaseRecyclerViewAdapter<Object, BaseRecyclerV
             User user = (User) data;
 
             //显示头像(data: User)
-            ImageUtil.showAvatar((Activity) context, iv_banner, user.getAvatar());
+            ImageUtil.showAvatar((Activity) context, iv_avatar, user.getAvatar());
 
             //昵称
             tv_title.setText(user.getNickname());
