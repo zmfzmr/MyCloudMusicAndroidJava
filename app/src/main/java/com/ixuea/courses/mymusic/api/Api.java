@@ -418,6 +418,17 @@ public class Api {
     }
 
     /**
+     * 粉丝列表
+     *
+     * @param id
+     */
+    public Observable<ListResponse<User>> fans(String id) {
+        return service.fans(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 获取用户创建的歌单
      */
     public Observable<ListResponse<Sheet>> createSheets(String userId) {

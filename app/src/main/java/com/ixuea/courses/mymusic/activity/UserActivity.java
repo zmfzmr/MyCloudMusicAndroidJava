@@ -5,13 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.LogUtil;
+
+import io.reactivex.Observable;
 
 /**
  * 好友列表界面
  */
 public class UserActivity extends BaseTitleActivity {
 
+    private static final String TAG = "UserActivity";
     public static final int FRIEND = 10;//好友
     public static final int FANS = 20;//粉丝列表
     private String userId;//用户id
@@ -31,12 +39,28 @@ public class UserActivity extends BaseTitleActivity {
         userId = extraId();
         //获取样式
         style = extraInt(Constant.INT);
+        Observable<ListResponse<User>> api = null;
         //判断样式设置Toolbar标题
         if (isFriend()) {
+            //好友
             setTitle(R.string.my_friend);
+
+            api = Api.getInstance().friends(userId);
         } else {
+            //粉丝
             setTitle(R.string.my_fans);
+
+            api = Api.getInstance().fans(userId);
         }
+
+        api.subscribe(new HttpObserver<ListResponse<User>>() {
+            @Override
+            public void onSucceeded(ListResponse<User> data) {
+                LogUtil.d(TAG, "users:" + data.getData().size());
+
+                //TODO 设置到适配器
+            }
+        });
     }
 
     /**

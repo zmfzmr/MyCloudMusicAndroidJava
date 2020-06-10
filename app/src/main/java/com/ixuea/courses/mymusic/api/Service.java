@@ -285,6 +285,13 @@ public interface Service {
     Observable<ListResponse<User>> friends(@Path("id") String id);
 
     /**
+     * 我的粉丝(关注我的人)
+     * id：用户的id
+     */
+    @GET("v1/users/{id}/followers")
+    Observable<ListResponse<User>> fans(@Path("id") String id);
+
+    /**
      * 获取用户创建的歌单
      * <p>
      * 这里之所以要传递id，主要是获取其他用户的歌单(查看其他人的歌单)
