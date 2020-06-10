@@ -1,11 +1,13 @@
 package com.ixuea.courses.mymusic;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 
 import com.facebook.stetho.Stetho;
 import com.ixuea.android.downloader.DownloadService;
@@ -39,7 +41,8 @@ import static android.os.Build.VERSION.SDK_INT;
 /**
  * 全局Application
  */
-public class AppContext extends Application {
+public class AppContext extends Application implements Application.ActivityLifecycleCallbacks {
+    private static final String TAG = "AppContext";
 //    public class AppContext extends MultiDexApplication {
 
     /**
@@ -92,6 +95,11 @@ public class AppContext extends Application {
 //            updateMedia(context,"/sdcard/Download/刘若英-后来.mp3");
 //            updateMedia(context,"/sdcard/Download/庞龙-人生第一次.mp3");
         }
+
+        //注册界面声明周期监听
+        //什么是ActivityLifecycle
+        //简单来说，他是Android提供的一套API，可以用来监听当前应用，所有界面的生命周期。
+        registerActivityLifecycleCallbacks(this);
     }
 
     /**
@@ -248,4 +256,81 @@ public class AppContext extends Application {
         //返回下载管理器实例
         return downloadManager;
     }
+    //Activity声明周期回调
+
+    /**
+     * 界面创建了 对应ActivityonCreate方法 其他方法依次类推...
+     *
+     * @param activity
+     * @param savedInstanceState
+     */
+    @Override
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+        LogUtil.d(TAG, "onActivityCreated:" + activity);
+
+    }
+
+    /**
+     * 界面准备显示了
+     *
+     * @param activity
+     */
+    @Override
+    public void onActivityStarted(Activity activity) {
+        LogUtil.d(TAG, "onActivityStarted:" + activity);
+    }
+
+    /**
+     * 界面显示了
+     *
+     * @param activity
+     */
+    @Override
+    public void onActivityResumed(Activity activity) {
+        LogUtil.d(TAG, "onActivityResumed:" + activity);
+
+    }
+
+    /**
+     * 界面暂停了
+     *
+     * @param activity
+     */
+    @Override
+    public void onActivityPaused(Activity activity) {
+        LogUtil.d(TAG, "onActivityPaused:" + activity);
+    }
+
+    /**
+     * 界面停止了
+     *
+     * @param activity
+     */
+    @Override
+    public void onActivityStopped(Activity activity) {
+        LogUtil.d(TAG, "onActivityStopped:" + activity);
+    }
+
+    /**
+     * 界面保存数据恢复了
+     *
+     * @param activity
+     * @param outState
+     */
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+        LogUtil.d(TAG, "onActivitySaveInstanceState:" + activity);
+    }
+
+    /**
+     * 界面销毁了
+     *
+     * @param activity
+     */
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+        LogUtil.d(TAG, "onActivityDestroyed:" + activity);
+
+    }
+    //end Activity声明周期回调
 }
