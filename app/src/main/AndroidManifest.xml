@@ -39,8 +39,16 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="theme">
-        <!--如果等应用请求回来再去设置标题的话，
-        有可能在Toolbar标题中会看到应用的名称(应用名称即默认名称)，所以我们这里先设置为空字符串-->
+        <activity
+            android:name=".activity.CodeActivity"
+            android:label="@string/my_code" />
+        <activity
+            android:name=".activity.ScanActivity"
+            android:label="@string/scan" />
+        <!--
+        如果等应用请求回来再去设置标题的话，
+        有可能在Toolbar标题中会看到应用的名称(应用名称即默认名称)，所以我们这里先设置为空字符串
+        -->
         <activity
             android:name=".activity.UserActivity"
             android:label="" />

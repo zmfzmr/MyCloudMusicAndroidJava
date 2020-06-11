@@ -56,7 +56,9 @@ tools:openDrawer:预览的时候开启方向
                 <include layout="@layout/divider_small" />
 
                 <!--按钮容器-->
-                <LinearLayout style="@style/ItemContainer">
+                <LinearLayout
+                    style="@style/ItemContainer"
+                    android:id="@+id/ll_code">
                     <!--图标-->
                     <ImageView
                         style="@style/ItemIcon"
@@ -68,7 +70,9 @@ tools:openDrawer:预览的时候开启方向
                 </LinearLayout>
 
                 <!--按钮容器-->
-                <LinearLayout style="@style/ItemContainer">
+                <LinearLayout
+                    style="@style/ItemContainer"
+                    android:id="@+id/ll_scan">
                     <!--图标-->
                     <ImageView
                         style="@style/ItemIcon"

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><!--AppBarLayout主要用来实现标题折叠功能
+    elevation：阴影高度-->
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppTheme.AppBarOverlay"
+    android:background="@color/transparent"
+    app:elevation="0dp">
+
+    <!--这里：AppBarLayout中设置background 而在Toolbar中设置的是background 和 backgroundTint
+        其实只需要在AppBarLayout设置背景透明就行，这里只是照搬课程里的而已
+    -->
+
+    <!--Toolbar控件-->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        android:backgroundTint="@color/transparent" />
+</com.google.android.material.appbar.AppBarLayout>

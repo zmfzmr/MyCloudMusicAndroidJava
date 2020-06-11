@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
+import com.ixuea.courses.mymusic.activity.CodeActivity;
+import com.ixuea.courses.mymusic.activity.ScanActivity;
 import com.ixuea.courses.mymusic.activity.SettingActivity;
 import com.ixuea.courses.mymusic.activity.UserActivity;
 import com.ixuea.courses.mymusic.activity.UserDetailActivity;
@@ -429,6 +431,25 @@ public class MainActivity extends BaseMusicPlayerActivity {
         //这里是用父类到的startActivityExtraId方法(当然也可以用UserDetailActivity里面的startWithId方法)
         startActivityExtraId(UserDetailActivity.class, sp.getUserId());
         ///关闭抽屉
+        cloneDrawer();
+    }
+
+    /**
+     * 我的二维码点击
+     */
+    @OnClick(R.id.ll_code)
+    public void onCodeClick() {
+        //携带当前用户id过去
+        startActivityExtraId(CodeActivity.class, sp.getUserId());
+        cloneDrawer();
+    }
+
+    /**
+     * 扫一扫点击
+     */
+    @OnClick(R.id.ll_scan)
+    public void onScanClick() {
+        startActivity(ScanActivity.class);
         cloneDrawer();
     }
 
