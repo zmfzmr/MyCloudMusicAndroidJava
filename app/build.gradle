@@ -751,6 +751,10 @@ dependencies {
     //https://lbs.amap.com/api/android-location-sdk/guide/create-project/android-studio-create-project
     implementation 'com.amap.api:location:4.7.2'
 
+    //二维码生成扫描框架
+    //https://github.com/jenly1314/ZXingLite
+    implementation 'com.king.zxing:zxing-lite:1.1.3-androidx'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
