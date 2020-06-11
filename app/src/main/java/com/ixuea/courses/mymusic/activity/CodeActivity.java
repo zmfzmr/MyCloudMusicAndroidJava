@@ -14,4 +14,12 @@ public class CodeActivity extends BaseTitleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_code);
     }
+
+    @Override
+    protected void initView() {
+        super.initView();
+
+        //显示亮色状态栏
+        lightStatusBar();
+    }
 }

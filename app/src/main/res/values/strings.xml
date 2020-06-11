@@ -249,5 +249,6 @@
     <string name="confirm_unbind">你确定解绑吗?</string>
     <string name="success_unbind">解绑成功</string>
     <string name="add">添加</string>
+    <string name="hint_san_my_code">使用我的云音乐扫描即可关注我</string>
 
 </resources>
