@@ -1,5 +1,6 @@
 package com.ixuea.courses.mymusic.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.domain.ui.MeGroup;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.listener.ObserverAdapter;
+import com.ixuea.courses.mymusic.util.HttpUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
@@ -28,9 +31,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.functions.BiFunction;
 
 /**
  * 首页-我的界面
@@ -93,6 +98,7 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
 
     }
 
+    @SuppressLint("CheckResult")
     private void fetchData() {
         //数据类表
         ArrayList<MeGroup> datum = new ArrayList<>();
@@ -107,29 +113,102 @@ public class MeFragment extends BaseCommonFragment implements ExpandableListView
         //普通的方式
         //请求是线性(一个人干活，干完了另外一个人干)
         //(外请求：获取用户创建的歌单 内请求：获取用户收藏的歌单)
-        createSheetApi.subscribe(new HttpObserver<ListResponse<Sheet>>() {
-            @Override
-            public void onSucceeded(ListResponse<Sheet> data) {
-                //添加数据
-                //这里MeGroup 参数3：是否显示右侧按钮 这是是创建的歌单，就显示右侧按钮
-                datum.add(new MeGroup("创建的歌单", data.getData(), true));
+//        createSheetApi.subscribe(new HttpObserver<ListResponse<Sheet>>() {
+//            @Override
+//            public void onSucceeded(ListResponse<Sheet> data) {
+//                //添加数据
+//                //这里MeGroup 参数3：是否显示右侧按钮 这是是创建的歌单，就显示右侧按钮
+//                datum.add(new MeGroup("创建的歌单", data.getData(), true));
+//
+//                collectSheetsApi.subscribe(new HttpObserver<ListResponse<Sheet>>() {
+//                    @Override
+//                    public void onSucceeded(ListResponse<Sheet> data) {
+//                        //添加数据(这里是收藏歌单，所以MeGroup 参数3：表示不显示右侧按钮)
+//                        //这里传入了false，表示不显示右侧按钮
+//                        datum.add(new MeGroup("收藏的歌单", data.getData(), false));
+//
+//                        //设置数据到适配器
+//                        LogUtil.d(TAG, "get sheets success: " + datum.size());
+//
+//                        adapter.setDatum(datum);
+//
+//                        //展开所有组(显示完数据后才展开所有的组)
+//                        expandedAll();
+//                    }
+//                });
+//            }
+//        });
 
-                collectSheetsApi.subscribe(new HttpObserver<ListResponse<Sheet>>() {
+
+        //改成并发模式
+        //使用RxAndroid(RxJava 的封装 更适合android项目)
+        //将两个请求实现为并发
+        //两个请求都请求成功后回调
+
+        //第三个对象：泛型参数1:也就是zip(第一个createSheetApi返回来的模型对象) 依次类推 泛型参数2也是一样的
+        //           泛型参数3：你想要转换的格式类型(意思说：把网络请求到的数据转换成这个集合对象的类型)
+        Observable.zip(createSheetApi, collectSheetsApi,
+                new BiFunction<ListResponse<Sheet>, ListResponse<Sheet>, List<MeGroup>>() {
+                    /**
+                     * 所有任务都执行成功了回调
+                     *
+                     * @param createSheets
+                     * @param collectSheets
+                     * @return
+                     * @throws Exception
+                     */
                     @Override
-                    public void onSucceeded(ListResponse<Sheet> data) {
-                        //添加数据(这里是收藏歌单，所以MeGroup 参数3：表示不显示右侧按钮)
-                        //这里传入了false，表示不显示右侧按钮
-                        datum.add(new MeGroup("收藏的歌单", data.getData(), false));
+                    public List<MeGroup> apply(ListResponse<Sheet> createSheets,
+                                               ListResponse<Sheet> collectSheets) throws Exception {
+                        //请求成功了
 
-                        //设置数据到适配器
-                        LogUtil.d(TAG, "get sheets success: " + datum.size());
+                        //只要有一个请求失败了
+                        //就直接走到onError
 
-                        adapter.setDatum(datum);
+                        //将数据放到列表中
 
-                        //展开所有组(显示完数据后才展开所有的组)
-                        expandedAll();
+                        //也可以包装为对象
+                        //或者使用操作符
+                        //添加数据
+                        List<MeGroup> datum = new ArrayList<>();
+                        //添加创建的歌单和收藏的歌单 true:右边的创建歌单按钮
+                        datum.add(new MeGroup("创建的歌单", createSheets.getData(), true));
+                        datum.add(new MeGroup("收藏的歌单", collectSheets.getData(), false));
+                        return datum;
                     }
-                });
+                }).subscribeWith(new ObserverAdapter<List<MeGroup>>() {
+            //注意： 这里用的是 subscribeWith
+
+            //调用zip方法不会请求网络数据，只有调用这个subscribeWith后才会去请求网络数据
+            //请求成功后会回调zip 方法里面的apply方法(这个方法返回的数据又回调到这里的onNext中)
+
+            /**
+             * 成功调用
+             */
+            @Override
+            public void onNext(List<MeGroup> results) {
+                super.onNext(results);
+
+                //设置适配器数据
+                adapter.setDatum(results);
+                //展开所有组
+                expandedAll();
+            }
+
+            /**
+             * 失败调用
+             * <p>
+             * 因为我们用的是ObserverAdapter(避免重写多个方法)，不是用HttpObserver(这个类处理了错误)
+             * <p>
+             * 我们这ObserverAdapter没有处理错误，所以我们在onError中处理下错误
+             *
+             * @param e Throwable对象
+             */
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                //参数1：数据模型对象  因为我们前面的把数据模型对象转成List<MeGroup>了，所以这里写null
+                HttpUtil.handlerRequest(null,e);
             }
         });
     }

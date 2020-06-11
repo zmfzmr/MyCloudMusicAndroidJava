@@ -249,7 +249,7 @@ public class MeAdapter extends BaseExpandableListAdapter {
      *
      * @param datum
      */
-    public void setDatum(ArrayList<MeGroup> datum) {
+    public void setDatum(List<MeGroup> datum) {
         //清除原来的数据
         this.datum.clear();
 
