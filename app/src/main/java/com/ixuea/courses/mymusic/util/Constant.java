@@ -196,6 +196,11 @@ public class Constant {
      */
     public static final int REQUEST_OVERLAY_PERMISSION = 100;
     /**
+     * 扫描二维码界面请求码
+     */
+    public static final int REQUEST_SCAN_CODE = 300;
+
+    /**
      * 解锁全局歌词Id
      */
     public static final int NOTIFICATION_UNLOCK_LYRIC_ID = 10001;

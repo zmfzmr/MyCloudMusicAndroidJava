@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.CodeActivity;
-import com.ixuea.courses.mymusic.activity.ScanActivity;
 import com.ixuea.courses.mymusic.activity.SettingActivity;
 import com.ixuea.courses.mymusic.activity.UserActivity;
 import com.ixuea.courses.mymusic.activity.UserDetailActivity;
@@ -26,6 +25,8 @@ import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.king.zxing.CaptureActivity;
+import com.king.zxing.Intents;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -355,6 +356,17 @@ public class MainActivity extends BaseMusicPlayerActivity {
                     }
                 }
                 break;
+            case Constant.REQUEST_SCAN_CODE:
+                //默认二维码扫描界面结果
+                if (RESULT_OK == resultCode) {
+                    //扫描成功了
+
+                    //获取扫描结果 data: Intent
+                    // Intents.Scan.RESULT：key 框架(我们添加的二维码依赖)自带的一个key 注意：这里是Intents 加s的
+                    String result = data.getStringExtra(Intents.Scan.RESULT);
+                    LogUtil.d(TAG, "onActivityResult qrcode: " + result);
+                }
+                break;
         }
     }
 
@@ -449,8 +461,13 @@ public class MainActivity extends BaseMusicPlayerActivity {
      */
     @OnClick(R.id.ll_scan)
     public void onScanClick() {
-        startActivity(ScanActivity.class);
-        cloneDrawer();
+        //使用框架自带的扫描界面
+        Intent intent = new Intent(getMainActivity(), CaptureActivity.class);
+        startActivityForResult(intent, Constant.REQUEST_SCAN_CODE);
+
+//        startActivity(ScanActivity.class);
+//        cloneDrawer();
+
     }
 
     /**
