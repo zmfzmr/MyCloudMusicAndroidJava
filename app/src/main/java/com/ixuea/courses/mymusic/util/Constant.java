@@ -288,4 +288,17 @@ public class Constant {
      * 微博第三方登录
      */
     public static final int PLATFORM_WEIBO = 40;//这个值是和服务端协商好，不能随便更改
+    /**
+     * 二维码地址
+     * 因为我们没有做网页所有随便写一个地址
+     * 真实项目可能会使用主页，或者App下载界面
+     * <p>
+     * 我们这里的二维码的数据
+     * 就是一个网址
+     * 真实的数据在网址的查询参数里面
+     * http://dev-my-cloud-music-api-rails.ixuea.com/v1/monitors/version?u=
+     * <p>
+     * ENDPOINT:  http://dev-my-cloud-music-api-rails.ixuea.com
+     */
+    public static final String QRCODE_URL = String.format("%s/v1/monitors/version?u=", ENDPOINT);
 }
