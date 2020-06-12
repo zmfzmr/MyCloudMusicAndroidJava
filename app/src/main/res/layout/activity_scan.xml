@@ -4,14 +4,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.ScanActivity">
-    <!--标题栏 是透明-->
-    <include layout="@layout/tool_bar_transparent" />
 
     <!--内容容器-->
     <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--SurfaceView:可以理解为一个特殊的View(android系统自带的)
+       他内部封装了OpenGLES操作 (OpenGLES 专门用来绘图的，比如我们要拍照，也要用到这个SurfaceView)
+       比View更高效
+       一般：视频播放，游戏，特殊动画都会采用他
+       具体的使用还是比较复杂的
+       Id是框架默认的  (也就是surfaceView 这个id，框架默认的)
+       可以通过代理方法更改
+       这里我们就不更改了-->
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <!--扫描框: 动画 添加的二维码依赖 自带的
+            这个id跟前面的那个SurfaceView 也是固定的，也可以通过代理的方式修改
+
+            这个只是简单的显示一个框，照相的那部分交给前面的SurfaceView来处理
+            -->
+        <com.king.zxing.ViewfinderView
+            android:id="@+id/viewfinderView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <!--业务内容容器
+        我们并不希望这个LinearLayout展示到状态啦，
+        所以设置android:fitsSystemWindows="true" -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </RelativeLayout>
+        <!--标题栏 是透明-->
+        <include layout="@layout/tool_bar_transparent" />
+
+        <!--提示容器  前面的那个SurfaceView 有个属性 颜色是位于所有控件的上方的,这个属性默认为false
+                     我们这里设置下颜色，就能看到我们这个控件在哪啦-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--提示-->
+            <TextView
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="70dp"
+                android:textColor="@color/tab_normal"
+                android:text="@string/hint_san_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!--按钮 我的二维码-->
+            <Button
+                android:id="@+id/bt_code"
+                android:layout_marginBottom="70dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/my_code"
+                android:textColor="@color/tab_normal"
+                android:background="@drawable/shape_button_border_white"
+                android:layout_width="@dimen/button_width_large"
+                android:layout_height="@dimen/button_height_small" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

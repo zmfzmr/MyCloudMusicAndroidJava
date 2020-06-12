@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.CodeActivity;
+import com.ixuea.courses.mymusic.activity.ScanActivity;
 import com.ixuea.courses.mymusic.activity.SettingActivity;
 import com.ixuea.courses.mymusic.activity.UserActivity;
 import com.ixuea.courses.mymusic.activity.UserDetailActivity;
@@ -25,7 +26,6 @@ import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
-import com.king.zxing.CaptureActivity;
 import com.king.zxing.Intents;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -461,12 +461,12 @@ public class MainActivity extends BaseMusicPlayerActivity {
      */
     @OnClick(R.id.ll_scan)
     public void onScanClick() {
-        //使用框架自带的扫描界面
-        Intent intent = new Intent(getMainActivity(), CaptureActivity.class);
-        startActivityForResult(intent, Constant.REQUEST_SCAN_CODE);
+//        //使用框架自带的扫描界面
+//        Intent intent = new Intent(getMainActivity(), CaptureActivity.class);
+//        startActivityForResult(intent, Constant.REQUEST_SCAN_CODE);
 
-//        startActivity(ScanActivity.class);
-//        cloneDrawer();
+        startActivity(ScanActivity.class);
+        cloneDrawer();
 
     }
 
