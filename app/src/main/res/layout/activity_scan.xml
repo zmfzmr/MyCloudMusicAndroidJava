@@ -26,6 +26,8 @@
             这个id跟前面的那个SurfaceView 也是固定的，也可以通过代理的方式修改
 
             这个只是简单的显示一个框，照相的那部分交给前面的SurfaceView来处理
+
+            注意：这里设置的match_parent，里面的一些内边距，这个框架里面已经设置好了
             -->
         <com.king.zxing.ViewfinderView
             android:id="@+id/viewfinderView"
