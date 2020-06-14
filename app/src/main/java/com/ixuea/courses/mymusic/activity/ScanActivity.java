@@ -6,9 +6,15 @@ import android.view.SurfaceView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
+import com.ixuea.courses.mymusic.util.UrlUtil;
 import com.king.zxing.CaptureHelper;
 import com.king.zxing.OnCaptureCallback;
 import com.king.zxing.ViewfinderView;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -112,13 +118,109 @@ public class ScanActivity extends BaseTitleActivity implements OnCaptureCallback
     /**
      * 接收扫码结果回调
      *
-     * @param result 扫码结果
+     * @param result 扫码结果(这个结果：是CodeActivity生成二维码的时候已经存储用户信息(也就是网址),
+     *               扫描的时候直接把这个网址扫描出来了)
      * @return 返回true表示拦截，将不自动执行后续逻辑，为false表示不拦截，默认不拦截
      */
     @Override
     public boolean onResultCallback(String result) {
         LogUtil.d(TAG, "onResultCallback: " + result);
+
+        if (StringUtils.isNotBlank(result)) {
+            //处理扫描结果
+            handleScanString(result);
+        } else {
+            //显示不支持该格式
+            showNotSupportFormat();
+        }
+
         //拦截结果
         return true;
+    }
+
+    /**
+     * 显示不支持该格式
+     */
+    private void showNotSupportFormat() {
+        //先暂停
+        captureHelper.onPause();
+
+        //support：翻译 支持的意思
+        ToastUtil.errorShortToast(R.string.error_not_support_qrcode_format);
+
+        //延迟后启用扫描
+        //目的是防止持续扫描不正确的二维码
+        //可以根据需求调整
+
+        //扫描框暂停，继续用的是 viewfinderView
+        //注意：ViewfinderView:  是个扫描框
+        viewfinderView.postDelayed(new Runnable() {
+            /**
+             * 这里是在主线程中进行的
+             */
+            @Override
+            public void run() {
+                //继续扫描用的是工具类captureHelper的onResume()
+                captureHelper.onResume();
+            }
+        }, 800);
+    }
+
+    /**
+     * 处理扫描结果
+     */
+    private void handleScanString(String data) {
+        //从扫描的字符串中解析我们需要的参数
+        //我们的二维码格式如下：
+        //http://dev-my-cloud-music-api-rails.ixuea.com/v1/monitors/version?u=6
+
+        //表示用我的云音乐软件扫描后
+        //跳转到Id为6用户详情
+
+        //其实就是我们应用的下载地址
+        //我们要用到的参数放到了查询参数
+        //生成网址的好处是
+        //如果使用其他软件扫描的时候
+        //会自动打开网址
+        //大部分二维码扫描软件（QQ，微信）都会这样
+
+        //这样就可以引导用户下载我们的应用
+        //另外在真实项目中
+        //会将上面的网址转短一点
+        //因为二维码内容太多了
+        //生成的二维码格子就会很小
+        //如果显示的图片过小
+        //就会非常难识别
+
+        //另外不同的方式生成二维码
+        //也可能不同
+
+        //解析出网址中的查询参数
+        Map query = UrlUtil.getUrlQuery(data);
+
+        //获取用户id值 （因为这个是Map集合，可以通过key来获取值）
+        String userId = (String) query.get("u");
+
+        if (StringUtils.isNotBlank(userId)) {
+            //有值
+            processUserCode(userId);
+        } else {
+            //显示不支持该类型
+            showNotSupportFormat();
+        }
+
+    }
+
+    /**
+     * 处理用户二维码
+     * (其实就是把前面从网址上解除出来的的用户id获取出来，然后携带用户id跳转到用户详情)
+     */
+    private void processUserCode(String userId) {
+        //关闭当前界面
+        finish();
+
+        //跳转到用户详情
+        UserDetailActivity.startWithId(getMainActivity(), userId);
+
     }
 }

@@ -252,5 +252,6 @@
     <!--二维码-->
     <string name="hint_san_my_code">使用我的云音乐扫描即可关注我</string>
     <string name="hint_san_code">将二维码放入框内即可扫描</string>
+    <string name="error_not_support_qrcode_format">不支持该格式!</string>
 
 </resources>
