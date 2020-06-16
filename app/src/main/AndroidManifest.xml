@@ -40,6 +40,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="theme">
         <activity
+            android:name=".activity.ShopDetailActivity"
+            android:label="@string/activity_shop_detail" />
+        <activity
             android:name=".activity.ShopActivity"
             android:label="@string/shop" />
         <activity
