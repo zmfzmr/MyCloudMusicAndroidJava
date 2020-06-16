@@ -563,4 +563,13 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 商品详情
+     */
+    public Observable<DetailResponse<Book>> shopDetail(String id) {
+        return service.shopDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

@@ -256,5 +256,7 @@
     <!--商品-->
     <string name="price">￥%1$.2f</string>
     <string name="activity_shop_detail">商品详情</string>
+    <string name="go_buy">立即购买</string>
+    <string name="go_study">立即学习</string>
 
 </resources>

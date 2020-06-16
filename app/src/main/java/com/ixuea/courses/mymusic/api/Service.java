@@ -375,4 +375,12 @@ public interface Service {
      */
     @GET("v1/books")
     Observable<ListResponse<Book>> shops();
+
+    /**
+     * 商品详情
+     *
+     * @param id 从点击item传过来的id
+     */
+    @GET("v1/books/{id}")
+    Observable<DetailResponse<Book>> shopDetail(@Path("id") String id);
 }

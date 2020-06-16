@@ -51,4 +51,6 @@
     <color name="text_highlight">#3385ff</color>
     <!--索引提示-->
     <color name="transparent_88_black">#88000000</color>
+    <!--通过颜色 也就是绿色通行-->
+    <color name="color_pass">#28A745</color>
 </resources>

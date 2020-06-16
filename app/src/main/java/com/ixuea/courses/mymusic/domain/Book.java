@@ -50,4 +50,11 @@ public class Book extends BaseModel {
     public void setBuy(Integer buy) {
         this.buy = buy;
     }
+
+    /**
+     * 是否购买了
+     */
+    public boolean isBuy() {
+        return buy != null;
+    }
 }
