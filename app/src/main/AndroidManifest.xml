@@ -40,6 +40,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="theme">
         <activity
+            android:name=".activity.ShopActivity"
+            android:label="@string/shop" />
+        <activity
             android:name=".activity.CodeActivity"
             android:label="@string/my_code" />
         <activity
@@ -200,9 +203,7 @@
         <!-- 高德地图配置key  注意：这个key还是用自己的比较好点（value也就是高德创建应用key的值） -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="bda00b9f275ba9c180d9aa4dad76ad98" />
-
-        <!--框架自带二维码扫描界面-->
+            android:value="bda00b9f275ba9c180d9aa4dad76ad98" /> <!-- 框架自带二维码扫描界面 -->
         <activity
             android:name="com.king.zxing.CaptureActivity"
             android:screenOrientation="portrait" />

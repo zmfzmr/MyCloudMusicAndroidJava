@@ -130,7 +130,9 @@ tools:openDrawer:预览的时候开启方向
                 <include layout="@layout/divider_meddle" />
 
                 <!--按钮容器-->
-                <LinearLayout style="@style/ItemContainer">
+                <LinearLayout
+                    style="@style/ItemContainer"
+                    android:id="@+id/ll_shop">
                     <!--图标-->
                     <ImageView
                         style="@style/ItemIcon"

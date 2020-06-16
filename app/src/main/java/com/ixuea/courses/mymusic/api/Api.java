@@ -5,6 +5,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ixuea.courses.mymusic.AppContext;
 import com.ixuea.courses.mymusic.domain.Ad;
 import com.ixuea.courses.mymusic.domain.BaseModel;
+import com.ixuea.courses.mymusic.domain.Book;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.Feed;
 import com.ixuea.courses.mymusic.domain.Session;
@@ -549,6 +550,15 @@ public class Api {
      */
     public Observable<DetailResponse<BaseModel>> updateUser(User data) {
         return service.updateUser(data.getId(), data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 商品列表
+     */
+    public Observable<ListResponse<Book>> shops() {
+        return service.shops()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

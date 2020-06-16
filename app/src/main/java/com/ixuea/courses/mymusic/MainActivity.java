@@ -15,6 +15,7 @@ import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.CodeActivity;
 import com.ixuea.courses.mymusic.activity.ScanActivity;
 import com.ixuea.courses.mymusic.activity.SettingActivity;
+import com.ixuea.courses.mymusic.activity.ShopActivity;
 import com.ixuea.courses.mymusic.activity.UserActivity;
 import com.ixuea.courses.mymusic.activity.UserDetailActivity;
 import com.ixuea.courses.mymusic.activity.WebViewActivity;
@@ -487,6 +488,16 @@ public class MainActivity extends BaseMusicPlayerActivity {
     @OnClick(R.id.ll_fans)
     public void onFansClick() {
         UserActivity.start(getMainActivity(), sp.getUserId(), UserActivity.FANS);
+        cloneDrawer();
+    }
+
+    /**
+     * 商城
+     */
+    @OnClick(R.id.ll_shop)
+    public void onShopClick() {
+        startActivity(ShopActivity.class);
+
         cloneDrawer();
     }
 

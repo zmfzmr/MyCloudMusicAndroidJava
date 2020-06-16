@@ -2,6 +2,7 @@ package com.ixuea.courses.mymusic.api;
 
 import com.ixuea.courses.mymusic.domain.Ad;
 import com.ixuea.courses.mymusic.domain.BaseModel;
+import com.ixuea.courses.mymusic.domain.Book;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.Feed;
 import com.ixuea.courses.mymusic.domain.Session;
@@ -368,4 +369,10 @@ public interface Service {
      */
     @POST("v1/feeds")
     Observable<DetailResponse<BaseModel>> createFeed(@Body Feed data);
+
+    /**
+     * 商品列表
+     */
+    @GET("v1/books")
+    Observable<ListResponse<Book>> shops();
 }
