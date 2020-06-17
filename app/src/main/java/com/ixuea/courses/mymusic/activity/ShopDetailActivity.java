@@ -7,11 +7,14 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Book;
+import com.ixuea.courses.mymusic.domain.param.OrderParam;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -107,5 +110,44 @@ public class ShopDetailActivity extends BaseTitleActivity {
     @OnClick(R.id.bt_control)
     public void onControlClick() {
         LogUtil.d(TAG, "onControlClick");
+
+        if (data.isBuy()) {
+            //已经购买
+
+            ToastUtil.successShortToast(R.string.success_buy);
+        } else {
+            //未购买
+
+            //创建订单
+            createOrder();
+        }
+    }
+
+    /**
+     * 创建订单
+     */
+    private void createOrder() {
+        OrderParam param = new OrderParam();
+
+        //设置商品id
+        //this.data.getId(): 请求商品详情里面的 Book里面的 id
+        param.setBook_id(data.getId());
+        //source默认就有值，可以不用传入(这个值在OrderParam对象设置了)
+
+        //调用接口
+        //这个接口不管调用多少次，服务端那边都只创建一个订单(服务端那边实现了，不管调用多少次，只要是未支付状态，都是只创建一次)
+        Api.getInstance()
+                .createOrder(param)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        //订单创建成功
+                        LogUtil.d(TAG, "createOrder succcess: " + data.getData().getId());
+
+                        //跳转订单详情
+                        startActivityExtraId(OrderDetailActivity.class, data.getData().getId());
+                    }
+                });
+
     }
 }

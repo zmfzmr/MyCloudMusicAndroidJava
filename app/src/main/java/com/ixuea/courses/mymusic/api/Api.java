@@ -14,6 +14,7 @@ import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Topic;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.Video;
+import com.ixuea.courses.mymusic.domain.param.OrderParam;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
@@ -568,6 +569,17 @@ public class Api {
      */
     public Observable<DetailResponse<Book>> shopDetail(String id) {
         return service.shopDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 创建订单
+     *
+     * @param data OrderParam
+     */
+    public Observable<DetailResponse<BaseModel>> createOrder(OrderParam data) {
+        return service.createOrder(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

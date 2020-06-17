@@ -11,6 +11,7 @@ import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Topic;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.Video;
+import com.ixuea.courses.mymusic.domain.param.OrderParam;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
@@ -383,4 +384,11 @@ public interface Service {
      */
     @GET("v1/books/{id}")
     Observable<DetailResponse<Book>> shopDetail(@Path("id") String id);
+
+    /**
+     * 创建订单
+     * 因为没有什么接收的，所以用DetailResponse<BaseModel>
+     */
+    @POST("v1/orders")
+    Observable<DetailResponse<BaseModel>> createOrder(@Body OrderParam data);
 }
