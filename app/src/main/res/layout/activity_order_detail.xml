@@ -12,10 +12,227 @@
     <!-- 内容容器-->
 
     <LinearLayout
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- 订单信息容器-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/padding_middle"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- 订单状态-->
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="@string/order_status_value" />
+
+            <!-- 订单号-->
+            <TextView
+                android:id="@+id/tv_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_middle"
+                tools:text="@string/order_number_value" />
+
+            <!-- 商品信息容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_middle"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- 封面-->
+                <ImageView
+                    android:id="@+id/iv_banner"
+                    android:layout_width="140dp"
+                    android:layout_height="85dp"
+                    android:scaleType="centerCrop"
+                    tools:src="@drawable/placeholder" />
+
+                <!-- 标题-->
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_middle"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:lineSpacingMultiplier="@dimen/line_space"
+                    android:maxLines="3"
+                    tools:text="这是商品标题这是商品标题这是商品标题这是商品标题"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/text_large" />
+
+
+            </LinearLayout>
+
+            <!-- 下单日期-->
+            <TextView
+                android:id="@+id/tv_created_at"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_middle"
+                tools:text="@string/order_created_value"
+                android:textColor="@color/light_grey" />
+
+            <!-- 订单来源  实际中服务器不会返回回来，这里返回回来，只是为了看这些字段-->
+            <TextView
+                android:id="@+id/tv_source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_middle"
+                tools:text="@string/order_source_value"
+                android:textColor="@color/light_grey" />
+
+            <!-- 支付平台-->
+            <TextView
+                android:id="@+id/tv_origin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_middle"
+                tools:text="@string/origin_source_value"
+                android:textColor="@color/light_grey" />
+
+            <!-- 支付渠道-->
+            <TextView
+                android:id="@+id/tv_channel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_middle"
+                android:layout_marginBottom="@dimen/padding_middle"
+                tools:text="@string/origin_channel_value"
+                android:textColor="@color/light_grey" />
+
+            <!-- 支付方式容器-->
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/pay_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- 分割线 这个之所以放在这个容器里面，因为这个分割线，后面支付完成后，是需要隐藏的-->
+                <include layout="@layout/divider_meddle" />
+
+                <!-- 嵌套RadioGroup 这个是之前使用桌面控件的时候使用过
+                    注意：这里可以嵌套多个，因为这个是LinearLayout的子类
+                -->
+                <me.shihao.library.XRadioGroup
+                    android:id="@+id/rg_pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- 支付宝容器-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_middle"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <!--图标-->
+                        <ImageView
+                            android:layout_width="@dimen/button_height_small"
+                            android:layout_height="@dimen/button_height_small"
+                            android:src="@drawable/ic_pay_alipay" />
+
+                        <!--标题-->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/padding_middle"
+                            android:layout_weight="1"
+                            android:text="@string/alipay"
+                            android:textColor="@color/text" />
+
+                        <!--单选  注意:  这里不是RadioGroup组，组的话，已经用上面的XRadioGroup代替了RadioGroup -->
+                        <RadioButton
+                            android:id="@+id/rb_alipay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true" />
+
+                    </LinearLayout>
+
+                    <!-- 支付宝容器-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_middle"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <!--图标-->
+                        <ImageView
+                            android:layout_width="@dimen/button_height_small"
+                            android:layout_height="@dimen/button_height_small"
+                            android:src="@drawable/ic_pay_wechat" />
+
+                        <!--标题-->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/padding_middle"
+                            android:layout_weight="1"
+                            android:text="@string/wechat"
+                            android:textColor="@color/text" />
+
+                        <!--单选  注意:  这里不是RadioGroup组，组的话，已经用上面的XRadioGroup代替了RadioGroup -->
+                        <RadioButton
+                            android:id="@+id/rb_wechat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                </me.shihao.library.XRadioGroup>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- 分割线-->
+        <include layout="@layout/divider_small" />
+
+        <!-- 控制容器 高：50dp-->
+        <LinearLayout
+
+            android:id="@+id/control_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height_large"
+            android:gravity="center_vertical">
+
+            <!-- 价格-->
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textColor="@color/colorPrimary"
+                tools:text="@string/price" />
+            <!-- 控制按钮-->
+            <Button
+                android:id="@+id/bt_control"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:text="@string/go_pay"
+
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

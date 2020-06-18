@@ -260,5 +260,15 @@
     <string name="go_study">立即学习</string>
     <string name="success_buy">已经购买了</string>
     <string name="activity_order_detail">订单详情</string>
+    <!--注意： 如有值：后面加个value； 以后要想没有值：则用order_status 这个即可-->
+    <string name="order_status_value">订单状态: %1$s</string>
+    <string name="order_number_value">订单编号: %1$s</string>
+    <string name="order_created_value">下单日期: %1$s</string>
+    <string name="order_source_value">订单来源: %1$s</string>
+    <string name="origin_source_value">支付平台: %1$s</string>
+    <string name="origin_channel_value">支付渠道: %1$s</string>
+    <string name="alipay">支付宝</string>
+    <string name="wechat">微信</string>
+    <string name="go_pay">立即支付</string>
 
 </resources>
