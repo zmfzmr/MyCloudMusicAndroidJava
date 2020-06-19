@@ -12,6 +12,7 @@ import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.PayUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 
 import butterknife.BindView;
@@ -209,5 +210,18 @@ public class OrderDetailActivity extends BaseTitleActivity {
     @OnClick(R.id.bt_control)
     public void onControlClick() {
         LogUtil.d(TAG, "onControlClick: ");
+
+        //支付宝支付
+        //这个支付宝支付参数是真实的（是在PostMan 请求过来的）
+        processAlipay("app_id=2019013063161737&charset=UTF-8&sign_type=RSA2&version=1.0&timestamp=2020-06-19+17%3A48%3A10&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fdev-my-cloud-music-api-rails.ixuea.com%2Fv1%2Fcallbacks%2Falipay&biz_content=%7B%22out_trade_no%22%3A%22202006170402148050%22%2C%22product_code%22%3A%22FAST_INSTANT_TRADE_PAY%22%2C%22total_amount%22%3A%222.0%22%2C%22subject%22%3A%22202006170402148050%22%2C%22passback_params%22%3A92%7D&sign=XtaWZJnMc7e5I6OVAy2ufjOpbEI3zci9S57Er2YEeAifFLvsw00kR7Is47%2BG0auYPOEBli%2BXeAbYUOCzx293MB%2FGUEPF3FUxahW1%2BUoNWduyfaiFYBHp1NNc35XY%2Bocz1hE5%2F%2FRDsiCjzDJ0FEdXvf6u7ggkkGFDQROKQ4FmYBRvKO6grh0BUJEZxjeYarplTu14UrIJNePh9%2FfGQIU4j01hGH7C3uuKllQPHNvaw9bLJIcpCcB9kakTsOim2N9oGJbMys0HFvvGZ4z92Sgi5018zsvngKJTVF1ApZtpliInZb59U3em%2B34Wb7fQdS8EvWlbP608lEBsYgCvUSJMRQ%3D%3D");
+    }
+
+    /**
+     * 处理支付宝支付
+     *
+     * @param data
+     */
+    private void processAlipay(String data) {
+        PayUtil.alipay(getMainActivity(), data);
     }
 }
