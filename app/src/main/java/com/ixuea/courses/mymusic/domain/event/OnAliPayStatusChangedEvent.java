@@ -5,10 +5,10 @@ import com.ixuea.courses.mymusic.domain.alipay.PayResult;
 /**
  * 支付宝 支付状态改变了事件
  */
-public class OnAliPayStatusChanged {
+public class OnAliPayStatusChangedEvent {
     private PayResult data;//注意：这里不能用final
 
-    public OnAliPayStatusChanged(PayResult data) {
+    public OnAliPayStatusChangedEvent(PayResult data) {
         this.data = data;
     }
 

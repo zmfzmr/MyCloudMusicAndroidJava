@@ -271,5 +271,7 @@
     <string name="wechat">微信</string>
     <string name="go_pay">立即支付</string>
     <string name="error_pay_channel">支付渠道错误，请稍后再试!</string>
+    <string name="hint_pay_wait">支付确认中，请稍后!</string>
+    <string name="error_pay_failed">支付失败,请稍后再试!</string>
 
 </resources>

@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.alipay.sdk.app.PayTask;
 import com.ixuea.courses.mymusic.domain.alipay.PayResult;
-import com.ixuea.courses.mymusic.domain.event.OnAliPayStatusChanged;
+import com.ixuea.courses.mymusic.domain.event.OnAliPayStatusChangedEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -44,7 +44,7 @@ public class PayUtil {
                 LogUtil.d(TAG, "alipay: " + resultData);
 
                 //发布解析状态
-                EventBus.getDefault().post(new OnAliPayStatusChanged(resultData));
+                EventBus.getDefault().post(new OnAliPayStatusChangedEvent(resultData));
 
             }
         };

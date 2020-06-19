@@ -98,7 +98,7 @@ public class ShopDetailActivity extends BaseTitleActivity {
      */
     private void showBuySuccess() {
         //变成：立即学习
-        bt_control.setTextColor(R.string.go_study);
+        bt_control.setText(R.string.go_study);
         //绿色
         bt_control.setBackgroundColor(getResources().getColor(R.color.color_pass));
     }

@@ -53,6 +53,18 @@ public class LoadingUtil {
     }
 
     /**
+     * 显示加载对话框
+     *
+     * @param activity   Activity
+     * @param resourceId 资源id
+     */
+    public static void showLoading(Activity activity, int resourceId) {
+        String data = activity.getResources().getString(resourceId);
+        //复用上面的逻辑就行了
+        showLoading(activity, data);
+    }
+
+    /**
      * 隐藏加载提示对话框
      */
     public static void hideLoading() {

@@ -10,13 +10,19 @@ import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Order;
 import com.ixuea.courses.mymusic.domain.Pay;
 import com.ixuea.courses.mymusic.domain.PayParam;
+import com.ixuea.courses.mymusic.domain.event.OnAliPayStatusChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.ImageUtil;
+import com.ixuea.courses.mymusic.util.LoadingUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.PayUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -124,6 +130,9 @@ public class OrderDetailActivity extends BaseTitleActivity {
     @Override
     protected void initDatum() {
         super.initDatum();
+        //注册
+        EventBus.getDefault().register(this);
+
         //商品的id (商品详情那边传递过来的)
         id = extraId();
         fetchData();
@@ -293,5 +302,69 @@ public class OrderDetailActivity extends BaseTitleActivity {
      */
     private void processAlipay(String data) {
         PayUtil.alipay(getMainActivity(), data);
+    }
+
+    /**
+     * 支付宝支付状态改变了(这个事件是 PayUtil.alipay 发送过来的)
+     *
+     * @param event OnAliPayStatusChangedEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAlipayStatusChanged(OnAliPayStatusChangedEvent event) {
+        //event.getData(): 获取的是 PayResult(里面包含支付成功和失败)
+        String resultStatus = event.getData().getResultStatus();
+
+        //到过来写的目的是，防止破解我们应用的人，把整个9000改成一个空对象，
+        //倒过来写的，因为resultStatus是支付宝那边返回的，无法修改，所以这样安全点
+        //否则：如果是resultStatus.equals("9000") 可能就有问题
+
+        //注意：这里9000 是支付宝本地的SDK告诉我们支付成功了
+        if ("9000".equals(resultStatus)) {
+            //本地支付成功
+
+            //不能依赖本地支付结果
+            //一定要以服务端为准
+            LoadingUtil.showLoading(getMainActivity(), R.string.hint_pay_wait);
+
+            //延时3秒(这里延迟3s的原因是：前面的9000是本地的支付宝SDK告诉我们支付成功，但是不能完全依赖本地，
+            //       等待3秒(在这3到5s内，支付宝那边应该是返回数据给服务器了，否则的话，就是出什么问题了)，
+            //       等支付宝返回数据给我们的服务器，然后从服务器请求刷新支付状态)
+            //因为支付宝回调我们服务端可能有延迟
+            //用这个TextView的延时方法
+            tv_status.postDelayed(new Runnable() {
+                /**
+                 * 注意：这个是在主线程的
+                 */
+                @Override
+                public void run() {
+                    //检查支付状态
+                    checkPayStatus();
+                }
+            }, 3000);
+
+        } else {
+            //支付取消
+            //支付失败
+            ToastUtil.errorShortToast(R.string.error_pay_failed);
+        }
+    }
+
+    /**
+     * 检查支付状态
+     */
+    private void checkPayStatus() {
+        //隐藏加载对话框
+        LoadingUtil.hideLoading();
+
+        //请求订单详情
+        //因为走到这一步，是已经支付成功了的，所以刷新支付状态
+        fetchData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //取消注册
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }
