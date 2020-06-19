@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 订单模型
  */
-public class Order {
+public class Order extends BaseModel {
 
     public static final int WAIT_PAY = 0;//待支付
     public static final int PAYED = 10;//支付完成
@@ -42,6 +42,11 @@ public class Order {
      * 注意：这个不是常量，改成私有的就行
      */
     private int status;
+
+    /**
+     * 价格 (虽说返回的json里面是String类型，但是价格有小数，所以这里用double类型)
+     */
+    private double price;
     /**
      * 订单来源
      * 一般订单来源不会返回给客户端
@@ -154,4 +159,62 @@ public class Order {
     }
     //end辅助方法
 
+
+    //生成set get 方法时候，那些常量不需要生成
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getSource() {
+        return source;
+    }
+
+    public void setSource(int source) {
+        this.source = source;
+    }
+
+    public int getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(int origin) {
+        this.origin = origin;
+    }
+
+    public int getChannel() {
+        return channel;
+    }
+
+    public void setChannel(int channel) {
+        this.channel = channel;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
 }

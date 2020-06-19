@@ -8,6 +8,7 @@ import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Book;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.Feed;
+import com.ixuea.courses.mymusic.domain.Order;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -580,6 +581,15 @@ public class Api {
      */
     public Observable<DetailResponse<BaseModel>> createOrder(OrderParam data) {
         return service.createOrder(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 订单详情
+     */
+    public Observable<DetailResponse<Order>> orderDetail(String id) {
+        return service.orderDetail(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

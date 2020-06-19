@@ -181,6 +181,18 @@ public class TimeUtil {
         return yyyyMMddHHmm(dateTime);//转成2020-04-18-15:32这种形式
     }
 
+    /**
+     * 将DateTime(ISO8601字符串格式)转为yyyy-MM-dd HH:mm:ss
+     */
+    public static String yyyyMMddHHmmss(String data) {
+        //将字符串置为DataTime DateTime:是添加的依赖joda.time 里面的
+        //ISO8601这种表示方法: 例如： 2200-04-10T00:28:49.000Z
+        //将 2200-04-10T00:28:49.000Z这种格式的字符串 用DateTime（joda.time依赖库）对象来解析
+        DateTime dateTime = new DateTime(data);//传入进行一个解析
+        //格式化
+        return dateTime.toString("yyyy-MM-dd-HH:mm:ss");
+    }
+
     //辅助方法
 
     /**
@@ -234,6 +246,7 @@ public class TimeUtil {
     private static long toMonths(long date) {
         return toDays(date) / 30L;
     }
+
 
     //end 辅助方法
 }

@@ -5,6 +5,7 @@ import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Book;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.Feed;
+import com.ixuea.courses.mymusic.domain.Order;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -391,4 +392,12 @@ public interface Service {
      */
     @POST("v1/orders")
     Observable<DetailResponse<BaseModel>> createOrder(@Body OrderParam data);
+
+    /**
+     * 订单详情
+     *
+     * @param id 哪个订单id
+     */
+    @GET("v1/orders/{id}")
+    Observable<DetailResponse<Order>> orderDetail(@Path("id") String id);
 }
