@@ -34,7 +34,7 @@ import static com.ixuea.courses.mymusic.domain.Order.WECHAT;
 /**
  * 订单详情
  */
-public class OrderDetailActivity extends BaseTitleActivity {
+public class OrderDetailActivity extends BaseTitleActivity implements XRadioGroup.OnCheckedChangeListener {
     private static final String TAG = "OrderDetailActivity";
     /**
      * 订单状态
@@ -136,6 +136,14 @@ public class OrderDetailActivity extends BaseTitleActivity {
         //商品的id (商品详情那边传递过来的)
         id = extraId();
         fetchData();
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //设置支付方式改变监听器(单选按钮的监听)
+        rg_pay.setOnCheckedChangeListener(this);
     }
 
     private void fetchData() {
@@ -366,5 +374,32 @@ public class OrderDetailActivity extends BaseTitleActivity {
         //取消注册
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    /**
+     * 支付方式单选按钮改变了
+     *
+     * @param group
+     * @param checkedId
+     */
+    @Override
+    public void onCheckedChanged(XRadioGroup group, int checkedId) {
+        switch (checkedId) {
+            case R.id.rb_alipay:
+                //ALIPAY: 就是Order.ALIPAY
+                channel = ALIPAY;
+                break;
+            case R.id.rb_wechat:
+
+                //Order.WECHAT
+                channel = WECHAT;
+
+                //点击微信那个按钮后，赋值给了 channel （这个WECHAT这个值是跟服务器协商好的）
+                //然后当我们点击 支付按钮后，-->fetchPayData 中传给给PayParam中，通过post请求给服务器
+                //如果是微信的值，一起传递过去，那么就会提示支付渠道错误(因为服务器没有实现微信这个功能)
+                //注意：这个  (支付渠道错误) 在fetchPayData网络请求的时候，错误的话，
+                // 在里面的那个HttpObserver里面已经把这条message处理好，所以就通过ToastUtil显示了出来
+                break;
+        }
     }
 }
