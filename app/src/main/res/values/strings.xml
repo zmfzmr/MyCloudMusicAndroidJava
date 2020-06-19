@@ -270,5 +270,6 @@
     <string name="alipay">支付宝</string>
     <string name="wechat">微信</string>
     <string name="go_pay">立即支付</string>
+    <string name="error_pay_channel">支付渠道错误，请稍后再试!</string>
 
 </resources>

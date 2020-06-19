@@ -9,6 +9,8 @@ import com.ixuea.courses.mymusic.domain.Book;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.Feed;
 import com.ixuea.courses.mymusic.domain.Order;
+import com.ixuea.courses.mymusic.domain.Pay;
+import com.ixuea.courses.mymusic.domain.PayParam;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -590,6 +592,20 @@ public class Api {
      */
     public Observable<DetailResponse<Order>> orderDetail(String id) {
         return service.orderDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 订单支付
+     *
+     * @param id   订单id
+     * @param data PayParam(我们传递给服务器的参数)
+     *             <p>
+     *             而Pay：是支付宝那边返回的接收对象
+     */
+    public Observable<DetailResponse<Pay>> orderPay(String id, PayParam data) {
+        return service.orderPay(id, data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

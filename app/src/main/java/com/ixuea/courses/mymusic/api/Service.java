@@ -6,6 +6,8 @@ import com.ixuea.courses.mymusic.domain.Book;
 import com.ixuea.courses.mymusic.domain.Comment;
 import com.ixuea.courses.mymusic.domain.Feed;
 import com.ixuea.courses.mymusic.domain.Order;
+import com.ixuea.courses.mymusic.domain.Pay;
+import com.ixuea.courses.mymusic.domain.PayParam;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
@@ -400,4 +402,10 @@ public interface Service {
      */
     @GET("v1/orders/{id}")
     Observable<DetailResponse<Order>> orderDetail(@Path("id") String id);
+
+    /**
+     * 获取订单支付参数
+     */
+    @POST("v1/orders/{id}/pay")
+    Observable<DetailResponse<Pay>> orderPay(@Path("id") String id, @Body PayParam data);
 }

@@ -8,16 +8,22 @@ import android.widget.TextView;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Order;
+import com.ixuea.courses.mymusic.domain.Pay;
+import com.ixuea.courses.mymusic.domain.PayParam;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.PayUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.shihao.library.XRadioGroup;
+
+import static com.ixuea.courses.mymusic.domain.Order.ALIPAY;
+import static com.ixuea.courses.mymusic.domain.Order.WECHAT;
 
 /**
  * 订单详情
@@ -96,6 +102,10 @@ public class OrderDetailActivity extends BaseTitleActivity {
     TextView tv_price;
     private String id;
     private Order data;//订单详情对象
+    /**
+     * 支付渠道  默认是支付宝  Order.ALIPAY = 10
+     */
+    private int channel = ALIPAY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,6 +216,9 @@ public class OrderDetailActivity extends BaseTitleActivity {
 
     /**
      * 控制按钮点击了(立即购买按钮点击)
+     *
+     * 思路： 1.点击支付按钮，获取支付参数
+     *       2.判断渠道，调用不同支付方法
      */
     @OnClick(R.id.bt_control)
     public void onControlClick() {
@@ -213,7 +226,64 @@ public class OrderDetailActivity extends BaseTitleActivity {
 
         //支付宝支付
         //这个支付宝支付参数是真实的（是在PostMan 请求过来的）
-        processAlipay("app_id=2019013063161737&charset=UTF-8&sign_type=RSA2&version=1.0&timestamp=2020-06-19+17%3A48%3A10&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fdev-my-cloud-music-api-rails.ixuea.com%2Fv1%2Fcallbacks%2Falipay&biz_content=%7B%22out_trade_no%22%3A%22202006170402148050%22%2C%22product_code%22%3A%22FAST_INSTANT_TRADE_PAY%22%2C%22total_amount%22%3A%222.0%22%2C%22subject%22%3A%22202006170402148050%22%2C%22passback_params%22%3A92%7D&sign=XtaWZJnMc7e5I6OVAy2ufjOpbEI3zci9S57Er2YEeAifFLvsw00kR7Is47%2BG0auYPOEBli%2BXeAbYUOCzx293MB%2FGUEPF3FUxahW1%2BUoNWduyfaiFYBHp1NNc35XY%2Bocz1hE5%2F%2FRDsiCjzDJ0FEdXvf6u7ggkkGFDQROKQ4FmYBRvKO6grh0BUJEZxjeYarplTu14UrIJNePh9%2FfGQIU4j01hGH7C3uuKllQPHNvaw9bLJIcpCcB9kakTsOim2N9oGJbMys0HFvvGZ4z92Sgi5018zsvngKJTVF1ApZtpliInZb59U3em%2B34Wb7fQdS8EvWlbP608lEBsYgCvUSJMRQ%3D%3D");
+//        processAlipay("app_id=2019013063161737&charset=UTF-8&sign_type=RSA2&version=1.0&timestamp=2020-06-19+17%3A48%3A10&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fdev-my-cloud-music-api-rails.ixuea.com%2Fv1%2Fcallbacks%2Falipay&biz_content=%7B%22out_trade_no%22%3A%22202006170402148050%22%2C%22product_code%22%3A%22FAST_INSTANT_TRADE_PAY%22%2C%22total_amount%22%3A%222.0%22%2C%22subject%22%3A%22202006170402148050%22%2C%22passback_params%22%3A92%7D&sign=XtaWZJnMc7e5I6OVAy2ufjOpbEI3zci9S57Er2YEeAifFLvsw00kR7Is47%2BG0auYPOEBli%2BXeAbYUOCzx293MB%2FGUEPF3FUxahW1%2BUoNWduyfaiFYBHp1NNc35XY%2Bocz1hE5%2F%2FRDsiCjzDJ0FEdXvf6u7ggkkGFDQROKQ4FmYBRvKO6grh0BUJEZxjeYarplTu14UrIJNePh9%2FfGQIU4j01hGH7C3uuKllQPHNvaw9bLJIcpCcB9kakTsOim2N9oGJbMys0HFvvGZ4z92Sgi5018zsvngKJTVF1ApZtpliInZb59U3em%2B34Wb7fQdS8EvWlbP608lEBsYgCvUSJMRQ%3D%3D");
+
+        fetchPayData();
+    }
+
+    /**
+     * 获取支付参数
+     */
+    private void fetchPayData() {
+        //创建参数
+        PayParam data = new PayParam();
+        //设置支付渠道 这个渠道模式支付宝 ALIPAY    Order.ALIPAY = 10
+        data.setChannel(channel);
+
+        //请求支付参数
+        Api.getInstance()
+                //data: 是PayParam参数对象
+                .orderPay(id, data)
+                .subscribe(new HttpObserver<DetailResponse<Pay>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<Pay> data) {
+                        processPay(data.getData());
+                    }
+                });
+    }
+
+    /**
+     * 处理支付
+     *
+     * @param data 请求支付宝参数格式是这样子的   里面为： 渠道(10: 表示支付宝  支付参数为： pay: "123achangdf")
+     *             "data": {
+     *             channel = 10
+     *             pay = "123achangdf"
+     *             }
+     */
+    private void processPay(Pay data) {
+        //data: Pay对象
+        switch (data.getChannel()) {
+            case ALIPAY:
+                //支付宝支付 这个data.getPay()就是支付参数，根据这个支付参数可以调用支付宝接口支付
+                processAlipay(data.getPay());
+                break;
+            case WECHAT:
+                //微信支付 (可能微信那边，可能不能把所有参数拼接到一个字符串里面，我们处理下就行了)
+                processWechat(data.getPay());
+                break;
+            default:
+                ToastUtil.errorShortToast(R.string.error_pay_channel);
+                break;
+        }
+    }
+
+    /**
+     * TODO 处理微信支付
+     * 这微信支付还没有实现
+     */
+    private void processWechat(String data) {
+
     }
 
     /**
