@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.CodeActivity;
+import com.ixuea.courses.mymusic.activity.OrderActivity;
 import com.ixuea.courses.mymusic.activity.ScanActivity;
 import com.ixuea.courses.mymusic.activity.SettingActivity;
 import com.ixuea.courses.mymusic.activity.ShopActivity;
@@ -497,6 +498,16 @@ public class MainActivity extends BaseMusicPlayerActivity {
     @OnClick(R.id.ll_shop)
     public void onShopClick() {
         startActivity(ShopActivity.class);
+
+        cloneDrawer();
+    }
+
+    /**
+     * 我的订单点击
+     */
+    @OnClick(R.id.ll_order)
+    public void onOrderClick() {
+        startActivity(OrderActivity.class);
 
         cloneDrawer();
     }

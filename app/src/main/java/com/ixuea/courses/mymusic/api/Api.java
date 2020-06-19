@@ -588,6 +588,15 @@ public class Api {
     }
 
     /**
+     * 我的订单
+     */
+    public Observable<ListResponse<Order>> orders() {
+        return service.orders()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 订单详情
      */
     public Observable<DetailResponse<Order>> orderDetail(String id) {

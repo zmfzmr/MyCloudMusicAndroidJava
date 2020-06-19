@@ -396,6 +396,12 @@ public interface Service {
     Observable<DetailResponse<BaseModel>> createOrder(@Body OrderParam data);
 
     /**
+     * 订单列表
+     */
+    @GET("v1/orders")
+    Observable<ListResponse<Order>> orders();
+
+    /**
      * 订单详情
      *
      * @param id 哪个订单id
