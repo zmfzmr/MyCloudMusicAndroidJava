@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.facebook.stetho.Stetho;
+import com.fcfrt.netbua.FcfrtNetStatusBus;
 import com.ixuea.android.downloader.DownloadService;
 import com.ixuea.android.downloader.callback.DownloadManager;
 import com.ixuea.android.downloader.config.Config;
@@ -66,6 +67,10 @@ public class AppContext extends Application implements Application.ActivityLifec
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //尽可能早的进行这一步操作(这里放在最前面)
+        //建议在 Application 中完成初始化操作
+        FcfrtNetStatusBus.getInstance().init(this);
 
         context = this;
         //初始化toast工具类

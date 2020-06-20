@@ -18,6 +18,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.fcfrt.netbua.FcfrtNetStatusBus;
+import com.fcfrt.netbua.annotation.FcfrtNetSubscribe;
+import com.fcfrt.netbua.type.Mode;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.google.android.material.appbar.AppBarLayout;
@@ -156,6 +159,9 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         //而我们设置的是在Activity中，只要这个界面显示，那么就不息屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        //注册网络状态监听
+        FcfrtNetStatusBus.getInstance().register(this);
     }
 
     /**
@@ -170,6 +176,27 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
 
         //清除，只需要一个参数就可以了
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        //取消网络状态监听
+        FcfrtNetStatusBus.getInstance().unregister(this);
+    }
+
+    /**
+     * 当前移动网络连接可用时
+     * <p>
+     * 模式mode       Mode.MOBILE_CONNECT  移动网络连接可用  connect:连接
+     */
+    @FcfrtNetSubscribe(mode = Mode.MOBILE_CONNECT)
+    public void onMobileConnected() {
+        LogUtil.d(TAG, "onMobileConnected");
+    }
+
+    /**
+     * 当前WIFI网络连接 可用时
+     */
+    @FcfrtNetSubscribe(mode = Mode.WIFI_CONNECT)
+    public void onWiFiConnected() {
+        LogUtil.d(TAG, "onWiFiConnected");
     }
 
     @Override

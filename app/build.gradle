@@ -759,6 +759,12 @@ dependencies {
     //https://docs.open.alipay.com/204/105295/
     implementation(name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
 
+    //网络状态检测框架(这个框架是添加到jitpack里面的，
+    //               前面build项目更目录添加了这个jitpack配置信息，这里就不添加了)
+    //也可以自己实现
+    //https://github.com/fcfrt/FcfrtNetStatus
+    implementation 'com.github.fcfrt:FcfrtNetStatus:1.0.1'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
