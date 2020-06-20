@@ -21,6 +21,7 @@ public class PreferenceUtil {
     private static final String KEY_GLOBAL_LYRIC_LOCK = "KEY_GLOBAL_LYRIC_LOCK";//全局歌词锁定 key
     private static final String KEY_GLOBAL_LYRIC_VIEW_Y = "KEY_GLOBAL_LYRIC_VIEW_Y";//获取全局Y坐标 key
     private static final String KEY_LOCAL_MUSIC_SORT = "KEY_LOCAL_MUSIC_SORT";//本地音乐排序 key
+    private static final String KEY_MOBILE_PLAY = "KEY_MOBILE_PLAY";//移动网络播放音乐key
     private static PreferenceUtil instance;
     private final Context context;//上下文
     private final SharedPreferences preference;
@@ -224,6 +225,23 @@ public class PreferenceUtil {
      */
     public void setLocalMusicSortIndex(int data) {
         putInt(KEY_LOCAL_MUSIC_SORT, data);
+    }
+
+    /**
+     * 是否在移动网络播放
+     * 这里默认值是开着
+     * <p>
+     * 注意： 这里用的是is，而不是get；  有些命名规范就是这样
+     */
+    public boolean isMobilePay() {
+        return getBoolean(KEY_MOBILE_PLAY, true);
+    }
+
+    /**
+     * 设置移动网络播放
+     */
+    public void setMobile(boolean data) {
+        putBoolean(KEY_MOBILE_PLAY, data);
     }
 
     //辅助方法 （就是添加 删除等之类的）
