@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.ixuea.courses.mymusic.AppContext;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.fragment.ConfirmDialogFragment;
 
 import butterknife.OnClick;
 
@@ -23,7 +24,10 @@ public class SettingActivity extends BaseTitleActivity {
      */
     @OnClick(R.id.bt_logout)
     public void onLogoutClick() {
-        //退出
-        AppContext.getInstance().logout();
+
+        ConfirmDialogFragment.show(getSupportFragmentManager(), (dialog, which) -> {
+            //退出
+            AppContext.getInstance().logout();
+        });
     }
 }
