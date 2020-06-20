@@ -1,12 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_middle"
+    android:gravity="right">
+    <!-- 状态-->
     <TextView
-        android:text="这是订单"
+        android:id="@+id/tv_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/light_grey"
+        tools:text="@string/order_status_value" />
+
+    <!-- 订单编号-->
+    <TextView
+        android:id="@+id/tv_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_middle"
+        android:textColor="@color/light_grey"
+        tools:text="@string/order_number_value" />
+
+    <!-- 商品信息容器-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_middle"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <!-- 封面-->
+        <ImageView
+            android:id="@+id/iv_banner"
+            android:layout_width="140dp"
+            android:layout_height="85dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder" />
+
+        <!-- 标题-->
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_middle"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题"
+            android:textColor="@color/text"
+            android:textSize="@dimen/text_large" />
+
+    </LinearLayout>
+
+    <!-- 价格   外面容器设置了android:gravity="right"  所以就是在右边的-->
+    <TextView
+        android:id="@+id/tv_price"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_middle"
+        android:text="@string/price"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_large" />
+
 
 </LinearLayout>

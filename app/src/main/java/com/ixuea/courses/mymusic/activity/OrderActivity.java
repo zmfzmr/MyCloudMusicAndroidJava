@@ -56,6 +56,21 @@ public class OrderActivity extends BaseTitleActivity {
         fetchData();
     }
 
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //设置item点击事件
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            Order data = (Order) adapter.getItem(position);
+
+            //跳转到订单详情界面(注意： 在商品详情界面中 购买后也是跳转到订单详情界面)
+            //注意：这个是Order订单的id，进入到OrderDetailActivty后，根据这个订单id 请求数据;
+            //     如果这个订单已支付，则隐藏部分控件；否则就显示
+            startActivityExtraId(OrderDetailActivity.class, data.getId());
+        });
+    }
+
     private void fetchData() {
         Api.getInstance()
                 .orders()
