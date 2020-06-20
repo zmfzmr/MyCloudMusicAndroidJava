@@ -5,10 +5,15 @@ import android.os.Bundle;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.OrderAdapter;
 import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.OnPaySuccessEvent;
 import com.ixuea.courses.mymusic.domain.Order;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.LogUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -48,6 +53,8 @@ public class OrderActivity extends BaseTitleActivity {
     @Override
     protected void initDatum() {
         super.initDatum();
+        //注册
+        EventBus.getDefault().register(this);
 
         //创建适配器
         adapter = new OrderAdapter(R.layout.item_order);
@@ -83,5 +90,20 @@ public class OrderActivity extends BaseTitleActivity {
                         adapter.replaceData(data.getData());
                     }
                 });
+    }
+
+    /**
+     * 支付成功了通知
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPaySuccessEvent(OnPaySuccessEvent event) {
+        fetchData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //取消注册
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

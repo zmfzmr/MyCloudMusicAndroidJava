@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.OnPaySuccessEvent;
 import com.ixuea.courses.mymusic.domain.Order;
 import com.ixuea.courses.mymusic.domain.Pay;
 import com.ixuea.courses.mymusic.domain.PayParam;
@@ -112,6 +113,7 @@ public class OrderDetailActivity extends BaseTitleActivity implements XRadioGrou
      * 支付渠道  默认是支付宝  Order.ALIPAY = 10
      */
     private int channel = ALIPAY;
+    private boolean isNotifyPayStatus;//是否通知支付状态
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,6 +221,21 @@ public class OrderDetailActivity extends BaseTitleActivity implements XRadioGrou
 
                 //隐藏支付控制容器
                 control_container.setVisibility(View.GONE);
+
+                //订单是支付成功状态 并且这个为true(默认为false，支付成功后会置为true)
+
+                //这里为什么要这样写呢？
+                //第一次进入订单详情界面,会调用initeDatum初始化网络数据，如果不判断的话，
+                // 如果是订单状态是已支付的状态，那么就会重复发送事件
+                // 而这个if什么时候执行你，支付成功过后，把这个isNotifyPayStatus置为true;
+                // 当刷新订单状态的时候，这个if就会执行了
+                if (data.getStatus() == Order.PAYED && isNotifyPayStatus) {
+                    //发送支付成功通知
+                    EventBus.getDefault().post(new OnPaySuccessEvent());
+
+                    //支付成功后，就置为false，防止重复发送通知
+                    isNotifyPayStatus = false;
+                }
 
                 break;
             default:
@@ -361,6 +378,9 @@ public class OrderDetailActivity extends BaseTitleActivity implements XRadioGrou
      * 检查支付状态
      */
     private void checkPayStatus() {
+        //通知支付结果
+        isNotifyPayStatus = true;
+
         //隐藏加载对话框
         LoadingUtil.hideLoading();
 
