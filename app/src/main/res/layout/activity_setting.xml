@@ -8,19 +8,381 @@
 
     <!--标题控件-->
     <include layout="@layout/tool_bar" />
-    <!--内容布局-->
-    <LinearLayout
+
+    <!--滚动容器  注意：ScrollView  只能有一个直接子布局-->
+    <ScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-        <!--退出按钮-->
-        <Button
-            android:id="@+id/bt_logout"
+        <!--内容布局-->
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/logout" />
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+            <!--分割线-->
+            <include layout="@layout/divider_meddle" />
+
+            <!--标题-->
+            <TextView
+                style="@style/ItemTopTitle"
+                android:text="@string/network" />
+            <!--1 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="@string/play_mobile_network" />
+
+                    <!--描述  summary: 描述或者概述-->
+                    <TextView
+                        style="@style/ItemSummary"
+                        android:text="@string/play_mobile_network_summary" />
+
+
+                </LinearLayout>
+
+                <!--开关  mobile: 移动  paly播放-->
+                <Switch
+                    android:id="@+id/st_play_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--2 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="@string/play_mobile_network" />
+
+                    <!--描述  summary: 描述或者概述-->
+                    <TextView
+                        style="@style/ItemSummary"
+                        android:text="@string/play_mobile_network_summary" />
+
+
+                </LinearLayout>
+
+                <!--开关  mobile: 移动  paly播放-->
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!--3 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="@string/play_mobile_network" />
+
+                </LinearLayout>
+
+                <!--开关  mobile: 移动  paly播放-->
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--4 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="@string/play_mobile_network" />
+
+                </LinearLayout>
+
+                <!--开关  mobile: 移动  paly播放-->
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_meddle" />
+
+            <!--标题-->
+            <TextView
+                style="@style/ItemTopTitle"
+                android:text="@string/network" />
+
+            <!--21 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="鲸鱼音效" />
+                </LinearLayout>
+
+                <!--开关  mobile: 移动  paly播放-->
+                <TextView
+                    style="@style/ItemMore"
+                    android:text="自动" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+
+            <!--22 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="鲸鱼音效" />
+                </LinearLayout>
+
+                <!--开关  mobile: 移动  paly播放-->
+                <TextView
+                    style="@style/ItemMore"
+                    android:text="自动" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--23 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="鲸鱼音效" />
+                </LinearLayout>
+
+                <!--开关  mobile: 移动  paly播放-->
+                <TextView
+                    style="@style/ItemMore"
+                    android:text="自动" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--24 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="鲸鱼音效" />
+                </LinearLayout>
+
+                <!--开关  mobile: 移动  paly播放-->
+                <TextView
+                    style="@style/ItemMore"
+                    android:text="自动" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--25 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="鲸鱼音效" />
+                </LinearLayout>
+
+                <!--开关  mobile: 移动  paly播放-->
+                <TextView
+                    style="@style/ItemMore"
+                    android:text="自动" />
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_meddle" />
+
+            <!--标题-->
+            <TextView
+                style="@style/ItemTopTitle"
+                android:text="播放和下载" />
+
+            <!--31 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="桌面歌词" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--32 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="桌面歌词" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--33 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="桌面歌词" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--34 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="桌面歌词" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--35 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="桌面歌词" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_meddle" />
+
+            <!--标题-->
+            <TextView
+                style="@style/ItemTopTitle"
+                android:text="关于" />
+
+            <!--41 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="帮助与反馈" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--42 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="@string/about_music" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_small" />
+
+            <!--43 容器  height = 50 -->
+            <LinearLayout style="@style/ItemContainer">
+
+                <!--容器-->
+                <LinearLayout style="@style/ItemLeftContainer">
+                    <!--标题-->
+                    <TextView
+                        style="@style/ItemTitle"
+                        android:text="@string/about_code_music" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--分割线-->
+            <include layout="@layout/divider_meddle" />
+
+            <!--退出按钮-->
+            <Button
+                android:id="@+id/bt_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/logout" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

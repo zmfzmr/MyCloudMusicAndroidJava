@@ -273,5 +273,10 @@
     <string name="error_pay_channel">支付渠道错误，请稍后再试!</string>
     <string name="hint_pay_wait">支付确认中，请稍后!</string>
     <string name="error_pay_failed">支付失败,请稍后再试!</string>
+    <string name="network">网络</string>
+    <string name="play_mobile_network">使用移动网络播放</string>
+    <string name="play_mobile_network_summary">这是更多描述</string>
+    <string name="about_music">关于我的云音乐(可视化布局)</string>
+    <string name="about_code_music">关于我的云音乐(代码布局)</string>
 
 </resources>

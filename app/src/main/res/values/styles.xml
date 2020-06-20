@@ -112,4 +112,45 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <!--设置界面左侧容器-->
+    <style name="ItemLeftContainer">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--Item标题-->
+    <style name="ItemTitle">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--设置Item描述-->
+    <style name="ItemSummary">
+        <item name="android:layout_marginTop">@dimen/padding_small</item>
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--设置Item层级标题-->
+    <style name="ItemTopTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/padding_middle</item>
+        <item name="android:paddingLeft">@dimen/padding_large</item>
+        <item name="android:paddingRight">@dimen/padding_large</item>
+        <item name="android:textColor">@color/light_grey</item>
+        <item name="android:background">@color/white</item>
+
+    </style>
+
+    <!--设置Item更多文本-->
+    <style name="ItemMore">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/light_grey</item>
+    </style>
+
 </resources>
