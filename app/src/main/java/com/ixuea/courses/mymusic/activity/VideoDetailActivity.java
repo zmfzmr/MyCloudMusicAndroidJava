@@ -21,6 +21,8 @@ import android.widget.VideoView;
 import com.fcfrt.netbua.FcfrtNetStatusBus;
 import com.fcfrt.netbua.annotation.FcfrtNetSubscribe;
 import com.fcfrt.netbua.type.Mode;
+import com.fcfrt.netbua.type.NetType;
+import com.fcfrt.netbua.utils.FcfrtNetworkUtils;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.google.android.material.appbar.AppBarLayout;
@@ -37,6 +39,7 @@ import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ResourceUtil;
 import com.ixuea.courses.mymusic.util.ScreenUtil;
 import com.ixuea.courses.mymusic.util.TimeUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -139,6 +142,7 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
     private TextView tv_nickname;//昵称
     private int duration;//视频总时长
     private boolean isCompletetion;//是否播放完毕了
+    private boolean isResume;//切换WIFI 是否自动播放
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,10 +189,34 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
      * 当前移动网络连接可用时
      * <p>
      * 模式mode       Mode.MOBILE_CONNECT  移动网络连接可用  connect:连接
+     *
+     * 思路： 切换移动网络后，暂停播放； 如要开启播放，获取设置界面的sp偏好设置值
      */
     @FcfrtNetSubscribe(mode = Mode.MOBILE_CONNECT)
     public void onMobileConnected() {
-        LogUtil.d(TAG, "onMobileConnected");
+        LogUtil.d(TAG, "net onMobileConnected");
+
+        if (!isPlaying()) {
+            //不是播放(也就是已经暂停或者没有播放；所以就没必要调用下面到的暂停方法了，多此一举)
+            return;
+        }
+
+        if (sp.isMobilePay()) {
+            //设置开启了移动网络播放，所以就不暂停播放了（就是开启了移动网络播放，就不走下面的暂停方法）
+            return;
+        }
+
+        //因为onMobileConnected 方法的调用是在子线程，所以要切换到主线程
+        vv.post(new Runnable() {
+            @Override
+            public void run() {
+                //切换WIFI 自动播放(也就是移动网络暂停了，下次切换WIFI后，可以自动播放)
+                //取消WIFI 切换到移动后；当我们打开WIFI后，希望它能自动播放，所以把整个变量置为true
+                isResume = true;
+
+                pause();
+            }
+        });
     }
 
     /**
@@ -196,7 +224,25 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
      */
     @FcfrtNetSubscribe(mode = Mode.WIFI_CONNECT)
     public void onWiFiConnected() {
-        LogUtil.d(TAG, "onWiFiConnected");
+        LogUtil.d(TAG, "net onWiFiConnected");
+
+        if (isResume && !isPlaying()) {
+
+            //注意： 这里要条件满足才切换到主线程; 防止条件还没有满足就切换主线程
+
+            //因为onWiFiConnected 方法的调用是在子线程，所以要切换到主线程
+            vv.post(new Runnable() {
+                @Override
+                public void run() {
+                    //自动播放为true，并且没有在播放; 那么就继续播放
+                    resume();
+
+                    //记得置为false(否则一切WIFI 就会调用resume)
+                    isResume = false;
+                }
+            });
+        }
+
     }
 
     @Override
@@ -309,8 +355,11 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         //但是这里需要一个uri对象，所以需要解析成uri对象才可以的
         vv.setVideoURI(Uri.parse(ResourceUtil.resourceUri(data.getUri())));
 
-        //开始播放(记得开始播放)
-        vv.start();
+//        //开始播放(记得开始播放)
+//        vv.start();
+
+        //这里换成resume()播放
+        resume();
 
         //标题(setTitle: 是Activity里面的方法，设置标题栏标题)
         setTitle(data.getTitle());//Toolbar 标题
@@ -510,6 +559,19 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
      * 继续播放(继续播放是 是一个暂停的图标)
      */
     private void resume() {
+
+        //注意：这里获取网络类型是 FcfrtNetworkUtils
+        NetType netType = FcfrtNetworkUtils.getNetType();
+        if (netType == NetType.MOBILE) {
+            if (!sp.isMobilePay()) {
+                //移动网络下，如果没有开启移动网络，就弹出提示让用户去设置
+                ToastUtil.errorShortToast(R.string.hint_network_play_disable);
+                //注意：因为没有设置中开启移动网络开关，所以无法播放(调用return中断下面的vv.start()终止操作)
+                return;
+            }
+        }
+        //否则(这个else不用写，那么移动网络下设置中开启WIFI开关和WIFi下,都会调用下面的方法来播放)
+
         vv.start();
 
         //显示暂停状态

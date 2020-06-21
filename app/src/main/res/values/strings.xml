@@ -278,5 +278,6 @@
     <string name="play_mobile_network_summary">这是更多描述</string>
     <string name="about_music">关于我的云音乐(可视化布局)</string>
     <string name="about_code_music">关于我的云音乐(代码布局)</string>
+    <string name="hint_network_play_disable">已经禁用移动网络，可在设置界面打开!</string>
 
 </resources>
