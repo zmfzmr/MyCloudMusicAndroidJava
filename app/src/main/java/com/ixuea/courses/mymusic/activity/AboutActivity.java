@@ -46,11 +46,13 @@ public class AboutActivity extends BaseTitleActivity {
     }
 
     /**
-     * 版本点击
+     * 关于点击
      */
     @OnClick(R.id.about_container)
     public void onAboutClick() {
         LogUtil.d(TAG, "onAboutClick");
+
+        WebViewActivity.start(getMainActivity(), "关于爱学啊", "http://www.ixuea.com");
     }
 
 }
