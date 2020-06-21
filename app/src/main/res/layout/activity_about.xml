@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AboutActivity">
+
+    <include layout="@layout/tool_bar" />
+
+    <!--内容布局  背景为分割线颜色-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/divider_color"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!--logo-->
+        <ImageView
+            android:layout_width="@dimen/avatar_width"
+            android:layout_height="@dimen/avatar_width"
+            android:layout_marginTop="@dimen/button_height"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher" />
+
+        <!--1 版本容器-->
+        <LinearLayout
+            android:id="@+id/version_container"
+            style="@style/ItemContainer"
+            android:layout_marginTop="@dimen/button_height"
+            android:background="@color/white">
+
+            <!--容器-->
+
+            <LinearLayout style="@style/ItemLeftContainer">
+
+                <!--标题-->
+                <TextView
+                    style="@style/ItemTitle"
+                    android:text="@string/current_version" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_version"
+                style="@style/ItemMore"
+                tools:text="@string/version_value" />
+
+        </LinearLayout>
+
+        <!--2 我云音乐新手指南容器   距离顶部10（因为外容器背景会是灰色 看起来就有分割线的效果了）-->
+        <LinearLayout
+            style="@style/ItemContainer"
+            android:layout_marginTop="@dimen/padding_middle"
+            android:background="@color/white">
+
+            <!--容器-->
+            <LinearLayout style="@style/ItemLeftContainer">
+
+                <!--标题-->
+                <TextView
+                    style="@style/ItemTitle"
+                    android:text="@string/my_cloud_music" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_arrow_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <!--3 关于爱学啊容器 距离顶部10（因为外容器背景会是灰色 看起来就有分割线的效果了）-->
+        <LinearLayout
+            android:id="@+id/about_container"
+            style="@style/ItemContainer"
+            android:layout_marginTop="@dimen/divider_small"
+            android:background="@color/white">
+
+            <!--容器-->
+            <LinearLayout style="@style/ItemLeftContainer">
+
+                <!--标题-->
+                <TextView
+                    style="@style/ItemTitle"
+                    android:text="@string/about_ixuea" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_arrow_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -37,6 +37,14 @@ public class SettingActivity extends BaseTitleActivity {
     }
 
     /**
+     * 关于我的云音乐(可视化布局 点击
+     */
+    @OnClick(R.id.ll_about)
+    public void onAboutClick() {
+        startActivity(AboutActivity.class);
+    }
+
+    /**
      * 移动网络播放开关状态更改了回调
      *
      * @param view      表示switch这个控件(这个控件继承自CompoundButton)

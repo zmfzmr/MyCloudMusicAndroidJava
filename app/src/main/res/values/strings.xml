@@ -279,5 +279,9 @@
     <string name="about_music">关于我的云音乐(可视化布局)</string>
     <string name="about_code_music">关于我的云音乐(代码布局)</string>
     <string name="hint_network_play_disable">已经禁用移动网络，可在设置界面打开!</string>
+    <string name="current_version">当前版本</string>
+    <string name="version_value">V%1$s.%2$d</string>
+    <string name="my_cloud_music">我的云音乐新手指南</string>
+    <string name="about_ixuea">关于爱学啊</string>
 
 </resources>

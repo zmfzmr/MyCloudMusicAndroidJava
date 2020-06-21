@@ -40,6 +40,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="theme">
         <activity
+            android:name=".activity.AboutActivity"
+            android:label="@string/about_music" />
+        <activity
             android:name=".activity.OrderActivity"
             android:label="@string/my_order" />
         <activity
