@@ -62,7 +62,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/ItemTitle"
-                    android:text="@string/my_cloud_music" />
+                    android:text="@string/my_cloud_music_guide" />
 
             </LinearLayout>
 

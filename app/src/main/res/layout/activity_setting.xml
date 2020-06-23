@@ -359,7 +359,9 @@
             <include layout="@layout/divider_small" />
 
             <!--43 容器  height = 50 -->
-            <LinearLayout style="@style/ItemContainer">
+            <LinearLayout
+                style="@style/ItemContainer"
+                android:id="@+id/ll_about_code">
 
                 <!--容器-->
                 <LinearLayout style="@style/ItemLeftContainer">
