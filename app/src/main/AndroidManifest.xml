@@ -40,6 +40,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="theme">
         <activity
+            android:name=".activity.SearchActivity"
+            android:label="@string/search" />
+        <activity
             android:name=".activity.AboutCodeActivity"
             android:label="@string/about_code_music" />
         <activity

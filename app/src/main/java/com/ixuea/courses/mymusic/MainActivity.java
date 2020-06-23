@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +17,7 @@ import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.CodeActivity;
 import com.ixuea.courses.mymusic.activity.OrderActivity;
 import com.ixuea.courses.mymusic.activity.ScanActivity;
+import com.ixuea.courses.mymusic.activity.SearchActivity;
 import com.ixuea.courses.mymusic.activity.SettingActivity;
 import com.ixuea.courses.mymusic.activity.ShopActivity;
 import com.ixuea.courses.mymusic.activity.UserActivity;
@@ -527,5 +530,34 @@ public class MainActivity extends BaseMusicPlayerActivity {
     private void cloneDrawer() {
         //START 就是我们显示抽屉的方向
         dl.closeDrawer(GravityCompat.START);
+    }
+
+    /**
+     * 返回菜单
+     *
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //加载菜单
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    /**
+     * 菜单点击了
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            //搜索点击了
+            startActivity(SearchActivity.class);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
