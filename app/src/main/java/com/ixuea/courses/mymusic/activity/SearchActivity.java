@@ -3,11 +3,17 @@ package com.ixuea.courses.mymusic.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.ViewUtil;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+import butterknife.BindView;
 
 /**
  * 搜索界面
@@ -15,13 +21,45 @@ import androidx.appcompat.widget.SearchView;
 public class SearchActivity extends BaseTitleActivity {
 
     private static final String TAG = "SearchActivity";
-    private SearchView searchView;//搜索控件
     private String query;//当前搜索内容(可以是关键字或者其他)
+    /**
+     * 列表控件
+     */
+    @BindView(R.id.rv)
+    RecyclerView rv;
+
+    /**
+     * 搜索结果 容器
+     */
+    @BindView(R.id.search_result_container)
+    View search_result_container;
+    /**
+     * 指示器
+     */
+    @BindView(R.id.tl)
+    TabLayout tl;
+    /**
+     * 搜索结果左右滚动控件
+     */
+    @BindView(R.id.vp)
+    ViewPager vp;
+
+    /**
+     * 搜索控件
+     */
+    private SearchView searchView;//搜索控件
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        //初始化RecyclerView
+        ViewUtil.initVerticalLinearRecyclerView(getMainActivity(), rv);
     }
 
     @Override

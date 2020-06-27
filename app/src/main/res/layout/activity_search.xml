@@ -1,10 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.SearchActivity">
 
     <include layout="@layout/tool_bar" />
+
+    <!--内容布局-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!--列表控件
+            显示历史搜索
+            搜索历史-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+        <!--搜索结果容器-->
+        <LinearLayout
+            android:id="@+id/search_result_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--指示器容器-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary">
+                <!--Android官方提供的指示器
+                  tabTextColor:文本默认颜色
+                  tabSelectedTextColor:选中颜色
+                  tabIndicatorColor:下划线颜色
+
+                  layout_marginBottom的目的是：距离底部的线原点，好看点
+
+                  app:tabMode="scrollable"  scrollable: 表示：标题显示不下，那么可以左右滑动显示
+                  -->
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height_small"
+                    android:layout_marginBottom="@dimen/padding_middle"
+                    app:tabIndicatorColor="@color/white"
+                    app:tabMode="scrollable"
+                    app:tabSelectedTextColor="@color/white"
+                    app:tabTextColor="@color/tab_normal" />
+
+            </LinearLayout>
+
+            <!--搜索结果滚动控件-->
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/vp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

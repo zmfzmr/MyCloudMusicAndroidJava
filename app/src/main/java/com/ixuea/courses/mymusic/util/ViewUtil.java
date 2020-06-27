@@ -1,10 +1,15 @@
 package com.ixuea.courses.mymusic.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * View 相关的工具类方法
@@ -45,5 +50,23 @@ public class ViewUtil {
         //绘制view内容(路线是：背景绘制到Canvas->最终绘制到Bitmap上->View上（view绘制到Canvas画布上），注意：这里返回的是Bitmap对象)
         view.draw(canvas);
         return bitmap;
+    }
+
+    /**
+     * 初始化垂直方向 LinearLayoutManager RecyclerView
+     * 有效的分割线
+     *
+     * @param rv RecyclerView
+     */
+    public static void initVerticalLinearRecyclerView(Context context, RecyclerView rv) {
+        //固定尺寸
+        rv.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        rv.setLayoutManager(layoutManager);
+        //分割线
+        DividerItemDecoration decoration = new DividerItemDecoration(context,
+                DividerItemDecoration.VERTICAL);
+        rv.addItemDecoration(decoration);
     }
 }
