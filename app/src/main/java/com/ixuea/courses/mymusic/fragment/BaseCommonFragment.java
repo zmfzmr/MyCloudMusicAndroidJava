@@ -108,6 +108,15 @@ public abstract class BaseCommonFragment extends BaseFragment {
     }
 
     /**
+     * 获取int值 (比如style 等所有int值都可以通过这个来获取)
+     * <p>
+     * extraInt(String key) 和 extraId() 区别：前者需要传递key，后者不用
+     */
+    protected int extraInt(String key) {
+        return getArguments().getInt(key, -1);
+    }
+
+    /**
      * 获取字符串
      *
      * @param key Key

@@ -7,8 +7,14 @@ import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.SearchResultAdapter;
+import com.ixuea.courses.mymusic.domain.event.OnSearchEvent;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ViewUtil;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +24,7 @@ import butterknife.BindView;
 /**
  * 搜索界面
  */
-public class SearchActivity extends BaseTitleActivity {
+public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPageChangeListener {
 
     private static final String TAG = "SearchActivity";
     private String query;//当前搜索内容(可以是关键字或者其他)
@@ -48,6 +54,8 @@ public class SearchActivity extends BaseTitleActivity {
      * 搜索控件
      */
     private SearchView searchView;//搜索控件
+    private SearchResultAdapter searchResultAdapter;//搜索结果适配器
+    private int selectedIndex;//当前显示的搜索结果界面索引
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,43 @@ public class SearchActivity extends BaseTitleActivity {
         super.initView();
         //初始化RecyclerView
         ViewUtil.initVerticalLinearRecyclerView(getMainActivity(), rv);
+    }
+
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        //创建适配器
+        searchResultAdapter = new SearchResultAdapter(getMainActivity(), getSupportFragmentManager());
+
+        //设置搜索结果适配器
+        vp.setAdapter(searchResultAdapter);
+
+        //创建占位数据
+        //当然也可以在SearchResultAdapter中的getCount返回数量3或者其他数量，可以不用写这些占位数据了
+        //当然我们这里还是写一下
+        ArrayList<Integer> datum = new ArrayList<>();
+        datum.add(0);
+        datum.add(1);
+        datum.add(2);
+        datum.add(3);
+        datum.add(4);
+        datum.add(5);
+        datum.add(6);
+
+        //设置数据
+        searchResultAdapter.setDatum(datum);
+
+        //让指示器和ViewPager配合工作
+        tl.setupWithViewPager(vp);
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        //设置搜索结果滚动界面监听器
+        vp.setOnPageChangeListener(this);
+
     }
 
     @Override
@@ -117,11 +162,46 @@ public class SearchActivity extends BaseTitleActivity {
     /**
      * 执行搜索
      *
-     * @param query
+     * @param data 搜索关键字
      */
-    private void performSearch(String query) {
-        this.query = query;
+    private void performSearch(String data) {
+        this.query = data;
 
         LogUtil.d(TAG, "performSearch");
+
+        //发布搜索Key  query:搜索关键字  selectedIndex：滚动tab标签后保存的索引(成员变量，默认为0)
+        EventBus.getDefault().post(new OnSearchEvent(query, selectedIndex));
     }
+
+    //ViewPager监听器
+
+    /**
+     * 滚动中
+     */
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    /**
+     * 滚动完成了
+     */
+    @Override
+    public void onPageSelected(int position) {
+        //保存索引
+        selectedIndex = position;
+
+        //执行搜索(这里第一次搜搜的时候保存的query(搜索文字)，
+        // 这里滚动到另一个tab标签后，这个query是上一次搜索的那个query)
+        performSearch(query);
+    }
+
+    /**
+     * 滚动状态改变了
+     */
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+    //end ViewPager监听器
 }
