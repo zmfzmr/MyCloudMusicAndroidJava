@@ -12,6 +12,7 @@ import com.ixuea.courses.mymusic.domain.event.OnSearchEvent;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ViewUtil;
 
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -166,6 +167,11 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
      */
     private void performSearch(String data) {
         this.query = data;
+
+        if (StringUtils.isEmpty(data)) {
+            //没有数据直接返回
+            return;
+        }
 
         LogUtil.d(TAG, "performSearch");
 

@@ -632,6 +632,18 @@ public class Api {
     }
 
     /**
+     * 搜索用户
+     *
+     * @param data
+     * @return
+     */
+    public Observable<ListResponse<User>> searchUsers(String data) {
+        return service.searchUsers(getSearchParams(data))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 获取查询参数
      *
      * @param data
@@ -644,4 +656,5 @@ public class Api {
         datum.put(Constant.QUERY, data);
         return datum;
     }
+
 }

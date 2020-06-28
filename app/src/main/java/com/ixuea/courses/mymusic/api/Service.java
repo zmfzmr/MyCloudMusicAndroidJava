@@ -423,4 +423,10 @@ public interface Service {
      */
     @GET("v1/searches/sheets")
     Observable<ListResponse<Sheet>> searchSheets(@QueryMap Map<String, String> data);
+
+    /**
+     * 搜索用户
+     */
+    @GET("v1/searches/users")
+    Observable<ListResponse<User>> searchUsers(@QueryMap Map<String, String> data);
 }
