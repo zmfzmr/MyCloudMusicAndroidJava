@@ -306,4 +306,9 @@ public class Constant {
      * ENDPOINT:  http://dev-my-cloud-music-api-rails.ixuea.com
      */
     public static final String QRCODE_URL = String.format("%s/v1/monitors/version?u=", ENDPOINT);
+    /**
+     * 搜索接口查询关键字key （query = 123 中的  key：query）
+     * 这个key是和服务器协商好，不能随便更改
+     */
+    public static final String QUERY = "query";
 }

@@ -414,4 +414,13 @@ public interface Service {
      */
     @POST("v1/orders/{id}/pay")
     Observable<DetailResponse<Pay>> orderPay(@Path("id") String id, @Body PayParam data);
+
+    /**
+     * 搜索歌单
+     *
+     * @param data
+     * @return
+     */
+    @GET("v1/searches/sheets")
+    Observable<ListResponse<Sheet>> searchSheets(@QueryMap Map<String, String> data);
 }

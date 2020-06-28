@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.event.OnSearchEvent;
 import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.ViewUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 
 /**
  * 通过搜索fragment逻辑
@@ -19,8 +23,20 @@ import org.greenrobot.eventbus.ThreadMode;
  * abstract：表示不能创建实例，必须继承我写其他逻辑
  */
 public abstract class BaseSearchFragment extends BaseCommonFragment {
+    /**
+     * 列表控件
+     */
+    @BindView(R.id.rv)
+    RecyclerView rv;
 
     private int index;//当前界面索引
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+        //初始化列表控件
+        ViewUtil.initVerticalLinearRecyclerView(getMainActivity(), rv);
+    }
 
     @Override
     protected void initDatum() {

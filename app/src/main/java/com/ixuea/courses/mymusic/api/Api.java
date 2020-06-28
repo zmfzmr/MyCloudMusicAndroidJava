@@ -619,4 +619,29 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 搜索歌单
+     *
+     * @param data
+     * @return
+     */
+    public Observable<ListResponse<Sheet>> searchSheets(String data) {
+        return service.searchSheets(getSearchParams(data))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 获取查询参数
+     *
+     * @param data
+     * @return
+     */
+    private Map<String, String> getSearchParams(String data) {
+        HashMap<String, String> datum = new HashMap<>();
+
+        //添加查询参数
+        datum.put(Constant.QUERY, data);
+        return datum;
+    }
 }
