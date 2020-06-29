@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.SearchHistoryAdapter;
 import com.ixuea.courses.mymusic.adapter.SearchResultAdapter;
 import com.ixuea.courses.mymusic.domain.SearchHistory;
 import com.ixuea.courses.mymusic.domain.event.OnSearchEvent;
@@ -61,6 +62,7 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
     private SearchResultAdapter searchResultAdapter;//搜索结果适配器
     private int selectedIndex;//当前显示的搜索结果界面索引
     private LiteORMUtil orm;//数据库框架工具类
+    private SearchHistoryAdapter searchHistoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +107,11 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
 
         //让指示器和ViewPager配合工作
         tl.setupWithViewPager(vp);
+
+        //创建搜索历史适配器
+        searchHistoryAdapter = new SearchHistoryAdapter(R.layout.item_search_history);
+        //设置搜索历史适配器
+        rv.setAdapter(searchHistoryAdapter);
 
         //已进入界面，也要获取一次搜索历史
         fetchSearchHistoryData();
@@ -211,8 +218,8 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
         List<SearchHistory> datum = orm.querySearchHistory();
 
         LogUtil.d(TAG, "fetchSearchHistoryData: " + datum.size());
-        //TODO 设置到适配器
-
+        //设置到适配器
+        searchHistoryAdapter.replaceData(datum);
     }
 
     //ViewPager监听器
