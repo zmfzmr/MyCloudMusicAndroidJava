@@ -8,7 +8,9 @@ import android.view.View;
 import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SearchResultAdapter;
+import com.ixuea.courses.mymusic.domain.SearchHistory;
 import com.ixuea.courses.mymusic.domain.event.OnSearchEvent;
+import com.ixuea.courses.mymusic.util.LiteORMUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ViewUtil;
 
@@ -16,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,6 +60,7 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
     private SearchView searchView;//搜索控件
     private SearchResultAdapter searchResultAdapter;//搜索结果适配器
     private int selectedIndex;//当前显示的搜索结果界面索引
+    private LiteORMUtil orm;//数据库框架工具类
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,9 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
     @Override
     protected void initDatum() {
         super.initDatum();
+
+        //初始化数据库
+        orm = LiteORMUtil.getInstance(getApplicationContext());
 
         //创建适配器
         searchResultAdapter = new SearchResultAdapter(getMainActivity(), getSupportFragmentManager());
@@ -98,6 +105,9 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
 
         //让指示器和ViewPager配合工作
         tl.setupWithViewPager(vp);
+
+        //已进入界面，也要获取一次搜索历史
+        fetchSearchHistoryData();
     }
 
     @Override
@@ -177,6 +187,32 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
 
         //发布搜索Key  query:搜索关键字  selectedIndex：滚动tab标签后保存的索引(成员变量，默认为0)
         EventBus.getDefault().post(new OnSearchEvent(query, selectedIndex));
+
+        //保存搜索历史
+        SearchHistory searchHistory = new SearchHistory();
+        searchHistory.setContent(data);//data: 搜索关键字
+        searchHistory.setCreated_at(System.currentTimeMillis());
+
+        //保存(搜索历史)  (里面是调用了：  orm.save(data) )
+        orm.createOrUpdate(searchHistory);
+
+        //获取搜索历史()
+        //显示搜索历史界面的时候再获取
+        //效率更高
+        fetchSearchHistoryData();
+    }
+
+    /**
+     * 获取搜索历史
+     */
+    private void fetchSearchHistoryData() {
+        //查询搜索历史  按照： created_at 字段排序
+        // orm: LiteORMUtil对象
+        List<SearchHistory> datum = orm.querySearchHistory();
+
+        LogUtil.d(TAG, "fetchSearchHistoryData: " + datum.size());
+        //TODO 设置到适配器
+
     }
 
     //ViewPager监听器
