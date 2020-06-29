@@ -17,6 +17,7 @@ import com.ixuea.courses.mymusic.adapter.DiscoveryAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Ad;
 import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
+import com.ixuea.courses.mymusic.domain.SearchHistory;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Title;
@@ -27,6 +28,7 @@ import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.litesuits.orm.LiteOrm;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
@@ -116,6 +118,27 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
 
         //测试有没有生成多用户文件（每个用户单独查看自己的内容）
 //        orm.saveSong(new Song());
+
+        //测试LiteOrm数据库使用
+
+        //创建数据库实  参数2： 数据库名称
+        //创建到的数据默认保存/data/data/包名/databases 里面
+        LiteOrm orm = LiteOrm.newSingleInstance(getMainActivity(), "ixuea_android.db");
+
+        //创建对象(也就是表)
+        SearchHistory searchHistory = new SearchHistory();
+        //赋值
+        searchHistory.setContent("我们是爱学啊");
+        searchHistory.setCreated_at(System.currentTimeMillis());
+
+        //保存数据 这个orm 是LiteOrm对象
+        orm.save(searchHistory);
+
+        //查询所欲数据
+        ArrayList<SearchHistory> datum = orm.query(SearchHistory.class);
+        //打印数量
+        LogUtil.d(TAG, "search history count: " + datum.size());
+
     }
 
     private void testRealm() {
