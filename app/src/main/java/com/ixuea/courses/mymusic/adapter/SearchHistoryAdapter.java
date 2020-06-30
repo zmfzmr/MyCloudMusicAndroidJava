@@ -20,5 +20,8 @@ public class SearchHistoryAdapter extends BaseQuickAdapter<SearchHistory, BaseVi
     protected void convert(@NonNull BaseViewHolder helper, SearchHistory data) {
         //标题
         helper.setText(R.id.tv_title, data.getContent());
+
+        //删除按钮点击事件
+        helper.addOnClickListener(R.id.iv_delete);
     }
 }

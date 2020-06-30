@@ -135,6 +135,21 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
             }
         });
 
+        //child点击事件  注意:  是child
+        searchHistoryAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                //获取点击的数据
+                SearchHistory data = (SearchHistory) adapter.getItem(position);
+
+                //从数据库中删除这个历史记录
+                orm.deleteSearchHistory(data);
+
+                //从适配中删除
+                adapter.remove(position);
+            }
+        });
+
     }
 
     /**
@@ -231,8 +246,8 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
 
         LogUtil.d(TAG, "performSearch");
 
-        //发布搜索Key  query:搜索关键字  selectedIndex：滚动tab标签后保存的索引(成员变量，默认为0)
-        EventBus.getDefault().post(new OnSearchEvent(query, selectedIndex));
+//        //发布搜索Key  query:搜索关键字  selectedIndex：滚动tab标签后保存的索引(成员变量，默认为0)
+//        EventBus.getDefault().post(new OnSearchEvent(query, selectedIndex));
 
         //保存搜索历史
         SearchHistory searchHistory = new SearchHistory();
@@ -249,6 +264,9 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
 
         //显示搜索结果控件
         showSearchResultView();
+
+        //发布搜索Key  query:搜索关键字  selectedIndex：滚动tab标签后保存的索引(成员变量，默认为0)
+        EventBus.getDefault().post(new OnSearchEvent(query, selectedIndex));
     }
 
     /**
