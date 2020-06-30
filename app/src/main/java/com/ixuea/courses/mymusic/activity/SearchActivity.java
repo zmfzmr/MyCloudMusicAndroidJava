@@ -5,12 +5,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SearchHistoryAdapter;
 import com.ixuea.courses.mymusic.adapter.SearchResultAdapter;
 import com.ixuea.courses.mymusic.domain.SearchHistory;
 import com.ixuea.courses.mymusic.domain.event.OnSearchEvent;
+import com.ixuea.courses.mymusic.util.KeyBoardUtil;
 import com.ixuea.courses.mymusic.util.LiteORMUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ViewUtil;
@@ -123,6 +125,33 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
         //设置搜索结果滚动界面监听器
         vp.setOnPageChangeListener(this);
 
+        //设置搜索历史item点击事件
+        searchHistoryAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //获取点击的数据
+                SearchHistory data = (SearchHistory) adapter.getItem(position);
+                setSearchData(data.getContent());
+            }
+        });
+
+    }
+
+    /**
+     * 设置搜索数据并搜索
+     *
+     * @param data
+     */
+    private void setSearchData(String data) {
+        //将内容设置到搜索控件
+        //并马上执行搜索  true:表示马上执行搜索
+        searchView.setQuery(data, true);
+
+        //        //进入搜索状态
+        searchView.setIconified(false);
+
+        //隐藏软键盘
+        KeyBoardUtil.hideKeyBoard(getMainActivity());
     }
 
     @Override
