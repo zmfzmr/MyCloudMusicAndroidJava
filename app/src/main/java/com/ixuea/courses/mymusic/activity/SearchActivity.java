@@ -170,6 +170,16 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
         //默认为true
         searchView.setIconified(false);
 
+        //设置关闭监听器
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                //显示搜索历史
+                showSearchHistoryView();
+                return false;
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -207,6 +217,9 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
         //显示搜索历史界面的时候再获取
         //效率更高
         fetchSearchHistoryData();
+
+        //显示搜索结果控件
+        showSearchResultView();
     }
 
     /**
@@ -253,4 +266,58 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
 
     }
     //end ViewPager监听器
+
+    /**
+     * 显示(搜索结果) 控件
+     */
+    private void showSearchResultView() {
+        //显示搜索结果容器  隐藏rv(搜索历史)
+        search_result_container.setVisibility(View.VISIBLE);
+        rv.setVisibility(View.GONE);
+    }
+
+    /**
+     * 显示(搜索历史) 控件
+     */
+    private void showSearchHistoryView() {
+        search_result_container.setVisibility(View.GONE);
+        rv.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 菜单点击了
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //返回按钮点击
+                onBackPressed();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 物理按键返回调用
+     */
+    @Override
+    public void onBackPressed() {
+        if (searchView.isIconified()) {
+            //不是在搜索状态
+
+            //正常返回
+            super.onBackPressed();
+        } else {
+            //是搜索状态
+
+            //关闭搜索状态  默认false：开启   true: 关闭
+            searchView.setIconified(true);
+        }
+    }
 }
