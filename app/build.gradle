@@ -765,6 +765,11 @@ dependencies {
     //https://github.com/fcfrt/FcfrtNetStatus
     implementation 'com.github.fcfrt:FcfrtNetStatus:1.0.1'
 
+    //流式标签布局框架(目前添加的第二个流式布局)
+    //真实项目中选一个就行了
+    //https://github.com/nex3z/FlowLayout
+    implementation 'com.nex3z:flow-layout:1.3.0'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

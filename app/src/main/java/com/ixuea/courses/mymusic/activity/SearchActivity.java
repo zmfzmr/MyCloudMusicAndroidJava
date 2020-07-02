@@ -112,11 +112,29 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
 
         //创建搜索历史适配器
         searchHistoryAdapter = new SearchHistoryAdapter(R.layout.item_search_history);
+
+        searchHistoryAdapter.addHeaderView(createHeaderView());
         //设置搜索历史适配器
         rv.setAdapter(searchHistoryAdapter);
 
         //已进入界面，也要获取一次搜索历史
         fetchSearchHistoryData();
+    }
+
+    /**
+     * 创建header
+     *
+     * @return
+     */
+    private View createHeaderView() {
+        //从布局加载view  这个参数3根布局
+        //这种情况第三个参数不能写rv，这样会报错，换getLayoutInflater这种写法
+//        View view = View.inflate(getMainActivity(), R.layout.header_search, rv);
+        //参数3：在SheetDetailActivity那边写的是(ViewGroup) rv.getParent()，
+        //所以写 (ViewGroup) rv.getParent() 和 rv 都是可以的
+        //因为item布局: header_search 写rv或者(ViewGroup) rv.getParent()都是可以的
+        View view = getLayoutInflater().inflate(R.layout.header_search, rv, false);
+        return view;
     }
 
     @Override
