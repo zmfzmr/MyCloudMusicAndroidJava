@@ -14,6 +14,7 @@ import com.ixuea.courses.mymusic.domain.PayParam;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.Suggest;
 import com.ixuea.courses.mymusic.domain.Topic;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.Video;
@@ -655,6 +656,17 @@ public class Api {
         //添加查询参数
         datum.put(Constant.QUERY, data);
         return datum;
+    }
+
+    /**
+     * 搜索建议
+     *
+     * @param data
+     */
+    public Observable<DetailResponse<Suggest>> searchSuggest(String data) {
+        return service.searchSuggest(getSearchParams(data))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 }

@@ -11,6 +11,7 @@ import com.ixuea.courses.mymusic.domain.PayParam;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
+import com.ixuea.courses.mymusic.domain.Suggest;
 import com.ixuea.courses.mymusic.domain.Topic;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.Video;
@@ -429,4 +430,13 @@ public interface Service {
      */
     @GET("v1/searches/users")
     Observable<ListResponse<User>> searchUsers(@QueryMap Map<String, String> data);
+
+    /**
+     * 搜索建议
+     *
+     * @param data
+     * @return
+     */
+    @GET("v1/searches/suggests")
+    Observable<DetailResponse<Suggest>> searchSuggest(@QueryMap Map<String, String> data);
 }

@@ -1,9 +1,11 @@
 package com.ixuea.courses.mymusic.activity;
 
+import android.app.SearchManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -11,8 +13,13 @@ import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.SearchHistoryAdapter;
 import com.ixuea.courses.mymusic.adapter.SearchResultAdapter;
+import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.SearchHistory;
+import com.ixuea.courses.mymusic.domain.SearchTitle;
+import com.ixuea.courses.mymusic.domain.Suggest;
 import com.ixuea.courses.mymusic.domain.event.OnSearchEvent;
+import com.ixuea.courses.mymusic.domain.response.DetailResponse;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.KeyBoardUtil;
 import com.ixuea.courses.mymusic.util.LiteORMUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -68,6 +75,8 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
     private LiteORMUtil orm;//数据库框架工具类
     private SearchHistoryAdapter searchHistoryAdapter;
     private FlowLayout fl;//标签流
+    private SearchView.SearchAutoComplete searchAutoComplete;//搜索建议控件
+    private ArrayAdapter<String> suggestAdapter;//搜索建议适配器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,11 +301,75 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
             }
         });
 
+        //查找搜索建议控件
+        searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+
+        //默认要输入两个字符才显示提示，可以这样更改
+        searchAutoComplete.setThreshold(1);
+
+        //获取搜索管理器 SEARCH_SERVICE: Context里面的字段常量
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+
+        //设置搜索信息(searchView: 搜索的那个控件)
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        //设置搜索建议点击回调
+        //suggestAdapter: ArrayAdapter<String>  //搜索建议适配器
+        //suggestAdapter.getItem(position): 获取适配器里面的搜索数据(String类型)
+        searchAutoComplete.setOnItemClickListener((parent, view, position, id)
+//                -> performSearch(suggestAdapter.getItem(position)));
+                -> setSearchData(suggestAdapter.getItem(position)));
+
         return super.onCreateOptionsMenu(menu);
     }
 
     private void fetchSuggestion(String data) {
         LogUtil.d(TAG, "fetchSuggestion:  " + data);
+        Api.getInstance()
+                .searchSuggest(data)
+                .subscribe(new HttpObserver<DetailResponse<Suggest>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<Suggest> data) {
+                        setSuggest(data.getData());
+                    }
+                });
+
+    }
+
+    //设置搜索建议
+    private void setSuggest(Suggest data) {
+        LogUtil.d(TAG, "setSuggest: " + data);
+
+        //处理搜索建议数据
+
+        //像变换这个中操作
+        //如果是Kotlin语言中就一句话的事
+        List<String> datum = new ArrayList<>();
+
+        //处理歌单搜索建议  不等于null表示有这个歌单搜索建议数据
+        if (data.getSheets() != null) {
+            for (SearchTitle title : data.getSheets()) {
+                datum.add(title.getTitle());
+            }
+        }
+
+        //处理用户搜索建议
+        if (data.getUsers() != null) {
+            for (SearchTitle title : data.getUsers()) {
+                datum.add(title.getTitle());
+            }
+        }
+
+        //创建适配器  参数3：我显示控件的时候，这个控件的id是哪个
+        //ArrayAdapter: 这个是系统里面的类
+        suggestAdapter = new ArrayAdapter<>(getMainActivity(),
+                R.layout.item_suggest,
+                R.id.tv_title,
+                datum);
+
+        //设置到控件
+        //searchAutoComplete: SearchView.SearchAutoComplete //搜索建议控件
+        searchAutoComplete.setAdapter(suggestAdapter);
     }
 
     /**

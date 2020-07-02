@@ -15,21 +15,19 @@
         android:background="@color/background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!--列表控件
-            显示历史搜索
-            搜索历史-->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible" />
+        <!--
+            这里解决了第一次进入，点击搜索历史的时候不能搜索的问题
+            原因：主要是第一次进入的时候，这个结果容器隐藏，
+                那么里面的ViewPager控件不会创建，所以搜索结果没有显示(当然这只是推测)
+        -->
+
         <!--搜索结果容器-->
         <LinearLayout
             android:id="@+id/search_result_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
             <!--指示器容器-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,6 +62,16 @@
                 android:layout_weight="1" />
 
         </LinearLayout>
+
+        <!--列表控件
+          显示历史搜索
+          搜索历史-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="visible" />
 
     </RelativeLayout>
 
