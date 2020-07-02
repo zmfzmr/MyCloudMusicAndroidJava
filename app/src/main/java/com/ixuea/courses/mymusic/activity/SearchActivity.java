@@ -77,6 +77,7 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
     private FlowLayout fl;//标签流
     private SearchView.SearchAutoComplete searchAutoComplete;//搜索建议控件
     private ArrayAdapter<String> suggestAdapter;//搜索建议适配器
+    private Runnable suggestionRunnable;//获取搜索建议任务
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,7 +282,8 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
             @Override
             public boolean onQueryTextChange(String newText) {
                 //搜索建议(这个去服务端获取)
-                fetchSuggestion(newText);
+//                fetchSuggestion(newText);
+                prepareFetchSuggestion(newText);
                 return true;
             }
         });
@@ -321,6 +323,44 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
                 -> setSearchData(suggestAdapter.getItem(position)));
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 准备获取搜索建议
+     */
+    private void prepareFetchSuggestion(String data) {
+
+        if (data.length() > 0) {
+            //搜索关键字大于0才搜索
+
+            //尝试获取搜索建议
+            tryFetchSuggestion(data);
+        }
+
+    }
+
+    /**
+     * 尝试获取搜索建议
+     */
+    private void tryFetchSuggestion(String data) {
+        //取消原来的任务
+        if (suggestionRunnable != null) {
+            //removeCallbacks: 这个方法好像是个view控件都有的，这里只是用了ViewPager控件
+            //当然也可以用前面使用到的TimeTask,但是这个效率更低
+            vp.removeCallbacks(suggestionRunnable);
+            suggestionRunnable = null;
+        }
+
+        suggestionRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                fetchSuggestion(data);
+            }
+        };
+
+        //500毫秒后执行
+        vp.postDelayed(suggestionRunnable, 500);
     }
 
     private void fetchSuggestion(String data) {
