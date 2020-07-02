@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.android.material.tabs.TabLayout;
@@ -16,6 +17,7 @@ import com.ixuea.courses.mymusic.util.KeyBoardUtil;
 import com.ixuea.courses.mymusic.util.LiteORMUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ViewUtil;
+import com.nex3z.flowlayout.FlowLayout;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -65,6 +67,7 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
     private int selectedIndex;//当前显示的搜索结果界面索引
     private LiteORMUtil orm;//数据库框架工具类
     private SearchHistoryAdapter searchHistoryAdapter;
+    private FlowLayout fl;//标签流
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,8 +120,52 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
         //设置搜索历史适配器
         rv.setAdapter(searchHistoryAdapter);
 
+        //获取热门搜索数据
+        fetchPopularData();
+
         //已进入界面，也要获取一次搜索历史
         fetchSearchHistoryData();
+    }
+
+    /**
+     * 搜索热门搜索数据
+     */
+    private void fetchPopularData() {
+        //添加测试数据
+        //因为服务端没有实现热门搜索功能(这个热门搜索有可能很复杂，服务端没有实现，这里只负责在客户端展示即可)
+        List<String> datum = new ArrayList<>();
+        datum.add("爱学啊");
+        datum.add("我的云音乐");
+        datum.add("Android项目实战");
+        datum.add("人生苦短");
+        datum.add("我们只做好课");
+        datum.add("android开发");
+        datum.add("项目课程");
+        //设置热门搜索数据 popular:受欢迎 （热门的，也可以用这个词替代）
+        setPopularData(datum);
+    }
+
+    /**
+     * 设置热门搜索数据
+     */
+    private void setPopularData(List<String> datum) {
+        for (String data : datum) {
+            //循环每一个数据
+
+            //创建布局 item_tag： 流式标签的item布局
+            TextView tv = (TextView) View.inflate(getMainActivity(), R.layout.item_tag, null);
+            //设置数据
+            tv.setText(data);
+
+            //设置点击事件
+            tv.setOnClickListener(v -> {
+                //这里用的是 复用前面点击搜索历史 item 用的那个方法
+                setSearchData(data);
+            });
+
+            //添加控件(FlowLayout里面添加控件)
+            fl.addView(tv);
+        }
     }
 
     /**
@@ -134,6 +181,9 @@ public class SearchActivity extends BaseTitleActivity implements ViewPager.OnPag
         //所以写 (ViewGroup) rv.getParent() 和 rv 都是可以的
         //因为item布局: header_search 写rv或者(ViewGroup) rv.getParent()都是可以的
         View view = getLayoutInflater().inflate(R.layout.header_search, rv, false);
+
+        //查找标签流id
+        fl = view.findViewById(R.id.fl);
         return view;
     }
 

@@ -9,5 +9,5 @@
     android:background="@drawable/shape_light_grey"
     android:paddingLeft="@dimen/padding_middle"
     android:paddingRight="@dimen/padding_middle"
-    android:paddingTop="2dp"
-    android:paddingBottom="2dp" /><!-- 注意：这类宽高 都是包裹内容-->
+    android:paddingTop="@dimen/padding_small"
+    android:paddingBottom="@dimen/padding_small" /><!-- 注意：这类宽高 都是包裹内容-->
