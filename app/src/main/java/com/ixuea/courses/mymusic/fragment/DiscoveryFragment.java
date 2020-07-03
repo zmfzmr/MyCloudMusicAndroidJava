@@ -17,7 +17,6 @@ import com.ixuea.courses.mymusic.adapter.DiscoveryAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.Ad;
 import com.ixuea.courses.mymusic.domain.BaseMultiItemEntity;
-import com.ixuea.courses.mymusic.domain.SearchHistory;
 import com.ixuea.courses.mymusic.domain.Sheet;
 import com.ixuea.courses.mymusic.domain.Song;
 import com.ixuea.courses.mymusic.domain.Title;
@@ -26,9 +25,9 @@ import com.ixuea.courses.mymusic.domain.test.Person;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.manager.ListManager;
 import com.ixuea.courses.mymusic.service.MusicPlayerService;
+import com.ixuea.courses.mymusic.util.AndroidBase64Util;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
-import com.litesuits.orm.LiteOrm;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
@@ -123,21 +122,54 @@ public class DiscoveryFragment extends BaseCommonFragment implements OnBannerLis
 
         //创建数据库实  参数2： 数据库名称
         //创建到的数据默认保存/data/data/包名/databases 里面
-        LiteOrm orm = LiteOrm.newSingleInstance(getMainActivity(), "ixuea_android.db");
+//        LiteOrm orm = LiteOrm.newSingleInstance(getMainActivity(), "ixuea_android.db");
+//
+//        //创建对象(也就是表)
+//        SearchHistory searchHistory = new SearchHistory();
+//        //赋值
+//        searchHistory.setContent("我们是爱学啊");
+//        searchHistory.setCreated_at(System.currentTimeMillis());
+//
+//        //保存数据 这个orm 是LiteOrm对象
+//        orm.save(searchHistory);
+//
+//        //查询所欲数据
+//        ArrayList<SearchHistory> datum = orm.query(SearchHistory.class);
+//        //打印数量
+//        LogUtil.d(TAG, "search history count: " + datum.size());
 
-        //创建对象(也就是表)
-        SearchHistory searchHistory = new SearchHistory();
-        //赋值
-        searchHistory.setContent("我们是爱学啊");
-        searchHistory.setCreated_at(System.currentTimeMillis());
+        //测试Android Base64编码
+        //编码相等
+        if ("aXh1ZWFlZHU=".equals(AndroidBase64Util.encodeString2string("ixueaedu"))) {
+            //测试通过
+            LogUtil.d(TAG, "test encode1 pass");
+        } else {
+            LogUtil.d(TAG, "test encode1 error");
+        }
 
-        //保存数据 这个orm 是LiteOrm对象
-        orm.save(searchHistory);
+        //编码不相等
+        if ("ixueaedu".equals(AndroidBase64Util.encodeString2string("ixueaedu"))) {
+            LogUtil.d(TAG, "test encode2 error");
+        } else {
+            //编码不相等的时候才是通过的
+            LogUtil.d(TAG, "test encode2 pass");
+        }
 
-        //查询所欲数据
-        ArrayList<SearchHistory> datum = orm.query(SearchHistory.class);
-        //打印数量
-        LogUtil.d(TAG, "search history count: " + datum.size());
+        //解码相等测试(也就是把aXh1ZWFlZHU= 解码出来的结果是等于ixueaedu=  的 )
+        if ("ixueaedu".equals(AndroidBase64Util.decodeString2string("aXh1ZWFlZHU="))) {
+            LogUtil.d(TAG, "test decode1 pass");
+        } else {
+            LogUtil.d(TAG, "test decode1 error");
+        }
+
+        //解码不相等测试
+        if ("ixueaedu".equals(AndroidBase64Util.decodeString2string("ixueaedu"))) {
+            //解码处理不可能一样的，这个是错误的
+            LogUtil.d(TAG, "test decode2 error");
+        } else {
+            //这个不相等的时候 才是通过的
+            LogUtil.d(TAG, "test decode2 pass");
+        }
 
     }
 
