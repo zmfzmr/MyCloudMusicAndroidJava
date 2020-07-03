@@ -311,4 +311,15 @@ public class Constant {
      * 这个key是和服务器协商好，不能随便更改
      */
     public static final String QUERY = "query";
+    /**
+     * 签名算法字符串
+     * %%转义%
+     * <p>
+     * 这个是和服务器协商好的
+     * <p>
+     * wyZlmvYHoS^UU7#q  和 kNPd#3NRB%%84A!CF 这串都是盐
+     * <p>
+     * %s： 格式化的值
+     */
+    public static final String SIGN_FORMAT = "wyZlmvYHoS^UU7#q%skNPd#3NRB%%84A!CF";
 }
