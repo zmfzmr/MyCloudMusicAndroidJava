@@ -21,4 +21,30 @@ public class DigestUtilTests {
         assertNotEquals(DigestUtil.sha1("ixueaedu"), "ixueaedu");
 
     }
+
+    //注释的这部分移动android那边
+
+//    /**
+//     * 测试AES 128加密
+//     */
+//    @Test
+//    public void testEncryptAES() {
+//        //相等测试
+//        assertEquals(DigestUtil.encryptAES("ixueaedu"),"3gNwgHqyYLjPzO4xG8976w==");
+//
+//        //不相等测试
+//        assertNotEquals(DigestUtil.encryptAES("ixueaedu"),"ixueaedu");
+//    }
+//
+//    /**
+//     * 测试AES 128解码
+//     */
+//    @Test
+//    public void testDecryptAES() {
+//        //相等
+//        assertEquals(DigestUtil.decryptAES("3gNwgHqyYLjPzO4xG8976w=="),"ixueaedu");
+//        //不相等测试
+//        assertNotEquals(DigestUtil.decryptAES("ixueaedu"),"ixueaedu");
+//
+//    }
 }

@@ -27,6 +27,12 @@ public class AndroidBase64Util {
         return Base64.encode(data, Base64.NO_WRAP);
     }
 
+    /**
+     * 编码  传入byte[]  返回字符串
+     */
+    public static String encodeByte2String(byte[] data) {
+        return Base64.encodeToString(data, Base64.NO_WRAP);
+    }
 
     /**
      * 解码
@@ -39,10 +45,19 @@ public class AndroidBase64Util {
     }
 
     /**
-     * 解码 传入字节数组byte[]
+     * 解码 传入字节数组byte[]    byte[]  返回 byte[]
      */
     public static byte[] decodeByte2byte(byte[] data) {
 
         return Base64.decode(data, Base64.NO_WRAP);
+    }
+
+    /**
+     * 解码
+     *
+     * @param data 字符串   转换成 byte[]
+     */
+    public static byte[] decodeString2byte(String data) {
+        return Base64.decode(data.getBytes(), Base64.NO_WRAP);
     }
 }

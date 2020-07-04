@@ -322,4 +322,14 @@ public class Constant {
      * %s： 格式化的值
      */
     public static final String SIGN_FORMAT = "wyZlmvYHoS^UU7#q%skNPd#3NRB%%84A!CF";
+
+    /**
+     * AES128算法key
+     */
+    public static final String AES128_KEY = "wqfrwOSH*gN%I2v6";
+
+    /**
+     * AES128算法IV
+     */
+    public static final String AES128_IV = "VO*1sxQO5nDkcMyj";
 }
