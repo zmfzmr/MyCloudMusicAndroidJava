@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.CodeActivity;
+import com.ixuea.courses.mymusic.activity.NewOrderActivity;
 import com.ixuea.courses.mymusic.activity.OrderActivity;
 import com.ixuea.courses.mymusic.activity.ScanActivity;
 import com.ixuea.courses.mymusic.activity.SearchActivity;
@@ -513,6 +514,14 @@ public class MainActivity extends BaseMusicPlayerActivity {
         startActivity(OrderActivity.class);
 
         cloneDrawer();
+    }
+
+    /**
+     * 我的订单(接口签名和加密)
+     */
+    @OnClick(R.id.ll_new_order)
+    public void onNewOrder() {
+        startActivity(NewOrderActivity.class);
     }
 
     /**

@@ -40,6 +40,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="theme">
         <activity
+            android:name=".activity.NewOrderActivity"
+            android:label="@string/my_new_order" />
+        <activity
             android:name=".activity.SearchActivity"
             android:label="@string/search" />
         <activity
