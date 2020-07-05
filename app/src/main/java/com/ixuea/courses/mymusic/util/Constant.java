@@ -334,4 +334,9 @@ public class Constant {
      * AES128算法IV
      */
     public static final String AES128_IV = "VO*1sxQO5nDkcMyj";
+
+    /**
+     * 签名头名称
+     */
+    public static final String SIGN = "Sign";
 }
