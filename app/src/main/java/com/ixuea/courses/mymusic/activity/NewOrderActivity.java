@@ -5,6 +5,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.Order;
+import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.LogUtil;
 
 import butterknife.BindView;
@@ -32,6 +36,15 @@ public class NewOrderActivity extends BaseTitleActivity {
      */
     public void onOrderListSignClick(View view) {
         LogUtil.d(TAG, "onOrderListSignClick: ");
+
+        Api.getInstance()
+                .ordersV2()
+                .subscribe(new HttpObserver<ListResponse<Order>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Order> data) {
+                        tv_info.setText("(响应签名)订单数量： " + data.getData().size());
+                    }
+                });
     }
 
     /**

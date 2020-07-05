@@ -403,6 +403,12 @@ public interface Service {
     Observable<ListResponse<Order>> orders();
 
     /**
+     * 订单列表V2(响应签名)
+     */
+    @GET("v2/orders")
+    Observable<ListResponse<Order>> ordersV2();
+
+    /**
      * 订单详情
      *
      * @param id 哪个订单id

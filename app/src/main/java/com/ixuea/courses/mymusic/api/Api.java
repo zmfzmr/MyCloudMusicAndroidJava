@@ -22,6 +22,7 @@ import com.ixuea.courses.mymusic.domain.param.OrderParam;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
+import com.ixuea.courses.mymusic.interceptor.NetworkSecurityInterceptor;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
@@ -76,7 +77,11 @@ public class Api {
     private Api() {
         OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder();
 
-        //公共请求参数
+        //网络请求签名加密插件
+        //注意：这里是addInterceptor，而不是addNetworkInterceptor
+        okhttpClientBuilder.addInterceptor(new NetworkSecurityInterceptor());
+
+        //公共请求参数 (这部分是一个拦截器 这里面添加了2个请求头参数)
         okhttpClientBuilder.addNetworkInterceptor(chain -> {
             //获取到偏好设置工具类
             PreferenceUtil sp = PreferenceUtil.getInstance(AppContext.getInstance());
@@ -665,6 +670,15 @@ public class Api {
      */
     public Observable<DetailResponse<Suggest>> searchSuggest(String data) {
         return service.searchSuggest(getSearchParams(data))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 订单列表V2(响应签名)
+     */
+    public Observable<ListResponse<Order>> ordersV2() {
+        return service.ordersV2()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
