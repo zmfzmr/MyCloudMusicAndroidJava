@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -76,6 +77,10 @@ public class Api {
      */
     private Api() {
         OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder();
+
+        okhttpClientBuilder.connectTimeout(60, TimeUnit.SECONDS) //连接超时时间
+                .writeTimeout(60, TimeUnit.SECONDS) //写，也就是将数据发送到服务端超时时间
+                .readTimeout(60, TimeUnit.SECONDS); //读，将服务端的数据下载到本地
 
         //网络请求签名加密插件
         //注意：这里是addInterceptor，而不是addNetworkInterceptor

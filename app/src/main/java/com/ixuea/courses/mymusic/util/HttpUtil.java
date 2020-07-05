@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.ixuea.courses.mymusic.AppContext;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
+import com.ixuea.courses.mymusic.exception.ResponseSignException;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -39,6 +40,11 @@ public class HttpUtil {
                 HttpException exception = (HttpException) error;
                 int code = exception.code();
                 handleHttpError(code);//调用重构方法处理错误（401 403 404 500和其他错误）
+            } else if (error instanceof ResponseSignException) {
+                //真实项目中一般很少会提示这么明显
+                //因为错误提示的越详细
+                //对攻击者也就越详细了
+                ToastUtil.errorShortToast(R.string.error_response_sign);
             } else {
                 ToastUtil.errorShortToast(R.string.error_network_unknown);
             }

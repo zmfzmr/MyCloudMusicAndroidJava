@@ -283,5 +283,6 @@
     <string name="version_value">V%1$s.%2$d</string>
     <string name="my_cloud_music_guide">我的云音乐新手指南</string>
     <string name="about_ixuea">关于爱学啊</string>
+    <string name="error_response_sign">接口签名错误，请稍后再试!</string>
 
 </resources>
