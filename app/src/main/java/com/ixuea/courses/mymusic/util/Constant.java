@@ -318,6 +318,8 @@ public class Constant {
      * 这个是和服务器协商好的
      * <p>
      * wyZlmvYHoS^UU7#q  和 kNPd#3NRB%%84A!CF 这串都是盐
+     *
+     *    注意： %% 有一个是转义的，所以拷贝出去的话，需要删除一个
      * <p>
      * %s： 格式化的值
      */
