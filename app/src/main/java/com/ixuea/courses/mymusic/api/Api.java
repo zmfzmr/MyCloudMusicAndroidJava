@@ -599,6 +599,18 @@ public class Api {
     }
 
     /**
+     * 创建订单
+     *
+     * @param data
+     * @return
+     */
+    public Observable<DetailResponse<BaseModel>> createOrderV2(OrderParam data) {
+        return service.createOrderV2(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 我的订单
      */
     public Observable<ListResponse<Order>> orders() {

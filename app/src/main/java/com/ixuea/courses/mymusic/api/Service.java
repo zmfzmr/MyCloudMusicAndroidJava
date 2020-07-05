@@ -397,6 +397,15 @@ public interface Service {
     Observable<DetailResponse<BaseModel>> createOrder(@Body OrderParam data);
 
     /**
+     * 创建订单V2(参数签名)
+     *
+     * @param data
+     * @return
+     */
+    @POST("v2/orders")
+    Observable<DetailResponse<BaseModel>> createOrderV2(@Body OrderParam data);
+
+    /**
      * 订单列表
      */
     @GET("v1/orders")

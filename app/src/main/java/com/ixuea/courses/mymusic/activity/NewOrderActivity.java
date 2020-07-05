@@ -6,7 +6,10 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.api.Api;
+import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.Order;
+import com.ixuea.courses.mymusic.domain.param.OrderParam;
+import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.domain.response.ListResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -37,6 +40,8 @@ public class NewOrderActivity extends BaseTitleActivity {
     public void onOrderListSignClick(View view) {
         LogUtil.d(TAG, "onOrderListSignClick: ");
 
+        clearInfo();
+
         Api.getInstance()
                 .ordersV2()
                 .subscribe(new HttpObserver<ListResponse<Order>>() {
@@ -54,6 +59,22 @@ public class NewOrderActivity extends BaseTitleActivity {
      */
     public void onCreateOrderSignClick(View view) {
         LogUtil.d(TAG, "onCreateOrderSignClick: ");
+
+        clearInfo();
+
+        OrderParam data = new OrderParam();
+
+        data.setBook_id("1");
+
+        //调用登录接口
+        Api.getInstance()
+                .createOrderV2(data)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        tv_info.setText("(签名接口)订单创建成功");
+                    }
+                });
     }
 
     /**
@@ -61,6 +82,7 @@ public class NewOrderActivity extends BaseTitleActivity {
      */
     public void onOrderListEncryptClick(View view) {
         LogUtil.d(TAG, "onOrderListEncryptClick: ");
+        clearInfo();
     }
 
     /**
@@ -68,5 +90,13 @@ public class NewOrderActivity extends BaseTitleActivity {
      */
     public void onCreateOrderEncryptClick(View view) {
         LogUtil.d(TAG, "onCreateOrderEncryptClick: ");
+        clearInfo();
+    }
+
+    /**
+     * 清除提示
+     */
+    private void clearInfo() {
+        tv_info.setText("");
     }
 }
