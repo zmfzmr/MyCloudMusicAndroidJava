@@ -775,6 +775,12 @@ dependencies {
     //https://commons.apache.org/proper/commons-codec/
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.13'
 
+    //日志框架
+    //https://github.com/tony19/logback-android
+    //slf4j-api : 日志抽象框架的实现,我们使用的是依赖这个抽象的api
+    implementation 'org.slf4j:slf4j-api:1.7.29'
+    implementation 'com.github.tony19:logback-android:2.0.0'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

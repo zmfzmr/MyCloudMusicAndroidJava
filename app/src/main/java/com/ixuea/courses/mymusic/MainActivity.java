@@ -43,6 +43,9 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTit
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -58,6 +61,10 @@ import butterknife.OnClick;
 public class MainActivity extends BaseMusicPlayerActivity {
 
     private static final String TAG = "MainActivity";
+    //获取日志框架
+    //第二参数就是Tag
+    private Logger log = LoggerFactory.getLogger(MainActivity.class);
+
     /**
      * 侧滑控件
      */
@@ -109,6 +116,25 @@ public class MainActivity extends BaseMusicPlayerActivity {
     @Override
     protected void initView() {
         super.initView();
+
+        //打印日记
+        log.debug("initViews");
+
+        //info基本日记
+        log.info("initViews is info");
+
+        //格式化参数
+        //{}是占位符
+        //真实项目中字符不要用+号
+        //因为有性能影响
+        log.warn("my {} is {} ", "name", "ixuea");
+
+        //日志信息后面
+        //在打印一个异常
+        IllegalArgumentException illegalArgumentException = new IllegalArgumentException("爱学啊参数错误!");
+        log.error("is exception: " + illegalArgumentException);
+
+
 
         //侧滑配置 3 4参数 可以认为是2个字符串，目前还用不到
         //这里的toobar是父类里面的
