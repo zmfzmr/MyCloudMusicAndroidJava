@@ -83,6 +83,15 @@ public class NewOrderActivity extends BaseTitleActivity {
     public void onOrderListEncryptClick(View view) {
         LogUtil.d(TAG, "onOrderListEncryptClick: ");
         clearInfo();
+
+        Api.getInstance()
+                .ordersV3()
+                .subscribe(new HttpObserver<ListResponse<Order>>() {
+                    @Override
+                    public void onSucceeded(ListResponse<Order> data) {
+                        tv_info.setText("(响应加密)订单数量： " + data.getData().size());
+                    }
+                });
     }
 
     /**

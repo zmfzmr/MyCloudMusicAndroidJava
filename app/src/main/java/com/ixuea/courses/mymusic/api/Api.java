@@ -700,4 +700,15 @@ public class Api {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 订单列表V3(响应加密)
+     *
+     * @return
+     */
+    public Observable<ListResponse<Order>> ordersV3() {
+        return service.ordersV3()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

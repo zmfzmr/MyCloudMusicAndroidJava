@@ -418,6 +418,12 @@ public interface Service {
     Observable<ListResponse<Order>> ordersV2();
 
     /**
+     * 订单列表V3(响应加密)
+     */
+    @GET("v3/orders")
+    Observable<ListResponse<Order>> ordersV3();
+
+    /**
      * 订单详情
      *
      * @param id 哪个订单id
