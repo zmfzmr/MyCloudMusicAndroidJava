@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.ixuea.courses.mymusic.AppContext;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.domain.response.BaseResponse;
+import com.ixuea.courses.mymusic.exception.ResponseDecryptException;
 import com.ixuea.courses.mymusic.exception.ResponseSignException;
 
 import java.net.ConnectException;
@@ -45,6 +46,11 @@ public class HttpUtil {
                 //因为错误提示的越详细
                 //对攻击者也就越详细了
                 ToastUtil.errorShortToast(R.string.error_response_sign);
+            } else if (error instanceof ResponseDecryptException) {
+                //真实项目中一般很少会提示这么明显
+                //因为错误提示的越详细
+                //对攻击者也就越详细了
+                ToastUtil.errorShortToast(R.string.error_response_decript);
             } else {
                 ToastUtil.errorShortToast(R.string.error_network_unknown);
             }

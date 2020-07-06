@@ -1,5 +1,6 @@
 package com.ixuea.courses.mymusic.interceptor;
 
+import com.ixuea.courses.mymusic.exception.ResponseDecryptException;
 import com.ixuea.courses.mymusic.exception.ResponseSignException;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.DigestUtil;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -124,6 +126,48 @@ public class NetworkSecurityInterceptor implements Interceptor {
                 //如果判断没有签名
                 //就直接抛出错误(因为是别人串改数据的时候，把前面给删除了)
                 LogUtil.d(TAG, "process not sign:" + method + "," + url);
+            }
+
+            //解密-------------------------------------
+            if (url.endsWith("v3/orders") && method.equals("GET")) {
+                //该接口响应需要解密
+
+                //真实项目中可能所有接口都会加密
+                //所以就不用判断了
+
+                //我们这里为了降低课程难度
+                //所以只加密这个几个接口
+
+                //获取响应字符串
+                String dataString = getResponseString(response);
+
+                //解密数据(这里解密后其实是一串json字符串了，只是还没有json格式化，下面的ResponseBody实现json格式化)
+                String decryptString = DigestUtil.decryptAES(dataString);
+
+                if (StringUtils.isNotBlank(decryptString)) {
+
+                    //解密成功
+
+                    //就认为数据没问题
+
+                    //创建新的响应体
+                    //参数1：字节数组
+                    ResponseBody responseBody = ResponseBody.create(decryptString.getBytes(),
+                            MediaType.parse("application/json"));
+
+                    //解密后需要创建一个响应对象(因为原来的不能更改)
+
+                    response = response.newBuilder()
+                            //原来的请求头，注释是headers加s  不是addheader()
+                            .headers(response.headers())
+                            .body(responseBody)
+                            .build();
+                    LogUtil.d(TAG, "process decrypt success:" + method + "," + url);
+                } else {
+                    //解密失败(也就是更改了响应加密的字符串 这个时候是解密不出来的，这就为为null了)
+                    LogUtil.d(TAG, "process decrypt error:" + method + "," + url);
+                    throw new ResponseDecryptException();
+                }
             }
 
             return response;
