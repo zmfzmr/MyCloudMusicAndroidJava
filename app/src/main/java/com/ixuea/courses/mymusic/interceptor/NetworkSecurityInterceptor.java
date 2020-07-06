@@ -64,6 +64,7 @@ public class NetworkSecurityInterceptor implements Interceptor {
 //                RequestBody requestBody = request.body();
 
                 //把整个请求体转换成一个字符串(因为计算签名要字符串的)
+                // 也就是请求体(json数据)：去掉空格后的字符串 比如： {"book_id":1,"source":10}
                 String bodyString = getRequestBodyString(requestBody);
                 //计算签名
                 String sign = DigestUtil.sha1(bodyString);
