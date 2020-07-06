@@ -599,13 +599,24 @@ public class Api {
     }
 
     /**
-     * 创建订单
+     * 创建订单 v2(参数签名)
      *
      * @param data
      * @return
      */
     public Observable<DetailResponse<BaseModel>> createOrderV2(OrderParam data) {
         return service.createOrderV2(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 创建订单 v3(参数加密)
+     *
+     * @param data OrderParam
+     */
+    public Observable<DetailResponse<BaseModel>> createOrderV3(OrderParam data) {
+        return service.createOrderV3(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

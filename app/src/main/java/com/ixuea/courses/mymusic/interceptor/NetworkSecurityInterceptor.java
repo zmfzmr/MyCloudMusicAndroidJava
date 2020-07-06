@@ -53,11 +53,15 @@ public class NetworkSecurityInterceptor implements Interceptor {
             //请求前  处理网络请求
             LogUtil.d(TAG, "request before : " + method + ", " + url);
 
+            //获取请求体(也就是请求的部分参数)
+            RequestBody requestBody = request.body();
+
             if (url.endsWith("v2/orders") && method.equals("POST")) {
                 //该接口需要添加参数签名（目前只对这个接口签名，如果对所有接口签名，那么就不需要判断了）
 
-                //获取请求体(也就是请求的部分参数)
-                RequestBody requestBody = request.body();
+                //这部分共用的，放到外面来
+//                //获取请求体(也就是请求的部分参数)
+//                RequestBody requestBody = request.body();
 
                 //把整个请求体转换成一个字符串(因为计算签名要字符串的)
                 String bodyString = getRequestBodyString(requestBody);
@@ -80,6 +84,37 @@ public class NetworkSecurityInterceptor implements Interceptor {
                         .method(method, requestBody)
                         .build();
 
+            } else if (url.endsWith("v3/orders") && method.equals("POST")) {
+                //该接口参数需要加密
+
+                //将请求体转为字符串
+                String bodyString = getRequestBodyString(requestBody);
+                //将参数加密
+                String encryptBodyString = DigestUtil.encryptAES(bodyString);
+
+                //使用新参数创建请求体
+
+                //为什么更改header
+                //因为对于加密的数据
+                //有些服务端框架会自动处理
+                //例如：我们后台用的Rails框架
+                //如果传递的JSON他会解析为Hash
+                //类似iOS中的字典
+                //由于我们参数加密了
+                //其实就是一段字符串
+                //所以要更改Content-Type  用的文本方式 所以用plain (application/plain)
+                //不然服务端后出错
+
+                requestBody = RequestBody.create(encryptBodyString,
+                        MediaType.parse("application/plain"));
+                //创建请求
+                request = request.newBuilder()
+                        //添加原来的请求头
+                        .headers(request.headers())
+                        //设置请求方式和请求体
+                        .method(method, requestBody)
+                        .build();
+                LogUtil.d(TAG, "encrypt param success:" + method + "," + url);
             }
 
             //执行网络请求(前面的步骤都没有请求网络，执行了这个方法后才真正的执行网络操作)

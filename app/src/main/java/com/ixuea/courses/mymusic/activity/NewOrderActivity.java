@@ -100,6 +100,19 @@ public class NewOrderActivity extends BaseTitleActivity {
     public void onCreateOrderEncryptClick(View view) {
         LogUtil.d(TAG, "onCreateOrderEncryptClick: ");
         clearInfo();
+
+        OrderParam data = new OrderParam();
+
+        data.setBook_id("1");
+
+        Api.getInstance()
+                .createOrderV3(data)
+                .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
+                    @Override
+                    public void onSucceeded(DetailResponse<BaseModel> data) {
+                        tv_info.setText("(参数加密)订单创建成功！");
+                    }
+                });
     }
 
     /**
