@@ -1,44 +1,115 @@
-<!--
-    Debug以及以上级别都打印到控制台
-    这是一个备份文件
-
-    注意：这里标签没有提示
--->
 <configuration>
-    <!--定义一个日志添加器
-    用来将日志输出到控制台
-    当然也可以自定义
-    name:名称；方便后面引用
-    class:具体的实现类(打印到控制台的是这个类)
-          如果要打印到网络，直接换个类就行了
-    -->
-    <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
+    <!-- 定义日志文件的存储目录
+        可以是相对路径
+        也可以是绝对路径
+        这里是：/data/data/com.ixuea.courses.mymusic/files/logs-->
+    <property name="LOG_DIR" value="logs" />
 
+    <!--定义一个日志添加器
+        用来将日志输出到控制台
+        当然也可以自定义
+        name:名称；方便后面引用
+        class:具体的实现类-->
+    <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
         <!--tag编码器-->
         <tagEncoder>
-            <!--12:表示缩短日志所在全类名  因为全类名：包含包名+类型 会很长，这里缩短至12位 -->
+            <!--12:表示缩短日志所在全类名-->
             <pattern>%logger{12}</pattern>
         </tagEncoder>
 
         <!--日志编码器-->
         <encoder>
             <!--线程信息
-               如果不足20字符
-               就右边填充空格(-20 右边 ；否则20左边)
+            如果不足20字符
+            就右边填充空格
 
-               %msg：就是真实的日志信息了-->
+            %msg：就是真实的日志信息了-->
             <pattern>[%-20thread] %msg</pattern>
         </encoder>
     </appender>
+
+    <!--所以警告以及以上级别打印到文件   (warn级别的，只能用logger来引用，不能用root)
+        当然还可以细分
+        例如：用户模块打印到一个文件
+
+        RollingFileAppender:滚动文件配置
+        他可以实现当日志文件大小
+        到达指定尺寸的时候将
+        产生一个新的日志文件
+        当然还有每个产生一个文件的滚动器-->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!-- 总的理解：
+            当天的文件名为ixuea.log
+            那么明天后这个文件名为昨天的 : ixuea.2020-07-08.log, 又有一个当天的文件名ixuea.log...
+            这样保存30天，过后这个文件就会删除了
+        -->
+        <!--被写入的文件名
+            可以是相对目录
+            也可以是绝对目录
+            如果上级目录不存在会自动创建
+
+            LOG_DIR： 引用前面的property 标签路径: /data/data/com.ixuea.courses.mymusic/files/logs
+            -->
+        <file>${LOG_DIR}/ixuea.log</file>
+
+        <!-- 滚动策略
+            决定RollingFileAppender的行为
+            涉及文件移动和重命名
+            属性class定义具体的滚动策略类
+            这里使用的是时间戳滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--滚动日志命名-->
+            <fileNamePattern>${LOG_DIR}/ixuea.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!--保存最近30天日志-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <!--日志编码器
+
+        格式化参数如下：
+        %p:日志级别，即DEBUG,INFO,WARN,ERROR,FATAL
+        %r/%relative:输出自应用启动到输出该日志所耗费的毫秒数
+        可以用来跟踪
+        应用使用了多久了发生了什么错误
+
+        %t:输出产生该日志事件的线程名
+        %f:输出日志信息所属的类别的类别名
+        %c:输出日志信息所属的类的全名
+        %d:输出日志时间点的日期或时间，指定格式的方式： %d{yyyy-MM-dd HH:mm:ss}
+        %l:输出日志事件的发生位置，即输出日志信息的语句在他所在类别的第几行。
+        %m(%msg):输出代码中指定的信息，如log(message)中的message
+        %n:输出一个换行符号
+
+         更多参数可以查看官方文档
+         日志可以不用放到日志文件中
+         因为日志名称就有
+         如果没有就是当天-->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{12} -
+                %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!--日志器
+        将com.ixuea包下面所有日志写到文件
+        当然还可以按模块拆分
+        例如：数据库放到一个文件-->
+    <logger name="com.ixuea" level="WARN">
+        <!--警告以及以上级别打印到文件
+        这里可以写多个appender-ref-->
+        <appender-ref ref="file" />
+    </logger>
+
     <!--根日志打印到哪里
-      或者可以理解为
-      默认日志打印到哪里
-      level:指定日志级别-->
+        或者可以理解为
+        默认日志打印到哪里
+        level:指定日志级别-->
     <root level="DEBUG">
         <!--appender-ref:引用日志添加器
-           这里引用了logcat-->
+            这里引用了logcat-->
         <appender-ref ref="logcat" />
     </root>
-
-
 </configuration>

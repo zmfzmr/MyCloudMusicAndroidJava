@@ -1,0 +1,44 @@
+<!--
+    Debug以及以上级别都打印到控制台
+    这是一个备份文件
+
+    注意：这里标签没有提示
+-->
+<configuration>
+    <!--定义一个日志添加器
+    用来将日志输出到控制台
+    当然也可以自定义
+    name:名称；方便后面引用
+    class:具体的实现类(打印到控制台的是这个类)
+          如果要打印到网络，直接换个类就行了
+    -->
+    <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
+
+        <!--tag编码器-->
+        <tagEncoder>
+            <!--12:表示缩短日志所在全类名  因为全类名：包含包名+类型 会很长，这里缩短至12位 -->
+            <pattern>%logger{12}</pattern>
+        </tagEncoder>
+
+        <!--日志编码器-->
+        <encoder>
+            <!--线程信息
+               如果不足20字符
+               就右边填充空格(-20 右边 ；否则20左边)
+
+               %msg：就是真实的日志信息了-->
+            <pattern>[%-20thread] %msg</pattern>
+        </encoder>
+    </appender>
+    <!--根日志打印到哪里
+      或者可以理解为
+      默认日志打印到哪里
+      level:指定日志级别-->
+    <root level="DEBUG">
+        <!--appender-ref:引用日志添加器
+           这里引用了logcat-->
+        <appender-ref ref="logcat" />
+    </root>
+
+
+</configuration>
