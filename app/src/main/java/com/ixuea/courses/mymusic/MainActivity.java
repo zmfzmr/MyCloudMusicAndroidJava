@@ -556,7 +556,16 @@ public class MainActivity extends BaseMusicPlayerActivity {
     @OnClick(R.id.ll_setting)
     public void onSettingClick() {
         startActivity(SettingActivity.class);
+
+        //手动触发一个错误
+        //目的是测试Bugly异常上报是否正常工作
+//        CrashReport.testJavaCrash();
+
         cloneDrawer();
+
+        //手动抛出一个错误
+        RuntimeException runtimeException = new RuntimeException("手动抛出一个错误");
+        throw runtimeException;
     }
 
     /**

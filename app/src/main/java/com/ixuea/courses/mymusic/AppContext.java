@@ -18,11 +18,13 @@ import com.ixuea.courses.mymusic.activity.LoginOrRegisterActivity;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
 import com.ixuea.courses.mymusic.manager.impl.ActivityManager;
+import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 import com.mob.MobSDK;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -110,6 +112,26 @@ public class AppContext extends Application implements Application.ActivityLifec
         //什么是ActivityLifecycle
         //简单来说，他是Android提供的一套API，可以用来监听当前应用，所有界面的生命周期。
         registerActivityLifecycleCallbacks(this);
+
+        //初始化腾讯Bugly服务
+        initBugly();
+    }
+
+    /**
+     * 初始化腾讯Bugly服务
+     */
+    private void initBugly() {
+        //更多配置参数
+        //https://bugly.qq.com/docs/user-guide/instruction-manual-android/
+
+        //crash ： 崩溃  report： 报告
+        //参数1： 上下文 这里传入应用的上下文
+        // 2: Bugly官网 应用的App id
+        // 3： studio工具左边Build Variants栏 为debug状态，
+        //     那么这个BuildConfig.DEBUG为true，否则为false
+        //     老师说： 打包也是关闭的(false的) ，这个还没试过，不知道情况
+        CrashReport.initCrashReport(getApplicationContext(),
+                Constant.BUGLY_APP_ID, LogUtil.isDebug);
     }
 
     /**

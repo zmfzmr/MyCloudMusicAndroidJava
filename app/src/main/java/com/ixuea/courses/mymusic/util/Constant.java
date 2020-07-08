@@ -339,4 +339,9 @@ public class Constant {
      * 签名头名称
      */
     public static final String SIGN = "Sign";
+
+    /**
+     * 腾讯Bugly
+     */
+    public static final String BUGLY_APP_ID = "9299b31647";
 }
