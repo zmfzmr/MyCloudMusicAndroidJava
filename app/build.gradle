@@ -23,6 +23,28 @@ android {
 
         //渠道相关
         flavorDimensions "versionCode"
+
+        //NDK相关配置
+
+        //如果你的项目中用到了原生代码 或者第三方的原生库(我们项目的一些SDK用到了原生代码原生库，所以就需要配置SDK；这样腾讯的Bugly 准确的才能上报错误)，
+        //那么就需要配置ndk
+        //这里主要是配置SO库
+
+        //android手机的cpu 有不同的架构 （类似于window 有32 和64位）
+        //有些第三方库 是只支持 手机cpu的这种架构的。所以是需要配置不同的架构
+
+        //那什么是原生代码？: native code
+        //是本地cpu的目标执行代码, 不是il, 所以速度很快, 它的执行不依赖某个虚拟机或者解释器，
+        //编译后可直接依附操作系统运行，不需要经过虚拟机之类的东西。
+
+        //注意 ：
+        //    比如:如果项目的中有些原生库不支持 X86，而我们的模拟器是X86，这时你把下面的x86删除了，
+        //        那么就无法运行到手机上，如果没有删除的话，那还是可以运行到手机上的
+        ndk {
+            //设置支持的SO库架构
+            //我们 把'armeabi', 去掉 因为armeabi架构里面的原生库是不全的
+            abiFilters 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
     }
 
     //配置了签名后，是debug release中的签名都是一样，所以更加方面，
@@ -780,6 +802,18 @@ dependencies {
     //slf4j-api : 日志抽象框架的实现,我们使用的是依赖这个抽象的api
     implementation 'org.slf4j:slf4j-api:1.7.29'
     implementation 'com.github.tony19:logback-android:2.0.0'
+
+    //腾讯Bugly
+    //主要是实现异常上报
+    //应用内更新功能
+    //https://bugly.qq.com
+    //Java/Kotlin代码错误报告SDK
+    implementation 'com.tencent.bugly:crashreport:2.8.6.0'
+
+    //NDK错误报告SDK(也就是原生代码，顾名思义就是我们前面所说的C\C++ 这类语言写的原生的这种代码。
+    //               这类错误的的就引用这个区上报.而我们项目中，并没有去写这种原生代码，
+    //               但是在其他地方我们引用了一些第三方的SDK，里面带了原生的库)
+    implementation 'com.tencent.bugly:nativecrashreport:3.6.0.1'
 
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
