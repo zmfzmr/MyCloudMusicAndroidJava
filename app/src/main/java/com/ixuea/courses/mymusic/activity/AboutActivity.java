@@ -6,6 +6,7 @@ import android.widget.TextView;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.PackageUtil;
+import com.tencent.bugly.beta.Beta;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -43,6 +44,10 @@ public class AboutActivity extends BaseTitleActivity {
     @OnClick(R.id.version_container)
     public void onVersionClick() {
         LogUtil.d(TAG, "onVersionClick");
+
+        //参数1：isManual 用户手动点击检查，非用户点击操作请传false
+        //参数2：isSilence 是否显示弹窗等交互，[true:没有弹窗和toast] [false:有弹窗或toast]
+        Beta.checkUpgrade(true, false);
     }
 
     /**
