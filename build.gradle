@@ -67,7 +67,7 @@ ext {
     //Android应用有两个版本号，一个是versionName，一个versionCode，简单可以理解为versionName是给人看的
     // (也就是应用上显示的版本号)，versionCode使用内部判断的。
     // (比如当前版本是1.0.0  检测要升级的版本是2.0.0  直接判断的话不好判断，所以这个versionCode是int值 （这样既好判断了）)
-    versionCode = 200
-    versionName = "2.0.0"
+    versionCode = 100
+    versionName = "1.0.0"
 
 }

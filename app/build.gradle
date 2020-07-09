@@ -808,12 +808,33 @@ dependencies {
     //应用内更新功能
     //https://bugly.qq.com
     //Java/Kotlin代码错误报告SDK
-    implementation 'com.tencent.bugly:crashreport:2.8.6.0'
+//    implementation 'com.tencent.bugly:crashreport:2.8.6.0'
 
     //NDK错误报告SDK(也就是原生代码，顾名思义就是我们前面所说的C\C++ 这类语言写的原生的这种代码。
     //               这类错误的的就引用这个区上报.而我们项目中，并没有去写这种原生代码，
     //               但是在其他地方我们引用了一些第三方的SDK，里面带了原生的库)
     implementation 'com.tencent.bugly:nativecrashreport:3.6.0.1'
+
+    //腾讯Bugly应用升级SDK
+    //升级功能是专为App的灰度升级而开发的组件
+    //在bugly内测页面配置好App的更新策略
+    //策略指定的老版本App在启动时会自动检测更新并提示升级
+    //为团队的应用分发
+    //灰度内测提供一站式解决方案
+
+    //什么是灰度测试？
+    //就是开发了一个新功能
+    //不知道用户是否喜欢或者稳定
+    //就找几千或者上万个人
+    //只让他们更新
+    //先试用
+    //然后收集反馈或日志
+    //在决定是否需要这个功能
+    //或者该功能是否有重大问题
+
+    //包含了崩溃SDK
+    //所以单独添加的SDK要去掉
+    implementation 'com.tencent.bugly:crashreport_upgrade:1.3.1'
 
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段

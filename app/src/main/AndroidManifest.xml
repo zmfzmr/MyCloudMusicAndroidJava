@@ -228,6 +228,23 @@
         <activity
             android:name="com.king.zxing.CaptureActivity"
             android:screenOrientation="portrait" />
+
+        <!-- 腾讯Bulgy需要配置
+             关于什么是FileProvider
+             这里就不再讲解了
+             这里只要学会这样配置就行了-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <!--这里引用了bugly_provider-->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/bugly_provider" />
+        </provider>
+
     </application>
 
 </manifest>

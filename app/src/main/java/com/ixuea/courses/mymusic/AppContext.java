@@ -24,7 +24,7 @@ import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 import com.mob.MobSDK;
-import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.bugly.Bugly;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -130,7 +130,13 @@ public class AppContext extends Application implements Application.ActivityLifec
         // 3： studio工具左边Build Variants栏 为debug状态，
         //     那么这个BuildConfig.DEBUG为true，否则为false
         //     老师说： 打包也是关闭的(false的) ，这个还没试过，不知道情况
-        CrashReport.initCrashReport(getApplicationContext(),
+//        CrashReport.initCrashReport(getApplicationContext(),
+//                Constant.BUGLY_APP_ID, LogUtil.isDebug);
+
+        //初始化Bugly所有服务
+        //包括异常上报
+        //更新
+        Bugly.init(getApplicationContext(),
                 Constant.BUGLY_APP_ID, LogUtil.isDebug);
     }
 
