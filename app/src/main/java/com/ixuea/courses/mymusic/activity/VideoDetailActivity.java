@@ -1045,4 +1045,9 @@ public class VideoDetailActivity extends BaseTitleActivity implements MediaPlaye
         //            2. 或者页面已经来就会调用startShowProgress 开始倒计时隐藏播放按钮)
         ib_play.setVisibility(View.VISIBLE);
     }
+
+    @Override
+    protected String pageId() {
+        return "VideoDetail";
+    }
 }

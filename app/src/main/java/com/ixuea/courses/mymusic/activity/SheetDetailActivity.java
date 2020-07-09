@@ -854,4 +854,8 @@ public class SheetDetailActivity extends BaseMusicPlayerActivity implements View
         EventBus.getDefault().post(new SheetChangedEvent());
     }
 
+    @Override
+    protected String pageId() {
+        return "SheetDetail";
+    }
 }

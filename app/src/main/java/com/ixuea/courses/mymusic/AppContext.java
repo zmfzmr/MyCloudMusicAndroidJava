@@ -33,6 +33,7 @@ import java.io.File;
 import androidx.emoji.bundled.BundledEmojiCompatConfig;
 import androidx.emoji.text.EmojiCompat;
 import androidx.multidex.MultiDex;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
@@ -115,6 +116,19 @@ public class AppContext extends Application implements Application.ActivityLifec
 
         //初始化腾讯Bugly服务
         initBugly();
+
+        //初始化极光
+        initJiGuang();
+    }
+
+    /**
+     * 初始化极光
+     */
+    private void initJiGuang() {
+        //初始化极光统计
+        JAnalyticsInterface.init(getApplicationContext());
+        //设计极光统计调试模式
+        JAnalyticsInterface.setDebugMode(LogUtil.isDebug);
     }
 
     /**

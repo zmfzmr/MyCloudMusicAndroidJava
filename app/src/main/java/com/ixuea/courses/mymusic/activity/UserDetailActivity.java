@@ -387,4 +387,9 @@ public class UserDetailActivity extends BaseTitleActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
+    @Override
+    protected String pageId() {
+        return "UserDetail";
+    }
 }

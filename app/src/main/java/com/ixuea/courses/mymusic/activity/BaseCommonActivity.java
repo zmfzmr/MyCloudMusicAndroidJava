@@ -14,9 +14,12 @@ import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 import com.ixuea.courses.mymusic.util.ServiceUtil;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 
 import butterknife.ButterKnife;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 /**
  * 通用界面逻辑
@@ -143,6 +146,36 @@ public class BaseCommonActivity extends BaseActivity {
 
             //就尝试隐藏桌面歌词(可能桌面歌词控件没有显示出来，那么就是尝试隐藏)
             globalLyricManager.tryHide();
+        }
+
+        //获取页面id
+        String pageId = pageId();
+        if (StringUtils.isNotBlank(pageId)) {
+            //使用极光统计
+            //页面开始事件
+            JAnalyticsInterface.onPageStart(getMainActivity(), pageId);
+        }
+    }
+
+    /**
+     * 获取页面id
+     */
+    protected String pageId() {
+        return null;
+    }
+
+    /**
+     * 页面暂停了
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //获取页面id
+        String pageId = pageId();
+        if (StringUtils.isNotBlank(pageId)) {
+            //页面结束
+            JAnalyticsInterface.onPageEnd(getMainActivity(), pageId);
         }
     }
 

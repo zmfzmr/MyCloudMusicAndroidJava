@@ -700,4 +700,9 @@ public class CommentActivity extends BaseTitleActivity implements CommentAdapter
             rv.setNoMore(true);
         }
     }
+
+    @Override
+    protected String pageId() {
+        return "Comment";
+    }
 }

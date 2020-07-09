@@ -1517,4 +1517,9 @@ public class MusicPlayerActivity extends BaseTitleActivity implements MusicPlaye
 
         return true;//这里返回true
     }
+
+    @Override
+    protected String pageId() {
+        return "MusicPlayer";
+    }
 }

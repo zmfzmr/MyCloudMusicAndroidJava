@@ -154,4 +154,9 @@ public class AdActivity extends BaseCommonActivity {
             countDownTimer.cancel();
         }
     }
+
+    @Override
+    protected String pageId() {
+        return "Ad";
+    }
 }

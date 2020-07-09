@@ -296,4 +296,35 @@ public class SplashActivity extends BaseCommonActivity {
             }, DEFAULT_DELAY_TIME);
         }
     }
+
+//    /**
+//     * 页面显示了
+//     */
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        //使用极光分析
+//        //统计页面
+//        //参数2： 取的名称
+//        JAnalyticsInterface.onPageStart(getMainActivity(),"Splash");
+//    }
+//
+//    /**
+//     * 页面暂停了
+//     */
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//
+//        //页面结束了
+//        //参数2： 取的名称
+//        JAnalyticsInterface.onPageEnd(getMainActivity(),"Splash");
+//    }
+
+
+    @Override
+    protected String pageId() {
+        return "Splash";
+    }
 }

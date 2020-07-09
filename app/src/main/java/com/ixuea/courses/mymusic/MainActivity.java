@@ -604,4 +604,9 @@ public class MainActivity extends BaseMusicPlayerActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected String pageId() {
+        return "Main";
+    }
 }
