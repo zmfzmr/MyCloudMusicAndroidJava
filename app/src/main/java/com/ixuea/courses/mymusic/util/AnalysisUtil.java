@@ -2,13 +2,17 @@ package com.ixuea.courses.mymusic.util;
 
 import android.content.Context;
 
+import com.ixuea.courses.mymusic.domain.Order;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jiguang.analytics.android.api.Currency;
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import cn.jiguang.analytics.android.api.LoginEvent;
+import cn.jiguang.analytics.android.api.PurchaseEvent;
 import cn.jiguang.analytics.android.api.RegisterEvent;
 
 /**
@@ -77,6 +81,49 @@ public class AnalysisUtil {
 
         //记录事件(前面是创建了一个事件，这里可以理解为将这事件发送到服务端)
         //调试模式是实时发送的，不是调试的，那在合适的时候发送上去
+        JAnalyticsInterface.onEvent(context, event);
+    }
+
+    /**
+     * 购买事件
+     */
+    public static void onPurchase(Context context, boolean success, Order order) {
+        //官方文档
+        //https://docs.jiguang.cn//janalytics/client/android_api/#_6
+
+        //参数解释：
+        //purchaseGoodsid   String  商品id
+        //purchaseGoodsName String  商品名称
+        //purchasePrice double  购买价格(非空)
+        //purchaseSuccess   boolean 购买是否成功(非空)
+        //purchaseCurrency  Currency    货币类型，一个枚举类
+        //purchaseGoodsType String  商品类型
+        //purchaseGoodsCount    int 商品数量
+        PurchaseEvent event = new PurchaseEvent(order.getId(),
+                //真实项目中可能不会讲标题传递给第三方
+                order.getBook().getTitle(),
+                //价格
+                order.getPrice(),
+                success,
+                //极光SDK里面的枚举常量
+                //货币类型，人民币
+                Currency.CNY,
+                //商品类型
+                //一般有多种商品
+                //例如：有课程，有电子书
+                "book",
+                //数量
+                //由于我们这里没有数据
+                //所有随便写一个值
+                1
+        );
+
+        //添加扩展信息
+        //这个订单id可以不用传递了，因为上面已经添加了
+        //我们这里用这种方式传递订单id
+        event.addKeyValue("order", order.getId());
+
+        //记录事件
         JAnalyticsInterface.onEvent(context, event);
     }
 

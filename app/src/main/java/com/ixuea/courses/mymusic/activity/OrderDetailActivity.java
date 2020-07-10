@@ -14,6 +14,7 @@ import com.ixuea.courses.mymusic.domain.PayParam;
 import com.ixuea.courses.mymusic.domain.event.OnAliPayStatusChangedEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.AnalysisUtil;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LoadingUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -344,6 +345,7 @@ public class OrderDetailActivity extends BaseTitleActivity implements XRadioGrou
         //否则：如果是resultStatus.equals("9000") 可能就有问题
 
         //注意：这里9000 是支付宝本地的SDK告诉我们支付成功了
+//        if (true) {//这个主要用来测试成功了
         if ("9000".equals(resultStatus)) {
             //本地支付成功
 
@@ -367,10 +369,17 @@ public class OrderDetailActivity extends BaseTitleActivity implements XRadioGrou
                 }
             }, 3000);
 
+            //这里就不根据服务端判断了
+            //购买成功统计
+            AnalysisUtil.onPurchase(getMainActivity(), true, data);
+
         } else {
             //支付取消
             //支付失败
             ToastUtil.errorShortToast(R.string.error_pay_failed);
+
+            //购买事件
+            AnalysisUtil.onPurchase(getMainActivity(), false, data);
         }
     }
 
