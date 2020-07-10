@@ -10,6 +10,7 @@ import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.AnalysisUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
 /**
@@ -38,9 +39,41 @@ public class BaseLoginActivity extends BaseTitleActivity {
                     @Override
                     public void onSucceeded(DetailResponse<Session> data) {
                         Log.d(TAG, "onLongClick,onSucceeded: " + data.getData());
+                        //统计登录事件
+                        //因为这个外层方法login方法里面只有phone email这2个参数，传递这2个即可
+                        AnalysisUtil.onLogin(getMainActivity(), true,
+                                AnalysisUtil.getMethod(phone, email),
+                                phone, email, null, null);
+
 //                        toLogin(data);
                         toLogin(data.getData());
 
+                    }
+
+                    /**
+                     * 登录失败
+                     *
+                     * @param data
+                     * @param e
+                     * @return
+                     */
+                    @Override
+                    public boolean onFailed(DetailResponse<Session> data, Throwable e) {
+
+                        //统计登录事件
+
+                        //因为这个外层方法login方法里面只有phone email这2个参数，传递这2个即可
+                        AnalysisUtil.onLogin(getMainActivity(), true,
+                                AnalysisUtil.getMethod(phone, email),
+                                phone, email, null, null);
+
+                        //统计登录失败事件
+                        //像无网络
+                        //用户名密码格式不正确这些就不统计了
+                        //当然真实项目中可能也需要统计
+
+                        //让框架自动处理错误(可以 查看 HttpObserver.java 中查看)
+                        return false;
                     }
                 });
     }

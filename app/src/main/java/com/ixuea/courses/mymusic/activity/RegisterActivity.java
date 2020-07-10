@@ -101,7 +101,7 @@ public class RegisterActivity extends BaseLoginActivity {
 
         //获取手机号
         String phone = et_phone.getText().toString().trim();
-        if (StringUtils.isBlank(nickname)) {
+        if (StringUtils.isBlank(phone)) {
             ToastUtil.errorShortToast(R.string.enter_phone);
             return;
         }

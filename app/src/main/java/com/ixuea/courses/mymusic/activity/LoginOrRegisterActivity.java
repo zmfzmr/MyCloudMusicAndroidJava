@@ -14,6 +14,7 @@ import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.AnalysisUtil;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.HandlerUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -247,9 +248,17 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
                      * 登录成功
                      */
                     @Override
-                    public void onSucceeded(DetailResponse<Session> data) {
-                        if (data != null) {
-                            AppContext.getInstance().login(sp, data.getData());
+                    public void onSucceeded(DetailResponse<Session> d) {
+                        if (d != null) {
+
+                            //统计登录事件
+
+                            //因为这个外层方法login方法里面只有phone email这2个参数，传递这2个即可
+                            AnalysisUtil.onLogin(getMainActivity(), true,
+                                    AnalysisUtil.getThirdMethod(data.getQq_id(), data.getWeibo_id()),
+                                    null, null, data.getQq_id(), data.getWeibo_id());
+
+                            AppContext.getInstance().login(sp, d.getData());
 
                             ToastUtil.successShortToast(R.string.login_success);
                             startActivityAfterFinishThis(MainActivity.class);
@@ -260,13 +269,21 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
                      * 登录失败
                      */
                     @Override
-                    public boolean onFailed(DetailResponse<Session> data, Throwable e) {
-                        if (data != null) {
+                    public boolean onFailed(DetailResponse<Session> d, Throwable e) {
+
+                        //统计登录事件
+
+                        //因为这个外层方法login方法里面只有phone email这2个参数，传递这2个即可
+                        AnalysisUtil.onLogin(getMainActivity(), false,
+                                AnalysisUtil.getThirdMethod(data.getQq_id(), data.getWeibo_id()),
+                                null, null, data.getQq_id(), data.getWeibo_id());
+
+                        if (d != null) {
                             //请求成功了
                             //并且服务端还返回了错误信息
 
                             //判断错误码
-                            if (1010 == data.getStatus()) {
+                            if (1010 == d.getStatus()) {
                                 //用户未注册
                                 //跳转到补充用户资料界面
                                 toRegister();
@@ -276,7 +293,7 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
                             }
                         }
                         //其他错误直接让父类处理
-                        return super.onFailed(data, e);//默认是返回false的
+                        return super.onFailed(d, e);//默认是返回false的
                     }
 
 
