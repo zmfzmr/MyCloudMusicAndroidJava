@@ -255,7 +255,7 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
 
                             //因为这个外层方法login方法里面只有phone email这2个参数，传递这2个即可
                             AnalysisUtil.onLogin(getMainActivity(), true,
-                                    AnalysisUtil.getThirdMethod(data.getQq_id(), data.getWeibo_id()),
+                                    AnalysisUtil.getMethod(null, null, data.getQq_id(), data.getWeibo_id()),
                                     null, null, data.getQq_id(), data.getWeibo_id());
 
                             AppContext.getInstance().login(sp, d.getData());
@@ -275,7 +275,7 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
 
                         //因为这个外层方法login方法里面只有phone email这2个参数，传递这2个即可
                         AnalysisUtil.onLogin(getMainActivity(), false,
-                                AnalysisUtil.getThirdMethod(data.getQq_id(), data.getWeibo_id()),
+                                AnalysisUtil.getMethod(null, null, data.getQq_id(), data.getWeibo_id()),
                                 null, null, data.getQq_id(), data.getWeibo_id());
 
                         if (d != null) {

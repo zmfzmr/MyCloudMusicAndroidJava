@@ -10,6 +10,7 @@ import com.ixuea.courses.mymusic.domain.BaseModel;
 import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
+import com.ixuea.courses.mymusic.util.AnalysisUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
@@ -168,10 +169,35 @@ public class RegisterActivity extends BaseLoginActivity {
         Api.getInstance().register(data)
                 .subscribe(new HttpObserver<DetailResponse<BaseModel>>() {
                     @Override
-                    public void onSucceeded(DetailResponse<BaseModel> data) {
-                        LogUtil.d(TAG, "register success: " + data.getData().getId());
+                    public void onSucceeded(DetailResponse<BaseModel> d) {
+                        LogUtil.d(TAG, "register success: " + d.getData().getId());
+
+                        //统计注册
+                        //这个手机登信息 真实项目中，可能需要进行加密（因为传递的是第三方）
+                        AnalysisUtil.onRegister(getMainActivity(), true,
+                                AnalysisUtil.getMethod(data.getPhone(), data.getEmail(),
+                                        data.getQq_id(), data.getWeibo_id()), data.getAvatar(),
+                                data.getNickname(),
+                                data.getPhone(), data.getEmail(),
+                                data.getQq_id(), data.getWeibo_id());
+
                         //注册后自动登录(调用父类自动登录方法)
                         login(phone, email, password);
+                    }
+
+                    @Override
+                    public boolean onFailed(DetailResponse<BaseModel> d, Throwable e) {
+
+                        //统计注册
+                        //这个手机登信息 真实项目中，可能需要进行加密（因为传递的是第三方）
+                        AnalysisUtil.onRegister(getMainActivity(), false,
+                                AnalysisUtil.getMethod(data.getPhone(), data.getEmail(),
+                                        data.getQq_id(), data.getWeibo_id()), data.getAvatar(),
+                                data.getNickname(),
+                                data.getPhone(), data.getEmail(),
+                                data.getQq_id(), data.getWeibo_id());
+
+                        return super.onFailed(d, e);
                     }
                 });
 

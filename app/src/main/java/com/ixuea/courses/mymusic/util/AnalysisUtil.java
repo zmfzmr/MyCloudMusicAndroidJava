@@ -9,6 +9,7 @@ import java.util.Map;
 
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import cn.jiguang.analytics.android.api.LoginEvent;
+import cn.jiguang.analytics.android.api.RegisterEvent;
 
 /**
  * 统计相关工具类
@@ -38,6 +39,40 @@ public class AnalysisUtil {
         Map<String, String> extra = getExtra(null, null, phone, email, qqId, weiboId);
 
         //添加拓展信息(这个信息并一定要添加，只是我们这里要传递给极光后端平台，所以需要添加的)
+        event.addExtMap(extra);
+
+        //记录事件(前面是创建了一个事件，这里可以理解为将这事件发送到服务端)
+        //调试模式是实时发送的，不是调试的，那在合适的时候发送上去
+        JAnalyticsInterface.onEvent(context, event);
+    }
+
+    /**
+     * 注册事件
+     *
+     * @param context
+     * @param success
+     * @param method
+     * @param avatar
+     * @param nickname
+     * @param phone
+     * @param email
+     * @param qqId
+     * @param weiboId  比onLogin 多了2个参数： nickname 和avatar
+     */
+    public static void onRegister(Context context, boolean success,
+                                  String method, String avatar,
+                                  String nickname, String phone,
+                                  String email, String qqId,
+                                  String weiboId) {
+        //创建事件
+        //参数1：注册类型
+        //参数2：是否注册成功
+        RegisterEvent event = new RegisterEvent(method, success);
+
+        //获取拓展信息
+        Map<String, String> extra = getExtra(avatar, nickname, phone, email, qqId, weiboId);
+
+        //添加拓展信息
         event.addExtMap(extra);
 
         //记录事件(前面是创建了一个事件，这里可以理解为将这事件发送到服务端)
@@ -105,24 +140,29 @@ public class AnalysisUtil {
      * @param email
      * @return
      */
-    public static String getMethod(String phone, String email) {
+    public static String getMethod(String phone, String email, String qq, String weibo_id) {
         if (StringUtils.isNotBlank(phone)) {
             return "phone";
-        }
-        return "email";
-    }
-
-    /**
-     * 获取第三方登录/注册方式
-     *
-     * @param qq       QQ 的id
-     * @param weibo_id
-     * @return
-     */
-    public static String getThirdMethod(String qq, String weibo_id) {
-        if (StringUtils.isNotBlank(qq)) {
+        } else if (StringUtils.isNotBlank(email)) {
+            return "email";
+        } else if (StringUtils.isNotBlank(qq)) {
             return "qq";
         }
+
         return "weibo";
     }
+
+//    /**
+//     * 获取第三方登录/注册方式
+//     *
+//     * @param qq       QQ 的id
+//     * @param weibo_id
+//     * @return
+//     */
+//    public static String getThirdMethod(String qq, String weibo_id) {
+//        if (StringUtils.isNotBlank(qq)) {
+//            return "qq";
+//        }
+//        return "weibo";
+//    }
 }
