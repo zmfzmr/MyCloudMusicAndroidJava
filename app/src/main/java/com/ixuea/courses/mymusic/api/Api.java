@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -77,6 +78,22 @@ public class Api {
      */
     private Api() {
         OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder();
+
+        //配置缓存
+
+        /*
+            Etag 缓存
+            Etag 可以理解为 对这个body数据进行了一次hash哈希运算
+            第一次请求，服务端返回200，并在header 返回了Etag
+            第二次，Get请求，在请求头带上上次返回的Etag，
+            服务端返回的Etag和本地数据的Etag比较，相等表示没有更新数据，所以返回数据为空(返回304)，那么拿上次的数据即可
+            注意：如果更新了数据了，客户端再次请求，需要携带上次的Etag
+
+            这个Cache对象 里面已经实现了Etag缓存方式
+         */
+        Cache cache = new Cache(AppContext.getInstance().getCacheDir(),
+                Constant.NETWORK_CACHE_SIZE);
+        okhttpClientBuilder.cache(cache);
 
         okhttpClientBuilder.connectTimeout(60, TimeUnit.SECONDS) //连接超时时间
                 .writeTimeout(60, TimeUnit.SECONDS) //写，也就是将数据发送到服务端超时时间

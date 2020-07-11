@@ -344,4 +344,12 @@ public class Constant {
      * 腾讯Bugly
      */
     public static final String BUGLY_APP_ID = "9299b31647";
+
+    /**
+     * 网络缓存目录大小
+     * 100M： 1024字节    1024*1024 = 1M    1024*1024*100： 100M
+     * <p>
+     * 这个100M的时候 目前来说足够用了，因为网络请求一次也就几kb
+     */
+    public static final long NETWORK_CACHE_SIZE = 1024 * 1024 * 100;
 }
