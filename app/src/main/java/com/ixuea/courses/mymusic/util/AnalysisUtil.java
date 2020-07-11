@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jiguang.analytics.android.api.CountEvent;
 import cn.jiguang.analytics.android.api.Currency;
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import cn.jiguang.analytics.android.api.LoginEvent;
@@ -125,6 +126,25 @@ public class AnalysisUtil {
 
         //记录事件
         JAnalyticsInterface.onEvent(context, event);
+    }
+
+    /**
+     * 跳过广告事件
+     *
+     * @param context
+     * @param userId
+     */
+    public static void onSkipAd(Context context, String userId) {
+        //自定义事件名称(可以随便写)
+        //和iOS那边保持一致
+        CountEvent event = new CountEvent("SkipAd");
+
+        //传递用户id
+        //就可以统计是谁跳过了
+        event.addKeyValue("user", userId);
+
+        //记录事件
+        JAnalyticsInterface.onEvent(context,event);
     }
 
     /**
