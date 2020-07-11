@@ -245,6 +245,16 @@
                 android:resource="@xml/bugly_provider" />
         </provider>
 
+        <!-- JCore2.0.0及以上版本需要添加这个service
+             这个Service要继承JCommonService -->
+        <service
+            android:name="com.ixuea.courses.mymusic.service.JiGuangService"
+            android:process=":pushcore">
+            <intent-filter>
+                <action android:name="cn.jiguang.user.service.action" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

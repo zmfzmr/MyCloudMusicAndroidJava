@@ -54,7 +54,10 @@ android {
                 JPUSH_APPKEY : "7e2f3f21c1507ec8d4cd9620",
 
                 //暂时填写默认值即可.
-                JPUSH_CHANNEL : "developer-default"
+                JPUSH_CHANNEL : "developer-default",
+
+                //包名
+                JPUSH_PKGNAME: "com.ixuea.courses.mymusic"
         ]
     }
 
@@ -852,6 +855,11 @@ dependencies {
     //janalytics: 分析的真实逻辑
     implementation 'cn.jiguang.sdk:janalytics:2.1.0'
     implementation 'cn.jiguang.sdk:jcore:2.1.6'
+
+    //极光聊天
+    //http://docs.jiguang.cn/jmessage/client/jmessage_android_guide/
+    //因为上面已经添加了jcore 这里就不添加了
+    implementation 'cn.jiguang.sdk:jmessage:2.9.0'
 
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
