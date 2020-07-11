@@ -20,6 +20,7 @@ import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
 import com.ixuea.courses.mymusic.manager.impl.ActivityManager;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.MessageUtil;
 import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
@@ -34,6 +35,9 @@ import androidx.emoji.bundled.BundledEmojiCompatConfig;
 import androidx.emoji.text.EmojiCompat;
 import androidx.multidex.MultiDex;
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.event.MessageEvent;
+import cn.jpush.im.android.api.model.Message;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
@@ -129,6 +133,13 @@ public class AppContext extends Application implements Application.ActivityLifec
         JAnalyticsInterface.init(getApplicationContext());
         //设计极光统计调试模式
         JAnalyticsInterface.setDebugMode(LogUtil.isDebug);
+
+        //初始化极光IM
+        JMessageClient.init(getApplicationContext());
+
+        //注册极光消息回调 (这个this 也就是应用上下文，跟getApplicationContext都是一样的)
+        //回调： 别人给我发的消息
+        JMessageClient.registerEventReceiver(this);
     }
 
     /**
@@ -395,4 +406,21 @@ public class AppContext extends Application implements Application.ActivityLifec
 
     }
     //end Activity声明周期回调
+
+    /**
+     * 接收在线消息
+     * 还有接收离线消息的事件(离线： 我不在线，别人给我发的消息)
+     * 如果有需要请查看文档
+     * https://docs.jiguang.cn//jmessage/client/android_sdk/message/#_30
+     *
+     * @param event 注意： 这个方法名字不要写错了
+     *              onEventMainThread： 别人给我发送事件，我这边接收事件是在主线程中运行
+     */
+    public void onEventMainThread(MessageEvent event) {
+        //获取消息
+        Message data = event.getMessage();
+
+        //data.getContentType(): 消息类型： 比如图片消息 视频消息 文本消息等
+        LogUtil.d(TAG, "onEventMainThread:" + data.getContentType() + "," + MessageUtil.getContent(data.getContent()));
+    }
 }
