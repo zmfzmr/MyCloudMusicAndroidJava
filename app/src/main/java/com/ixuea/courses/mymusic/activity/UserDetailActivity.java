@@ -23,6 +23,7 @@ import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.StringUtil;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -326,7 +327,8 @@ public class UserDetailActivity extends BaseTitleActivity {
     @OnClick(R.id.bt_send_message)
     public void onSendMessage() {
         //data.getId(): 用户id
-        Chat2Activity.start(getMainActivity(), data.getId());
+        //这里的id 是包裹着的
+        Chat2Activity.start(getMainActivity(), StringUtil.wrapperUserId(data.getId()));
     }
 
     /**
