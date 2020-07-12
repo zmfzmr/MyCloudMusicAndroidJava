@@ -86,7 +86,7 @@ public class BaseLoginActivity extends BaseTitleActivity {
         //把登录成功的事件通知到AppContext
         //PreferenceUtil sp 是父类BaseCommonActivity初始化的
 //        AppContext.getInstance().login(sp, data.getData());
-        AppContext.getInstance().login(sp, data);
+        AppContext.getInstance().login(data);
 
         ToastUtil.successShortToast(R.string.login_success);
 

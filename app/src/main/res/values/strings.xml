@@ -43,6 +43,7 @@
     <string name="error_confirm_password">两次密码不正确</string>
     <string name="enter_register2">补充资料</string>
     <string name="complete_register">完成注册</string>
+    <string name="error_message_register">注册聊天服务器失败,请稍后再试!</string>
 
     <!--忘记密码-->
     <string name="send_code">发送验证码</string>
@@ -285,5 +286,6 @@
     <string name="about_ixuea">关于爱学啊</string>
     <string name="error_response_sign">接口签名错误，请稍后再试!</string>
     <string name="error_response_decript">接口解密错误，请稍后再试!</string>
+    <string name="error_message_login">登录聊天服务器失败,请稍后再试!</string>
 
 </resources>

@@ -258,7 +258,7 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
                                     AnalysisUtil.getMethod(null, null, data.getQq_id(), data.getWeibo_id()),
                                     null, null, data.getQq_id(), data.getWeibo_id());
 
-                            AppContext.getInstance().login(sp, d.getData());
+                            AppContext.getInstance().login(d.getData());
 
                             ToastUtil.successShortToast(R.string.login_success);
                             startActivityAfterFinishThis(MainActivity.class);

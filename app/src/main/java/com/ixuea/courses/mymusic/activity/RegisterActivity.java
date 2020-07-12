@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.api.BasicCallback;
 
 public class RegisterActivity extends BaseLoginActivity {
 
@@ -181,8 +183,51 @@ public class RegisterActivity extends BaseLoginActivity {
                                 data.getPhone(), data.getEmail(),
                                 data.getQq_id(), data.getWeibo_id());
 
-                        //注册后自动登录(调用父类自动登录方法)
-                        login(phone, email, password);
+                        //注册用户到聊天服务端
+
+                        //由于注册的时候不能上传头像
+                        //所以我们就干脆不让sdk管理任何用户信息
+                        //只传递用户名（我们这里传递的是用户Id）
+
+                        //这里不能直接传递密码
+                        //因为第三方登陆的时候没有密码
+                        //所以如果是第三方登陆
+                        //那么就会导致无法登陆聊天服务器
+                        //这里我们就简单实现
+                        //直接将用户id当密码
+                        //但这样实现其实是有重大Bug
+                        //因为用户的id不会变
+                        //真实项目中应该换其他方式实现
+
+                        //为啥用户名和密码都用 用户id呢？
+                        //用户名？： 因为我们的登录可以用手机号 邮箱 第三方登录，要是你用手机号的话，
+                        //          到时候用户用邮箱登录的话，那也不行
+                        //密码?  :  虽然手机号登录 和邮箱登录 密码都是相同的，但是，第三方登录，是没有密码的，
+                        //         导致无法登录聊天服务器。
+                        //所以我们这里统一用用户的id 作为  ： 用户名和密码
+
+                        String id = StringUtil.wrapperUserId(d.getData().getId());
+
+                        JMessageClient.register(id, id, new BasicCallback() {
+                            /**
+                             * @param responseCode    - 0 表示正常。大于 0 表示异常
+                             *                        responseMessage 会有进一步的异常信息。
+                             * @param responseMessage - 一般异常时会有进一步的信息提示。
+                             */
+                            @Override
+                            public void gotResult(int responseCode, String responseMessage) {
+                                if (responseCode != 0) {
+                                    ToastUtil.errorShortToast(R.string.error_message_register);
+                                    LogUtil.d(TAG, "message register failed:" + responseMessage);
+                                } else {
+                                    LogUtil.d(TAG, "message register success");
+
+                                    //注册后自动登录(调用父类自动登录方法)
+                                    login(phone, email, password);
+                                }
+                            }
+                        });
+
                     }
 
                     @Override

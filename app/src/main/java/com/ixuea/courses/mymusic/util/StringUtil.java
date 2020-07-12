@@ -206,4 +206,14 @@ public class StringUtil {
         //就直接返回
         return data;
     }
+
+    /**
+     * 给用户id添加占位字符(因为第三方服务需要的长度最少为4位，而我们这里是从1开始的)
+     *
+     * @param data
+     * @return
+     */
+    public static String wrapperUserId(String data) {
+        return "100" + data;
+    }
 }

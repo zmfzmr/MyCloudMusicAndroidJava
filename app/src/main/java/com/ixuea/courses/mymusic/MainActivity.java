@@ -563,9 +563,10 @@ public class MainActivity extends BaseMusicPlayerActivity {
 
         cloneDrawer();
 
-        //手动抛出一个错误
-        RuntimeException runtimeException = new RuntimeException("手动抛出一个错误");
-        throw runtimeException;
+        //这个先注释
+//        //手动抛出一个错误
+//        RuntimeException runtimeException = new RuntimeException("手动抛出一个错误");
+//        throw runtimeException;
     }
 
     /**

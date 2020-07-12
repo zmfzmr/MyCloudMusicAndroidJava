@@ -23,6 +23,7 @@ import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.MessageUtil;
 import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
+import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 import com.mob.MobSDK;
 import com.tencent.bugly.Bugly;
@@ -38,6 +39,7 @@ import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.model.Message;
+import cn.jpush.im.api.BasicCallback;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
@@ -60,6 +62,7 @@ public class AppContext extends Application implements Application.ActivityLifec
     private static AppContext context;
     private DownloadManager downloadManager;//下载管理器实例
     private ActivityManager activityManager;//界面管理器
+    private PreferenceUtil sp;//偏好工具类
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -74,6 +77,8 @@ public class AppContext extends Application implements Application.ActivityLifec
     @Override
     public void onCreate() {
         super.onCreate();
+
+        sp = PreferenceUtil.getInstance(getApplicationContext());
 
         //尽可能早的进行这一步操作(这里放在最前面)
         //建议在 Application 中完成初始化操作
@@ -123,6 +128,12 @@ public class AppContext extends Application implements Application.ActivityLifec
 
         //初始化极光
         initJiGuang();
+
+        //判断是否登录了(杀死再次进入应用,再次登录极光聊天)
+        if (sp.isLogin()) {
+            //初始化其他需要登录后才初始化的内容
+            onLogin();
+        }
     }
 
     /**
@@ -200,11 +211,10 @@ public class AppContext extends Application implements Application.ActivityLifec
     /**
      * 当用户登录了
      *
-     * @param sp   PreferenceUtil
      * @param data Session
      *             保存到PreferenceUtil中SharedPreferences对象里面
      */
-    public void login(PreferenceUtil sp, Session data) {
+    public void login(Session data) {
         //保存登录后的session
         sp.setSession(data.getSession());
 
@@ -227,7 +237,25 @@ public class AppContext extends Application implements Application.ActivityLifec
      * 初始化其他需要登录后初始化的内容
      */
     private void onLogin() {
+        //登录聊天服务器
+        String id = StringUtil.wrapperUserId(sp.getUserId());
+        JMessageClient.login(id, id, new BasicCallback() {
+            /**
+             * @param responseCode    - 0 表示正常。大于 0 表示异常
+             *                        responseMessage 会有进一步的异常信息。
+             * @param responseMessage - 一般异常时会有进一步的信息提示。
+             */
+            @Override
+            public void gotResult(int responseCode, String responseMessage) {
+                if (responseCode != 0) {
+                    LogUtil.d(TAG, "message login failed:" + responseMessage);
 
+                    ToastUtil.errorShortToast(R.string.error_message_login);
+                } else {
+                    LogUtil.d(TAG, "message login success");
+                }
+            }
+        });
     }
 
     /**
@@ -299,6 +327,9 @@ public class AppContext extends Application implements Application.ActivityLifec
             downloadManager.destroy();
             downloadManager = null;//注意:销毁后还要置为null
         }
+
+        //退出极光聊天
+        JMessageClient.logout();
     }
 
     /**
