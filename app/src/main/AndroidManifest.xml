@@ -40,6 +40,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="theme">
         <activity
+            android:name=".activity.ConversationActivity"
+            android:label="@string/my_message" />
+        <activity
             android:name=".activity.NewOrderActivity"
             android:label="@string/my_new_order" />
         <activity
@@ -228,33 +231,34 @@
         <activity
             android:name="com.king.zxing.CaptureActivity"
             android:screenOrientation="portrait" />
-
-        <!-- 腾讯Bulgy需要配置
+        <!--
+ 腾讯Bulgy需要配置
              关于什么是FileProvider
              这里就不再讲解了
-             这里只要学会这样配置就行了-->
+             这里只要学会这样配置就行了
+        -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
 
-            <!--这里引用了bugly_provider-->
+            <!-- 这里引用了bugly_provider -->
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/bugly_provider" />
         </provider>
-
-        <!-- JCore2.0.0及以上版本需要添加这个service
-             这个Service要继承JCommonService -->
+        <!--
+ JCore2.0.0及以上版本需要添加这个service
+             这个Service要继承JCommonService
+        -->
         <service
-            android:name="com.ixuea.courses.mymusic.service.JiGuangService"
+            android:name=".service.JiGuangService"
             android:process=":pushcore">
             <intent-filter>
                 <action android:name="cn.jiguang.user.service.action" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

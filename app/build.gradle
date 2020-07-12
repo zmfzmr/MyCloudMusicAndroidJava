@@ -54,7 +54,7 @@ android {
                 JPUSH_APPKEY : "7e2f3f21c1507ec8d4cd9620",
 
                 //暂时填写默认值即可.
-                JPUSH_CHANNEL : "developer-default",
+                JPUSH_CHANNEL: "developer-default",
 
                 //包名
                 JPUSH_PKGNAME: "com.ixuea.courses.mymusic"

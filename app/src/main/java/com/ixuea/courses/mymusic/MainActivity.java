@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
 import com.ixuea.courses.mymusic.activity.CodeActivity;
+import com.ixuea.courses.mymusic.activity.ConversationActivity;
 import com.ixuea.courses.mymusic.activity.NewOrderActivity;
 import com.ixuea.courses.mymusic.activity.OrderActivity;
 import com.ixuea.courses.mymusic.activity.ScanActivity;
@@ -500,6 +501,16 @@ public class MainActivity extends BaseMusicPlayerActivity {
         startActivity(ScanActivity.class);
         cloneDrawer();
 
+    }
+
+    /**
+     * 消息点击
+     */
+    @OnClick(R.id.message_container)
+    public void onMessageClick() {
+        startActivity(ConversationActivity.class);
+
+        cloneDrawer();
     }
 
     /**
