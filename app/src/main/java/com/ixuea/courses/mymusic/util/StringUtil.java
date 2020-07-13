@@ -218,6 +218,17 @@ public class StringUtil {
     }
 
     /**
+     * 去除用户id占位符
+     *
+     * @param data
+     * @return
+     */
+    public static String unwrapUserId(String data) {
+        //因为前面方法wrapperUserId的时候，前面添加了3位，所以这里从3开始截取
+        return data.substring(3);
+    }
+
+    /**
      * 格式化消息数量
      *
      * @param data
@@ -230,4 +241,5 @@ public class StringUtil {
         //转换成字符串(因为消息数量 是int类型)
         return String.valueOf(data);
     }
+
 }
