@@ -11,10 +11,60 @@
 
     <!--内容容器-->
     <LinearLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!--列表控件-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <include layout="@layout/divider_small" />
+
+        <!--底部容器
+             android:gravity="bottom"   意思是： 不管输入框中的内容是多少，左右2个控件都是显示在底部
+        -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_middle">
+
+            <!--选择图片按钮-->
+            <ImageView
+                android:id="@+id/iv_select_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_select_image" />
+
+            <!--输入框-->
+            <androidx.emoji.widget.EmojiAppCompatEditText
+                android:id="@+id/et_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_middle"
+                android:layout_weight="1"
+                android:background="@drawable/shape_edit_text_border"
+                android:hint="@string/hint_enter_message"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/text"
+                tools:text="我没打过的手动挡勾搭勾搭个价格和昂贵的刚啊昂贵的噶噶个改好后狂蜂浪蝶好可怜哈伦裤考虑过" />
+
+            <!--发送按钮-->
+            <ImageView
+                android:id="@+id/iv_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_middle"
+                android:src="@drawable/ic_send" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

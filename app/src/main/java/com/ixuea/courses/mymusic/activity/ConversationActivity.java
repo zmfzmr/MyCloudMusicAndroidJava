@@ -1,7 +1,9 @@
 package com.ixuea.courses.mymusic.activity;
 
 import android.os.Bundle;
+import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.ConversationAdapter;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Conversation;
+import cn.jpush.im.android.api.model.UserInfo;
 
 /**
  * 消息(会话) 界面
@@ -47,6 +50,26 @@ public class ConversationActivity extends BaseTitleActivity {
 
         //设置适配器
         rv.setAdapter(adapter);
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+        //设置item点击事件
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //获取点击的数据
+                Conversation data = (Conversation) adapter.getItem(position);
+
+                //获取目标用户
+                UserInfo user = (UserInfo) data.getTargetInfo();
+
+                //跳转到聊天界面 user.getUserName(): 这个是其实就是发送方的用户id
+                Chat2Activity.start(getMainActivity(), user.getUserName());
+            }
+        });
     }
 
     /**
