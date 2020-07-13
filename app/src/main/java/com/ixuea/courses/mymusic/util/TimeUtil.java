@@ -114,6 +114,72 @@ public class TimeUtil {
         //ISO8601这种表示方法: 例如： 2200-04-10T00:28:49.000Z
         //将 2200-04-10T00:28:49.000Z这种格式的字符串 用DateTime（joda.time依赖库）对象来解析
         DateTime dateTime = new DateTime(date);//传入进行一个解析
+//
+//        //计算和现在时间的差
+//        //单位毫秒
+//        //Date() 为java util里面的         这个DateTime对象需要转换成Date ，然后才能获取时间
+//        //就是现在的 减去  原来的时间 = 时间差
+//        long value = new Date().getTime() - dateTime.toDate().getTime();
+//
+//        if (value < 1L * ONE_MINUTE) {
+//            //小于1分钟
+//
+//            //显示多少秒前(把value转换成多少秒)
+//            long data = toSeconds(value);
+//            //data：表示秒   秒小于0 那就是1秒前，否则就是显示data
+//            return String.format("%d秒前", data <= 0 ? 1 : data);
+//        } else if (value < 60L * ONE_MINUTE) {
+//            //小于1小时(60 * 1分钟（ONE_MINUTE的值是用毫秒表示的）)
+//
+//            //显示多少分钟前
+//            long data = toMinutes(value);
+//            return String.format("%d分钟前", data);
+//        } else if (value < 24 * ONE_HOUR) {
+//            //小于1天(24 * 1小时（ONE_HOUR：用毫秒表示）)
+//
+//            //显示多少小时前
+//            long data = toHours(value);
+//            return String.format("%d小时前", data);
+//
+//        } else if (value < 30 * ONE_DAY) {
+//            //小于30天(1月)
+//
+//            //显示多少天前
+//            long data = toDays(value);
+//            return String.format("%d天前", data);
+//        }
+//
+//        //其他时间
+//        //格式化为yyyyMMddHHmm(y:年 M：月 d：天 H：小时 m：分钟  M和H为大写)
+//        return yyyyMMddHHmm(dateTime);
+
+        return commonFormat(dateTime);
+    }
+
+    /**
+     * 将时间戳转为项目中通用的格式
+     *
+     * @param data
+     */
+    public static String commonFormat(long data) {
+        //解析时间戳
+        DateTime dateTime = new DateTime(data);
+
+        return commonFormat(dateTime);
+    }
+
+    /**
+     * 将Datetime 转为项目中通用的格式
+     *
+     * @param dateTime
+     */
+    private static String commonFormat(DateTime dateTime) {
+
+//           //将字符串置为DataTime DateTime:是添加的依赖joda.time 里面的
+//        //ISO8601这种表示方法: 例如： 2200-04-10T00:28:49.000Z
+//        //将 2200-04-10T00:28:49.000Z这种格式的字符串 用DateTime（joda.time依赖库）对象来解析
+//        DateTime dateTime = new DateTime(dateTime);//传入进行一个解析
+        //上面的部分不用，因为在上一次commonFormat方法中已经使用了
 
         //计算和现在时间的差
         //单位毫秒

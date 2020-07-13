@@ -3,9 +3,11 @@ package com.ixuea.courses.mymusic.activity;
 import android.os.Bundle;
 
 import com.ixuea.courses.mymusic.R;
+import com.ixuea.courses.mymusic.adapter.ConversationAdapter;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ViewUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +23,7 @@ public class ConversationActivity extends BaseTitleActivity {
     private static final String TAG = "ConversationActivity";
     @BindView(R.id.rv)
     RecyclerView rv;
+    private ConversationAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +38,33 @@ public class ConversationActivity extends BaseTitleActivity {
         ViewUtil.initVerticalLinearRecyclerView(getMainActivity(), rv);
     }
 
+    @Override
+    protected void initDatum() {
+        super.initDatum();
+
+        //创建适配器
+        adapter = new ConversationAdapter(R.layout.item_conversation);
+
+        //设置适配器
+        rv.setAdapter(adapter);
+    }
+
     /**
      * 获取会话列表数据
      */
     private void fetchData() {
         //获取会话数据
         List<Conversation> datum = JMessageClient.getConversationList();
-        if (datum != null) {
+        if (datum == null) {
+            //没有消息
+
+            //情况数据(传入一个空数据，把原来的清空)
+            adapter.replaceData(new ArrayList<>());
+        } else {
             LogUtil.d(TAG, "fetchData:" + datum.size());
+
+            //设置数据
+            adapter.replaceData(datum);
         }
     }
 

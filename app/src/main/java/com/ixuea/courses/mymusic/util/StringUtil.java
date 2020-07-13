@@ -216,4 +216,18 @@ public class StringUtil {
     public static String wrapperUserId(String data) {
         return "100" + data;
     }
+
+    /**
+     * 格式化消息数量
+     *
+     * @param data
+     * @return
+     */
+    public static String formatMessageCount(int data) {
+        if (data > 99) {
+            return "99+";
+        }
+        //转换成字符串(因为消息数量 是int类型)
+        return String.valueOf(data);
+    }
 }
