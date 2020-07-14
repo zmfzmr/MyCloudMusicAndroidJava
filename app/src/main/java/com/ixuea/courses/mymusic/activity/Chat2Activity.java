@@ -11,12 +11,16 @@ import com.ixuea.courses.mymusic.manager.impl.UserManager;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.StringUtil;
-import com.ixuea.courses.mymusic.util.ViewUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.model.Conversation;
+import cn.jpush.im.android.api.model.Message;
 
 /**
  * 聊天界面
@@ -51,8 +55,11 @@ public class Chat2Activity extends BaseTitleActivity {
     protected void initView() {
         super.initView();
 
-        //初始化列表控件
-        ViewUtil.initVerticalLinearRecyclerView(getMainActivity(), rv);
+        //固定尺寸
+        rv.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getMainActivity());
+        rv.setLayoutManager(layoutManager);
     }
 
     @Override
@@ -68,10 +75,14 @@ public class Chat2Activity extends BaseTitleActivity {
         //以为从上个界面传递过来的id是包裹完成的，所以需要解除包裹
         userManager.getUser(StringUtil.unwrapUserId(id), data -> setTitle(data.getNickname()));
 
-//        //测试聊天SDK是否集成成功
-//        //这里的用户必须是通过客户端注册的
-//        //也就是要调用了极光IM的注册方法
-//        conversation = Conversation.createSingleConversation(id);
+        //测试聊天SDK是否集成成功
+        //这里的用户必须是通过客户端注册的
+        //也就是要调用了极光IM的注册方法
+
+        //这个不能注释
+        //当在Conversation 界面中点击item进来的时候，根据这个id(对方的id)可以获取到对方发送过来的会话
+        //然后根据会话获取所有的消息
+        conversation = Conversation.createSingleConversation(id);
 //        //创建文本消息
 //        Message message = conversation.createSendTextMessage("我们是爱学啊,这是一条文本消息");
 //        //发送文本消息
@@ -83,6 +94,30 @@ public class Chat2Activity extends BaseTitleActivity {
         adapter = new ChatAdapter(getMainActivity());
         //设置适配器
         rv.setAdapter(adapter);
+    }
+
+    /**
+     * 界面显示了
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        fetchData();
+    }
+
+    private void fetchData() {
+        //获取会话中所有消息
+        //消息按照时间升序排列
+        List<Message> messages = conversation.getAllMessage();
+        //这里就不在实现分页了
+        //因为评论列表已经讲解了
+        if (messages == null) {
+            //因为这个会话中可能没有数据
+            adapter.setDatum(new ArrayList<>());
+        } else {
+            adapter.setDatum(messages);
+        }
     }
 
     /**

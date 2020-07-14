@@ -352,4 +352,22 @@ public class Constant {
      * 这个100M的时候 目前来说足够用了，因为网络请求一次也就几kb
      */
     public static final long NETWORK_CACHE_SIZE = 1024 * 1024 * 100;
+
+    /**
+     * 左侧(其他人) 文本消息
+     */
+    public static final int TYPE_TEXT_LEFT = 100;
+    /**
+     * 右侧(我的)  文本消息
+     */
+    public static final int TYPE_TEXT_RIGHT = 110;
+
+    /**
+     * 左侧(其他人) 图片消息
+     */
+    public static final int TYPE_IMAGE_LEFT = 120;
+    /**
+     * 右侧(我的)   图片消息
+     */
+    public static final int TYPE_IMAGE_RIGHT = 130;
 }
