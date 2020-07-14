@@ -21,6 +21,7 @@
         android:layout_marginLeft="@dimen/padding_middle"
         tools:text="这是消息内容这是消息内容这是消息内容这是消息内容这是消息内容这是消息内容这是消息内容这是消息内容"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_chat_background_left" />
 
 </LinearLayout>
