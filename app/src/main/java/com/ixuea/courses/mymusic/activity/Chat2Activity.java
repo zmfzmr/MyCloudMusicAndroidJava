@@ -11,6 +11,9 @@ import com.ixuea.courses.mymusic.manager.impl.UserManager;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.StringUtil;
+import com.ixuea.courses.mymusic.util.ToastUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 
@@ -149,5 +153,30 @@ public class Chat2Activity extends BaseTitleActivity {
     @OnClick(R.id.iv_send)
     public void onSendClick() {
         LogUtil.d(TAG, "onSendClick: ");
+
+        String content = et_content.getText().toString().trim();
+
+        if (StringUtils.isEmpty(content)) {
+            //提示： 请输入你要发送的消息
+            ToastUtil.errorShortToast(R.string.hint_enter_message);
+            return;
+        }
+        //创建文本消息
+        Message message = conversation.createSendTextMessage(content);
+
+        //设置消息监听器
+        setSendMessageCallback(message);
+
+        //发送文本消息
+        JMessageClient.sendMessage(message);
+    }
+
+    /**
+     * 设置消息监听器
+     *
+     * @param message Message
+     */
+    private void setSendMessageCallback(Message message) {
+
     }
 }

@@ -11,11 +11,11 @@
     <TextView
         android:id="@+id/tv_content"
         android:layout_marginTop="@dimen/padding_small"
-        android:textColor="@color/text"
+        android:textColor="@color/white"
         android:lineSpacingMultiplier="@dimen/line_space"
         android:layout_marginLeft="@dimen/padding_message"
         android:layout_marginRight="@dimen/padding_middle"
-        tools:text="这是消息内容"
+        tools:text="这是消息"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_chat_background_right" />
