@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 右侧表示我发的 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_middle"
+    android:gravity="right">
+
+    <!--消息-->
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_marginTop="@dimen/padding_small"
+        android:textColor="@color/text"
+        android:lineSpacingMultiplier="@dimen/line_space"
+        android:layout_marginLeft="@dimen/padding_message"
+        android:layout_marginRight="@dimen/padding_middle"
+        tools:text="这是消息内容"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!--头像-->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_avatar"
+        android:src="@drawable/placeholder"
+        android:layout_width="@dimen/avatar_width_meddle"
+        android:layout_height="@dimen/avatar_width_meddle" />
+
+</LinearLayout>
