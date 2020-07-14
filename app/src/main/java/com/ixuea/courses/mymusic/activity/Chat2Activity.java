@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
+import cn.jpush.im.api.BasicCallback;
 
 /**
  * 聊天界面
@@ -177,6 +178,44 @@ public class Chat2Activity extends BaseTitleActivity {
      * @param message Message
      */
     private void setSendMessageCallback(Message message) {
+        message.setOnSendCompleteCallback(new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage) {
+                if (responseCode == 0) {
+                    //发送成功
 
+                    LogUtil.d(TAG, "send message success");
+                    addMessage(message);
+
+                    //清空输入框
+                    clearInput();
+
+                } else {
+                    //发送失败
+                    LogUtil.d(TAG, "send message failed:" + responseCode + "," + responseMessage);
+
+                    //弹出提示
+                    ToastUtil.successShortToast(R.string.error_send_message);
+                }
+            }
+        });
+    }
+
+    /**
+     * 清空输入框
+     */
+    private void clearInput() {
+        et_content.setText("");
+    }
+
+    /**
+     * 添加消息到列表
+     *
+     * @param data Message
+     */
+    private void addMessage(Message data) {
+        //将消息添加到列表后面
+        //这样列表就会刷新这条数据
+        adapter.addData(data);
     }
 }
