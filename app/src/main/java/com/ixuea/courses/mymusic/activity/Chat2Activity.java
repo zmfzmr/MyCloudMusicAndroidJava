@@ -3,12 +3,14 @@ package com.ixuea.courses.mymusic.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.ChatAdapter;
 import com.ixuea.courses.mymusic.manager.impl.UserManager;
 import com.ixuea.courses.mymusic.util.Constant;
+import com.ixuea.courses.mymusic.util.HandlerUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
@@ -30,7 +32,7 @@ import cn.jpush.im.api.BasicCallback;
 /**
  * 聊天界面
  */
-public class Chat2Activity extends BaseTitleActivity {
+public class Chat2Activity extends BaseTitleActivity implements ViewTreeObserver.OnGlobalLayoutListener {
     private static final String TAG = "Chat2Activity";
     /**
      * 列表控件
@@ -109,6 +111,18 @@ public class Chat2Activity extends BaseTitleActivity {
         super.onResume();
 
         fetchData();
+
+        //添加布局监听器
+        //布局的每次改变都会调用实现的回调方法，所以说是比较耗费性能的
+        rv.getViewTreeObserver().addOnGlobalLayoutListener(this);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //移除布局管理器
+        rv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 
     private void fetchData() {
@@ -217,5 +231,49 @@ public class Chat2Activity extends BaseTitleActivity {
         //将消息添加到列表后面
         //这样列表就会刷新这条数据
         adapter.addData(data);
+
+        //滚动到底部（发送数据完成后,才滚动到底部）
+        scrollBottom();
+    }
+
+    /**
+     * 滚动到底部
+     * rv.post： View已经onLayout完毕了(里面的item已经添加完毕后才行)
+     */
+    private void scrollBottom() {
+        //之所以用这个方法，因为rv.post方法执行是在添加item 后才执行，也就是rv里面的item加载完成后才用这个方法
+        rv.post(new Runnable() {
+            @Override
+            public void run() {
+                LogUtil.d("是否是主线程: ", "" + HandlerUtil.isMainThread());
+                //使用动画滚动到底部(这里传递集合的大小，说明滚动到集合的size-1 个，也就是最后一个)
+                rv.smoothScrollToPosition(adapter.getItemCount());
+            }
+        });
+    }
+
+    /**
+     * 布局改变了
+     * RecyclerView布局监听器
+     * <p>
+     * 第一次进来，如果发生布局改变了（也就是item消息变多了）,那么就滚动到底部
+     * 注意： 第一次进来的时候，并没有和原来的RecyclerView(也就是销毁的RecyclerView)比较
+     * 只要第一次进啦，添加了数据，那么就会滚动到底部
+     */
+    @Override
+    public void onGlobalLayout() {
+
+        //滚动到底部()
+        scrollBottom();
+
+        //之所以在这里实现
+        //是因为像文本消息没什么问题
+        //直接就可以滚动到底部
+        //但图片就有可能有问题
+        //因为图片是异步加载的
+        //也就是说有可能界面滚动时
+        //图片还没显示出来
+        //等图片显示出来后
+        //就不是界面底部了
     }
 }
