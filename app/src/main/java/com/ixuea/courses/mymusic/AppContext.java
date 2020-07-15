@@ -39,6 +39,7 @@ import androidx.multidex.MultiDex;
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.event.MessageEvent;
+import cn.jpush.im.android.api.event.NotificationClickEvent;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.api.BasicCallback;
 import cn.sharesdk.framework.Platform;
@@ -457,5 +458,37 @@ public class AppContext extends Application implements Application.ActivityLifec
 
         //发布消息事件
         EventBus.getDefault().post(new OnNewMessageEvent(data));
+    }
+
+    /**
+     * 聊天消息通知栏点击
+     *
+     * @param event NotificationClickEvent 这个事件是极光里面的
+     */
+    public void onEventMainThread(NotificationClickEvent event) {
+        //获取消息发送人id (getUserName: 因为我们传递的是id)
+        //注意：这个id是String类型的
+        String id = event.getMessage().getFromUser().getUserName();
+        //创建意图
+        Intent intent = new Intent(this, MainActivity.class);
+        //添加用户id
+        intent.putExtra(Constant.ID, id);
+        //要跳转到聊天界面
+        //先启动主界面的
+        //好处是
+        //用户在聊天界面
+        //返回正好看到的主界面
+        //这样才符合应用逻辑
+        intent.setAction(Constant.ACTION_MESSAGE);
+        //在Activity以外启动界面
+        //都要写这个标识
+        //具体的还比较复杂
+        //基础课程中讲解
+        //这里学会这样用就行了
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);好像用set也行
+        //这里用addFlags
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //启动界面
+        startActivity(intent);
     }
 }

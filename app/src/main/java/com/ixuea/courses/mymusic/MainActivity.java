@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ixuea.courses.mymusic.activity.BaseMusicPlayerActivity;
+import com.ixuea.courses.mymusic.activity.Chat2Activity;
 import com.ixuea.courses.mymusic.activity.CodeActivity;
 import com.ixuea.courses.mymusic.activity.ConversationActivity;
 import com.ixuea.courses.mymusic.activity.NewOrderActivity;
@@ -464,6 +465,11 @@ public class MainActivity extends BaseMusicPlayerActivity {
 
             //进入音乐播放界面
             startMusicPlayerActivity();
+        } else if (Constant.ACTION_MESSAGE.equals(intent.getAction())) {
+            //要跳转到聊天界面(点击聊天通知栏携带id跳转)
+            //注意：这个id是String类型的
+            String id = intent.getStringExtra(Constant.ID);
+            startActivityExtraId(Chat2Activity.class, id);
         }
     }
 
