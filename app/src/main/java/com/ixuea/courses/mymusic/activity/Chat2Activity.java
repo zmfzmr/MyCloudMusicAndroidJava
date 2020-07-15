@@ -130,6 +130,14 @@ public class Chat2Activity extends BaseTitleActivity implements ViewTreeObserver
         //注册发布订阅框架
         EventBus.getDefault().register(this);
 
+        //进入了聊天回话
+        //标记后
+        //不会显示新消息到通知栏
+        //同时也会清除原来显示的消息
+
+        //可以看到该SDK，默认会显示收到的消息到通知栏，但如果正在和这个人聊天，这条消息就不应该显示到通知栏，
+        // 只需要调用聊天SDK方法，设置进入聊天了，进入后该消息就不会显示；或退出聊天了，退出了，消息就会显示到通知栏。
+        JMessageClient.enterSingleConversation(id);
     }
     @Override
     protected void onPause() {
@@ -139,6 +147,9 @@ public class Chat2Activity extends BaseTitleActivity implements ViewTreeObserver
 
         //取消发布订阅框架
         EventBus.getDefault().unregister(this);
+
+        //退出了回话(退出会话后，就可以显示到通知栏里面了)
+        JMessageClient.exitConversation();
     }
 
     private void fetchData() {
