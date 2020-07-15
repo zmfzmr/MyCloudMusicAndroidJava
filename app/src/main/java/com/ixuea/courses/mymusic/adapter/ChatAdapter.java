@@ -171,4 +171,25 @@ public class ChatAdapter extends BaseRecyclerViewAdapter<Message, ChatAdapter.Vi
             //所以这里就不在重复讲解了
         }
     }
+
+    /**
+     * 图片消息 ViewHolder
+     * ChatAdapter.ViewHolder 的后面不需要<Message>了，因为父类已经传入了
+     */
+    class ImageViewHolder extends ChatAdapter.ViewHolder {
+
+        public ImageViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+
+        /**
+         * 绑定数据方法
+         *
+         * @param data D 是 类class ViewHolder<D> 中的D数据
+         */
+        @Override
+        public void bindData(Message data) {
+            super.bindData(data);
+        }
+    }
 }
