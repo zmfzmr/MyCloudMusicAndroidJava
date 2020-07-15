@@ -11,8 +11,13 @@ import com.ixuea.courses.mymusic.manager.impl.UserManager;
 import com.ixuea.courses.mymusic.util.ImageUtil;
 import com.ixuea.courses.mymusic.util.StringUtil;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
+
 import androidx.annotation.NonNull;
 import butterknife.BindView;
+import cn.jpush.im.android.api.callback.DownloadCompletionCallback;
 import cn.jpush.im.android.api.content.ImageContent;
 import cn.jpush.im.android.api.content.MessageContent;
 import cn.jpush.im.android.api.content.TextContent;
@@ -56,6 +61,12 @@ public class ChatAdapter extends BaseRecyclerViewAdapter<Message, ChatAdapter.Vi
         //他们的布局都一样只是方向不一样
         //所以可以用同一个ViewHolder
         switch (viewType) {
+            case TYPE_IMAGE_LEFT:
+                //其他人发送的图片消息
+                return new ImageViewHolder(getInflater().inflate(R.layout.item_chat_image_left, parent, false));
+            case TYPE_IMAGE_RIGHT:
+                //我发送的图片消息
+                return new ImageViewHolder(getInflater().inflate(R.layout.item_chat_image_right, parent, false));
             case TYPE_TEXT_LEFT:
                 //图片的那个ViewHolder 已经在TextViewHolder里面实现了
                 return new TextViewHolder(getInflater().inflate(R.layout.item_chat_text_left, parent, false));
@@ -178,6 +189,9 @@ public class ChatAdapter extends BaseRecyclerViewAdapter<Message, ChatAdapter.Vi
      */
     class ImageViewHolder extends ChatAdapter.ViewHolder {
 
+        @BindView(R.id.iv_banner)
+        ImageView iv_banner;
+
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
         }
@@ -190,6 +204,46 @@ public class ChatAdapter extends BaseRecyclerViewAdapter<Message, ChatAdapter.Vi
         @Override
         public void bindData(Message data) {
             super.bindData(data);
+
+            //设置为默认图片
+            //放置显示原来的图片
+
+            //这里主要是防止：进入聊天界面还没有加载完成的情况下，显示上次的情况，所以统一用占位图替代
+            iv_banner.setImageResource(R.drawable.placeholder);
+
+            //获取图片内容
+            ImageContent content = (ImageContent) data.getContent();
+
+            if (StringUtils.isNotBlank(content.getLocalPath())) {
+                //有本地路径
+
+                //直接显示本地路径  注意： 这里传入的ImageContent对象
+                showImage(content);
+            } else {
+                //下载原图
+                content.downloadOriginImage(data, new DownloadCompletionCallback() {
+                    @Override
+                    public void onComplete(int i, String s, File file) {
+                        //这里没有处理错误
+
+                        //下载完成后
+                        //直接显示
+
+                        //下载完成后，会保存到原来的content(ImageContent对象)
+                        showImage(content);
+                    }
+                });
+            }
+
+        }
+
+        /**
+         * 显示图片
+         *
+         * @param data ImageContent 下载完成后的ImageContent对象   有一个本地路径data.getLocalPath()
+         */
+        private void showImage(ImageContent data) {
+            ImageUtil.showLocalImage(context, iv_banner, data.getLocalPath());
         }
     }
 }

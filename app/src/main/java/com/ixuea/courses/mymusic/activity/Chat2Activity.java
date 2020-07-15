@@ -15,15 +15,22 @@ import com.ixuea.courses.mymusic.util.HandlerUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -94,6 +101,10 @@ public class Chat2Activity extends BaseTitleActivity implements ViewTreeObserver
         //这个不能注释
         //当在Conversation 界面中点击item进来的时候，根据这个id(对方的id)可以获取到对方发送过来的会话
         //然后根据会话获取所有的消息
+
+        //可以简单理解为发送的消息保存到这个会话里面，可以根据conversation.getAllMessage()获取发送的消息
+        //(确定他具体是如何实现的哟；但假设用sqlite数据库，那可以这样设计，
+        // 有一张会话表，有一张聊天记录表，每一条聊天消息，有一个会话ID指向，它属于哪个会话)
         conversation = Conversation.createSingleConversation(id);
 //        //创建文本消息
 //        Message message = conversation.createSendTextMessage("我们是爱学啊,这是一条文本消息");
@@ -139,6 +150,7 @@ public class Chat2Activity extends BaseTitleActivity implements ViewTreeObserver
         // 只需要调用聊天SDK方法，设置进入聊天了，进入后该消息就不会显示；或退出聊天了，退出了，消息就会显示到通知栏。
         JMessageClient.enterSingleConversation(id);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -187,6 +199,51 @@ public class Chat2Activity extends BaseTitleActivity implements ViewTreeObserver
     @OnClick(R.id.iv_select_image)
     public void onSelectImageClick() {
         LogUtil.d(TAG, "onSelectImageClick: ");
+
+        //进入相册
+        //以下是例子
+        //用不到的api可以不写
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                //.theme()//主题样式(不设置为默认样式) 也可参考demo values/styles下 例如：R.style.picture.white.style
+                .maxSelectNum(1)// 最大图片选择数量 int
+                .minSelectNum(1)// 最小选择数量 int
+                .imageSpanCount(3)// 每行显示个数 int
+                .selectionMode(PictureConfig.MULTIPLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
+                .previewImage(true)// 是否可预览图片 true or false
+                //.previewVideo()// 是否可预览视频 true or false
+                //.enablePreviewAudio() // 是否可播放音频 true or false
+                .isCamera(true)// 是否显示拍照按钮 true or false
+                .imageFormat(PictureMimeType.JPEG)// 拍照保存图片格式后缀,默认jpeg
+                .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
+                .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
+                //.setOutputCameraPath("/CustomPath")// 自定义拍照保存路径,可不填
+                //.enableCrop()// 是否裁剪 true or false
+                .compress(true)// 是否压缩 true or false
+                //.glideOverride()// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
+                //.withAspectRatio()// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
+                //.hideBottomControls()// 是否显示uCrop工具栏，默认不显示 true or false
+                //.isGif()// 是否显示gif图片 true or false
+                //.compressSavePath(getPath())//压缩图片保存地址
+                //.freeStyleCropEnabled()// 裁剪框是否可拖拽 true or false
+                //.circleDimmedLayer()// 是否圆形裁剪 true or false
+                //.showCropFrame()// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
+                //.showCropGrid()// 是否显示裁剪矩形网格 圆形裁剪时建议设为false    true or false
+                //.openClickSound()// 是否开启点击声音 true or false
+                //.selectionMedia(selectedImage)// 是否传入已选图片 List<LocalMedia> list
+                .previewEggs(true)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中) true or false
+                //.cropCompressQuality()// 裁剪压缩质量 默认90 int
+                //.minimumCompressSize(100)// 小于100kb的图片不压缩
+                //.synOrAsy(true)//同步true或异步false 压缩 默认同步
+                //.cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效 int
+                //.rotateEnabled() // 裁剪是否可旋转图片 true or false
+                //.scaleEnabled()// 裁剪是否可放大缩小图片 true or false
+                //.videoQuality()// 视频陆制质量 0 or 1 int
+                //.videoMaxSecond(15)// 显示多少秒以内的视频or音频也可适用 int
+                //.videoMinSecond(10)// 显示多少秒以内的视频or音频也可适用 int
+                //.recordVideoSecond()//视频秒数陆制 默认60s int
+                //.isDragFrame(false)// 是否可拖动裁剪框(固定)
+                .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
     }
 
     /**
@@ -336,6 +393,47 @@ public class Chat2Activity extends BaseTitleActivity implements ViewTreeObserver
                 adapter.addData(data);
             }
         });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            //因为是返回的数据，所以这里结果码，而不是请求码
+
+            List<LocalMedia> localMedia = PictureSelector.obtainMultipleResult(data);
+
+            //发送图片消息  因为集合中就一个图片，所以是索引为0
+            sendImageMessage(localMedia.get(0).getCompressPath());
+        }
+    }
+
+    /**
+     * 发送图片消息
+     *
+     * @param path 压缩的图片路径
+     */
+    private void sendImageMessage(String path) {
+
+        try {
+            //创建消息  这里传入的是一个文件对象
+            Message message = conversation.createSendImageMessage(new File(path));
+
+//            //设置消息发送监听器  (setSendMessageCallback: 这个方法是前面创建的)
+            //这个必须要注释，因为 我们选择图片完成后，调用了onResume->fetchData 这个时候设置了适配器数据
+            //然后onActivityResult-->setSendMessageCallback-->addMessage(message);这个时候适配中又多了一条数据
+            //所以你会看到里列表中多一条数据；实际会话中只保存了一条数据
+//            setSendMessageCallback(message);
+
+            //发送消息(极光推送发送的消息是保存到本地的)
+            JMessageClient.sendMessage(message);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            //提示： 发送失败,请稍后再试
+            ToastUtil.errorShortToast(R.string.error_send_message);
+        }
 
     }
 }
