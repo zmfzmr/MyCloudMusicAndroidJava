@@ -29,6 +29,7 @@ import com.ixuea.courses.mymusic.activity.WebViewActivity;
 import com.ixuea.courses.mymusic.adapter.MainAdapter;
 import com.ixuea.courses.mymusic.api.Api;
 import com.ixuea.courses.mymusic.domain.User;
+import com.ixuea.courses.mymusic.domain.event.OnNewMessageEvent;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.Constant;
@@ -45,6 +46,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTit
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,11 +57,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.nekocode.badge.BadgeDrawable;
 
 public class MainActivity extends BaseMusicPlayerActivity {
 
@@ -89,6 +95,12 @@ public class MainActivity extends BaseMusicPlayerActivity {
      */
     @BindView(R.id.tv_description)
     TextView tv_description;
+
+    /**
+     * 消息未读数
+     */
+    @BindView(R.id.iv_count)
+    ImageView iv_count;
 
     /**
      * 滚动视图
@@ -343,6 +355,40 @@ public class MainActivity extends BaseMusicPlayerActivity {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             //检查是否有悬浮权限
             requestDrawOverlays();
+        }
+
+        //显示消息未读数
+        showMessageCount();
+    }
+
+    /**
+     * 显示消息未读数
+     * <p>
+     * 添加一个ImageView，因为我们使用的红点框架，他并不是一个View，而是生成一个Drawable，
+     * 所以只需要添加一个ImageView，然后把生成的Drawable设置到图片控件就行了。
+     */
+    private void showMessageCount() {
+        //获取所有未读消息数
+        int count = JMessageClient.getAllUnReadMsgCount();
+
+        if (count > 0) {
+            //有未读消息
+
+            //我的消息未读消息数drawable
+            BadgeDrawable countDrawable = new BadgeDrawable.Builder()
+                    //显示的类型,这里是是数字类型
+                    .type(BadgeDrawable.TYPE_NUMBER)
+                    //显示的数量
+                    .number(count)
+                    //设置背景颜色
+                    //这里使用了兼容方法获取颜色()
+                    //也可以用getResources().getColor()这种方式
+                    .badgeColor(ContextCompat.getColor(getMainActivity(), R.color.colorPrimary))
+                    .build();
+            iv_count.setImageDrawable(countDrawable);
+        } else {
+            //没有未读消息
+            iv_count.setImageDrawable(null);
         }
     }
 
@@ -626,5 +672,16 @@ public class MainActivity extends BaseMusicPlayerActivity {
     @Override
     protected String pageId() {
         return "Main";
+    }
+
+    /**
+     * 接收到新消息(实时显示红点数字)
+     * <p>
+     * EventBus在父类BaseMusicPlayerActivity中，已经注册了，所以不需要再注册了。
+     * 思路: AppContext->onEventMainThread-发送OnNewMessageEvent事件，这里更新
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNewMessageEvent(OnNewMessageEvent event) {
+        showMessageCount();
     }
 }

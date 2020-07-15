@@ -96,8 +96,21 @@ tools:openDrawer:预览的时候开启方向
                         android:src="@drawable/ic_phone" />
                     <!--文本-->
                     <TextView
-                        style="@style/ItemText"
+                        android:textColor="@color/text"
+                        android:layout_marginLeft="@dimen/padding_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/my_message" />
+
+                    <!--图标-->
+                    <ImageView
+                        android:id="@+id/iv_count"
+                        android:layout_marginLeft="@dimen/padding_small"
+                        tools:src="@drawable/ic_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/icon_height_small" />
+
+
                 </LinearLayout>
 
                 <!--按钮容器-->

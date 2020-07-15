@@ -861,6 +861,13 @@ dependencies {
     //因为上面已经添加了jcore 这里就不添加了
     implementation 'cn.jiguang.sdk:jmessage:2.9.0'
 
+    //红点Drawable
+    //https://github.com/nekocode/Badge
+    //现在我们要实现的功能，如果有未读消息，在我的消息按钮上面显示一个红点，
+    // 当然红点实现很简单，就是一个View，然后设置背景变为一个圆，就和会话界面一样，
+    // 所以理论上来说挺简单，但正因为简单，所以还可以采用第三方成熟的框架。
+    implementation "com.github.nekocode:Badge:2.1"
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'
