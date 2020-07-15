@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.ChatAdapter;
+import com.ixuea.courses.mymusic.domain.event.OnNewMessageEvent;
 import com.ixuea.courses.mymusic.manager.impl.UserManager;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.HandlerUtil;
@@ -16,6 +17,9 @@ import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,7 @@ import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
+import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 
 /**
@@ -97,6 +102,12 @@ public class Chat2Activity extends BaseTitleActivity implements ViewTreeObserver
 
         //上面测试的可以注释掉
 
+        //清除未读消息
+        //这个只要是进入到这个会话，就是全部为已读的了
+        //如果要想实现成钉钉那样，显示到这条消息的时候才设置为已读，
+        // 那么在ChatAdapter中TextViewHolder->bindData中 这个文本设置完成后才设置为已读
+        conversation.setUnReadMessageCnt(0);
+
         //创建适配器
         adapter = new ChatAdapter(getMainActivity());
         //设置适配器
@@ -116,13 +127,18 @@ public class Chat2Activity extends BaseTitleActivity implements ViewTreeObserver
         //布局的每次改变都会调用实现的回调方法，所以说是比较耗费性能的
         rv.getViewTreeObserver().addOnGlobalLayoutListener(this);
 
-    }
+        //注册发布订阅框架
+        EventBus.getDefault().register(this);
 
+    }
     @Override
     protected void onPause() {
         super.onPause();
         //移除布局管理器
         rv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+        //取消发布订阅框架
+        EventBus.getDefault().unregister(this);
     }
 
     private void fetchData() {
@@ -275,5 +291,40 @@ public class Chat2Activity extends BaseTitleActivity implements ViewTreeObserver
         //图片还没显示出来
         //等图片显示出来后
         //就不是界面底部了
+    }
+
+    /**
+     * 有新消息了
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNewMessageEvent(OnNewMessageEvent event) {
+        //获取消息
+        Message data = event.getData();
+
+        //获取消息发送人
+        UserInfo user = data.getFromUser();
+
+        //id： 聊天对方人的 id
+        //user.getUserName()： 发送人的id
+        //如果发送人的id 不是等于聊天对方人的id，那就直接返回
+        //在ChatActivity界面 表示我是接受方； 当前聊天节的id(也就是聊天对方的id)
+        //                                 user.getUserName(): 我接收的消息对方的id
+        if (!user.getUserName().equals(id)) {
+            //不是这个人的消息
+            //就不能显示
+            return;
+        }
+
+        //设置为已读，并添加数据到列表 (而有些是需要用户看到，才能是已读的: 这个只需要在adapter里面调用这个方法，也就是显示的时候才调用它)
+        data.setHaveRead(new BasicCallback() {
+            @Override
+            public void gotResult(int i, String s) {
+                //添加到列表
+                adapter.addData(data);
+            }
+        });
+
     }
 }

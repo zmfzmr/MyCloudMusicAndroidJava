@@ -17,6 +17,7 @@ import com.ixuea.android.downloader.config.Config;
 import com.ixuea.courses.mymusic.activity.LoginOrRegisterActivity;
 import com.ixuea.courses.mymusic.domain.Session;
 import com.ixuea.courses.mymusic.domain.event.LoginSuccessEvent;
+import com.ixuea.courses.mymusic.domain.event.OnNewMessageEvent;
 import com.ixuea.courses.mymusic.manager.impl.ActivityManager;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.LogUtil;
@@ -453,5 +454,8 @@ public class AppContext extends Application implements Application.ActivityLifec
 
         //data.getContentType(): 消息类型： 比如图片消息 视频消息 文本消息等
         LogUtil.d(TAG, "onEventMainThread:" + data.getContentType() + "," + MessageUtil.getContent(data.getContent()));
+
+        //发布消息事件
+        EventBus.getDefault().post(new OnNewMessageEvent(data));
     }
 }

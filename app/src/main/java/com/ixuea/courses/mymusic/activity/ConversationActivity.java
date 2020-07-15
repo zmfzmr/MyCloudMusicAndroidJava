@@ -6,8 +6,13 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ixuea.courses.mymusic.R;
 import com.ixuea.courses.mymusic.adapter.ConversationAdapter;
+import com.ixuea.courses.mymusic.domain.event.OnNewMessageEvent;
 import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.ViewUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,5 +106,29 @@ public class ConversationActivity extends BaseTitleActivity {
         super.onResume();
         //获取会话列表数据
         fetchData();
+
+        //注册发布订阅框架
+        EventBus.getDefault().register(this);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //取消发布订阅框架
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 有新消息了
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNewMessageEvent(OnNewMessageEvent event) {
+        //这个只需要刷新下界面就可以了
+        fetchData();
+    }
+
+
 }
