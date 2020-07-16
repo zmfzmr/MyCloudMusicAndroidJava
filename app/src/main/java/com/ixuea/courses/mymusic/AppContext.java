@@ -32,6 +32,7 @@ import com.tencent.bugly.Bugly;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 import androidx.emoji.bundled.BundledEmojiCompatConfig;
 import androidx.emoji.text.EmojiCompat;
@@ -66,6 +67,12 @@ public class AppContext extends Application implements Application.ActivityLifec
     private DownloadManager downloadManager;//下载管理器实例
     private ActivityManager activityManager;//界面管理器
     private PreferenceUtil sp;//偏好工具类
+    /**
+     * 当前Activity引用
+     * 通过弱引用保存
+     * 不影响gc销毁界面
+     */
+    private WeakReference<Activity> currentActivity;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -410,6 +417,11 @@ public class AppContext extends Application implements Application.ActivityLifec
     public void onActivityResumed(Activity activity) {
         LogUtil.d(TAG, "onActivityResumed:" + activity);
 
+        //保存界面
+        //目的是显示全局对话框的时候用到
+        //注意：这里用到了弱引用，防止内存泄漏
+        // (因为当前AppContext对象不销毁，这个当前Activity是不能释放的，所以使用弱引用就没有这个问题了)
+        currentActivity = new WeakReference<Activity>(activity);
     }
 
     /**
