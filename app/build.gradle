@@ -868,6 +868,10 @@ dependencies {
     // 所以理论上来说挺简单，但正因为简单，所以还可以采用第三方成熟的框架。
     implementation "com.github.nekocode:Badge:2.1"
 
+    //极光推送
+    //https://docs.jiguang.cn/jpush/client/Android/android_guide
+    implementation 'cn.jiguang.sdk:jpush:3.3.8'
+
     //java测试依赖
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'//这段不知道哪里生产的，所以去掉这段
     testImplementation 'junit:junit:4.12'

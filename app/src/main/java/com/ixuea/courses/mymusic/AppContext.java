@@ -37,6 +37,7 @@ import androidx.emoji.bundled.BundledEmojiCompatConfig;
 import androidx.emoji.text.EmojiCompat;
 import androidx.multidex.MultiDex;
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+import cn.jpush.android.api.JPushInterface;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.event.NotificationClickEvent;
@@ -258,6 +259,22 @@ public class AppContext extends Application implements Application.ActivityLifec
                 }
             }
         });
+
+        //设置推送别名
+        //这里将别名设置为了用户Id(好处是： 以后可以通过别名的方式用UserId去推送)
+        //官网文档：https://docs.jiguang.cn/jpush/client/Android/android_api/
+        //也可以到官网看看这个别名到底是干什么的
+        JPushInterface.setAlias(getApplicationContext(), 0, sp.getUserId());
+        //调试模式
+        JPushInterface.setDebugMode(true);
+
+        //初始化极光推送
+        JPushInterface.init(getApplicationContext());
+
+        //打印推送注册Id(类似于设备id，它有一个唯一值)
+        //只是为了调试
+        String pushId = JPushInterface.getRegistrationID(getApplicationContext());
+        LogUtil.d(TAG, "onLogin pushId:" + pushId);
     }
 
     /**
