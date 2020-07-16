@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--包含appBar和内容布局-->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -29,21 +30,44 @@
            这里把  app:titleTextColor="@color/white"去掉（这个只能更改单个，不能更改返回箭头的颜色）
            所以把AppBarLayout的style变为android:theme，全称是：android:theme="@style/AppTheme.AppBarOverlay"
         -->
-        <androidx.appcompat.widget.Toolbar
-            android:background="?attr/colorPrimary"
-            android:id="@+id/toolbar"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-            <!--在Toolbar添加了个指示器，Toolbar也是继承自ViewGroup的，
-                所以可以在里面放控件-->
-            <!--指示器-->
-            <net.lucode.hackware.magicindicator.MagicIndicator
-                android:id="@+id/mi"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
 
-        </androidx.appcompat.widget.Toolbar>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:background="?attr/colorPrimary"
+                android:id="@+id/toolbar"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+                <!--在Toolbar添加了个指示器，Toolbar也是继承自ViewGroup的，
+                    所以可以在里面放控件-->
+                <!--指示器-->
+                <net.lucode.hackware.magicindicator.MagicIndicator
+                    android:id="@+id/mi"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <!--标题消息未读数
+                目的是显示到Menu按钮右上方
+                可以通过自定义菜单实现
+                但Home菜单是系统添加的
+                修改起来比较麻烦
+                所以这种方式最简单
+                但可能有兼容性问题
+                因为不同的手机可能menu距离不一样-->
+            <ImageView
+                android:id="@+id/iv_title_count"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                tools:src="@drawable/ic_phone"
+                android:layout_width="@dimen/icon_height_small"
+                android:layout_height="@dimen/icon_height_small" />
+
+        </RelativeLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 

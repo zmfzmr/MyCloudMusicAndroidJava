@@ -103,6 +103,12 @@ public class MainActivity extends BaseMusicPlayerActivity {
     ImageView iv_count;
 
     /**
+     * 标题消息未读数
+     */
+    @BindView(R.id.iv_title_count)
+    ImageView iv_title_count;
+
+    /**
      * 滚动视图
      * ViewPager
      */
@@ -386,9 +392,24 @@ public class MainActivity extends BaseMusicPlayerActivity {
                     .badgeColor(ContextCompat.getColor(getMainActivity(), R.color.colorPrimary))
                     .build();
             iv_count.setImageDrawable(countDrawable);
+
+            //----------
+            //标题消息未读数
+            BadgeDrawable titleCountDrawable = new BadgeDrawable.Builder()
+                    .type(BadgeDrawable.TYPE_NUMBER)
+                    .number(count)
+                    //背景颜色
+                    .badgeColor(ContextCompat.getColor(getMainActivity(), R.color.white))
+                    .textColor(ContextCompat.getColor(getMainActivity(), R.color.colorPrimary))
+                    .build();
+            iv_title_count.setImageDrawable(titleCountDrawable);
+
+
         } else {
             //没有未读消息
             iv_count.setImageDrawable(null);
+
+            iv_title_count.setImageDrawable(null);
         }
     }
 
