@@ -508,4 +508,12 @@ public class AppContext extends Application implements Application.ActivityLifec
         //启动界面
         startActivity(intent);
     }
+
+    /**
+     * 远程推送退出事件
+     */
+    public void onRemoteLogout() {
+        LogUtil.d(TAG, "onRemoteLogout");
+
+    }
 }
