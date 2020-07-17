@@ -99,6 +99,17 @@ public class User extends BaseModel {
      * 格式为：yyyy-MM-dd
      */
     private String birthday;
+    /**
+     * 推送注册后的Id
+     * 设备唯一
+     * 作用是后台用来判断是否推送退出事件
+     * 当然也可以通过其他方式实现
+     * <p>
+     * 思路： 后台服务器获取这个Push id 会和原来的的去匹配，
+     * 如果一样，那么这个用户在同一个设备上登录，这个时候不应该推送 比如： 推送json字段
+     * 如果不一样，那么就给原来的设备推送一个退出
+     */
+    private String push;
 
     //本地过滤字段
     /**
@@ -299,6 +310,14 @@ public class User extends BaseModel {
 
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    public String getPush() {
+        return push;
+    }
+
+    public void setPush(String push) {
+        this.push = push;
     }
 
     @Override

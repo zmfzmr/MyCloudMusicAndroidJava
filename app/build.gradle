@@ -51,7 +51,9 @@ android {
         //详细讲解可以查看笔记 云音乐经验2   7.统计
         manifestPlaceholders = [
                 //JPush上注册的包名对应的appkey.
-                JPUSH_APPKEY : "7e2f3f21c1507ec8d4cd9620",
+//                JPUSH_APPKEY : "7e2f3f21c1507ec8d4cd9620",
+                //2台设备挤掉用老师的key
+                JPUSH_APPKEY : "ba3f08e44440a942db10b46e",
 
                 //暂时填写默认值即可.
                 JPUSH_CHANNEL: "developer-default",

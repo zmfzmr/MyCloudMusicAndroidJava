@@ -11,6 +11,7 @@ import com.ixuea.courses.mymusic.domain.User;
 import com.ixuea.courses.mymusic.domain.response.DetailResponse;
 import com.ixuea.courses.mymusic.listener.HttpObserver;
 import com.ixuea.courses.mymusic.util.AnalysisUtil;
+import com.ixuea.courses.mymusic.util.PushUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
 /**
@@ -33,6 +34,8 @@ public class BaseLoginActivity extends BaseTitleActivity {
         user.setPhone(phone);
         user.setEmail(email);
         user.setPassword(password);
+        //在这个User对象上添加个 pushId
+        user.setPush(PushUtil.getPushId(getApplicationContext()));
         Api.getInstance()
                 .login(user)
                 .subscribe(new HttpObserver<DetailResponse<Session>>() {

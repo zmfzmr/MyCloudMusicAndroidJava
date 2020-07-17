@@ -24,6 +24,7 @@ import com.ixuea.courses.mymusic.util.LogUtil;
 import com.ixuea.courses.mymusic.util.MessageUtil;
 import com.ixuea.courses.mymusic.util.ORMUtil;
 import com.ixuea.courses.mymusic.util.PreferenceUtil;
+import com.ixuea.courses.mymusic.util.PushUtil;
 import com.ixuea.courses.mymusic.util.StringUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 import com.mob.MobSDK;
@@ -281,7 +282,8 @@ public class AppContext extends Application implements Application.ActivityLifec
 
         //打印推送注册Id(类似于设备id，它有一个唯一值)
         //只是为了调试
-        String pushId = JPushInterface.getRegistrationID(getApplicationContext());
+//        String pushId = JPushInterface.getRegistrationID(getApplicationContext());
+        String pushId = PushUtil.getPushId(getApplicationContext());
         LogUtil.d(TAG, "onLogin pushId:" + pushId);
     }
 
@@ -290,23 +292,15 @@ public class AppContext extends Application implements Application.ActivityLifec
      * 清除信息后，跳转到 登录注册界面
      */
     public void logout() {
+
+        logoutSilence();
+
         //清除所有界面
         //因为我们应用是只有登录了
         //才能进入
         //所以用户退出了
         //所有界面都应该关闭
         activityManager.clear();
-
-
-        //清楚登录相关信息
-        //这里在PreferenceUtil偏好设置里面又定义了一个方法（在这里面清除）
-        PreferenceUtil.getInstance(getApplicationContext()).logout();
-
-        //QQ退出
-        otherLogout(QQ.NAME);
-
-        //微博退出
-        otherLogout(SinaWeibo.NAME);
 
         //退出后跳转到登录注册界面
         //因为我们的应用实现的是必须登录才能进入首页
@@ -320,8 +314,6 @@ public class AppContext extends Application implements Application.ActivityLifec
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //启动界面
         startActivity(intent);
-        //退出了通知了（可能需要做些其他处理）
-        onLogout();
     }
 
     /**
@@ -572,6 +564,7 @@ public class AppContext extends Application implements Application.ActivityLifec
         builder.setPositiveButton(R.string.confirm, (dialog, which) -> {
             //TODO 执行退出并跳转到登录界面逻辑
             LogUtil.d(TAG, "showLogoutDialog confirm");
+            logout();
         });
 
         //设置标题
@@ -585,7 +578,18 @@ public class AppContext extends Application implements Application.ActivityLifec
      * 静默退出
      */
     private void logoutSilence() {
+        //清楚登录相关信息
+        //这里在PreferenceUtil偏好设置里面又定义了一个方法（在这里面清除）
+        PreferenceUtil.getInstance(getApplicationContext()).logout();
 
+        //QQ退出
+        otherLogout(QQ.NAME);
+
+        //微博退出
+        otherLogout(SinaWeibo.NAME);
+
+        //退出了通知了（可能需要做些其他处理）
+        onLogout();
     }
 
 }

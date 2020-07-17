@@ -18,6 +18,7 @@ import com.ixuea.courses.mymusic.util.AnalysisUtil;
 import com.ixuea.courses.mymusic.util.Constant;
 import com.ixuea.courses.mymusic.util.HandlerUtil;
 import com.ixuea.courses.mymusic.util.LogUtil;
+import com.ixuea.courses.mymusic.util.PushUtil;
 import com.ixuea.courses.mymusic.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -241,6 +242,8 @@ public class LoginOrRegisterActivity extends BaseCommonActivity  {
      * 否则可以登录，直接通知关闭登录注册界面并跳转到主页
      */
     private void continueLogin() {
+        //在这个User对象上添加个 pushId
+        data.setPush(PushUtil.getPushId(getApplicationContext()));
         Api.getInstance()
                 .login(data)
                 .subscribe(new HttpObserver<DetailResponse<Session>>() {
