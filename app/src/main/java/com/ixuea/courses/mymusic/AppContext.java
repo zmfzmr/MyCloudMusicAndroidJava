@@ -34,6 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.emoji.bundled.BundledEmojiCompatConfig;
 import androidx.emoji.text.EmojiCompat;
 import androidx.multidex.MultiDex;
@@ -526,6 +527,65 @@ public class AppContext extends Application implements Application.ActivityLifec
      */
     public void onRemoteLogout() {
         LogUtil.d(TAG, "onRemoteLogout");
+        //为什么是尝试? 因为这个界面可能被销毁(如果是销毁，那么我们直接销毁数据就行了，不需要显示对话框)
+        tryShowLogoutDialog();
 
     }
+
+    /**
+     * 尝试显示被退出的对话框
+     */
+    private void tryShowLogoutDialog() {
+        Activity activity = currentActivity.get();
+        if (activity == null) {
+            //没有界面了
+
+            //静默退出(也就是不弹出对话框，直接清除登录数据。退出后不会跳转到登录注册界面)
+            logoutSilence();
+        }
+        //显示强制退出对话框
+        showLogoutDialog(activity);
+    }
+
+    /**
+     * 显示强制退出对话框
+     * 类似QQ和微信效果
+     *
+     * @param activity 注意： 可以理解为 这个弹出下线对话框接受到下线消息会随着activity的显示而显示(activity显示，弹出框就显示)
+     *                 虽说这个方法会执行，但是activity没有显示出来，弹出框也没有显示出来
+     */
+    private void showLogoutDialog(Activity activity) {
+        //当该界面后台后
+        //该方法依然会执行
+        //但弹窗不会显示
+        //用户在切换到前台后
+        //会继续显示
+        //这符合我们需求
+        //所以不用更改
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        //点击外部不能关闭
+        //只能点击确定关闭
+        //因为确定里面有退出逻辑
+        builder.setCancelable(false);
+        //设置确定按钮
+        builder.setPositiveButton(R.string.confirm, (dialog, which) -> {
+            //TODO 执行退出并跳转到登录界面逻辑
+            LogUtil.d(TAG, "showLogoutDialog confirm");
+        });
+
+        //设置标题
+        builder.setTitle(R.string.hint_logout);
+        //显示
+        builder.show();
+    }
+
+
+    /**
+     * 静默退出
+     */
+    private void logoutSilence() {
+
+    }
+
 }

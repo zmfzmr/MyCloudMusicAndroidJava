@@ -55,6 +55,7 @@
          -->
     <string name="count_second">%1$ds</string>
     <string name="hint_agreement">注册就代表同意《用户协议》</string>
+    <string name="hint_logout">您的账号在另一地点登录，你已被迫下线!</string>
 
     <!-- 网络相关-->
     <string name="error_network_unknown_host">找不到服务器，请稍后再试</string>
@@ -286,6 +287,8 @@
     <string name="about_ixuea">关于爱学啊</string>
     <string name="error_response_sign">接口签名错误，请稍后再试!</string>
     <string name="error_response_decript">接口解密错误，请稍后再试!</string>
+
+    <!-- 聊天-->
     <string name="error_message_login">登录聊天服务器失败,请稍后再试!</string>
     <string name="hint_enter_message">请输入你要发送的消息</string>
     <string name="error_send_message">发送失败,请稍后再试!</string>
