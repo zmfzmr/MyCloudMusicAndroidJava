@@ -147,6 +147,10 @@ public class ChatAdapter extends BaseRecyclerViewAdapter<Message, ChatAdapter.Vi
             //显示当前消息发送人
             // data.getFromUser(): UserInfo对象 也就是谁发送的
             //data.getFromUser().getUserName(): 发送人的用户id
+
+            //注意： 如果是Conversation对象获取UserInfo对象是：data.getTargetInfo();
+            //      但是这里是Message，所以获取UserInfo对象是: data.getFromUser()
+            //特别注意： 这个是用户的头像(也就是发送人和接收人的头像),不是发送消息的图片
             String userId = data.getFromUser().getUserName();
             //去掉外层包裹
             userId = StringUtil.unwrapUserId(userId);
@@ -230,6 +234,8 @@ public class ChatAdapter extends BaseRecyclerViewAdapter<Message, ChatAdapter.Vi
                         //直接显示
 
                         //下载完成后，会保存到原来的content(ImageContent对象)
+                        //那么下次进来的时候，这个图片已经有了
+                        // (也就是这个ImageContent：data.getContent()里的content.getLocalPath() 有内容了，下面下次直接走if里面)
                         showImage(content);
                     }
                 });

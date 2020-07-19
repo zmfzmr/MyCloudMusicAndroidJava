@@ -66,7 +66,7 @@ public class BaseLoginActivity extends BaseTitleActivity {
                         //统计登录事件
 
                         //因为这个外层方法login方法里面只有phone email这2个参数，传递这2个即可
-                        AnalysisUtil.onLogin(getMainActivity(), true,
+                        AnalysisUtil.onLogin(getMainActivity(), false,
                                 AnalysisUtil.getMethod(phone, email, null, null),
                                 phone, email, null, null);
 
